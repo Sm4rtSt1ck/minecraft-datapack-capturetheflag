@@ -1,6 +1,7 @@
 # Deploy
 
 gamerule naturalRegeneration false
+gamerule doImmediateRespawn true
 
 team leave @a
 team add team_1

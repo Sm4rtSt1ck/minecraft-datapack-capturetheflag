@@ -14,6 +14,7 @@ tag @s remove defence
 
 #########################################
 
+clear @s
 team leave @s
 gamemode adventure @s
 

@@ -6,9 +6,9 @@ scoreboard players add match rounds 1
 
 execute if score match rounds < swap rounds run \
     bossbar set ctf:match name [\
-        {"color":"red","score":{"name":"team_1","objective":"rounds"}},\
+        {"color":"blue","score":{"name":"team_2","objective":"rounds"}},\
         {"color":"dark_purple","text":" | "},\
-        {"color":"blue","score":{"name":"team_2","objective":"rounds"}}\
+        {"color":"red","score":{"name":"team_1","objective":"rounds"}}\
     ]
 execute if score match rounds >= swap rounds run \
     bossbar set ctf:match name [\

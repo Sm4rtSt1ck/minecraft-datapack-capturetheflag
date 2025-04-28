@@ -3,6 +3,7 @@ say match/start
 # SET THE GAME SETTINGS
 
 tag @s remove lobby
+tag @s remove dead
 tag @s add player
 clear @s
 scoreboard players set match rounds 0
