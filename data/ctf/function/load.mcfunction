@@ -6,7 +6,7 @@ team leave @a
 team add team_1
 team add team_2
 
-scoreboard objectives add const dummy "Const"
+scoreboard objectives add const dummy
 scoreboard players set 2 const 2
 scoreboard players set 3 const 3
 scoreboard players set 4 const 4
@@ -25,7 +25,7 @@ scoreboard objectives add map_vote dummy "Map vote"
 scoreboard players reset @a map_vote
 
 # Game status (0 - lobby, 1 - vote, 2 - warmup, 3 - freeze, 4 - round, 5 - end_round, 6 - end)
-scoreboard objectives add status dummy "Status"
+scoreboard objectives add status dummy
 # IMPORTANT! change to 0 after fully adding vote status
 scoreboard players set game status 1
 
@@ -39,6 +39,11 @@ scoreboard objectives add health health "hp"
 scoreboard objectives modify health rendertype hearts
 scoreboard objectives setdisplay below_name health
 scoreboard objectives modify health numberformat styled {"color":"green"}
+
+scoreboard objectives add kills playerKillCount "Kills"
+scoreboard objectives add deaths deathCount "Deaths"
+scoreboard objectives add just_killed playerKillCount
+scoreboard objectives add just_died deathCount
 
 bossbar remove ctf:match
 bossbar add ctf:match "x1 | x2"

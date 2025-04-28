@@ -6,7 +6,6 @@ scoreboard players set round timer 2400
 bossbar set ctf:match max 2400
 
 gamemode survival @a[tag=player]
-effect clear @a[tag=player]
-effect give @a[tag=player] minecraft:saturation infinite 127 true
+effect clear @a[tag=player] minecraft:regeneration
 
 function ctf:match/map/map_1/round
