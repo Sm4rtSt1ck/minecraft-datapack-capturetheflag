@@ -1,4 +1,8 @@
-execute as @a[tag=!lobby] run function ctf:lobby/join
+#########################################
 
 scoreboard objectives setdisplay sidebar map_vote
-scoreboard players set game status 0
+# IMPORTANT! change to 0 after fully adding vote status
+scoreboard players set game status 1
+bossbar set ctf:match visible false
+
+execute as @a[tag=!lobby] run function ctf:lobby/join

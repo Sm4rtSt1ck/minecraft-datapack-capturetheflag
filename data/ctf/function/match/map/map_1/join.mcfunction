@@ -1,4 +1,7 @@
+say match/map/map_1/join
+
 title @s title {"text": "Map 1", "color": "blue"}
 
-spreadplayers 10 10 1 3 under -38 false @a[tag=player, team=team_1]
-spreadplayers 10 10 1 3 under -38 false @a[tag=player, team=team_2]
+# Clone the map
+clone -44 -53 43 -98 -40 70 -200 -50 -200
+clone -44 -53 70 -98 -40 102 -200 -50 -173

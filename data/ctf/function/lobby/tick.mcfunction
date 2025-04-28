@@ -1,7 +1,7 @@
 #########################################
-# Run game button
+# RUN GAME BUTTON
 
-# Give item
+# Give an item
 item replace entity @a[tag=lobby,tag=admin] hotbar.8 with firework_rocket[\
     custom_name="{\
         \"shadow_color\": -65536,\
@@ -17,7 +17,3 @@ execute if entity @a[\
         Slot:-106b,\
     }]}\
 ] as @a run function ctf:match/start
-
-#########################################
-
-execute as @a[tag=lobby] run function ctf:lobby/vote/vote

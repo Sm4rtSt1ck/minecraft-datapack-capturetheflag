@@ -1,5 +1,5 @@
 #########################################
-# Map 1
+# MAP 1
 
 # Give items
 item replace entity @s hotbar.0 with filled_map[\
@@ -21,7 +21,7 @@ execute if entity @s[\
     scoreboard players set @s map_vote 1
 
 #########################################
-# Map 2
+# MAP 2
 
 # Give items
 item replace entity @s hotbar.1 with filled_map[\
@@ -43,5 +43,6 @@ execute if entity @s[\
     scoreboard players set @s map_vote 2
 
 #########################################
-# Clear left hand
+# CLEAR THE LEFT HAND AFTER ALL CHECKINGS
+
 item replace entity @s weapon.offhand with air
