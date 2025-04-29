@@ -11,4 +11,7 @@ scoreboard players set @a[tag=player] just_died 0
 scoreboard players set @a[tag=player] kills 0
 scoreboard players set @a[tag=player] just_killed 0
 
+scoreboard players set @a[tag=player] flag_dropped 0
+scoreboard players set @a[tag=player] flag_pickedup 0
+
 function ctf:match/freeze/start

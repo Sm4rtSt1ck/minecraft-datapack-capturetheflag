@@ -1,6 +1,8 @@
 #########################################
 # EVENTS
 
+execute as @a[scores={flag_dropped=1..}] run function ctf:match/event/on_drop_flag
+execute as @a[scores={flag_pickedup=1..}] run function ctf:match/event/on_pickup_flag
 execute as @a[scores={just_killed=1..}] run function ctf:match/event/kill
 execute as @a[scores={just_died=1..}] run function ctf:match/event/die
 
