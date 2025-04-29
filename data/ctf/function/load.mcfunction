@@ -48,6 +48,7 @@ scoreboard objectives add just_killed playerKillCount
 scoreboard objectives add just_died deathCount
 scoreboard objectives add flag_dropped minecraft.dropped:minecraft.yellow_banner
 scoreboard objectives add flag_pickedup minecraft.picked_up:minecraft.yellow_banner
+scoreboard objectives add flag_broken minecraft.mined:minecraft.yellow_banner
 
 bossbar remove ctf:match
 bossbar add ctf:match "x1 | x2"

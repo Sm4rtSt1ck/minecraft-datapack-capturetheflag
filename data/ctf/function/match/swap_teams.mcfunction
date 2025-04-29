@@ -13,3 +13,5 @@ tag team_2 remove defence
 tag team_2 add attack
 tag @a[team=team_2] remove defence
 tag @a[team=team_2] add attack
+
+clear @a[tag=player]

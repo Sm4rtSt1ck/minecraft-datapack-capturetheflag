@@ -9,9 +9,13 @@ scoreboard players set warmup timer 600
 bossbar set ctf:match max 600
 
 scoreboard players set @a[tag=player] deaths 0
-scoreboard players set @a[tag=player] just_died 0
 scoreboard players set @a[tag=player] kills 0
+
+scoreboard players set @a[tag=player] just_died 0
 scoreboard players set @a[tag=player] just_killed 0
+scoreboard players set @a[tag=player] flag_broken 0
+scoreboard players set @a[tag=player] flag_dropped 0
+scoreboard players set @a[tag=player] flag_pickedup 0
 
 effect clear @a[tag=player]
 effect give @a[tag=player] minecraft:saturation infinite 127 true
