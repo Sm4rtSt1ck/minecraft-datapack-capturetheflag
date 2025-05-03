@@ -10,16 +10,13 @@ tag @s add lobby
 tag @s remove player
 tag @s remove spectator
 tag @s remove attack
-tag @s remove defence
+tag @s remove defense
 
 #########################################
 
 clear @s
 team leave @s
 gamemode adventure @s
-
-# Reset vote
-scoreboard players reset @s map_vote
 
 #########################################
 # EFFECTS

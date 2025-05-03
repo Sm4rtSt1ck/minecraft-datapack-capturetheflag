@@ -40,15 +40,18 @@ scoreboard objectives add health health "hp"
 scoreboard objectives modify health rendertype hearts
 scoreboard objectives setdisplay below_name health
 scoreboard objectives modify health numberformat styled {"color":"green"}
+scoreboard objectives add money dummy "Money"
 
 scoreboard objectives add kills playerKillCount "Kills"
 scoreboard objectives add deaths deathCount "Deaths"
 # Events
 scoreboard objectives add just_killed playerKillCount
 scoreboard objectives add just_died deathCount
+scoreboard objectives add flag_placed minecraft.used:minecraft.yellow_banner
 scoreboard objectives add flag_dropped minecraft.dropped:minecraft.yellow_banner
 scoreboard objectives add flag_pickedup minecraft.picked_up:minecraft.yellow_banner
 scoreboard objectives add flag_broken minecraft.mined:minecraft.yellow_banner
+scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.yellow_wall_banner
 
 bossbar remove ctf:match
 bossbar add ctf:match "x1 | x2"

@@ -5,4 +5,9 @@ execute if entity @a[tag=attack, team=team_2] run scoreboard players add team_2 
 
 clear @a[tag=attack] minecraft:yellow_banner
 
+effect clear @a[tag=attack] minecraft:glowing
+
+scoreboard players add @a[tag=attack] money 3000
+scoreboard players add @a[tag=defense] money 2000
+
 function ctf:match/end_round/start
