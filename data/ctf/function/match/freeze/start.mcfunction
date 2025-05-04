@@ -14,6 +14,7 @@ kill @e[type=arrow]
 kill @e[type=trident]
 kill @e[type=armor_stand, tag=flag]
 
+clear @a[tag=player] minecraft:black_stained_glass_pane
 # Give flag
 clear @a[tag=player] minecraft:yellow_banner
 give @r[tag=defense] minecraft:yellow_banner

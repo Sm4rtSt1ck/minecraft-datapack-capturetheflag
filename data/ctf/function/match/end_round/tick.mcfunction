@@ -1,4 +1,10 @@
 #########################################
+# RULES
+
+function ctf:match/helpers/pickup_restrict
+function ctf:match/helpers/inventory
+
+#########################################
 # EVENTS
 
 execute as @a[scores={flag_broken=1..}] run function ctf:match/event/on_break_flag
