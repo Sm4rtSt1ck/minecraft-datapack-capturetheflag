@@ -1,9 +1,13 @@
 say match/round/start
 
 scoreboard players set game status 4
-# Round timer 120 secs (2400 ticks)
-scoreboard players set round timer 2400
-bossbar set ctf:match max 2400
+# Round timer 180 secs (3600 ticks)
+scoreboard players set round timer 3600
+bossbar set ctf:match max 3600
+
+title @a[tag=attack] title {"text": "STEAL THE FLAG!", "color": "green"}
+title @a[tag=defense] title {"text": "DEFEND THE FLAG!", "color": "green"}
+execute as @a[tag=player] at @s run playsound minecraft:entity.player.levelup ambient @s ~ ~ ~ 10 1
 
 scoreboard players set @a[tag=player] flag_broken 0
 scoreboard players set @a[tag=player] wall_flag_broken 0

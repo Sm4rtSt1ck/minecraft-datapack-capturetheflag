@@ -13,4 +13,11 @@ effect give @a[tag=player] minecraft:saturation infinite 127 true
 
 gamemode adventure @a[tag=player]
 
-function ctf:match/map/map_1/prepare
+tp @a[tag=attack] -87 -51 27 -90 0
+tp @a[tag=defense] -74 -51 26 90 0
+
+execute as @a positioned as @s run spawnpoint @s
+
+gamerule keepInventory true
+
+give @a[tag=player] minecraft:stone_sword

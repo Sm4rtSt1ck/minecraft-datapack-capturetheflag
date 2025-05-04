@@ -5,12 +5,30 @@
 # Weapon
 tag @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] add shop_weapon
 tag @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] remove shop_defense
+tag @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] remove shop_staff
+tag @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] remove shop_kits
 execute at @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] run playsound minecraft:ui.button.click master @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] ~ ~ ~ 0.2
 
 # Defense
 tag @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] add shop_defense
 tag @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] remove shop_weapon
+tag @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] remove shop_staff
+tag @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] remove shop_kits
 execute at @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] run playsound minecraft:ui.button.click master @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] ~ ~ ~ 0.2
+
+# Staff
+tag @a[nbt=!{Inventory:[{Slot:14b,id:"minecraft:firework_rocket"}]}] add shop_staff
+tag @a[nbt=!{Inventory:[{Slot:14b,id:"minecraft:firework_rocket"}]}] remove shop_weapon
+tag @a[nbt=!{Inventory:[{Slot:14b,id:"minecraft:firework_rocket"}]}] remove shop_defense
+tag @a[nbt=!{Inventory:[{Slot:14b,id:"minecraft:firework_rocket"}]}] remove shop_kits
+execute at @a[nbt=!{Inventory:[{Slot:14b,id:"minecraft:firework_rocket"}]}] run playsound minecraft:ui.button.click master @a[nbt=!{Inventory:[{Slot:14b,id:"minecraft:firework_rocket"}]}] ~ ~ ~ 0.2
+
+# Kits
+tag @a[nbt=!{Inventory:[{Slot:16b,id:"minecraft:chest"}]}] add shop_kits
+tag @a[nbt=!{Inventory:[{Slot:16b,id:"minecraft:chest"}]}] remove shop_weapon
+tag @a[nbt=!{Inventory:[{Slot:16b,id:"minecraft:chest"}]}] remove shop_defense
+tag @a[nbt=!{Inventory:[{Slot:16b,id:"minecraft:chest"}]}] remove shop_staff
+execute at @a[nbt=!{Inventory:[{Slot:16b,id:"minecraft:chest"}]}] run playsound minecraft:ui.button.click master @a[nbt=!{Inventory:[{Slot:16b,id:"minecraft:chest"}]}] ~ ~ ~ 0.2
 
 
 # DROP-DOWN LIST BUTTONS
@@ -18,49 +36,91 @@ execute at @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}]
 # IRON SWORD
 
 # Fix bug
-item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.18 with iron_sword[custom_data={tags:["shop"]}]
+item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.18 with iron_sword[custom_data={tags:["shop", "item"]}]
 
 # Buing process
-tag @a[scores={money=550..},tag=shop_weapon,nbt=!{Inventory:[{Slot:18b,id:"minecraft:iron_sword",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_iron_sword
-scoreboard players remove @a[tag=buy_iron_sword] money 550
+tag @a[scores={money=1100..},tag=shop_weapon,nbt=!{Inventory:[{Slot:18b,id:"minecraft:iron_sword",components:{"minecraft:custom_data":{tags:["shop", "item"]}}}]}] add buy_iron_sword
+scoreboard players remove @a[tag=buy_iron_sword] money 1100
 execute at @a[tag=buy_iron_sword] run playsound minecraft:ui.button.click master @a[tag=buy_iron_sword] ~ ~ ~ 0.2
 give @a[tag=buy_iron_sword] iron_sword
 tag @a remove buy_iron_sword
 
 # Steal control
-clear @a[nbt=!{Inventory:[{Slot:18b,id:"minecraft:iron_sword"}]}] minecraft:iron_sword[custom_data={tags:["shop"]}]
-clear @a[tag=!shop_weapon] minecraft:iron_sword[custom_data={tags:["shop"]}]
+clear @a[nbt=!{Inventory:[{Slot:18b,id:"minecraft:iron_sword"}]}] minecraft:iron_sword[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_weapon] minecraft:iron_sword[custom_data={tags:["shop", "item"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_weapon] container.18 with iron_sword[lore=['{"text":"550$","italic":false}'],custom_data={tags:["shop"]}]
+item replace entity @a[tag=shop_weapon] container.18 with iron_sword[lore=['{"text":"1100$","italic":false}'],custom_data={tags:["shop", "item"]}]
 
 # IRON SWORD
 ##########################################################################################
-# TRIDENT
+# DIAMOND SWORD
 
 # Fix bug
-item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.20 with minecraft:trident[custom_data={tags:["shop"]}]
+item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.20 with minecraft:diamond_sword[custom_data={tags:["shop", "item"]}]
 
 # Buing process
-tag @a[scores={money=5000..},tag=shop_weapon,nbt=!{Inventory:[{Slot:20b,id:"minecraft:trident",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_trident
-scoreboard players remove @a[tag=buy_trident] money 5000
-execute at @a[tag=buy_trident] run playsound minecraft:ui.button.click master @a[tag=buy_trident] ~ ~ ~ 0.2
-give @a[tag=buy_trident] minecraft:trident
-tag @a remove buy_trident
+tag @a[scores={money=1300..},tag=shop_weapon,nbt=!{Inventory:[{Slot:20b,id:"minecraft:diamond_sword",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_diamond_sword
+scoreboard players remove @a[tag=buy_diamond_sword] money 1300
+execute at @a[tag=buy_diamond_sword] run playsound minecraft:ui.button.click master @a[tag=buy_diamond_sword] ~ ~ ~ 0.2
+give @a[tag=buy_diamond_sword] minecraft:diamond_sword
+tag @a remove buy_diamond_sword
 
 # Steal control
-clear @a[nbt=!{Inventory:[{Slot:20b,id:"minecraft:trident"}]}] minecraft:trident[custom_data={tags:["shop"]}]
-clear @a[tag=!shop_weapon] minecraft:trident[custom_data={tags:["shop"]}]
+clear @a[nbt=!{Inventory:[{Slot:20b,id:"minecraft:diamond_sword"}]}] minecraft:diamond_sword[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_weapon] minecraft:diamond_sword[custom_data={tags:["shop", "item"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_weapon] container.20 with minecraft:trident[lore=['{"text":"5000$","italic":false}'],custom_data={tags:["shop"]}]
+item replace entity @a[tag=shop_weapon] container.20 with minecraft:diamond_sword[lore=['{"text":"1300$","italic":false}'],custom_data={tags:["shop", "item"]}]
 
-# TRIDENT
+# DIAMOND SWORD
+##########################################################################################
+# NETHERITE SWORD
+
+# Fix bug
+item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.27 with minecraft:netherite_sword[custom_data={tags:["shop", "item"]}]
+
+# Buing process
+tag @a[scores={money=1500..},tag=shop_weapon,nbt=!{Inventory:[{Slot:27b,id:"minecraft:netherite_sword",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_netherite_sword
+scoreboard players remove @a[tag=buy_netherite_sword] money 1500
+execute at @a[tag=buy_netherite_sword] run playsound minecraft:ui.button.click master @a[tag=buy_netherite_sword] ~ ~ ~ 0.2
+give @a[tag=buy_netherite_sword] minecraft:netherite_sword
+tag @a remove buy_netherite_sword
+
+# Steal control
+clear @a[nbt=!{Inventory:[{Slot:27b,id:"minecraft:netherite_sword"}]}] minecraft:netherite_sword[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_weapon] minecraft:netherite_sword[custom_data={tags:["shop", "item"]}]
+
+# Drop-down lists
+item replace entity @a[tag=shop_weapon] container.27 with minecraft:netherite_sword[lore=['{"text":"1500$","italic":false}'],custom_data={tags:["shop", "item"]}]
+
+# NETHERITE SWORD
+##########################################################################################
+# MACE
+
+# Fix bug
+item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.29 with minecraft:mace[custom_data={tags:["shop", "item"]}]
+
+# Buing process
+tag @a[scores={money=2000..},tag=shop_weapon,nbt=!{Inventory:[{Slot:29b,id:"minecraft:mace",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_mace
+scoreboard players remove @a[tag=buy_mace] money 2000
+execute at @a[tag=buy_mace] run playsound minecraft:ui.button.click master @a[tag=buy_mace] ~ ~ ~ 0.2
+give @a[tag=buy_mace] minecraft:mace
+tag @a remove buy_mace
+
+# Steal control
+clear @a[nbt=!{Inventory:[{Slot:29b,id:"minecraft:mace"}]}] minecraft:mace[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_weapon] minecraft:mace[custom_data={tags:["shop", "item"]}]
+
+# Drop-down lists
+item replace entity @a[tag=shop_weapon] container.29 with minecraft:mace[lore=['{"text":"2000$","italic":false}'],custom_data={tags:["shop", "item"]}]
+
+# MACE
 ##########################################################################################
 # BOW
 
 # Fix bug
-item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.22 with minecraft:bow[custom_data={tags:["shop"]}]
+item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.22 with minecraft:bow[custom_data={tags:["shop", "item"]}]
 
 # Buing process
 tag @a[scores={money=890..},tag=shop_weapon,nbt=!{Inventory:[{Slot:22b,id:"minecraft:bow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_bow
@@ -70,18 +130,18 @@ give @a[tag=buy_bow] minecraft:bow
 tag @a remove buy_bow
 
 # Steal control
-clear @a[nbt=!{Inventory:[{Slot:20b,id:"minecraft:bow"}]}] minecraft:bow[custom_data={tags:["shop"]}]
-clear @a[tag=!shop_weapon] minecraft:bow[custom_data={tags:["shop"]}]
+clear @a[nbt=!{Inventory:[{Slot:22b,id:"minecraft:bow"}]}] minecraft:bow[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_weapon] minecraft:bow[custom_data={tags:["shop", "item"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_weapon] container.22 with minecraft:bow[lore=['{"text":"890$","italic":false}'],custom_data={tags:["shop"]}]
+item replace entity @a[tag=shop_weapon] container.22 with minecraft:bow[lore=['{"text":"890$","italic":false}'],custom_data={tags:["shop", "item"]}]
 
 # BOW
 ##########################################################################################
 # CROSSBOW
 
 # Fix bug
-item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.24 with minecraft:crossbow[custom_data={tags:["shop"]}]
+item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.24 with minecraft:crossbow[custom_data={tags:["shop", "item"]}]
 
 # Buing process
 tag @a[scores={money=3000..},tag=shop_weapon,nbt=!{Inventory:[{Slot:24b,id:"minecraft:crossbow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_crossbow
@@ -91,18 +151,18 @@ give @a[tag=buy_crossbow] minecraft:crossbow
 tag @a remove buy_crossbow
 
 # Steal control
-clear @a[nbt=!{Inventory:[{Slot:24b,id:"minecraft:crossbow"}]}] minecraft:crossbow[custom_data={tags:["shop"]}]
-clear @a[tag=!shop_weapon] minecraft:crossbow[custom_data={tags:["shop"]}]
+clear @a[nbt=!{Inventory:[{Slot:24b,id:"minecraft:crossbow"}]}] minecraft:crossbow[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_weapon] minecraft:crossbow[custom_data={tags:["shop", "item"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_weapon] container.24 with minecraft:crossbow[lore=['{"text":"3000$","italic":false}'],custom_data={tags:["shop"]}]
+item replace entity @a[tag=shop_weapon] container.24 with minecraft:crossbow[lore=['{"text":"3000$","italic":false}'],custom_data={tags:["shop", "item"]}]
 
 # CROSSBOW
 ##########################################################################################
 # ARROWS
 
 # Fix bug
-item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.26 with minecraft:arrow[custom_data={tags:["shop"]}]
+item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.26 with minecraft:arrow[custom_data={tags:["shop", "item", "0"]}]
 
 # Buing process
 tag @a[scores={money=100..},tag=shop_weapon,nbt=!{Inventory:[{Slot:26b,id:"minecraft:arrow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_arrow
@@ -112,85 +172,171 @@ execute at @a[tag=buy_arrow] run playsound minecraft:ui.button.click master @a[t
 tag @a remove buy_arrow
 
 # Steal control
-clear @a[nbt=!{Inventory:[{Slot:26b,id:"minecraft:arrow"}]}] minecraft:arrow[custom_data={tags:["shop"]}]
-clear @a[tag=!shop_weapon] minecraft:arrow[custom_data={tags:["shop"]}]
+clear @a[nbt=!{Inventory:[{Slot:26b,id:"minecraft:arrow"}]}] minecraft:arrow[custom_data={tags:["shop", "item", "0"]}]
+clear @a[tag=!shop_weapon] minecraft:arrow[custom_data={tags:["shop", "item", "0"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_weapon] container.26 with minecraft:arrow[lore=['{"text":"100$","italic":false}'],custom_data={tags:["shop"]}]
+item replace entity @a[tag=shop_weapon] container.26 with minecraft:arrow[custom_name='{"text":"Arrows x10", "color":"dark_green", "italic": false}', lore=['{"text":"100$","italic":false}'],custom_data={tags:["shop", "item", "0"]}]
 
 # ARROWS
 ##########################################################################################
-# LEATHER ARMOR
+# POISON ARROWS
 
 # Fix bug
-item replace entity @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] container.18 with minecraft:leather_chestplate[custom_data={tags:["shop"]}]
+item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.31 with minecraft:arrow[custom_data={tags:["shop", "item", "1"]}]
 
 # Buing process
-tag @a[scores={money=700..},tag=shop_defense,nbt=!{Inventory:[{Slot:18b,id:"minecraft:leather_chestplate",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_leather_chestplate
-scoreboard players remove @a[tag=buy_leather_chestplate] money 700
-item replace entity @a[tag=buy_leather_chestplate] armor.head with minecraft:leather_helmet
-item replace entity @a[tag=buy_leather_chestplate] armor.chest with minecraft:leather_chestplate
-item replace entity @a[tag=buy_leather_chestplate] armor.legs with minecraft:leather_leggings
-item replace entity @a[tag=buy_leather_chestplate] armor.feet with minecraft:leather_boots
-execute at @a[tag=buy_leather_chestplate] run playsound minecraft:ui.button.click master @a[tag=buy_leather_chestplate] ~ ~ ~ 0.2
-tag @a remove buy_leather_chestplate
+tag @a[scores={money=1000..},tag=shop_weapon,nbt=!{Inventory:[{Slot:31b,id:"minecraft:arrow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_poison_arrow
+scoreboard players remove @a[tag=buy_poison_arrow] money 1000
+give @a[tag=buy_poison_arrow] minecraft:arrow[potion_contents={custom_color:39936,custom_effects:[{id:"minecraft:poison",amplifier:1,duration:100}]}] 10
+execute at @a[tag=buy_poison_arrow] run playsound minecraft:ui.button.click master @a[tag=buy_poison_arrow] ~ ~ ~ 0.2
+tag @a remove buy_poison_arrow
 
 # Steal control
-clear @a[nbt=!{Inventory:[{Slot:18b,id:"minecraft:leather_chestplate"}]}] minecraft:leather_chestplate[custom_data={tags:["shop"]}]
-clear @a[tag=!shop_defense] minecraft:leather_chestplate[custom_data={tags:["shop"]}]
+clear @a[nbt=!{Inventory:[{Slot:31b,id:"minecraft:arrow"}]}] minecraft:arrow[custom_data={tags:["shop", "item", "1"]}]
+clear @a[tag=!shop_weapon] minecraft:arrow[custom_data={tags:["shop", "item", "1"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_defense] container.18 with minecraft:leather_chestplate[lore=['{"text":"700$","italic":false}'],custom_data={tags:["shop"]}]
+item replace entity @a[tag=shop_weapon] container.31 with minecraft:arrow[custom_name='{"text":"Poison arrows x10", "color":"dark_green", "italic":false}', lore=['{"text":"1000$","italic":false}'],custom_data={tags:["shop", "item", "1"]}]
 
-# LEATHER ARMOR
+# POISON ARROWS
 ##########################################################################################
-# GOLDEN ARMOR
+# IRON ARMOR
 
 # Fix bug
-item replace entity @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] container.20 with minecraft:golden_chestplate[custom_data={tags:["shop"]}]
+item replace entity @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] container.18 with minecraft:iron_chestplate[custom_data={tags:["shop", "item"]}]
 
 # Buing process
-tag @a[scores={money=1400..},tag=shop_defense,nbt=!{Inventory:[{Slot:20b,id:"minecraft:golden_chestplate",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_golden_chestplate
-scoreboard players remove @a[tag=buy_golden_chestplate] money 1400
-item replace entity @a[tag=buy_golden_chestplate] armor.head with minecraft:golden_helmet
-item replace entity @a[tag=buy_golden_chestplate] armor.chest with minecraft:golden_chestplate
-item replace entity @a[tag=buy_golden_chestplate] armor.legs with minecraft:golden_leggings
-item replace entity @a[tag=buy_golden_chestplate] armor.feet with minecraft:golden_boots
-execute at @a[tag=buy_golden_chestplate] run playsound minecraft:ui.button.click master @a[tag=buy_golden_chestplate] ~ ~ ~ 0.2
-tag @a remove buy_golden_chestplate
+tag @a[scores={money=1000..},tag=shop_defense,nbt=!{Inventory:[{Slot:18b,id:"minecraft:iron_chestplate",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_iron_armor
+scoreboard players remove @a[tag=buy_iron_armor] money 1000
+item replace entity @a[tag=buy_iron_armor] armor.head with minecraft:iron_helmet
+item replace entity @a[tag=buy_iron_armor] armor.chest with minecraft:iron_chestplate
+item replace entity @a[tag=buy_iron_armor] armor.legs with minecraft:iron_leggings
+item replace entity @a[tag=buy_iron_armor] armor.feet with minecraft:iron_boots
+execute at @a[tag=buy_iron_armor] run playsound minecraft:ui.button.click master @a[tag=buy_iron_armor] ~ ~ ~ 0.2
+tag @a remove buy_iron_armor
 
 # Steal control
-clear @a[nbt=!{Inventory:[{Slot:20b,id:"minecraft:golden_chestplate"}]}] minecraft:golden_chestplate[custom_data={tags:["shop"]}]
-clear @a[tag=!shop_defense] minecraft:golden_chestplate[custom_data={tags:["shop"]}]
+clear @a[nbt=!{Inventory:[{Slot:18b,id:"minecraft:iron_chestplate"}]}] minecraft:iron_chestplate[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_defense] minecraft:iron_chestplate[custom_data={tags:["shop", "item"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_defense] container.20 with minecraft:golden_chestplate[lore=['{"text":"1400$","italic":false}'],custom_data={tags:["shop"]}]
+item replace entity @a[tag=shop_defense] container.18 with minecraft:iron_chestplate[lore=['{"text":"1000$","italic":false}'],custom_data={tags:["shop", "item"]}]
 
-# GOLDEN ARMOR
+# IRON ARMOR
 ##########################################################################################
-# CHAINMAIL ARMOR
+# DIAMOND ARMOR
 
 # Fix bug
-item replace entity @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] container.22 with minecraft:chainmail_chestplate[custom_data={tags:["shop"]}]
+item replace entity @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] container.20 with minecraft:diamond_chestplate[custom_data={tags:["shop", "item"]}]
 
 # Buing process
-tag @a[scores={money=1600..},tag=shop_defense,nbt=!{Inventory:[{Slot:22b,id:"minecraft:chainmail_chestplate",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_chainmail_chestplate
-scoreboard players remove @a[tag=buy_chainmail_chestplate] money 1600
-item replace entity @a[tag=buy_chainmail_chestplate] armor.head with minecraft:chainmail_helmet
-item replace entity @a[tag=buy_chainmail_chestplate] armor.chest with minecraft:chainmail_chestplate
-item replace entity @a[tag=buy_chainmail_chestplate] armor.legs with minecraft:chainmail_leggings
-item replace entity @a[tag=buy_chainmail_chestplate] armor.feet with minecraft:chainmail_boots
-execute at @a[tag=buy_chainmail_chestplate] run playsound minecraft:ui.button.click master @a[tag=buy_chainmail_chestplate] ~ ~ ~ 0.2
-tag @a remove buy_chainmail_chestplate
+tag @a[scores={money=1500..},tag=shop_defense,nbt=!{Inventory:[{Slot:20b,id:"minecraft:diamond_chestplate",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_diamond_armor
+scoreboard players remove @a[tag=buy_diamond_armor] money 1500
+item replace entity @a[tag=buy_diamond_armor] armor.head with minecraft:diamond_helmet
+item replace entity @a[tag=buy_diamond_armor] armor.chest with minecraft:diamond_chestplate
+item replace entity @a[tag=buy_diamond_armor] armor.legs with minecraft:diamond_leggings
+item replace entity @a[tag=buy_diamond_armor] armor.feet with minecraft:diamond_boots
+execute at @a[tag=buy_diamond_armor] run playsound minecraft:ui.button.click master @a[tag=buy_diamond_armor] ~ ~ ~ 0.2
+tag @a remove buy_diamond_armor
 
 # Steal control
-clear @a[nbt=!{Inventory:[{Slot:22b,id:"minecraft:chainmail_chestplate"}]}] minecraft:chainmail_chestplate[custom_data={tags:["shop"]}]
-clear @a[tag=!shop_defense] minecraft:chainmail_chestplate[custom_data={tags:["shop"]}]
+clear @a[nbt=!{Inventory:[{Slot:20b,id:"minecraft:diamond_chestplate"}]}] minecraft:diamond_chestplate[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_defense] minecraft:diamond_chestplate[custom_data={tags:["shop", "item"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_defense] container.22 with minecraft:chainmail_chestplate[lore=['{"text":"1600$","italic":false}'],custom_data={tags:["shop"]}]
+item replace entity @a[tag=shop_defense] container.20 with minecraft:diamond_chestplate[lore=['{"text":"1500$","italic":false}'],custom_data={tags:["shop", "item"]}]
 
-# CHAINMAIL ARMOR
+# DIAMOND ARMOR
+##########################################################################################
+# NETHERITE ARMOR
+
+# Fix bug
+item replace entity @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] container.22 with minecraft:netherite_chestplate[custom_data={tags:["shop", "item"]}]
+
+# Buing process
+tag @a[scores={money=2000..},tag=shop_defense,nbt=!{Inventory:[{Slot:22b,id:"minecraft:netherite_chestplate",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_netherite_armor
+scoreboard players remove @a[tag=buy_netherite_armor] money 2000
+item replace entity @a[tag=buy_netherite_armor] armor.head with minecraft:netherite_helmet
+item replace entity @a[tag=buy_netherite_armor] armor.chest with minecraft:netherite_chestplate
+item replace entity @a[tag=buy_netherite_armor] armor.legs with minecraft:netherite_leggings
+item replace entity @a[tag=buy_netherite_armor] armor.feet with minecraft:netherite_boots
+execute at @a[tag=buy_netherite_armor] run playsound minecraft:ui.button.click master @a[tag=buy_netherite_armor] ~ ~ ~ 0.2
+tag @a remove buy_netherite_armor
+
+# Steal control
+clear @a[nbt=!{Inventory:[{Slot:22b,id:"minecraft:netherite_chestplate"}]}] minecraft:netherite_chestplate[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_defense] minecraft:netherite_chestplate[custom_data={tags:["shop", "item"]}]
+
+# Drop-down lists
+item replace entity @a[tag=shop_defense] container.22 with minecraft:netherite_chestplate[lore=['{"text":"2000$","italic":false}'],custom_data={tags:["shop", "item"]}]
+
+# NETHERITE ARMOR
+##########################################################################################
+# WIND CHARGE
+
+# Fix bug
+item replace entity @a[nbt=!{Inventory:[{Slot:14b,id:"minecraft:firework_rocket"}]}] container.18 with minecraft:wind_charge[custom_data={tags:["shop", "item"]}]
+
+# Buing process
+tag @a[scores={money=500..},tag=shop_staff,nbt=!{Inventory:[{Slot:18b,id:"minecraft:wind_charge",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_wind_charge
+scoreboard players remove @a[tag=buy_wind_charge] money 500
+give @a[tag=buy_wind_charge] minecraft:wind_charge
+execute at @a[tag=buy_wind_charge] run playsound minecraft:ui.button.click master @a[tag=buy_wind_charge] ~ ~ ~ 0.2
+tag @a remove buy_wind_charge
+
+# Steal control
+clear @a[nbt=!{Inventory:[{Slot:18b,id:"minecraft:wind_charge"}]}] minecraft:wind_charge[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_staff] minecraft:wind_charge[custom_data={tags:["shop", "item"]}]
+
+# Drop-down lists
+item replace entity @a[tag=shop_staff] container.18 with minecraft:wind_charge[lore=['{"text":"500$","italic":false}'],custom_data={tags:["shop", "item"]}]
+
+# WIND CHARGE
+##########################################################################################
+# POTION OF REGENERATION
+
+# Fix bug
+item replace entity @a[nbt=!{Inventory:[{Slot:14b,id:"minecraft:firework_rocket"}]}] container.20 with minecraft:potion[custom_data={tags:["shop", "item"]}]
+
+# Buing process
+tag @a[scores={money=500..},tag=shop_staff,nbt=!{Inventory:[{Slot:20b,id:"minecraft:potion",components:{"minecraft:custom_data":{tags:["shop", "item"]}}}]}] add buy_potion
+scoreboard players remove @a[tag=buy_potion] money 500
+give @a[tag=buy_potion] potion[potion_contents={custom_color:16711680,custom_effects:[{id:"minecraft:regeneration",amplifier:1,duration:200,show_particles:1b}]}] 1
+execute at @a[tag=buy_potion] run playsound minecraft:ui.button.click master @a[tag=buy_potion] ~ ~ ~ 0.2
+tag @a remove buy_potion
+
+# Steal control
+clear @a[nbt=!{Inventory:[{Slot:20b,id:"minecraft:potion"}]}] minecraft:potion[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_staff] minecraft:potion[custom_data={tags:["shop", "item"]}]
+
+# Drop-down lists
+item replace entity @a[tag=shop_staff] container.20 with minecraft:potion[lore=['{"text":"500$","italic":false}'],custom_data={tags:["shop", "item"]}]
+
+# POTION OF REGENERATION
+##########################################################################################
+# TNT KIT
+
+# Fix bug
+item replace entity @a[tag=defense, nbt=!{Inventory:[{Slot:16b,id:"minecraft:chest"}]}] container.18 with minecraft:tnt[custom_data={tags:["shop", "item"]}]
+
+# Buing process
+tag @a[scores={money=1000..},tag=shop_kits,tag=defense,nbt=!{Inventory:[{Slot:18b,id:"minecraft:tnt",components:{"minecraft:custom_data":{tags:["shop", "item"]}}}]}] add buy_tnt
+scoreboard players remove @a[tag=buy_tnt] money 1000
+give @a[tag=buy_tnt] minecraft:tnt 3
+give @a[tag=buy_tnt] minecraft:redstone 10
+give @a[tag=buy_tnt] minecraft:stone_pressure_plate 5
+execute at @a[tag=buy_tnt] run playsound minecraft:ui.button.click master @a[tag=buy_tnt] ~ ~ ~ 0.2
+tag @a remove buy_tnt
+
+# Steal control
+clear @a[nbt=!{Inventory:[{Slot:18b,id:"minecraft:tnt"}]}] minecraft:tnt[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_kits] minecraft:tnt[custom_data={tags:["shop", "item"]}]
+
+# Drop-down lists
+item replace entity @a[tag=defense, tag=shop_kits] container.18 with minecraft:tnt[lore=['{"text":"1000$","italic":false}'],custom_data={tags:["shop", "item"]}]
+
+# TNT KIT
 ##########################################################################################
 # FILL EMPTY SLOTS
 
@@ -231,12 +377,20 @@ item replace entity @a container.34 with minecraft:black_stained_glass_pane[cust
 # DROP DOWN LISTS
 
 # Weapon
-clear @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] minecraft:netherite_sword[custom_data={tags:["shop"]}]
-item replace entity @a container.10 with netherite_sword[custom_name='{"text":"Weapon","italic":false,"color":"dark_red","bold":true}',enchantments={levels:{"minecraft:unbreaking":1},show_in_tooltip:false}, custom_data={tags:["shop"]}]
+clear @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] minecraft:netherite_sword[custom_data={tags:["shop", "menu"]}]
+item replace entity @a container.10 with netherite_sword[custom_name='{"text":"Weapon","italic":false,"color":"dark_red","bold":true}',enchantments={levels:{"minecraft:unbreaking":1},show_in_tooltip:false}, custom_data={tags:["shop", "menu"]}]
 
 # Defense
-clear @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] minecraft:netherite_chestplate[custom_data={tags:["shop"]}]
-item replace entity @a container.12 with netherite_chestplate[custom_name='{"text":"Defense","italic":false,"color":"green","bold":true}',enchantments={levels:{"minecraft:unbreaking":1},show_in_tooltip:false}, custom_data={tags:["shop"]}]
+clear @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] minecraft:netherite_chestplate[custom_data={tags:["shop", "menu"]}]
+item replace entity @a container.12 with netherite_chestplate[custom_name='{"text":"Defense","italic":false,"color":"green","bold":true}',enchantments={levels:{"minecraft:unbreaking":1},show_in_tooltip:false}, custom_data={tags:["shop", "menu"]}]
+
+# Staff
+clear @a[nbt=!{Inventory:[{Slot:14b,id:"minecraft:firework_rocket"}]}] minecraft:firework_rocket[custom_data={tags:["shop", "menu"]}]
+item replace entity @a container.14 with firework_rocket[custom_name='{"text":"Staff","italic":false,"color":"blue","bold":true}', custom_data={tags:["shop", "menu"]}]
+
+# Kits
+clear @a[nbt=!{Inventory:[{Slot:16b,id:"minecraft:chest"}]}] minecraft:chest[custom_data={tags:["shop", "menu"]}]
+item replace entity @a container.16 with minecraft:chest[custom_name='{"text":"Kits","italic":false,"color":"blue","bold":true}', custom_data={tags:["shop", "menu"]}]
 
 
 # DROP DOWN LISTS

@@ -14,6 +14,8 @@ tag team_2 add attack
 tag @a[team=team_2] remove defense
 tag @a[team=team_2] add attack
 
-scoreboard players set @a[tag=player] money 1300
+scoreboard players set @a[tag=player] money 2000
 
 clear @a[tag=player]
+
+function ctf:match/map/map_1/prepare

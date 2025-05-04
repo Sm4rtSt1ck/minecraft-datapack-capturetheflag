@@ -1,7 +1,16 @@
 #########################################
 # RULES
 
+# Instant tnt explosion
+execute positioned as @e[type=tnt] run summon minecraft:creeper ~ ~ ~ {\
+  Fuse:0,\
+  ignited:1b,\
+  ExplosionRadius:3\
+}
+kill @e[type=tnt]
 
+
+# Blindness near the flag
 execute at @e[type=armor_stand, tag=flag] run effect give @a[tag=attack, distance=..5] minecraft:blindness 2 1 true
 
 # Restrict picking up
@@ -37,4 +46,4 @@ execute if score round timer matches -2147483648..0 run function ctf:match/round
 
 # If flag is stolen -> attack wins
 # This works via command_block and pressure plate above it (doesn't execute every tick, if only command_block activates)
-# command for the command_block: execute if entity @p[tag=attack, nbt={Inventory:[{id:"minecraft:yellow_banner"}]}] if score game status matches 4 run function ctf:match/round/win_attack
+# command for the command_block: execute as @a[tag=attack, nbt={Inventory:[{id:"minecraft:yellow_banner"}]}, distance=..4] if score game status matches 4 run function ctf:match/event/on_bring_flag

@@ -7,7 +7,7 @@ clear @a[tag=attack] minecraft:yellow_banner
 
 effect clear @a[tag=attack] minecraft:glowing
 
-scoreboard players add @a[tag=attack] money 3000
-scoreboard players add @a[tag=defense] money 2000
+scoreboard players add @a[tag=attack] money 2500
+scoreboard players add @a[tag=defense] money 2500
 
 function ctf:match/end_round/start

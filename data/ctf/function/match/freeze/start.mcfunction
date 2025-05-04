@@ -2,9 +2,9 @@ say match/freeze/start
 
 scoreboard players set game status 3
 
-# 30 secs freeze before round start (600 ticks)
-scoreboard players set freeze timer 600
-bossbar set ctf:match max 600
+# 60 secs freeze before round start (1200 ticks)
+scoreboard players set freeze timer 1200
+bossbar set ctf:match max 1200
 
 gamemode adventure @a[tag=attack]
 gamemode survival @a[tag=defense]
@@ -21,7 +21,7 @@ give @r[tag=defense] minecraft:yellow_banner
 # Give flag breaker
 clear @a[tag=attack] minecraft:stick
 give @a[tag=attack] minecraft:stick[\
-    can_break={predicates:[{blocks:["yellow_banner", "yellow_wall_banner"]}]},\
+    can_break={predicates:[{blocks:["yellow_banner", "yellow_wall_banner", "tnt", "redstone_wire", "stone_pressure_plate"]}]},\
     custom_name='{"color":"green","text":"Flag breaker"}'\
 ] 1
 

@@ -2,6 +2,9 @@
 
 gamerule naturalRegeneration false
 gamerule doImmediateRespawn true
+gamerule mobGriefing false
+gamerule doMobSpawning false
+gamerule doFireTick false
 
 team leave @a
 team add team_1
