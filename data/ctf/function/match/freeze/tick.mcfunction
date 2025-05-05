@@ -1,7 +1,7 @@
 scoreboard players remove freeze timer 1
 execute store result bossbar ctf:match value run scoreboard players get freeze timer
 
-execute if score freeze timer matches 195..205 run title @a[tag=player] title {"text": "10 secs left", "color": "green"}
+execute if score freeze timer matches 199..201 run title @a[tag=player] title {"text": "10 secs left", "color": "green"}
 execute if score freeze timer matches 60 run title @a[tag=player] title {"text": "3", "color": "green"}
 execute if score freeze timer matches 60 as @a[tag=player] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 10 0.6
 execute if score freeze timer matches 40 run title @a[tag=player] title {"text": "2", "color": "green"}
@@ -10,8 +10,10 @@ execute if score freeze timer matches 20 run title @a[tag=player] title {"text":
 execute if score freeze timer matches 20 as @a[tag=player] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 10 1
 
 
-execute at @e[type=tnt] run setblock ^ ^1 ^ tnt
+execute at @e[type=tnt] run summon armor_stand ~ ~ ~ {Tags:["tnt_marker"], Marker:true}
 kill @e[type=tnt]
+execute at @e[type=armor_stand,tag=tnt_marker] run setblock ~ ~ ~ tnt
+kill @e[type=armor_stand, tag=tnt_marker]
 
 execute as @a[scores={flag_placed=1..}] run function ctf:match/event/on_place_flag
 function ctf:match/freeze/shop

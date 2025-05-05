@@ -64,6 +64,6 @@ tag @a[team=team_2] remove attack
 # GO TO THE MOST VOTED MAP
 
 # execute if score @p map_vote matches 1 run function ctf:match/map/map_1/join
-function ctf:match/warmup/start
+execute as @s run function ctf:match/warmup/start
 # execute if score @s[tag=admin] map_vote matches 2 run function ctf:match/map/map_2/join
 function ctf:match/map/map_1/prepare

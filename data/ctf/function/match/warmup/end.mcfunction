@@ -21,4 +21,6 @@ gamerule keepInventory false
 
 clear @a[tag=player]
 
+title @a[tag=player] title {"text":"LET'S WIN", "color":"green"}
+
 function ctf:match/freeze/start
