@@ -273,6 +273,37 @@ item replace entity @a[tag=shop_defense] container.22 with minecraft:netherite_c
 
 # NETHERITE ARMOR
 ##########################################################################################
+# TEMPLATE
+
+# Fix bug
+item replace entity @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] container.24 with minecraft:shield[custom_data={tags:["shop", "item"]}]
+
+# Buing process
+tag @a[scores={money=2000..},tag=shop_defense,nbt=!{Inventory:[{Slot:24b,id:"minecraft:shield",components:{"minecraft:custom_data":{tags:["shop", "item"]}}}]}] add buy_shield
+scoreboard players remove @a[tag=buy_shield] money 2000
+give @a[tag=buy_shield, tag=attack] minecraft:shield[base_color="orange",banner_patterns=[\
+    {"pattern":"gradient","color":"black"},\
+    {"pattern":"skull","color":"black"},\
+    {"pattern":"gradient_up","color":"red"},\
+    {"pattern":"triangles_bottom","color":"orange"},\
+    {"pattern":"triangles_bottom","color":"red"}\
+]] 1
+give @a[tag=buy_shield, tag=defense] minecraft:shield[base_color="blue",banner_patterns=[\
+    {"pattern":"gradient_up","color":"light_blue"},\
+    {"pattern":"flower","color":"light_blue"}\
+]] 1
+execute at @a[tag=buy_shield] run playsound minecraft:ui.button.click master @a[tag=buy_shield] ~ ~ ~ 0.2
+tag @a remove buy_shield
+
+# Steal control
+clear @a[nbt=!{Inventory:[{Slot:24b,id:"minecraft:shield"}]}] minecraft:shield[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_defense] minecraft:shield[custom_data={tags:["shop", "item"]}]
+
+# Drop-down lists
+item replace entity @a[tag=shop_defense] container.24 with minecraft:shield[lore=['{"text":"2000$","italic":false}'],custom_data={tags:["shop", "item"]}]
+
+# TEMPLATE
+##########################################################################################
 # WIND CHARGE
 
 # Fix bug
@@ -325,7 +356,7 @@ tag @a[scores={money=1000..},tag=shop_kits,tag=defense,nbt=!{Inventory:[{Slot:18
 scoreboard players remove @a[tag=buy_tnt] money 1000
 give @a[tag=buy_tnt] minecraft:tnt 3
 give @a[tag=buy_tnt] minecraft:redstone 10
-give @a[tag=buy_tnt] minecraft:stone_pressure_plate 5
+give @a[tag=buy_tnt] minecraft:pale_oak_pressure_plate 5
 execute at @a[tag=buy_tnt] run playsound minecraft:ui.button.click master @a[tag=buy_tnt] ~ ~ ~ 0.2
 tag @a remove buy_tnt
 

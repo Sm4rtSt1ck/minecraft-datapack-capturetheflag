@@ -6,4 +6,4 @@ scoreboard players reset * map_vote
 scoreboard players set game status 1
 bossbar set ctf:match visible false
 
-execute as @a[tag=!lobby] run function ctf:lobby/join
+execute as @a run function ctf:lobby/join

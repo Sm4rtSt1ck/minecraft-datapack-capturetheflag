@@ -1,5 +1,3 @@
-# Deploy
-
 gamerule naturalRegeneration false
 gamerule doImmediateRespawn true
 gamerule mobGriefing false
@@ -9,6 +7,7 @@ gamerule commandBlockOutput false
 gamerule keepInventory false
 
 kill @e[tag=flag]
+kill @e[tag=map_entity]
 effect clear @a
 
 team leave @a
