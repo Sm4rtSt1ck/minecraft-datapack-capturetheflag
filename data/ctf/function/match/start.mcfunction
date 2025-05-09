@@ -12,7 +12,7 @@ scoreboard players set team_1 rounds 0
 scoreboard players set team_2 rounds 0
 bossbar set ctf:match visible true
 bossbar set ctf:match players @a[tag=!lobby]
-title @s subtitle {"text":"Preparing the map!", "color": "yellow"}
+title @s subtitle {"text":"The game is being started!", "color": "yellow"}
 
 scoreboard players set @a[tag=player] money 2000
 scoreboard objectives setdisplay list kills
@@ -68,4 +68,4 @@ tag @a[team=team_2] remove attack
 # execute if score @s[tag=admin] map_vote matches 2 run function ctf:match/map/map_2/join
 execute if score @r[tag=admin] map_vote matches 1 run function ctf:match/map/map_1/prepare
 execute if score @r[tag=admin] map_vote matches 2 run function ctf:match/map/map_2/prepare
-schedule function ctf:match/warmup/start 5s
+function ctf:match/warmup/start

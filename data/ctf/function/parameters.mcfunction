@@ -5,6 +5,8 @@ gamerule doMobSpawning false
 gamerule doFireTick false
 gamerule commandBlockOutput false
 gamerule keepInventory false
+setworldspawn 0 -45 0
+defaultgamemode adventure
 
 kill @e[tag=flag]
 kill @e[tag=map_entity]

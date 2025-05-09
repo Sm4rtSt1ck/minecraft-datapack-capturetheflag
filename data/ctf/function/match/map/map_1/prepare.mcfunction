@@ -2,7 +2,8 @@ say match/map/map_1/prepare
 
 title @s title {"text": "Map 1", "color": "blue"}
 
-tp @a[tag=player] -69.00 -50.26 70.07
+forceload add -98 43 -44 102
+forceload add -200 -200 -100 -100
 
 # Clone the map
-schedule function ctf:match/map/map_1/clone 3s
+schedule function ctf:match/map/map_1/clone 1s

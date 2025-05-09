@@ -1,4 +1,4 @@
-say match/map/map_1/freeze
+say match/map/map_2/freeze
 
 # Fill the borders
 # Way 1

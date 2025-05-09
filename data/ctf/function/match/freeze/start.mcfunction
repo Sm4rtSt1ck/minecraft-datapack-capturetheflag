@@ -36,6 +36,7 @@ effect give @a[tag=defense] minecraft:mining_fatigue infinite 4 true
 execute if score @r[tag=admin] map_vote matches 1 run function ctf:match/map/map_1/freeze
 execute if score @r[tag=admin] map_vote matches 2 run function ctf:match/map/map_2/freeze
 
+
 # Give flag
 clear @a[tag=player] minecraft:yellow_banner
 
@@ -70,8 +71,3 @@ execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, Picku
   ]\
 }\
 }}
-
-give @a chainmail_boots
-give @a chainmail_chestplate
-give @a chainmail_helmet
-give @a chainmail_leggings

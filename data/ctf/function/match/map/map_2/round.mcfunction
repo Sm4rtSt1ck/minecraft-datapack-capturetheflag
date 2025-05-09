@@ -1,4 +1,4 @@
-say match/map/map_1/round
+say match/map/map_2/round
 
 # Break the borders
 # Way 1
