@@ -18,4 +18,5 @@ scoreboard players set @a[tag=player] money 2000
 
 clear @a[tag=player]
 
-function ctf:match/map/map_1/prepare
+execute if score @r[tag=admin] map_vote matches 1 run function ctf:match/map/map_1/prepare
+execute if score @r[tag=admin] map_vote matches 2 run function ctf:match/map/map_2/prepare

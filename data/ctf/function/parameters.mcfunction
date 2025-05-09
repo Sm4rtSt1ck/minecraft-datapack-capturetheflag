@@ -8,6 +8,9 @@ gamerule doFireTick false
 gamerule commandBlockOutput false
 gamerule keepInventory false
 
+kill @e[tag=flag]
+effect clear @a
+
 team leave @a
 team add team_1
 team add team_2

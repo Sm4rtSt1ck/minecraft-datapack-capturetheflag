@@ -12,6 +12,7 @@ kill @e[type=tnt]
 
 # Blindness near the flag
 execute at @e[type=armor_stand, tag=flag] run effect give @a[tag=attack, distance=..5] minecraft:blindness 2 1 true
+execute at @e[type=armor_stand, tag=flag] run particle minecraft:ash ~ ~ ~ 0.5 1 0.5 0 20 force
 
 # Restrict picking up
 function ctf:match/helpers/pickup_restrict

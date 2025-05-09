@@ -20,4 +20,5 @@ execute if score match rounds >= swap rounds run \
 scoreboard players set end_round timer 100
 bossbar set ctf:match max 100
 
-function ctf:match/map/map_1/end_round
+execute if score @r[tag=admin] map_vote matches 1 run function ctf:match/map/map_1/end_round
+execute if score @r[tag=admin] map_vote matches 2 run function ctf:match/map/map_2/end_round

@@ -2,13 +2,10 @@ say match/map/map_1/freeze
 
 # Fill the borders
 # Way 1
-fill -190 -50 -145 -191 -36 -145 minecraft:barrier
 fill -190 -50 -146 -191 -36 -146 minecraft:light_blue_stained_glass_pane
 # Way 2
-fill -192 -50 -182 -192 -36 -188 minecraft:barrier
 fill -193 -50 -182 -193 -36 -188 minecraft:light_blue_stained_glass_pane
 # Way 3
-fill -196 -50 -190 -198 -36 -190 minecraft:barrier
 fill -196 -50 -189 -198 -36 -189 minecraft:light_blue_stained_glass_pane
 
 # Attack team
