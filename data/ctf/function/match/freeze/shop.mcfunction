@@ -123,8 +123,8 @@ item replace entity @a[tag=shop_weapon] container.29 with minecraft:mace[lore=['
 item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.22 with minecraft:bow[custom_data={tags:["shop", "item"]}]
 
 # Buing process
-tag @a[scores={money=890..},tag=shop_weapon,nbt=!{Inventory:[{Slot:22b,id:"minecraft:bow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_bow
-scoreboard players remove @a[tag=buy_bow] money 890
+tag @a[scores={money=1850..},tag=shop_weapon,nbt=!{Inventory:[{Slot:22b,id:"minecraft:bow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_bow
+scoreboard players remove @a[tag=buy_bow] money 1850
 execute at @a[tag=buy_bow] run playsound minecraft:ui.button.click master @a[tag=buy_bow] ~ ~ ~ 0.2
 give @a[tag=buy_bow] minecraft:bow
 tag @a remove buy_bow
@@ -134,7 +134,7 @@ clear @a[nbt=!{Inventory:[{Slot:22b,id:"minecraft:bow"}]}] minecraft:bow[custom_
 clear @a[tag=!shop_weapon] minecraft:bow[custom_data={tags:["shop", "item"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_weapon] container.22 with minecraft:bow[lore=['{"text":"890$","italic":false}'],custom_data={tags:["shop", "item"]}]
+item replace entity @a[tag=shop_weapon] container.22 with minecraft:bow[lore=['{"text":"1850$","italic":false}'],custom_data={tags:["shop", "item"]}]
 
 # BOW
 ##########################################################################################
@@ -165,8 +165,8 @@ item replace entity @a[tag=shop_weapon] container.24 with minecraft:crossbow[lor
 item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.26 with minecraft:arrow[custom_data={tags:["shop", "item", "0"]}]
 
 # Buing process
-tag @a[scores={money=100..},tag=shop_weapon,nbt=!{Inventory:[{Slot:26b,id:"minecraft:arrow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_arrow
-scoreboard players remove @a[tag=buy_arrow] money 100
+tag @a[scores={money=200..},tag=shop_weapon,nbt=!{Inventory:[{Slot:26b,id:"minecraft:arrow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_arrow
+scoreboard players remove @a[tag=buy_arrow] money 200
 give @a[tag=buy_arrow] minecraft:arrow 10
 execute at @a[tag=buy_arrow] run playsound minecraft:ui.button.click master @a[tag=buy_arrow] ~ ~ ~ 0.2
 tag @a remove buy_arrow
@@ -176,7 +176,7 @@ clear @a[nbt=!{Inventory:[{Slot:26b,id:"minecraft:arrow"}]}] minecraft:arrow[cus
 clear @a[tag=!shop_weapon] minecraft:arrow[custom_data={tags:["shop", "item", "0"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_weapon] container.26 with minecraft:arrow[custom_name='{"text":"Arrows x10", "color":"dark_green", "italic": false}', lore=['{"text":"100$","italic":false}'],custom_data={tags:["shop", "item", "0"]}]
+item replace entity @a[tag=shop_weapon] container.26 with minecraft:arrow[custom_name='{"text":"Arrows x10", "color":"dark_green", "italic": false}', lore=['{"text":"200$","italic":false}'],custom_data={tags:["shop", "item", "0"]}]
 
 # ARROWS
 ##########################################################################################
@@ -186,9 +186,9 @@ item replace entity @a[tag=shop_weapon] container.26 with minecraft:arrow[custom
 item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.31 with minecraft:arrow[custom_data={tags:["shop", "item", "1"]}]
 
 # Buing process
-tag @a[scores={money=1000..},tag=shop_weapon,nbt=!{Inventory:[{Slot:31b,id:"minecraft:arrow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_poison_arrow
-scoreboard players remove @a[tag=buy_poison_arrow] money 1000
-give @a[tag=buy_poison_arrow] minecraft:arrow[potion_contents={custom_color:39936,custom_effects:[{id:"minecraft:poison",amplifier:1,duration:100}]}] 10
+tag @a[scores={money=500..},tag=shop_weapon,nbt=!{Inventory:[{Slot:31b,id:"minecraft:arrow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_poison_arrow
+scoreboard players remove @a[tag=buy_poison_arrow] money 500
+give @a[tag=buy_poison_arrow] minecraft:arrow[potion_contents={custom_color:39936,custom_effects:[{id:"minecraft:poison",amplifier:1,duration:20}]}] 10
 execute at @a[tag=buy_poison_arrow] run playsound minecraft:ui.button.click master @a[tag=buy_poison_arrow] ~ ~ ~ 0.2
 tag @a remove buy_poison_arrow
 
@@ -197,7 +197,7 @@ clear @a[nbt=!{Inventory:[{Slot:31b,id:"minecraft:arrow"}]}] minecraft:arrow[cus
 clear @a[tag=!shop_weapon] minecraft:arrow[custom_data={tags:["shop", "item", "1"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_weapon] container.31 with minecraft:arrow[custom_name='{"text":"Poison arrows x10", "color":"dark_green", "italic":false}', lore=['{"text":"1000$","italic":false}'],custom_data={tags:["shop", "item", "1"]}]
+item replace entity @a[tag=shop_weapon] container.31 with minecraft:arrow[custom_name='{"text":"Poison arrows (1 sec) x10", "color":"dark_green", "italic":false}', lore=['{"text":"500$","italic":false}'],custom_data={tags:["shop", "item", "1"]}]
 
 # POISON ARROWS
 ##########################################################################################
@@ -273,25 +273,25 @@ item replace entity @a[tag=shop_defense] container.22 with minecraft:netherite_c
 
 # NETHERITE ARMOR
 ##########################################################################################
-# TEMPLATE
+# SHIELD
 
 # Fix bug
 item replace entity @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] container.24 with minecraft:shield[custom_data={tags:["shop", "item"]}]
 
 # Buing process
-tag @a[scores={money=2000..},tag=shop_defense,nbt=!{Inventory:[{Slot:24b,id:"minecraft:shield",components:{"minecraft:custom_data":{tags:["shop", "item"]}}}]}] add buy_shield
-scoreboard players remove @a[tag=buy_shield] money 2000
-give @a[tag=buy_shield, tag=attack] minecraft:shield[base_color="orange",banner_patterns=[\
+tag @a[scores={money=500..},tag=shop_defense,nbt=!{Inventory:[{Slot:24b,id:"minecraft:shield",components:{"minecraft:custom_data":{tags:["shop", "item"]}}}]}] add buy_shield
+scoreboard players remove @a[tag=buy_shield] money 500
+give @a[tag=buy_shield, tag=attack] minecraft:shield[ base_color="orange",banner_patterns=[\
     {"pattern":"gradient","color":"black"},\
     {"pattern":"skull","color":"black"},\
     {"pattern":"gradient_up","color":"red"},\
     {"pattern":"triangles_bottom","color":"orange"},\
     {"pattern":"triangles_bottom","color":"red"}\
-]] 1
+], damage=316] 1
 give @a[tag=buy_shield, tag=defense] minecraft:shield[base_color="blue",banner_patterns=[\
     {"pattern":"gradient_up","color":"light_blue"},\
     {"pattern":"flower","color":"light_blue"}\
-]] 1
+], damage=316] 1
 execute at @a[tag=buy_shield] run playsound minecraft:ui.button.click master @a[tag=buy_shield] ~ ~ ~ 0.2
 tag @a remove buy_shield
 
@@ -300,9 +300,9 @@ clear @a[nbt=!{Inventory:[{Slot:24b,id:"minecraft:shield"}]}] minecraft:shield[c
 clear @a[tag=!shop_defense] minecraft:shield[custom_data={tags:["shop", "item"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_defense] container.24 with minecraft:shield[lore=['{"text":"2000$","italic":false}'],custom_data={tags:["shop", "item"]}]
+item replace entity @a[tag=shop_defense] container.24 with minecraft:shield[lore=['{"text":"500$","italic":false}'],custom_data={tags:["shop", "item"]}]
 
-# TEMPLATE
+# SHIELD
 ##########################################################################################
 # WIND CHARGE
 

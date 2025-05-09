@@ -71,3 +71,7 @@ execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, Picku
 }\
 }}
 
+give @a chainmail_boots
+give @a chainmail_chestplate
+give @a chainmail_helmet
+give @a chainmail_leggings

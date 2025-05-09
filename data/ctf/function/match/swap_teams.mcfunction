@@ -16,6 +16,8 @@ tag @a[team=team_2] add attack
 
 scoreboard players set @a[tag=player] money 2000
 
+title @a[tag=player] title {"text":"Preparing the map!", "color": "yellow"}
+
 clear @a[tag=player]
 
 execute if score @r[tag=admin] map_vote matches 1 run function ctf:match/map/map_1/prepare
