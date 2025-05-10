@@ -42,6 +42,8 @@ scoreboard objectives add status dummy
 # IMPORTANT! change to 0 after fully adding vote status
 scoreboard players set game status 1
 
+scoreboard objectives add had_left minecraft.custom:minecraft.leave_game
+
 scoreboard players set max rounds 10
 scoreboard players operation swap rounds = max rounds
 scoreboard players operation swap rounds /= 2 const

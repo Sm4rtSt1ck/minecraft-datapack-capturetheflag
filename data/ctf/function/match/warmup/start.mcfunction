@@ -1,5 +1,7 @@
 say match/warmup/start
 
+scoreboard objectives setdisplay sidebar kills
+
 # Warmup game status
 scoreboard players set game status 2
 bossbar set ctf:match name {"text": "WARM-UP", "color": "green"}

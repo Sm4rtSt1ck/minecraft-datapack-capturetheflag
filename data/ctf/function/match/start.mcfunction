@@ -23,12 +23,13 @@ scoreboard players reset * kills
 # Display players with no kills
 scoreboard players set @a[tag=player] kills 0
 
-scoreboard players reset @a[tag=player] just_died
-scoreboard players reset @a[tag=player] just_killed
-scoreboard players reset @a[tag=player] flag_placed
-scoreboard players reset @a[tag=player] flag_broken
-scoreboard players reset @a[tag=player] flag_dropped
-scoreboard players reset @a[tag=player] flag_pickedup
+scoreboard players reset * just_died
+scoreboard players reset * just_killed
+scoreboard players reset * flag_placed
+scoreboard players reset * flag_broken
+scoreboard players reset * wall_flag_broken
+scoreboard players reset * flag_dropped
+scoreboard players reset * flag_pickedup
 
 # Set the attacking and the defending sides
 team empty team_1
