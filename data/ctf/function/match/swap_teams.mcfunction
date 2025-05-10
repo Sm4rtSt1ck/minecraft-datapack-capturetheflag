@@ -16,9 +16,11 @@ tag @a[team=team_2] add attack
 
 scoreboard players set @a[tag=player] money 2000
 
-title @a[tag=player] title {"text":"Preparing the map!", "color": "yellow"}
+title @a[tag=!lobby] title {"text":"SWAP TEAMS", "color": "green"}
 
 clear @a[tag=player]
+gamemode spectator @a[tag=player]
 
-execute if score @r[tag=admin] map_vote matches 1 run function ctf:match/map/map_1/prepare
-execute if score @r[tag=admin] map_vote matches 2 run function ctf:match/map/map_2/prepare
+function ctf:match/prepare/prepare
+
+schedule function ctf:match/freeze/start 200t

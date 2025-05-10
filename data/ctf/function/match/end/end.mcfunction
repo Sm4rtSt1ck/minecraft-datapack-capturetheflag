@@ -5,4 +5,6 @@ tag team_1 remove defense
 tag team_2 remove attack
 tag team_2 remove defense
 
+forceload remove -200 -200 -72 -72
+
 function ctf:lobby/join_all

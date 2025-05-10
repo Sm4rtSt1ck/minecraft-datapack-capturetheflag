@@ -7,6 +7,8 @@ bossbar set ctf:match name {"text": "WARM-UP", "color": "green"}
 # 30 secs warmup timer (600 ticks)
 scoreboard players set warmup timer 600
 bossbar set ctf:match max 600
+title @a[tag=!lobby] title {"text":"WARM-UP", "color": "green"}
+title @a[tag=!lobby] subtitle {"text":"30 seconds", "color": "yellow"}
 
 effect clear @a[tag=player]
 effect give @a[tag=player] minecraft:saturation infinite 127 true

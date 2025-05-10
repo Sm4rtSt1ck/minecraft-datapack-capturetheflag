@@ -5,8 +5,11 @@ gamerule doMobSpawning false
 gamerule doFireTick false
 gamerule commandBlockOutput false
 gamerule keepInventory false
+gamerule spectatorsGenerateChunks false
 setworldspawn 0 -45 0
 defaultgamemode adventure
+
+forceload remove all
 
 kill @e[tag=flag]
 kill @e[tag=map_entity]
@@ -63,7 +66,7 @@ scoreboard objectives add flag_broken minecraft.mined:minecraft.yellow_banner
 scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.yellow_wall_banner
 
 bossbar remove ctf:match
-bossbar add ctf:match "x1 | x2"
+bossbar add ctf:match ""
 bossbar set ctf:match visible true
 bossbar set ctf:match color purple
 bossbar set ctf:match max 300

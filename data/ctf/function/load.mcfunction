@@ -1,4 +1,4 @@
-function ctf:parameters
+# function ctf:load_parameters
 
 # Loading notification
 title @a[tag=admin] title { \

@@ -2,6 +2,8 @@ say match/freeze/start
 
 scoreboard players set game status 3
 
+spawnpoint @a[tag=player] -190 -30 -190
+
 # 60 secs freeze before round start (1200 ticks)
 scoreboard players set freeze timer 1200
 bossbar set ctf:match max 1200
@@ -42,7 +44,7 @@ clear @a[tag=player] minecraft:yellow_banner
 
 # give @r[tag=defense] minecraft:yellow_banner ONLY AFTER CALL MAP FREEZE FUNCTION
 # execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, PickupDelay:30, Tags:["flag"],Item:{id:"minecraft:yellow_banner",count:1}}
-execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, PickupDelay:30, Tags:["flag"],Item:{id:"minecraft:yellow_banner",count:1, components:{\
+execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, PickupDelay:20, Tags:["flag"],Item:{id:"minecraft:yellow_banner",count:1, components:{\
   "minecraft:banner_patterns": [\
     {\
       "color": "red",\
