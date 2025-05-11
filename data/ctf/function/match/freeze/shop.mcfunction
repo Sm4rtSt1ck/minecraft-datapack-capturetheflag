@@ -231,7 +231,7 @@ item replace entity @a[tag=shop_defense] container.18 with minecraft:iron_chestp
 item replace entity @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] container.20 with minecraft:diamond_chestplate[custom_data={tags:["shop", "item"]}]
 
 # Buing process
-tag @a[scores={money=1500..},tag=shop_defense,nbt=!{Inventory:[{Slot:20b,id:"minecraft:diamond_chestplate",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_diamond_armor
+tag @a[scores={money=1700..},tag=shop_defense,nbt=!{Inventory:[{Slot:20b,id:"minecraft:diamond_chestplate",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_diamond_armor
 scoreboard players remove @a[tag=buy_diamond_armor] money 1500
 item replace entity @a[tag=buy_diamond_armor] armor.head with minecraft:diamond_helmet
 item replace entity @a[tag=buy_diamond_armor] armor.chest with minecraft:diamond_chestplate
@@ -245,7 +245,7 @@ clear @a[nbt=!{Inventory:[{Slot:20b,id:"minecraft:diamond_chestplate"}]}] minecr
 clear @a[tag=!shop_defense] minecraft:diamond_chestplate[custom_data={tags:["shop", "item"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_defense] container.20 with minecraft:diamond_chestplate[lore=['{"text":"1500$","italic":false}'],custom_data={tags:["shop", "item"]}]
+item replace entity @a[tag=shop_defense] container.20 with minecraft:diamond_chestplate[lore=['{"text":"1700$","italic":false}'],custom_data={tags:["shop", "item"]}]
 
 # DIAMOND ARMOR
 ##########################################################################################
@@ -255,8 +255,8 @@ item replace entity @a[tag=shop_defense] container.20 with minecraft:diamond_che
 item replace entity @a[nbt=!{Inventory:[{Slot:12b,id:"minecraft:netherite_chestplate"}]}] container.22 with minecraft:netherite_chestplate[custom_data={tags:["shop", "item"]}]
 
 # Buing process
-tag @a[scores={money=2000..},tag=shop_defense,nbt=!{Inventory:[{Slot:22b,id:"minecraft:netherite_chestplate",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_netherite_armor
-scoreboard players remove @a[tag=buy_netherite_armor] money 2000
+tag @a[scores={money=2700..},tag=shop_defense,nbt=!{Inventory:[{Slot:22b,id:"minecraft:netherite_chestplate",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_netherite_armor
+scoreboard players remove @a[tag=buy_netherite_armor] money 2700
 item replace entity @a[tag=buy_netherite_armor] armor.head with minecraft:netherite_helmet
 item replace entity @a[tag=buy_netherite_armor] armor.chest with minecraft:netherite_chestplate
 item replace entity @a[tag=buy_netherite_armor] armor.legs with minecraft:netherite_leggings
@@ -269,7 +269,7 @@ clear @a[nbt=!{Inventory:[{Slot:22b,id:"minecraft:netherite_chestplate"}]}] mine
 clear @a[tag=!shop_defense] minecraft:netherite_chestplate[custom_data={tags:["shop", "item"]}]
 
 # Drop-down lists
-item replace entity @a[tag=shop_defense] container.22 with minecraft:netherite_chestplate[lore=['{"text":"2000$","italic":false}'],custom_data={tags:["shop", "item"]}]
+item replace entity @a[tag=shop_defense] container.22 with minecraft:netherite_chestplate[lore=['{"text":"2700$","italic":false}'],custom_data={tags:["shop", "item"]}]
 
 # NETHERITE ARMOR
 ##########################################################################################
@@ -354,9 +354,11 @@ item replace entity @a[tag=defense, nbt=!{Inventory:[{Slot:16b,id:"minecraft:che
 # Buing process
 tag @a[scores={money=1000..},tag=shop_kits,tag=defense,nbt=!{Inventory:[{Slot:18b,id:"minecraft:tnt",components:{"minecraft:custom_data":{tags:["shop", "item"]}}}]}] add buy_tnt
 scoreboard players remove @a[tag=buy_tnt] money 1000
-give @a[tag=buy_tnt] minecraft:tnt 3
+give @a[tag=buy_tnt] minecraft:tnt 4
 give @a[tag=buy_tnt] minecraft:redstone 10
-give @a[tag=buy_tnt] minecraft:pale_oak_pressure_plate 5
+give @a[tag=buy_tnt] minecraft:pale_oak_pressure_plate 6
+give @a[tag=buy_tnt] minecraft:string 5
+give @a[tag=buy_tnt] minecraft:tripwire_hook 4
 execute at @a[tag=buy_tnt] run playsound minecraft:ui.button.click master @a[tag=buy_tnt] ~ ~ ~ 0.2
 tag @a remove buy_tnt
 

@@ -20,7 +20,7 @@ tag @s remove just_killed
 clear @s
 team leave @s
 gamemode adventure @s
-
+execute positioned as @s run spawnpoint @s
 scoreboard players set @s had_left 0
 
 #########################################
