@@ -18,8 +18,7 @@ scoreboard players set @a[tag=player] wall_flag_broken 0
 scoreboard players set @a[tag=player] flag_dropped 0
 scoreboard players set @a[tag=player] flag_pickedup 0
 
-scoreboard objectives setdisplay sidebar.team.blue money
-scoreboard objectives setdisplay sidebar.team.red money
+scoreboard objectives setdisplay sidebar kills
 
 gamerule keepInventory false
 

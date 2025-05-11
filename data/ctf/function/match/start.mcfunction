@@ -17,7 +17,7 @@ bossbar set ctf:match players @a[tag=!lobby]
 bossbar set ctf:match name {"text":"MAP PREPARATION", "color": "yellow"}
 
 scoreboard players set @a[tag=player] money 2000
-scoreboard objectives setdisplay list kills
+scoreboard objectives setdisplay list deaths
 scoreboard players reset * deaths
 scoreboard players reset * kills
 # Display players with no kills

@@ -56,8 +56,8 @@ scoreboard objectives setdisplay below_name health
 scoreboard objectives modify health numberformat styled {"color":"green"}
 scoreboard objectives add money dummy "Money"
 
-scoreboard objectives add kills playerKillCount "Kills"
-scoreboard objectives add deaths deathCount "Deaths"
+scoreboard objectives add kills playerKillCount {"text": "Kills", "color": "red"}
+scoreboard objectives add deaths deathCount {"text": "Deaths", "color": "red"}
 # Events
 scoreboard objectives add just_killed playerKillCount
 scoreboard objectives add just_died deathCount
