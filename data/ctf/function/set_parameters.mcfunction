@@ -19,6 +19,10 @@ team leave @a
 team add team_1
 team add team_2
 
+scoreboard objectives add match_id dummy
+# To prevent bla bla lba
+scoreboard players add match match_id 1
+
 scoreboard objectives add const dummy
 scoreboard players set 2 const 2
 scoreboard players set 3 const 3
@@ -56,7 +60,7 @@ scoreboard objectives setdisplay below_name health
 scoreboard objectives modify health numberformat styled {"color":"green"}
 scoreboard objectives add money dummy "Money"
 
-scoreboard objectives add kills playerKillCount {"text": "Kills", "color": "red"}
+scoreboard objectives add kills playerKillCount {"text": "Kills", "color": "green"}
 scoreboard objectives add deaths deathCount {"text": "Deaths", "color": "red"}
 # Events
 scoreboard objectives add just_killed playerKillCount

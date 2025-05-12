@@ -148,6 +148,8 @@ tag @a[scores={money=3000..},tag=shop_weapon,nbt=!{Inventory:[{Slot:24b,id:"mine
 scoreboard players remove @a[tag=buy_crossbow] money 3000
 execute at @a[tag=buy_crossbow] run playsound minecraft:ui.button.click master @a[tag=buy_crossbow] ~ ~ ~ 0.2
 give @a[tag=buy_crossbow] minecraft:crossbow
+give @a[tag=buy_crossbow, tag=defense] firework_rocket[fireworks={explosions:[{shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"}]}] 5
+give @a[tag=buy_crossbow, tag=attack] firework_rocket[fireworks={explosions:[{shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"}]}] 5
 tag @a remove buy_crossbow
 
 # Steal control
@@ -188,7 +190,7 @@ item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"
 # Buing process
 tag @a[scores={money=500..},tag=shop_weapon,nbt=!{Inventory:[{Slot:31b,id:"minecraft:arrow",components:{"minecraft:custom_data":{tags:["shop"]}}}]}] add buy_poison_arrow
 scoreboard players remove @a[tag=buy_poison_arrow] money 500
-give @a[tag=buy_poison_arrow] minecraft:arrow[potion_contents={custom_color:39936,custom_effects:[{id:"minecraft:poison",amplifier:1,duration:20}]}] 10
+give @a[tag=buy_poison_arrow] minecraft:arrow[potion_contents={custom_color:39936,custom_effects:[{id:"minecraft:poison",amplifier:1,duration:30}]}] 10
 execute at @a[tag=buy_poison_arrow] run playsound minecraft:ui.button.click master @a[tag=buy_poison_arrow] ~ ~ ~ 0.2
 tag @a remove buy_poison_arrow
 
@@ -200,7 +202,29 @@ clear @a[tag=!shop_weapon] minecraft:arrow[custom_data={tags:["shop", "item", "1
 item replace entity @a[tag=shop_weapon] container.31 with minecraft:arrow[custom_name='{"text":"Poison arrows (1 sec) x10", "color":"dark_green", "italic":false}', lore=['{"text":"500$","italic":false}'],custom_data={tags:["shop", "item", "1"]}]
 
 # POISON ARROWS
-##########################################################################################
+#########################################################################################
+# FIREWORK
+
+# Fix bug
+item replace entity @a[nbt=!{Inventory:[{Slot:10b,id:"minecraft:netherite_sword"}]}] container.33 with minecraft:firework_rocket[custom_data={tags:["shop", "item"]}]
+
+# Buing process
+tag @a[scores={money=1000..},tag=shop_weapon,nbt=!{Inventory:[{Slot:33b,id:"minecraft:firework_rocket",components:{"minecraft:custom_data":{tags:["shop", "item"]}}}]}] add buy_firework_rocket
+scoreboard players remove @a[tag=buy_firework_rocket] money 1000
+give @a[tag=buy_firework_rocket, tag=defense] firework_rocket[fireworks={explosions:[{shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"}]}] 5
+give @a[tag=buy_firework_rocket, tag=attack] firework_rocket[fireworks={explosions:[{shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"}]}] 5
+execute at @a[tag=buy_firework_rocket] run playsound minecraft:ui.button.click master @a[tag=buy_firework_rocket] ~ ~ ~ 0.2
+tag @a remove buy_firework_rocket
+
+# Steal control
+clear @a[nbt=!{Inventory:[{Slot:33b,id:"minecraft:firework_rocket"}]}] minecraft:firework_rocket[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_weapon] minecraft:firework_rocket[custom_data={tags:["shop", "item"]}]
+
+# Drop-down lists
+item replace entity @a[tag=shop_weapon] container.33 with minecraft:firework_rocket[lore=['{"text":"1000$","italic":false}'],custom_data={tags:["shop", "item"]}]
+
+# FIREWORK
+#########################################################################################
 # IRON ARMOR
 
 # Fix bug

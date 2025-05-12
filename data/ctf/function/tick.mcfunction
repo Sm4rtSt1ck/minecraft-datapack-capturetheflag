@@ -6,4 +6,4 @@ execute if score game status matches 4 run function ctf:match/round/tick
 execute if score game status matches 5 run function ctf:match/end_round/tick
 execute if score game status matches 6 run function ctf:match/end/tick
 
-execute as @a unless score @s had_left matches 0 run function ctf:lobby/join
+execute as @a unless score @s had_left matches 0 unless score @s match_id = match match_id run function ctf:lobby/join

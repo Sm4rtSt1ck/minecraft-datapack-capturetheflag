@@ -30,6 +30,31 @@ give @a[tag=attack] minecraft:stick[\
     custom_name='{"color":"green","text":"Flag breaker"}'\
 ] 1
 
+tag @a[nbt={Inventory:[{id:"minecraft:chainmail_helmet"}]}] add has_helmet
+tag @a[nbt={Inventory:[{id:"minecraft:iron_helmet"}]}] add has_helmet
+tag @a[nbt={Inventory:[{id:"minecraft:diamond_helmet"}]}] add has_helmet
+tag @a[nbt={Inventory:[{id:"minecraft:netherite_helmet"}]}] add has_helmet
+item replace entity @a[tag=player, tag=!has_helmet] armor.head with chainmail_helmet
+tag @a remove has_helmet
+tag @a[nbt={Inventory:[{id:"minecraft:chainmail_chestplate"}]}] add has_chestplate
+tag @a[nbt={Inventory:[{id:"minecraft:iron_chestplate"}]}] add has_chestplate
+tag @a[nbt={Inventory:[{id:"minecraft:diamond_chestplate"}]}] add has_chestplate
+tag @a[nbt={Inventory:[{id:"minecraft:netherite_chestplate"}]}] add has_chestplate
+item replace entity @a[tag=player, tag=!has_chestplate] armor.chest with chainmail_chestplate
+tag @a remove has_chestplate
+tag @a[nbt={Inventory:[{id:"minecraft:chainmail_leggings"}]}] add has_leggings
+tag @a[nbt={Inventory:[{id:"minecraft:iron_leggings"}]}] add has_leggings
+tag @a[nbt={Inventory:[{id:"minecraft:diamond_leggings"}]}] add has_leggings
+tag @a[nbt={Inventory:[{id:"minecraft:netherite_leggings"}]}] add has_leggings
+item replace entity @a[tag=player, tag=!has_leggings] armor.legs with chainmail_leggings
+tag @a remove has_leggings
+tag @a[nbt={Inventory:[{id:"minecraft:chainmail_boots"}]}] add has_boots
+tag @a[nbt={Inventory:[{id:"minecraft:iron_boots"}]}] add has_boots
+tag @a[nbt={Inventory:[{id:"minecraft:diamond_boots"}]}] add has_boots
+tag @a[nbt={Inventory:[{id:"minecraft:netherite_boots"}]}] add has_boots
+item replace entity @a[tag=player, tag=!has_boots] armor.feet with chainmail_boots
+tag @a remove has_boots
+
 effect clear @a[tag=player]
 effect give @a[tag=player] minecraft:saturation infinite 127 true
 effect give @a[tag=player] minecraft:regeneration infinite 127 true

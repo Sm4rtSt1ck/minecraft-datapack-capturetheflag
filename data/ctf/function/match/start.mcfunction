@@ -9,6 +9,9 @@ tag @s remove dead
 tag @s add player
 clear @s
 
+scoreboard players add match match_id 1
+scoreboard players operation @a[tag=!lobby] match_id = match match_id
+
 scoreboard players set match rounds 0
 scoreboard players set team_1 rounds 0
 scoreboard players set team_2 rounds 0
