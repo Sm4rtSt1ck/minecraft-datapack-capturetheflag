@@ -21,6 +21,9 @@ title @a[tag=!lobby] title {"text":"SWAP TEAMS", "color": "green"}
 clear @a[tag=player]
 gamemode spectator @a[tag=player]
 
+effect clear @a[tag=player] haste
+effect give @a[tag=attack] minecraft:haste infinite 3 true
+
 function ctf:match/prepare/prepare
 
 schedule function ctf:match/freeze/start 200t

@@ -7,7 +7,8 @@ item replace entity @s hotbar.0 with filled_map[\
         \"shadow_color\": -16252673,\
         \"text\" :\"Test map\"\
     }",\
-    map_id=0\
+    map_id=0,\
+    custom_data={tags:["menu"]}\
 ]
 
 # Check first map choice (left hand)
@@ -29,7 +30,8 @@ item replace entity @s hotbar.1 with filled_map[\
         \"shadow_color\": -16252673,\
         \"text\" :\"Green Mine\"\
     }",\
-    map_id=1\
+    map_id=1,\
+    custom_data={tags:["menu"]}\
 ]
 
 # Check first map choice (left hand)
@@ -50,7 +52,8 @@ item replace entity @s hotbar.2 with filled_map[\
         \"shadow_color\": -16252673,\
         \"text\" :\"Night Club\"\
     }",\
-    map_id=2\
+    map_id=2,\
+    custom_data={tags:["menu"]}\
 ]
 
 # Check first map choice (left hand)

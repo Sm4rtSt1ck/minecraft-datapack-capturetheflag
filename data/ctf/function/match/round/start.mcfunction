@@ -15,7 +15,7 @@ scoreboard players set @a[tag=player] flag_pickedup 0
 
 gamemode adventure @a[tag=defense]
 
-effect clear @a[tag=player] minecraft:regeneration
+effect clear @a[tag=player] minecraft:resistance
 effect clear @a[tag=defense] minecraft:mining_fatigue
 
 # If flag is not set (inventory or dropped) -> attack wins

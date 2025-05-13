@@ -15,12 +15,12 @@ function ctf:match/helpers/inventory
 #########################################
 # EVENTS
 
-execute as @a[scores={flag_broken=1..}] run function ctf:match/event/break_flag
-execute as @a[scores={wall_flag_broken=1..}] run function ctf:match/event/break_flag
-execute as @a[scores={flag_dropped=1..}] run function ctf:match/event/drop_flag
-execute as @a[scores={flag_pickedup=1..}] run function ctf:match/event/pickup_flag
-execute as @a[scores={just_killed=1..}] run function ctf:match/event/kill
-execute as @a[scores={just_died=1..}] run function ctf:match/event/die
+execute as @a[scores={flag_broken=1..}] run function ctf:match/events/flag/break
+execute as @a[scores={wall_flag_broken=1..}] run function ctf:match/events/flag/break
+execute as @a[scores={flag_dropped=1..}] run function ctf:match/events/flag/drop
+execute as @a[scores={flag_pickedup=1..}] run function ctf:match/events/flag/pickup
+execute as @a[scores={just_killed=1..}] run function ctf:match/events/fight/kill
+execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
 
 #########################################
 # TIMER

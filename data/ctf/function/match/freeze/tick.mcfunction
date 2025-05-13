@@ -16,8 +16,8 @@ kill @e[type=tnt]
 execute at @e[type=armor_stand,tag=tnt_marker] run setblock ~ ~ ~ tnt
 kill @e[type=armor_stand, tag=tnt_marker]
 
-execute as @a[scores={flag_placed=1..}] run function ctf:match/event/place_flag
-execute as @a[scores={just_died=1..}] run function ctf:match/event/die
+execute as @a[scores={flag_placed=1..}] run function ctf:match/events/flag/place
+execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
 
 function ctf:match/freeze/shop
 execute if score freeze timer matches -2147483648..0 run function ctf:match/round/start

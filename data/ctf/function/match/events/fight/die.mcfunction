@@ -9,4 +9,4 @@ tag @s add dead
 title @s title ""
 title @s subtitle {"text": "DEATH", "color": "black"}
 
-schedule function ctf:match/helpers/tp_dead_killed 2t
+schedule function ctf:match/events/fight/tp_dead_to_killer 2t

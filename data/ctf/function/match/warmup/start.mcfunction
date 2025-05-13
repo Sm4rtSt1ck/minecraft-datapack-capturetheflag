@@ -12,9 +12,6 @@ bossbar set ctf:match max 600
 title @a[tag=!lobby] title {"text":"WARM-UP", "color": "green"}
 title @a[tag=!lobby] subtitle {"text":"30 seconds", "color": "yellow"}
 
-effect clear @a[tag=player]
-effect give @a[tag=player] minecraft:saturation infinite 127 true
-
 gamemode adventure @a[tag=player]
 
 tp @a[tag=attack] -87 -51 27 -90 0

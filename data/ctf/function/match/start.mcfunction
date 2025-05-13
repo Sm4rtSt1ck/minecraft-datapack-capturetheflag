@@ -9,6 +9,11 @@ tag @s remove dead
 tag @s add player
 clear @s
 
+effect clear @a[tag=player]
+effect give @a[tag=player] minecraft:saturation infinite 127 true
+effect give @a[tag=attack] minecraft:haste infinite 3 true
+
+
 scoreboard players add match match_id 1
 scoreboard players operation @a[tag=!lobby] match_id = match match_id
 

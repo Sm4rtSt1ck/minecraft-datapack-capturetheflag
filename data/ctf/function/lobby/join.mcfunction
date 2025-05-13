@@ -26,9 +26,10 @@ execute positioned as @s run spawnpoint @s
 # EFFECTS
 
 effect clear @s
-effect give @s regeneration infinite 127 true
-effect give @s jump_boost infinite 1 true
-effect give @s speed infinite 1 true
+effect give @s minecraft:regeneration 1 127 true
+effect give @s minecraft:resistance infinite 127 true
+effect give @s minecraft:jump_boost infinite 1 true
+effect give @s minecraft:speed infinite 1 true
 effect give @s minecraft:saturation infinite 127 true
 
 #########################################

@@ -57,7 +57,8 @@ tag @a remove has_boots
 
 effect clear @a[tag=player]
 effect give @a[tag=player] minecraft:saturation infinite 127 true
-effect give @a[tag=player] minecraft:regeneration infinite 127 true
+effect give @a[tag=player] minecraft:regeneration 1 127 true
+effect give @a[tag=player] minecraft:resistance infinite 127 true
 effect give @a[tag=defense] minecraft:mining_fatigue infinite 4 true
 
 execute if score @r[tag=admin] map_vote matches 1 as @a[tag=player] run function ctf:match/map/map_1/freeze
