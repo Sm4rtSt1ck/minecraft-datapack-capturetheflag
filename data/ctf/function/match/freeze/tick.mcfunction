@@ -1,14 +1,14 @@
 scoreboard players remove freeze timer 1
 execute store result bossbar ctf:match value run scoreboard players get freeze timer
 
-execute if score freeze timer matches 199..200 run title @a[tag=player] title {"text": "10 SECS LEFT", "color": "green"}
-execute if score freeze timer matches 60 as @a[tag=player] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 10 0.4
-execute if score freeze timer matches 60 run title @a[tag=player] title {"text": "3", "color": "green"}
-execute if score freeze timer matches 60 as @a[tag=player] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 10 0.6
-execute if score freeze timer matches 40 run title @a[tag=player] title {"text": "2", "color": "green"}
-execute if score freeze timer matches 40 as @a[tag=player] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 10 0.8
-execute if score freeze timer matches 20 run title @a[tag=player] title {"text": "1", "color": "green"}
-execute if score freeze timer matches 20 as @a[tag=player] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 10 1
+execute if score freeze timer matches 199..200 run title @a[tag=!lobby] title {"text": "10 SECS LEFT", "color": "green"}
+execute if score freeze timer matches 199..200 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.4
+execute if score freeze timer matches 60 run title @a[tag=!lobby] title {"text": "3", "color": "green"}
+execute if score freeze timer matches 60 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.6
+execute if score freeze timer matches 40 run title @a[tag=!lobby] title {"text": "2", "color": "green"}
+execute if score freeze timer matches 40 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.8
+execute if score freeze timer matches 20 run title @a[tag=!lobby] title {"text": "1", "color": "green"}
+execute if score freeze timer matches 20 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 1
 
 
 execute at @e[type=tnt] run summon armor_stand ~ ~ ~ {Tags:["tnt_marker"], Marker:true}

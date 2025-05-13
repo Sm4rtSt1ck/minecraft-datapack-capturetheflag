@@ -21,12 +21,17 @@ clear @s
 team leave @s
 gamemode adventure @s
 execute positioned as @s run spawnpoint @s
-scoreboard players set @s had_left 0
 
 #########################################
 # EFFECTS
 
+effect clear @s
 effect give @s regeneration infinite 127 true
 effect give @s jump_boost infinite 1 true
 effect give @s speed infinite 1 true
 effect give @s minecraft:saturation infinite 127 true
+
+#########################################
+# OTHER
+
+execute at @s run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1

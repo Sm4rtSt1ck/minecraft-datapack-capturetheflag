@@ -24,6 +24,7 @@ execute positioned as @n[tag=clone_marker] run clone ~96 ~ ~96 ~127 ~31 ~127 -10
 kill @e[tag=map_entity]
 execute if score @r[tag=admin] map_vote matches 1 run function ctf:match/map/map_1/clone
 execute if score @r[tag=admin] map_vote matches 2 run function ctf:match/map/map_2/clone
+execute if score @r[tag=admin] map_vote matches 3 run function ctf:match/map/night_club/clone
 
 execute positioned as @e[tag=clone_marker] run forceload remove ~ ~ ~127 ~127
 

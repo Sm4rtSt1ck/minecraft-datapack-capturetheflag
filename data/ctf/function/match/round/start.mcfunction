@@ -7,7 +7,7 @@ bossbar set ctf:match max 3600
 
 title @a[tag=attack] title {"text": "STEAL THE FLAG!", "color": "green"}
 title @a[tag=defense] title {"text": "DEFEND THE FLAG!", "color": "green"}
-execute as @a[tag=player] at @s run playsound minecraft:entity.player.levelup ambient @s ~ ~ ~ 10 1
+execute as @a[tag=!lobby] at @s run playsound minecraft:entity.firework_rocket.launch ambient @s ~ ~ ~ 10 1
 
 scoreboard players set @a[tag=player] flag_broken 0
 scoreboard players set @a[tag=player] wall_flag_broken 0
@@ -25,3 +25,4 @@ execute unless entity @e[type=armor_stand, tag=flag] run function ctf:match/roun
 
 execute if score @r[tag=admin] map_vote matches 1 run function ctf:match/map/map_1/round
 execute if score @r[tag=admin] map_vote matches 2 run function ctf:match/map/map_2/round
+execute if score @r[tag=admin] map_vote matches 3 run function ctf:match/map/night_club/round

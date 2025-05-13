@@ -29,3 +29,5 @@ title @a[tag=defense] subtitle {"text":"Defense", "color":"blue"}
 title @a[tag=attack] subtitle {"text":"Attack", "color":"red"}
 
 function ctf:match/freeze/start
+
+execute as @a[tag=!lobby] at @s run playsound minecraft:entity.firework_rocket.launch ambient @s ~ ~ ~ 10 1

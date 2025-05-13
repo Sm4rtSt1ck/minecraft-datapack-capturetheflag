@@ -6,7 +6,7 @@ gamerule doFireTick false
 gamerule commandBlockOutput false
 gamerule keepInventory false
 gamerule spectatorsGenerateChunks false
-setworldspawn 0 -45 0
+setworldspawn 0 -41 0
 defaultgamemode adventure
 
 forceload remove all

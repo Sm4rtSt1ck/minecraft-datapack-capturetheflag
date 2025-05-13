@@ -15,6 +15,7 @@ scoreboard players operation @a[tag=!lobby] match_id = match match_id
 scoreboard players set match rounds 0
 scoreboard players set team_1 rounds 0
 scoreboard players set team_2 rounds 0
+bossbar set ctf:match value 0
 bossbar set ctf:match visible true
 bossbar set ctf:match players @a[tag=!lobby]
 bossbar set ctf:match name {"text":"MAP PREPARATION", "color": "yellow"}
