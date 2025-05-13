@@ -1,5 +1,7 @@
 say match/warmup/start
 
+gamerule fallDamage true
+
 scoreboard objectives setdisplay sidebar kills
 
 # Warmup game status

@@ -1,3 +1,5 @@
+gamerule fallDamage false
+
 #########################################
 
 scoreboard objectives setdisplay sidebar map_vote

@@ -5,6 +5,8 @@ scoreboard players set game status 4
 scoreboard players set round timer 3600
 bossbar set ctf:match max 3600
 
+gamerule fallDamage true
+
 title @a[tag=attack] title {"text": "STEAL THE FLAG!", "color": "green"}
 title @a[tag=defense] title {"text": "DEFEND THE FLAG!", "color": "green"}
 execute as @a[tag=!lobby] at @s run playsound minecraft:entity.firework_rocket.launch ambient @s ~ ~ ~ 10 1

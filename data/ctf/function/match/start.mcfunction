@@ -42,15 +42,12 @@ scoreboard players reset * flag_pickedup
 
 # Set the attacking and the defending sides
 team empty team_1
-team modify team_1 friendlyFire false
 team modify team_1 displayName "Attack"
 team modify team_1 color red
-team modify team_1 nametagVisibility hideForOtherTeams
+
 team empty team_2
-team modify team_2 friendlyFire false
 team modify team_2 displayName "defense"
 team modify team_2 color blue
-team modify team_2 nametagVisibility hideForOtherTeams
 
 # Join teams 10 players
 team join team_2 @r[tag=player]

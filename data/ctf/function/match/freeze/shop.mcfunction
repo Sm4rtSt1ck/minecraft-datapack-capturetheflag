@@ -458,7 +458,7 @@ item replace entity @a container.16 with minecraft:chest[custom_name='{"text":"K
 kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{tags:["shop"]}}}}]
 
 # Show money
-execute as @a run title @s actionbar [{"text":"Money: ","color":"yellow"},{"score":{"name":"@s","objective":"money"},"color":"green"},{"text":"$","color":"green"}]
+execute as @a run title @s actionbar [{"text":"Money: ","color":"#ff9100"},{"text":"$","color":"#ff5100"},{"score":{"name":"@s","objective":"money"},"color":"#ff5100"}]
 
 
 # OTHER

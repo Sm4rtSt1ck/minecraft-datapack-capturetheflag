@@ -2,11 +2,13 @@ say match/freeze/start
 
 scoreboard players set game status 3
 
-spawnpoint @a[tag=player] -190 -30 -190
-
 # 60 secs freeze before round start (1200 ticks)
 scoreboard players set freeze timer 1200
 bossbar set ctf:match max 1200
+
+gamerule fallDamage false
+
+spawnpoint @a[tag=player] -190 -30 -190
 
 gamemode adventure @a[tag=attack]
 gamemode survival @a[tag=defense]
@@ -27,9 +29,12 @@ clear @a[tag=player] minecraft:black_stained_glass_pane
 clear @a[tag=attack] minecraft:stick
 give @a[tag=attack] minecraft:stick[\
     can_break={predicates:[{blocks:["yellow_banner", "yellow_wall_banner", "tnt", "redstone_wire", "minecraft:pale_oak_pressure_plate"]}]},\
-    custom_name='{"color":"green","text":"Flag breaker"}'\
+    custom_name='{"color":"green","text":"Flag breaker"}',\
+    enchantments={knockback:1b}\
 ] 1
 
+
+# Give chainmail armor if player doesn't have it
 tag @a[nbt={Inventory:[{id:"minecraft:chainmail_helmet"}]}] add has_helmet
 tag @a[nbt={Inventory:[{id:"minecraft:iron_helmet"}]}] add has_helmet
 tag @a[nbt={Inventory:[{id:"minecraft:diamond_helmet"}]}] add has_helmet

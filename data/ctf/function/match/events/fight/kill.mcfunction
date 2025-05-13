@@ -1,5 +1,5 @@
 scoreboard players add @s money 500
-title @s actionbar [{"text":"Money: ","color":"yellow"},{"score":{"name":"@s","objective":"money"},"color":"green"},{"text":"$","color":"green"}]
+title @s actionbar [{"text":"+$500","color":"green"}]
 
 title @s title ""
 title @s subtitle {"text": "KILL", "color": "red"}

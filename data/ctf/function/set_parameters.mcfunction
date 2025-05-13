@@ -6,6 +6,7 @@ gamerule doFireTick false
 gamerule commandBlockOutput false
 gamerule keepInventory false
 gamerule spectatorsGenerateChunks false
+gamerule fallDamage false
 setworldspawn 0 -41 0
 defaultgamemode adventure
 
@@ -17,7 +18,11 @@ effect clear @a
 
 team leave @a
 team add team_1
+team modify team_1 friendlyFire true
+team modify team_1 nametagVisibility hideForOtherTeams
 team add team_2
+team modify team_2 friendlyFire true
+team modify team_2 nametagVisibility hideForOtherTeams
 
 scoreboard objectives add match_id dummy
 # To prevent bla bla lba

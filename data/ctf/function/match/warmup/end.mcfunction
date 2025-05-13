@@ -1,10 +1,6 @@
 say match/warmup/end
 
-bossbar set ctf:match name [\
-    {"text": "0", "color": "blue"},\
-    {"text": " | ", "color": "dark_purple"},\
-    {"text": "0", "color": "red"}\
-]
+function ctf:match/helpers/update_score_display
 
 scoreboard players set @a[tag=player] deaths 0
 scoreboard players set @a[tag=player] kills 0
