@@ -70,3 +70,6 @@ execute if entity @s[\
 # CLEAR THE LEFT HAND AFTER ALL CHECKINGS
 
 item replace entity @s weapon.offhand with air
+
+
+title @s actionbar [{"color":"blue","text":"Press "},{"color":"light_purple","text":"["},{"keybind":"key.swapOffhand", "color": "light_purple"},{"color":"light_purple", "text":"]"},{"color":"blue","text":" to vote"}]

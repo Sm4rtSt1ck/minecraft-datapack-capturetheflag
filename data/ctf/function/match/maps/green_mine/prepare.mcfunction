@@ -1,4 +1,4 @@
-say match/map/map_2/prepare
+say match/maps/green_mine/prepare
 
 title @s title [{"text": "Green", "color": "green"}, {"text": "Mine", "color": "gray"}]
 

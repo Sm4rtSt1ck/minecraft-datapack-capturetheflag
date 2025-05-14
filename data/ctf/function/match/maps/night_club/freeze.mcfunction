@@ -1,4 +1,4 @@
-say match/map/night_club/freeze
+say match/maps/night_club/freeze
 
 # Fill the borders
 # Way 1

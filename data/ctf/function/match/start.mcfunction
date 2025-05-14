@@ -73,7 +73,7 @@ tag @a[team=team_2] remove attack
 #########################################
 # GO TO THE MOST VOTED MAP
 
-# execute if score @p map_vote matches 1 run function ctf:match/map/map_1/join
-# execute if score @s[tag=admin] map_vote matches 2 run function ctf:match/map/map_2/join
+# execute if score @p map_vote matches 1 run function ctf:match/maps/test_map/join
+# execute if score @s[tag=admin] map_vote matches 2 run function ctf:match/maps/green_mine/join
 function ctf:match/prepare/prepare
 schedule function ctf:match/warmup/start 60t

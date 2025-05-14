@@ -1,19 +1,19 @@
 title @s title {"text":"WELCOME TO", "color": "#ff00bf"}
 title @s subtitle [\
-    {"text":"C", "color": "#0000ff"},\
-    {"text":"a", "color": "#2600ff"},\
-    {"text":"p", "color": "#4400ff"},\
-    {"text":"t", "color": "#5900ff"},\
-    {"text":"u", "color": "#7700ff"},\
-    {"text":"r", "color": "#9900ff"},\
-    {"text":"e", "color": "#ae00ff"},\
-    {"text":"T", "color": "#b700ff"},\
-    {"text":"h", "color": "#d400ff"},\
-    {"text":"e", "color": "#ea00ff"},\
-    {"text":"F", "color": "#ff00f2"},\
-    {"text":"l", "color": "#ff00bf"},\
-    {"text":"a", "color": "#ff006a"},\
-    {"text":"g", "color": "#ff0037"}\
+    {"color":"#0000FF","text":"C", "shadow_color": 1693581554},\
+    {"color":"#1200ED","text":"a"},\
+    {"color":"#2400DB","text":"p"},\
+    {"color":"#3700C8","text":"t"},\
+    {"color":"#4900B6","text":"u"},\
+    {"color":"#5B00A4","text":"r"},\
+    {"color":"#6D0092","text":"e"},\
+    {"color":"#800080","text":"T"},\
+    {"color":"#92006D","text":"h"},\
+    {"color":"#A4005B","text":"e"},\
+    {"color":"#B60049","text":"F"},\
+    {"color":"#C80037","text":"l"},\
+    {"color":"#DB0024","text":"a"},\
+    {"color":"#FF0000","text":"g"}\
 ]
 
 

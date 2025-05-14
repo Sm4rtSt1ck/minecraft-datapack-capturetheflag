@@ -1,4 +1,4 @@
-say match/map/night_club/clone
+say match/maps/night_club/clone
 
 # Map entities
 # summon minecraft:minecart -188.5 -34 -174.5 {Invulnerable:true, Tags:["map_entity"]}

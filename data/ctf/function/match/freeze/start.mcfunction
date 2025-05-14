@@ -66,9 +66,9 @@ effect give @a[tag=player] minecraft:regeneration 1 127 true
 effect give @a[tag=player] minecraft:resistance infinite 127 true
 effect give @a[tag=defense] minecraft:mining_fatigue infinite 4 true
 
-execute if score @r[tag=admin] map_vote matches 1 as @a[tag=player] run function ctf:match/map/map_1/freeze
-execute if score @r[tag=admin] map_vote matches 2 as @a[tag=player] run function ctf:match/map/map_2/freeze
-execute if score @r[tag=admin] map_vote matches 3 as @a[tag=player] run function ctf:match/map/night_club/freeze
+execute if score @r[tag=admin] map_vote matches 1 as @a[tag=player] run function ctf:match/maps/test_map/freeze
+execute if score @r[tag=admin] map_vote matches 2 as @a[tag=player] run function ctf:match/maps/green_mine/freeze
+execute if score @r[tag=admin] map_vote matches 3 as @a[tag=player] run function ctf:match/maps/night_club/freeze
 
 
 # Give flag

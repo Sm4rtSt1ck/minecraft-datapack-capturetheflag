@@ -8,10 +8,11 @@ execute as @a[scores={just_died=1..}] run function ctf:lobby/events/die
 
 # Give an item
 item replace entity @a[tag=lobby,tag=admin] hotbar.8 with firework_rocket[\
-    custom_name="{\
-        \"shadow_color\": -65536,\
-        \"text\" :\"Launch!\"\
-    }",\
+    custom_name='[\
+        {"shadow_color":-65536,"text":"Launch! "},\
+        {"color":"light_purple","text":"["},\
+        {"color":"light_purple","keybind":"key.swapOffhand"},\
+        {"color":"light_purple","text":"]"}]',\
     custom_data={tags:["menu"]}\
 ]
 
@@ -20,7 +21,7 @@ execute if entity @a[\
     tag=lobby, tag=admin,\
     nbt={Inventory:[{\
         id:"minecraft:firework_rocket",\
-        Slot:-106b,\
+        Slot:-106b\
     }]}\
 ] as @a run function ctf:match/start
 

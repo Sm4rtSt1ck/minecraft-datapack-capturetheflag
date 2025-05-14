@@ -1,4 +1,4 @@
-say match/map/map_2/clone
+say match/maps/green_mine/clone
 
 # Map entities
 summon minecraft:minecart -188.5 -34 -174.5 {Invulnerable:true, Tags:["map_entity"]}

@@ -1,4 +1,4 @@
-say match/map/night_club/round
+say match/maps/night_club/round
 
 # Break the borders
 # Way 1
