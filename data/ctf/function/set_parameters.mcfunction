@@ -10,6 +10,7 @@ gamerule commandBlockOutput false
 gamerule keepInventory false
 gamerule spectatorsGenerateChunks false
 gamerule fallDamage false
+gamerule announceAdvancements false
 
 defaultgamemode adventure
 setworldspawn 0 -41 0
@@ -103,6 +104,7 @@ kill @e[tag=flag]
 kill @e[tag=map_entity]
 kill @e[tag=clone_marker]
 kill @e[tag=tnt_marker]
+kill @e[tag=lastDeathMarker]
 
 #########################################
 

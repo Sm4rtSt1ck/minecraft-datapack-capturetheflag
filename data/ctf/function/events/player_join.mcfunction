@@ -1,3 +1,6 @@
+#########################################
+# WELCOME MESSAGE
+
 title @s title {"text":"WELCOME TO", "color": "#ff00bf"}
 title @s subtitle [\
     {"color":"#0000FF","text":"C", "shadow_color": 1693581554},\
@@ -16,12 +19,18 @@ title @s subtitle [\
     {"color":"#FF0000","text":"g"}\
 ]
 
+#########################################
+# 
 
-execute unless score @s match_id = match match_id run function ctf:lobby/join
+# If match is not on, join lobby
 execute if score game status matches 0..1 run function ctf:lobby/join
+# If player had left during the match that had been ended but another match is on, join lobby
+execute if score game status matches 2..6 unless score @s match_id = match match_id run function ctf:lobby/join
+# If player had left during the match that is on and it's warm-up, return to match
+execute if score game status matches 2 if score @s[tag=player] match_id = match match_id positioned as @s run tp @s @a[tag=player, sort=furthest, limit=1]
+# If player had left during the match that is on and it isn't warm-up, join to spectate
+execute if score game status matches 3..5 if score @s match_id = match match_id run function ctf:match/spectate
 
-execute if score @s[tag=player] match_id = match match_id if score game status matches 2 positioned as @s run tp @s @a[tag=player, sort=furthest, limit=1]
-
-execute if score @s match_id = match match_id if score game status matches 3..5 run function ctf:match/spectate
+#########################################
 
 scoreboard players set @s had_left 0
