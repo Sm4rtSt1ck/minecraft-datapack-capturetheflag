@@ -79,6 +79,7 @@ scoreboard objectives add deaths deathCount {"text": "Deaths", "color": "red"}
 # Match events
 scoreboard objectives add just_killed playerKillCount
 scoreboard objectives add just_died deathCount
+scoreboard objectives add just_used_totem minecraft.used:minecraft.totem_of_undying
 scoreboard objectives add flag_placed minecraft.used:minecraft.armor_stand
 scoreboard objectives add flag_dropped minecraft.dropped:minecraft.yellow_banner
 scoreboard objectives add flag_pickedup minecraft.picked_up:minecraft.yellow_banner

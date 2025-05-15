@@ -1,0 +1,11 @@
+{
+  "criteria": {
+    "used_totem": {
+      "trigger": "minecraft:used_totem"
+    }
+  },
+  "requirements": [],
+  "rewards": {
+    "function": "ctf:match/events/use_totem"
+  }
+}

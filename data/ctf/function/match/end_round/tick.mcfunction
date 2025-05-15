@@ -9,8 +9,6 @@ execute positioned as @e[type=tnt] run summon minecraft:creeper ~ ~ ~ {\
 }
 kill @e[type=tnt]
 
-execute at @a[tag=player, tag=!dead] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/helpers/traps/tnt_explode
-execute at @e[type=arrow] as @e[tag=trap.tnt, tag=trap_marker, distance=..1] run function ctf:match/helpers/traps/tnt_explode
 
 function ctf:match/helpers/pickup_restrict
 function ctf:match/helpers/inventory
@@ -18,12 +16,7 @@ function ctf:match/helpers/inventory
 #########################################
 # EVENTS
 
-execute as @a[scores={flag_broken=1..}] run function ctf:match/events/flag/break
-execute as @a[scores={wall_flag_broken=1..}] run function ctf:match/events/flag/break
-execute as @a[scores={flag_dropped=1..}] run function ctf:match/events/flag/drop
-execute as @a[scores={flag_pickedup=1..}] run function ctf:match/events/flag/pickup
-execute as @a[scores={just_killed=1..}] run function ctf:match/events/fight/kill
-execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
+function ctf:match/events/handle
 
 #########################################
 # TIMER

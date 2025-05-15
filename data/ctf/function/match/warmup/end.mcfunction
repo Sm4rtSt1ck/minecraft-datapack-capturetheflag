@@ -5,6 +5,7 @@ function ctf:match/helpers/update_score_display
 scoreboard players set @a[tag=player] deaths 0
 scoreboard players set @a[tag=player] kills 0
 
+scoreboard players set @a[tag=player] just_used_totem 0
 scoreboard players set @a[tag=player] just_died 0
 scoreboard players set @a[tag=player] just_killed 0
 

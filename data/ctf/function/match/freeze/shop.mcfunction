@@ -370,6 +370,27 @@ item replace entity @a[tag=shop_stuff] container.20 with minecraft:potion[lore=[
 
 # POTION OF REGENERATION
 ##########################################################################################
+# TOTEM OF UNDYING
+
+# Fix bug
+item replace entity @a[nbt=!{Inventory:[{Slot:14b,id:"minecraft:firework_rocket"}]}] container.22 with minecraft:totem_of_undying[custom_data={tags:["shop", "item"]}]
+
+# Buing process
+tag @a[scores={money=3000..},tag=shop_stuff,nbt=!{Inventory:[{Slot:22b,id:"minecraft:totem_of_undying",components:{"minecraft:custom_data":{tags:["shop", "item"]}}}]}] add buy_totem_of_undying
+scoreboard players remove @a[tag=buy_totem_of_undying] money 3000
+give @a[tag=buy_totem_of_undying] minecraft:totem_of_undying
+execute at @a[tag=buy_totem_of_undying] run playsound minecraft:ui.button.click master @a[tag=buy_totem_of_undying] ~ ~ ~ 0.2
+tag @a remove buy_totem_of_undying
+
+# Steal control
+clear @a[nbt=!{Inventory:[{Slot:22b,id:"minecraft:totem_of_undying"}]}] minecraft:totem_of_undying[custom_data={tags:["shop", "item"]}]
+clear @a[tag=!shop_stuff] minecraft:totem_of_undying[custom_data={tags:["shop", "item"]}]
+
+# Drop-down lists
+item replace entity @a[tag=shop_stuff] container.22 with minecraft:totem_of_undying[lore=['{"text":"3000$","italic":false}'],custom_data={tags:["shop", "item"]}]
+
+# TOTEM OF UNDYING
+##########################################################################################
 # TNT KIT
 
 # Fix bug

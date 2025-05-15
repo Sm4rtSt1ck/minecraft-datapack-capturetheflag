@@ -12,6 +12,7 @@ tag @s remove spectator
 tag @s remove attack
 tag @s remove defense
 tag @s remove dead
+tag @s remove just_used_totem
 tag @s remove just_died
 tag @s remove just_killed
 
