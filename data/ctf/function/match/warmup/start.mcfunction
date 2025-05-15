@@ -26,5 +26,5 @@ gamerule keepInventory true
 
 item replace entity @a[tag=defense] weapon.offhand with firework_rocket[fireworks={explosions:[{shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"}]}] 64
 item replace entity @a[tag=attack] weapon.offhand with firework_rocket[fireworks={explosions:[{shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"}]}] 64
-item replace entity @a[tag=player] weapon.mainhand with crossbow[custom_name='{"text":"Firework shooter", "italic": false, "color": "red"}']
+give @a[tag=player] crossbow[custom_name='{"text":"Firework shooter", "italic": false, "color": "red"}']
 give @a[tag=player] minecraft:stone_sword

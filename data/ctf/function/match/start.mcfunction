@@ -4,6 +4,8 @@ say match/start
 
 forceload add -200 -200 -72 -72
 
+kill @e[tag=trap]
+
 tag @s remove lobby
 tag @s remove dead
 tag @s add player
@@ -12,7 +14,6 @@ clear @s
 effect clear @a[tag=player]
 effect give @a[tag=player] minecraft:saturation infinite 127 true
 effect give @a[tag=attack] minecraft:haste infinite 3 true
-
 
 scoreboard players add match match_id 1
 scoreboard players operation @a[tag=!lobby] match_id = match match_id
@@ -39,6 +40,7 @@ scoreboard players reset * flag_broken
 scoreboard players reset * wall_flag_broken
 scoreboard players reset * flag_dropped
 scoreboard players reset * flag_pickedup
+scoreboard players reset * just_placed_trap
 
 # Set the attacking and the defending sides
 team empty team_1

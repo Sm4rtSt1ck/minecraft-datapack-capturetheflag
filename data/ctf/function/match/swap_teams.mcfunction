@@ -24,6 +24,8 @@ gamemode spectator @a[tag=player]
 effect clear @a[tag=player] haste
 effect give @a[tag=attack] minecraft:haste infinite 3 true
 
+kill @e[tag=trap]
+
 function ctf:match/prepare/prepare
 
 schedule function ctf:match/freeze/start 200t

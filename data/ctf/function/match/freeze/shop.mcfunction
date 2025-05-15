@@ -378,11 +378,12 @@ item replace entity @a[tag=defense, nbt=!{Inventory:[{Slot:16b,id:"minecraft:che
 # Buing process
 tag @a[scores={money=1000..},tag=shop_kits,tag=defense,nbt=!{Inventory:[{Slot:18b,id:"minecraft:tnt",components:{"minecraft:custom_data":{tags:["shop", "item"]}}}]}] add buy_tnt
 scoreboard players remove @a[tag=buy_tnt] money 1000
-give @a[tag=buy_tnt] minecraft:tnt 4
-give @a[tag=buy_tnt] minecraft:redstone 10
-give @a[tag=buy_tnt] minecraft:pale_oak_pressure_plate 6
-give @a[tag=buy_tnt] minecraft:string 5
-give @a[tag=buy_tnt] minecraft:tripwire_hook 4
+# give @a[tag=buy_tnt] minecraft:tnt 4
+# give @a[tag=buy_tnt] minecraft:redstone 10
+# give @a[tag=buy_tnt] minecraft:pale_oak_pressure_plate 6
+# give @a[tag=buy_tnt] minecraft:string 5
+# give @a[tag=buy_tnt] minecraft:tripwire_hook 4
+give @a[tag=buy_tnt] minecraft:armor_stand[custom_name='{"text":"Tnt trap"}', item_model=tnt, entity_data={id:"minecraft:armor_stand", Marker:true, Invisible:true, Tags:["trap", "trap.tnt"], ArmorItems:[{}, {}, {}, {id:"minecraft:tnt"}]}] 3
 execute at @a[tag=buy_tnt] run playsound minecraft:ui.button.click master @a[tag=buy_tnt] ~ ~ ~ 0.2
 tag @a remove buy_tnt
 

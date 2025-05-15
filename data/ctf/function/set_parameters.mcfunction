@@ -84,6 +84,7 @@ scoreboard objectives add flag_dropped minecraft.dropped:minecraft.yellow_banner
 scoreboard objectives add flag_pickedup minecraft.picked_up:minecraft.yellow_banner
 scoreboard objectives add flag_broken minecraft.mined:minecraft.yellow_banner
 scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.yellow_wall_banner
+scoreboard objectives add just_placed_trap minecraft.used:minecraft.armor_stand
 
 #########################################
 # BOSSBAR
@@ -105,6 +106,7 @@ kill @e[tag=map_entity]
 kill @e[tag=clone_marker]
 kill @e[tag=tnt_marker]
 kill @e[tag=lastDeathMarker]
+kill @e[tag=trap]
 
 #########################################
 

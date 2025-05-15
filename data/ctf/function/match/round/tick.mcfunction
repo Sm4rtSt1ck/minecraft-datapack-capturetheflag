@@ -21,6 +21,12 @@ function ctf:match/helpers/pickup_restrict
 function ctf:match/helpers/inventory
 
 #########################################
+# TRAPS
+
+# Tnt
+execute at @a[tag=attack] as @e[tag=trap.tnt, distance=..3] run function ctf:match/helpers/traps/tnt_explode
+
+#########################################
 # TIMER
 
 scoreboard players remove round timer 1
