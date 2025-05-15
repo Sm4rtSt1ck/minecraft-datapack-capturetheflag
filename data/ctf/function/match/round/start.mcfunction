@@ -20,6 +20,8 @@ gamemode adventure @a[tag=defense]
 effect clear @a[tag=player] minecraft:resistance
 effect clear @a[tag=defense] minecraft:mining_fatigue
 
+kill @e[type=arrow]
+
 # If flag is not set (inventory or dropped) -> attack wins
 # execute if entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:yellow_banner"}]}] run function ctf:match/round/win_attack
 # execute if entity @e[type=item, nbt={Item:{id:"minecraft:yellow_banner"}}] run function ctf:match/round/win_attack

@@ -11,10 +11,10 @@ execute if score freeze timer matches 20 run title @a[tag=!lobby] title {"text":
 execute if score freeze timer matches 20 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 1
 
 
-execute at @e[type=tnt] run summon armor_stand ~ ~ ~ {Tags:["tnt_marker"], Marker:true}
-kill @e[type=tnt]
-execute at @e[type=armor_stand,tag=tnt_marker] run setblock ~ ~ ~ tnt
-kill @e[type=armor_stand, tag=tnt_marker]
+# execute at @e[type=tnt] run summon armor_stand ~ ~ ~ {Tags:["tnt_marker"], Marker:true}
+# kill @e[type=tnt]
+# execute at @e[type=armor_stand,tag=tnt_marker] run setblock ~ ~ ~ tnt
+# kill @e[type=armor_stand, tag=tnt_marker]
 
 execute as @a[scores={flag_placed=1..}] run function ctf:match/events/flag/place
 execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die

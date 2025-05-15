@@ -5,4 +5,6 @@ scoreboard players set game status 6
 scoreboard players set end timer 300
 bossbar set ctf:match max 300
 
+kill @e[tag=flag]
 kill @e[tag=trap]
+kill @e[tag=map_entity]

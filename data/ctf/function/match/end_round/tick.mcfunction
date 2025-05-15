@@ -9,7 +9,8 @@ execute positioned as @e[type=tnt] run summon minecraft:creeper ~ ~ ~ {\
 }
 kill @e[type=tnt]
 
-execute at @a[tag=attack] as @e[tag=trap.tnt, distance=..3] run function ctf:match/helpers/tnt_explode
+execute at @a[tag=player, tag=!dead] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/helpers/traps/tnt_explode
+execute at @e[type=arrow] as @e[tag=trap.tnt, tag=trap_marker, distance=..1] run function ctf:match/helpers/traps/tnt_explode
 
 function ctf:match/helpers/pickup_restrict
 function ctf:match/helpers/inventory
