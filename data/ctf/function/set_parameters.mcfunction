@@ -88,6 +88,7 @@ scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.yellow_wall
 scoreboard objectives add just_placed_trap minecraft.used:minecraft.armor_stand
 
 # Shop
+scoreboard objectives add shop_category dummy
 scoreboard objectives add bought.trap.tnt dummy
 
 #########################################

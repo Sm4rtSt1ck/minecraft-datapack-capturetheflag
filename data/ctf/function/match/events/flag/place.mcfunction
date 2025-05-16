@@ -2,7 +2,7 @@ scoreboard players set @s flag_placed 0
 
 execute at @s run summon minecraft:armor_stand ^ ^ ^ {Tags:["flag"], Invisible:true, Invulnerable:true, Marker:true}
 
-execute if score freeze timer matches 200.. run scoreboard players set freeze timer 200
+execute if score freeze timer matches 202.. run scoreboard players set freeze timer 201
 
 
 function ctf:match/events/flag/place/find_position

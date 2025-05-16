@@ -1,8 +1,8 @@
 scoreboard players remove freeze timer 1
 execute store result bossbar ctf:match value run scoreboard players get freeze timer
 
-execute if score freeze timer matches 199..200 run title @a[tag=!lobby] title {"text": "10 SECS LEFT", "color": "green"}
-execute if score freeze timer matches 199..200 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.4
+execute if score freeze timer matches 200 run title @a[tag=!lobby] title {"text": "10 SECS LEFT", "color": "green"}
+execute if score freeze timer matches 200 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.4
 execute if score freeze timer matches 60 run title @a[tag=!lobby] title {"text": "3", "color": "green"}
 execute if score freeze timer matches 60 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.6
 execute if score freeze timer matches 40 run title @a[tag=!lobby] title {"text": "2", "color": "green"}
@@ -16,9 +16,9 @@ execute if score freeze timer matches 20 as @a[tag=!lobby] at @s run playsound m
 # execute at @e[type=armor_stand,tag=tnt_marker] run setblock ~ ~ ~ tnt
 # kill @e[type=armor_stand, tag=tnt_marker]
 
+# execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
 execute as @a[scores={flag_placed=1..}] run function ctf:match/events/flag/place
-execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
 execute as @a[scores={just_placed_trap=1..}] run function ctf:match/events/traps/place
 
-function ctf:match/freeze/shop
+function ctf:match/freeze/shop/tick
 execute if score freeze timer matches -2147483648..0 run function ctf:match/round/start
