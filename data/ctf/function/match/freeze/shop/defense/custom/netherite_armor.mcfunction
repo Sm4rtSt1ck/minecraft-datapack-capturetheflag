@@ -2,5 +2,5 @@ $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. run it
 $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. run item replace entity @s armor.chest with minecraft:netherite_chestplate
 $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. run item replace entity @s armor.legs with minecraft:netherite_leggings
 $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. run item replace entity @s armor.feet with minecraft:netherite_boots
-$function ctf:match/freeze/shop/show_item {item: netherite_chestplate, slot: $(slot), cost: $(cost), tag: "", item_name: '$(item_name)', nbt: ''}
-$function ctf:match/freeze/shop/buy_item {item: air, nbt: '', cost: $(cost), amount: 1, item_name: ''}
+$function ctf:match/freeze/shop/templates/show_item {item: netherite_chestplate, slot: $(slot), cost: $(cost), tag: "", item_name: '$(item_name)', nbt: ''}
+$function ctf:match/freeze/shop/templates/buy_item {item: air, nbt: '', cost: $(cost), amount: 1, item_name: ''}

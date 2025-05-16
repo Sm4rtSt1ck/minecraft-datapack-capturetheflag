@@ -8,7 +8,7 @@ execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop
     function ctf:match/freeze/shop/defense/custom/netherite_armor {slot: 22, cost: 1500, item_name: '{"text": "Netherite armor"}'}
 
 execute as @s[tag=attack, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:24b}]}] run \
-    function ctf:match/freeze/shop/click_item {item: 'shield', nbt: 'base_color="orange",banner_patterns=[\
+    function ctf:match/freeze/shop/templates/click_item {item: 'shield', nbt: 'base_color="orange",banner_patterns=[\
         {"pattern":"gradient","color":"black"},\
         {"pattern":"skull","color":"black"},\
         {"pattern":"gradient_up","color":"red"},\
@@ -17,7 +17,7 @@ execute as @s[tag=attack, nbt=!{Inventory:[{components:{"minecraft:custom_data":
     ], damage=316', slot: 24, cost: 500, tag: "", item_name: '{"text": "Shield"}', amount: 1}
 
 execute as @s[tag=defense, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:24b}]}] run \
-    function ctf:match/freeze/shop/click_item {item: 'shield', nbt: 'base_color="blue",banner_patterns=[\
+    function ctf:match/freeze/shop/templates/click_item {item: 'shield', nbt: 'base_color="blue",banner_patterns=[\
         {"pattern":"gradient_up","color":"light_blue"},\
         {"pattern":"flower","color":"light_blue"}\
     ], damage=316', slot: 24, cost: 500, tag: "", item_name: '{"text": "Shield"}', amount: 1}
