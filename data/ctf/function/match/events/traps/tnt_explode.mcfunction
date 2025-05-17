@@ -5,5 +5,5 @@ execute positioned as @s run summon minecraft:creeper ~ ~ ~ {\
   ExplosionRadius:3\
 }
 
-execute positioned as @s run kill @n[tag=trap_display, tag=trap.tnt]
+execute positioned as @s run kill @n[tag=trap_display, tag=trap.tnt, distance=1.3..1.4]
 kill @s
