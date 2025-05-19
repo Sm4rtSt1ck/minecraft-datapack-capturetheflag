@@ -9,3 +9,6 @@ execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:24b}]}] run \
     function ctf:match/freeze/shop/kits/custom/levitation_trap {slot: 24, cost: 500, item_name: '{"text": "Levitation trap"}'}
+
+execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:26b}]}] run \
+    function ctf:match/freeze/shop/kits/custom/wither_trap {slot: 26, cost: 500, item_name: '{"text": "Wither trap"}'}

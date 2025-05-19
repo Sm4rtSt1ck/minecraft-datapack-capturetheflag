@@ -94,6 +94,7 @@ scoreboard objectives add bought.trap.tnt dummy
 scoreboard objectives add bought.trap.anvil dummy
 scoreboard objectives add bought.trap.web dummy
 scoreboard objectives add bought.trap.levitation dummy
+scoreboard objectives add bought.trap.wither dummy
 
 #########################################
 # BOSSBAR
