@@ -25,10 +25,17 @@ kill @e[tag=flag]
 
 clear @a[tag=player] minecraft:black_stained_glass_pane
 
+execute as @a[scores={money=5000..}] run scoreboard players set @s money 5000
+
 # Give flag breaker
-clear @a[tag=attack] minecraft:stick
-give @a[tag=attack] minecraft:stick[\
-    can_break={predicates:[{blocks:["yellow_banner", "yellow_wall_banner", "tnt", "redstone_wire", "minecraft:pale_oak_pressure_plate"]}]},\
+# clear @a[tag=attack] minecraft:stick
+give @a[tag=attack, nbt=!{Inventory:[{id: "minecraft:stick"}]}] minecraft:stick[\
+    can_break={predicates:[{blocks:[\
+        "yellow_banner",\
+        "yellow_wall_banner",\
+        "cobweb"\
+        ]}]\
+    },\
     custom_name='{"color":"green","text":"Flag breaker"}',\
     enchantments={knockback:1b}\
 ] 1
@@ -36,7 +43,7 @@ give @a[tag=attack] minecraft:stick[\
 
 # Give chainmail armor if player doesn't have it
 tag @a[nbt={Inventory:[{id:"minecraft:leather_helmet"}]}] add has_helmet
-tag @a[nbt={Inventory:[{id:"minecraft:golden_helmet"}]}] add has_helmet
+# tag @a[nbt={Inventory:[{id:"minecraft:golden_helmet"}]}] add has_helmet
 tag @a[nbt={Inventory:[{id:"minecraft:chainmail_helmet"}]}] add has_helmet
 tag @a[nbt={Inventory:[{id:"minecraft:iron_helmet"}]}] add has_helmet
 tag @a[nbt={Inventory:[{id:"minecraft:diamond_helmet"}]}] add has_helmet
@@ -44,7 +51,7 @@ tag @a[nbt={Inventory:[{id:"minecraft:netherite_helmet"}]}] add has_helmet
 item replace entity @a[tag=player, tag=!has_helmet] armor.head with golden_helmet
 tag @a remove has_helmet
 tag @a[nbt={Inventory:[{id:"minecraft:leather_chestplate"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:golden_chestplate"}]}] add has_boots
+# tag @a[nbt={Inventory:[{id:"minecraft:golden_chestplate"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:chainmail_chestplate"}]}] add has_chestplate
 tag @a[nbt={Inventory:[{id:"minecraft:iron_chestplate"}]}] add has_chestplate
 tag @a[nbt={Inventory:[{id:"minecraft:diamond_chestplate"}]}] add has_chestplate
@@ -52,7 +59,7 @@ tag @a[nbt={Inventory:[{id:"minecraft:netherite_chestplate"}]}] add has_chestpla
 item replace entity @a[tag=player, tag=!has_chestplate] armor.chest with golden_chestplate
 tag @a remove has_chestplate
 tag @a[nbt={Inventory:[{id:"minecraft:leather_leggings"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:golden_leggings"}]}] add has_boots
+# tag @a[nbt={Inventory:[{id:"minecraft:golden_leggings"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:chainmail_leggings"}]}] add has_leggings
 tag @a[nbt={Inventory:[{id:"minecraft:iron_leggings"}]}] add has_leggings
 tag @a[nbt={Inventory:[{id:"minecraft:diamond_leggings"}]}] add has_leggings
@@ -60,7 +67,7 @@ tag @a[nbt={Inventory:[{id:"minecraft:netherite_leggings"}]}] add has_leggings
 item replace entity @a[tag=player, tag=!has_leggings] armor.legs with golden_leggings
 tag @a remove has_leggings
 tag @a[nbt={Inventory:[{id:"minecraft:leather_boots"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:golden_boots"}]}] add has_boots
+# tag @a[nbt={Inventory:[{id:"minecraft:golden_boots"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:chainmail_boots"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:iron_boots"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:diamond_boots"}]}] add has_boots
@@ -73,8 +80,12 @@ effect give @a[tag=player] minecraft:saturation infinite 127 true
 effect give @a[tag=player] minecraft:regeneration 1 127 true
 effect give @a[tag=player] minecraft:resistance infinite 127 true
 effect give @a[tag=defense] minecraft:mining_fatigue infinite 4 true
+effect give @a[tag=attack] minecraft:haste infinite 40 true
 
 execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:armor_stand", components:{"minecraft:entity_data":{Tags:["trap.tnt"]}}}]}] run scoreboard players set defense bought.trap.tnt 0
+execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:armor_stand", components:{"minecraft:entity_data":{Tags:["trap.anvil"]}}}]}] run scoreboard players set defense bought.trap.anvil 0
+execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:armor_stand", components:{"minecraft:entity_data":{Tags:["trap.anvil"]}}}]}] run scoreboard players set defense bought.trap.web 0
+execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:armor_stand", components:{"minecraft:entity_data":{Tags:["trap.anvil"]}}}]}] run scoreboard players set defense bought.trap.levitation 0
 
 execute if score @r[tag=admin] map_vote matches 1 as @a[tag=player] run function ctf:match/maps/test_map/freeze
 execute if score @r[tag=admin] map_vote matches 2 as @a[tag=player] run function ctf:match/maps/green_mine/freeze

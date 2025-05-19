@@ -1,0 +1,1 @@
+execute positioned as @s run summon rabbit ~ ~1.4 ~ {Health: 1, Silent: true, NoAI:true, active_effects:[{id:"minecraft:invisibility", duration:9999999,show_particles:false}], Tags: ["trap", "trap_marker", "trap.anvil"]}

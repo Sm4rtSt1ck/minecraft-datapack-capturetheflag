@@ -85,11 +85,14 @@ scoreboard objectives add flag_dropped minecraft.dropped:minecraft.yellow_banner
 scoreboard objectives add flag_pickedup minecraft.picked_up:minecraft.yellow_banner
 scoreboard objectives add flag_broken minecraft.mined:minecraft.yellow_banner
 scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.yellow_wall_banner
-scoreboard objectives add just_placed_trap minecraft.used:minecraft.armor_stand
+scoreboard objectives add just_placed_trap minecraft.used:minecraft.rabbit_spawn_egg
 
 # Shop
 scoreboard objectives add shop_category dummy
 scoreboard objectives add bought.trap.tnt dummy
+scoreboard objectives add bought.trap.anvil dummy
+scoreboard objectives add bought.trap.web dummy
+scoreboard objectives add bought.trap.levitation dummy
 
 #########################################
 # BOSSBAR
