@@ -90,11 +90,7 @@ scoreboard objectives add just_placed_trap minecraft.used:minecraft.frog_spawn_e
 
 # Shop
 scoreboard objectives add shop_category dummy
-scoreboard objectives add bought.trap.tnt dummy
-scoreboard objectives add bought.trap.anvil dummy
-scoreboard objectives add bought.trap.web dummy
-scoreboard objectives add bought.trap.levitation dummy
-scoreboard objectives add bought.trap.wither dummy
+scoreboard objectives add bought.trap dummy
 
 #########################################
 # BOSSBAR

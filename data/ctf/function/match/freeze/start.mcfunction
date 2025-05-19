@@ -82,11 +82,11 @@ effect give @a[tag=player] minecraft:resistance infinite 127 true
 effect give @a[tag=defense] minecraft:mining_fatigue infinite 4 true
 effect give @a[tag=attack] minecraft:haste infinite 40 true
 
-execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:armor_stand", components:{"minecraft:entity_data":{Tags:["trap.tnt"]}}}]}] run scoreboard players set defense bought.trap.tnt 0
-execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:armor_stand", components:{"minecraft:entity_data":{Tags:["trap.anvil"]}}}]}] run scoreboard players set defense bought.trap.anvil 0
-execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:armor_stand", components:{"minecraft:entity_data":{Tags:["trap.web"]}}}]}] run scoreboard players set defense bought.trap.web 0
-execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:armor_stand", components:{"minecraft:entity_data":{Tags:["trap.levitation"]}}}]}] run scoreboard players set defense bought.trap.levitation 0
-execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:armor_stand", components:{"minecraft:entity_data":{Tags:["trap.wither"]}}}]}] run scoreboard players set defense bought.trap.wither 0
+execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.tnt"]}}}]}] run scoreboard players set tnt bought.trap 0
+execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.anvil"]}}}]}] run scoreboard players set anvil bought.trap 0
+execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.web"]}}}]}] run scoreboard players set web bought.trap 0
+execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.levitation"]}}}]}] run scoreboard players set levitation bought.trap 0
+execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.wither"]}}}]}] run scoreboard players set wither bought.trap 0
 
 execute if score @r[tag=admin] map_vote matches 1 as @a[tag=player] run function ctf:match/maps/test_map/freeze
 execute if score @r[tag=admin] map_vote matches 2 as @a[tag=player] run function ctf:match/maps/green_mine/freeze
