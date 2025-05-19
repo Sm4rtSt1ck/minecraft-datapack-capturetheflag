@@ -11,6 +11,7 @@ gamerule keepInventory false
 gamerule spectatorsGenerateChunks false
 gamerule fallDamage false
 gamerule announceAdvancements false
+gamerule doVinesSpread false
 
 defaultgamemode adventure
 setworldspawn 0 -41 0
@@ -85,7 +86,7 @@ scoreboard objectives add flag_dropped minecraft.dropped:minecraft.yellow_banner
 scoreboard objectives add flag_pickedup minecraft.picked_up:minecraft.yellow_banner
 scoreboard objectives add flag_broken minecraft.mined:minecraft.yellow_banner
 scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.yellow_wall_banner
-scoreboard objectives add just_placed_trap minecraft.used:minecraft.rabbit_spawn_egg
+scoreboard objectives add just_placed_trap minecraft.used:minecraft.frog_spawn_egg
 
 # Shop
 scoreboard objectives add shop_category dummy

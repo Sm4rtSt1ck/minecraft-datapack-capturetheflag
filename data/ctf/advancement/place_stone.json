@@ -1,0 +1,14 @@
+{
+  "criteria": {
+    "place": {
+      "trigger": "minecraft:placed_block",
+        "conditions": {
+          "player": {"equipment": {"mainhand": {"items": "stone"}}
+        }
+      }
+    }
+  },
+  "rewards": {
+    "function": "ctf:test"
+  }
+}

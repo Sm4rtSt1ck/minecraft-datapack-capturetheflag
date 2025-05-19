@@ -19,7 +19,7 @@ execute at @e[type=wind_charge] as @e[tag=trap.tnt, tag=trap_marker, distance=..
 
 execute at @a[tag=player, tag=!dead] positioned ~-0.125 ~1 ~-0.125 as @e[tag=trap.anvil, tag=trap_marker, dx=0.25, dy=256, dz=0.25] run function ctf:match/events/traps/anvil/trigger
 
-execute at @a[tag=player, tag=!dead] as @e[tag=trap.web, tag=trap_marker, distance=..1] run function ctf:match/events/traps/web/trigger
+execute at @a[tag=player, tag=!dead] as @e[tag=trap.web, tag=trap_marker, distance=..1.5] run function ctf:match/events/traps/web/trigger
 
 execute at @a[tag=player, tag=!dead] as @e[tag=trap.levitation, tag=trap_marker, distance=..1] run function ctf:match/events/traps/levitation/trigger
 

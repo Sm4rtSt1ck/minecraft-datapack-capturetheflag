@@ -1,5 +1,5 @@
 $function ctf:match/freeze/shop/templates/show_item {\
-    item: rabbit_spawn_egg, \
+    item: frog_spawn_egg, \
     slot: $(slot), \
     cost: $(cost), \
     tag: "3", \
@@ -20,7 +20,7 @@ $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. if sco
 
 $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. if score defense bought.trap.levitation matches 0 run tag @s add buy_levitation_trap
 $execute if score defense bought.trap.levitation matches 0 run function ctf:match/freeze/shop/templates/buy_item {\
-    item: rabbit_spawn_egg, \
+    item: frog_spawn_egg, \
     nbt: '\
         item_model=feather, \
         entity_data={\
