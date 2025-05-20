@@ -1,5 +1,5 @@
 # IF I COMMIT WITHOUT REMOVING THIS LINE, AMA ULTRA STUPID
-# execute as @a[scores={just_placed_trap=1..}] run function ctf:match/events/traps/place
+execute as @a[scores={just_placed_trap=1..}] run function ctf:match/events/traps/place
 
 
 # Flag

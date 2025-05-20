@@ -21,5 +21,8 @@ execute as @a[scores={flag_placed=1..}] run function ctf:match/events/flag/place
 execute as @a[scores={just_placed_trap=1..}] run function ctf:match/events/traps/place
 execute as @e[tag=trap_display] positioned as @s unless entity @n[tag=trap_marker, distance=1.2..1.5] run kill @s
 
+# ATTACK TEAM TRAPS
+function ctf:match/events/traps/detector/trigger
+
 function ctf:match/freeze/shop/tick
 execute if score freeze timer matches -2147483648..0 run function ctf:match/round/start
