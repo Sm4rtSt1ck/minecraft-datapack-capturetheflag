@@ -90,7 +90,7 @@ scoreboard objectives add just_placed_trap minecraft.used:minecraft.frog_spawn_e
 
 # Shop
 scoreboard objectives add shop_category dummy
-scoreboard objectives add bought.trap dummy
+scoreboard objectives add bought.item dummy
 
 #########################################
 # BOSSBAR

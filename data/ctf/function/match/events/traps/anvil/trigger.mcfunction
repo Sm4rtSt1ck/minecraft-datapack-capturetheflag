@@ -1,4 +1,4 @@
-say match/helpers/tnt_explode
+say anvil
 
 execute positioned as @s run summon minecraft:falling_block ~ ~ ~ {BlockState:{ Name: "anvil"},FallHurtAmount:5,FallHurtMax:20,HurtEntities:true, Motion:[0.0d,-0.5d,0.0d], CancelDrop: true, Silent: true}
 

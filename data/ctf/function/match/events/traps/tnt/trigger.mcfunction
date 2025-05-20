@@ -1,4 +1,4 @@
-say match/helpers/tnt_explode
+say tnt
 
 execute positioned as @s run summon minecraft:creeper ~ ~ ~ {\
   Fuse:0,\

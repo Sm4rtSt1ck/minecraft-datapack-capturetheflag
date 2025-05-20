@@ -1,4 +1,4 @@
-say match/helpers/tnt_explode
+say web
 
 execute positioned as @s run fill ~-1 ~-1 ~-1 ~1 ~1 ~1 cobweb replace air
 

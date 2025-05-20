@@ -10,6 +10,7 @@ execute as @n[tag=!placed, tag=trap_display, tag=trap.anvil] run function ctf:ma
 execute as @n[tag=!placed, tag=trap_display, tag=trap.web] run function ctf:match/events/traps/web/place
 execute as @n[tag=!placed, tag=trap_display, tag=trap.levitation] run function ctf:match/events/traps/levitation/place
 execute as @n[tag=!placed, tag=trap_display, tag=trap.wither] run function ctf:match/events/traps/wither/place
+execute as @n[tag=!placed, tag=trap_display, tag=trap.detector] run function ctf:match/events/traps/detector/place
 # execute at @s as @n[tag=!placed, tag=trap.something run function ctf:match/events/traps/place_something
 
 tag @n[tag=!placed, tag=trap_display] add placed

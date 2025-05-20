@@ -24,4 +24,7 @@ execute at @a[tag=player, tag=!dead] as @e[tag=trap.web, tag=trap_marker, distan
 execute at @a[tag=player, tag=!dead] as @e[tag=trap.levitation, tag=trap_marker, distance=..2] run function ctf:match/events/traps/levitation/trigger
 execute at @a[tag=player, tag=!dead] as @e[tag=trap.wither, tag=trap_marker, distance=..2] run function ctf:match/events/traps/wither/trigger
 
+
+function ctf:match/events/traps/detector/trigger
+
 execute as @e[tag=trap_display] positioned as @s unless entity @n[tag=trap_marker, distance=1.2..1.5] run kill @s

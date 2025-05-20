@@ -16,10 +16,10 @@ $function ctf:match/freeze/shop/templates/show_item {\
     }'\
 }
 
-$execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. if score levitation bought.trap matches 1.. run tellraw @s {"text": "Someone already had a levitation trap when the round started!", "color": "red"}
+$execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. if score levitation_trap bought.item matches 1.. run tellraw @s {"text": "Someone already had a levitation trap when the round started!", "color": "red"}
 
-$execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. if score levitation bought.trap matches 0 run tag @s add buy_levitation_trap
-$execute if score levitation bought.trap matches 0 run function ctf:match/freeze/shop/templates/buy_item {\
+$execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. if score levitation_trap bought.item matches 0 run tag @s add buy_levitation_trap
+$execute if score levitation_trap bought.item matches 0 run function ctf:match/freeze/shop/templates/buy_item {\
     item: frog_spawn_egg, \
     nbt: '\
         item_model=feather, \
@@ -36,5 +36,5 @@ $execute if score levitation bought.trap matches 0 run function ctf:match/freeze
     item_name: '$(item_name)'\
 }
 
-execute if entity @s[tag=buy_levitation_trap] run scoreboard players add levitation bought.trap 1
+execute if entity @s[tag=buy_levitation_trap] run scoreboard players add levitation_trap bought.item 1
 tag @s remove buy_levitation_trap

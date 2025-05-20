@@ -1,4 +1,4 @@
-say match/helpers/tnt_explode
+say levitation
 
 execute positioned as @s run kill @n[tag=trap_display, tag=trap.levitation, distance=1.2..1.5]
 # tag @s add trap_temp
