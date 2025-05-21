@@ -1,6 +1,8 @@
 # IF I COMMIT WITHOUT REMOVING THIS LINE, AMA ULTRA STUPID
 # execute as @a[scores={just_placed_trap=1..}] run function ctf:match/events/traps/place
 
+execute as @a[scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[minecraft:custom_data={tags:["trap", "detector"]}] run function ctf:match/events/traps/detector/place
+
 
 # Flag
 execute as @a[scores={flag_broken=1..}] run function ctf:match/events/flag/break

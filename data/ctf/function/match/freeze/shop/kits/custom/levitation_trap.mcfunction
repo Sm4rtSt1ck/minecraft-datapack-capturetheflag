@@ -28,9 +28,9 @@ $execute if score levitation_trap bought.item matches 0 run function ctf:match/f
             Marker:true, \
             Invisible:true, \
             Tags:["trap", "trap_display", "trap.levitation"],\
-            ArmorItems:[{}, {}, {}, {id:"minecraft:feather"}\
-        ]\
-    }', \
+            ArmorItems:[{}, {}, {}, {id:"minecraft:feather"}]\
+        }\
+    ', \
     cost: $(cost), \
     amount: 1, \
     item_name: '$(item_name)'\

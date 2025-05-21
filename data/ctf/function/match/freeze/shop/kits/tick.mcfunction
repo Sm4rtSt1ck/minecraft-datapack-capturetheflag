@@ -19,4 +19,4 @@ execute as @s[tag=defense, nbt=!{Inventory:[{components:{"minecraft:custom_data"
 # ATTACK
 
 execute as @s[tag=attack, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:18b}]}] run \
-    function ctf:match/freeze/shop/kits/custom/enemies_detector {slot: 18, cost: 500, item_name: '{"text": "Enemies detector (within 19 blocks)"}'}
+    function ctf:match/freeze/shop/kits/custom/enemies_detector {slot: 18, cost: 500, item_name: '{"text": "Enemies detector (within 10 blocks)"}'}
