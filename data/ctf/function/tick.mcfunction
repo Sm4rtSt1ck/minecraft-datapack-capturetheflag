@@ -27,3 +27,5 @@ execute if score game status matches 2..6 unless entity @a[tag=player] run funct
 # GLOBAL EVENTS
 
 execute as @a unless score @s had_left matches 0 run function ctf:events/player_join
+
+scoreboard players set @a carrot_on_stick 0

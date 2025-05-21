@@ -2,74 +2,52 @@
 # MAP 1
 
 # Give items
-item replace entity @s hotbar.0 with filled_map[\
+item replace entity @s hotbar.0 with carrot_on_a_stick[\
+    item_model="filled_map",\
+    map_id=0,\
+    custom_data={tags: ["menu"]},\
     custom_name="{\
         \"shadow_color\": -16252673,\
         \"text\" :\"Test map\"\
-    }",\
-    map_id=0,\
-    custom_data={tags:["menu"]}\
+    }"\
 ]
 
 # Check first map choice (left hand)
-execute if entity @s[\
-    nbt={Inventory:[{\
-        id:"minecraft:filled_map",\
-        Slot:-106b,\
-        components:{"minecraft:map_id":0}\
-    }]}\
-] run \
-    scoreboard players set @s map_vote 1
+execute as @a[tag=lobby, tag=admin, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=0] run scoreboard players set @s map_vote 1
 
 #########################################
 # MAP 2
 
 # Give items
-item replace entity @s hotbar.1 with filled_map[\
+item replace entity @s hotbar.1 with carrot_on_a_stick[\
+    item_model="filled_map",\
+    map_id=1,\
+    custom_data={tags: ["menu"]},\
     custom_name="{\
         \"shadow_color\": -16252673,\
-        \"text\" :\"Green Mine\"\
-    }",\
-    map_id=1,\
-    custom_data={tags:["menu"]}\
+        \"text\" :\"GreenMine\"\
+    }"\
 ]
 
 # Check first map choice (left hand)
-execute if entity @s[\
-    nbt={Inventory:[{\
-        id:"minecraft:filled_map",\
-        Slot:-106b,\
-        components:{"minecraft:map_id":1}\
-    }]}\
-] run \
-    scoreboard players set @s map_vote 2
+execute as @a[tag=lobby, tag=admin, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=1] run scoreboard players set @s map_vote 2
 #########################################
 # MAP 3
 
 # Give items
-item replace entity @s hotbar.2 with filled_map[\
+item replace entity @s hotbar.2 with carrot_on_a_stick[\
+    item_model="filled_map",\
+    map_id=2,\
+    custom_data={tags: ["menu"]},\
     custom_name="{\
         \"shadow_color\": -16252673,\
         \"text\" :\"Night Club\"\
-    }",\
-    map_id=2,\
-    custom_data={tags:["menu"]}\
+    }"\
 ]
 
 # Check first map choice (left hand)
-execute if entity @s[\
-    nbt={Inventory:[{\
-        id:"minecraft:filled_map",\
-        Slot:-106b,\
-        components:{"minecraft:map_id":2}\
-    }]}\
-] run \
-    scoreboard players set @s map_vote 3
+execute as @a[tag=lobby, tag=admin, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=2] run scoreboard players set @s map_vote 3
 
 #########################################
-# CLEAR THE LEFT HAND AFTER ALL CHECKINGS
 
-item replace entity @s weapon.offhand with air
-
-
-title @s actionbar [{"color":"blue","text":"Press "},{"color":"light_purple","text":"["},{"keybind":"key.swapOffhand", "color": "light_purple"},{"color":"light_purple", "text":"]"},{"color":"blue","text":" to vote"}]
+title @s actionbar [{"color":"blue","text":"Press "},{"color":"light_purple","text":"["},{"keybind":"key.use", "color": "light_purple"},{"color":"light_purple", "text":"]"},{"color":"blue","text":" to vote"}]
