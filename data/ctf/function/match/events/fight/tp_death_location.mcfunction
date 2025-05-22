@@ -11,6 +11,7 @@ kill @n[tag=lastDeathMarker]
 
 execute as @r[tag=just_died] positioned as @s run playsound minecraft:entity.allay.death ambient @s ~ ~ ~ 2 0
 effect give @r[tag=just_died] blindness 3 1 true
+title @r[tag=just_died] subtitle [{"selector": "@r[tag=just_killed]"}, {"text": " has ", "color": "gold"}, {"score": {"name": "@r[tag=just_killed]", "objective": "health"}, "color": "red"}, {"text": " hp left!", "color": "gold"}]
 
 tag @r[tag=just_died] remove just_died
 tag @r[tag=just_killed] remove just_killed

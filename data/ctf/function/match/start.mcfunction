@@ -47,10 +47,14 @@ scoreboard players reset * just_placed_trap
 team empty team_1
 team modify team_1 displayName "Attack"
 team modify team_1 color red
+team modify team_1 prefix "🪓 "
+team modify team_1 suffix " 🪓"
 
 team empty team_2
 team modify team_2 displayName "defense"
 team modify team_2 color blue
+team modify team_2 prefix "⛨ "
+team modify team_2 suffix " ⛨"
 
 # Join teams 10 players
 team join team_2 @r[tag=player]

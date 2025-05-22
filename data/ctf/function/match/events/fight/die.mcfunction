@@ -6,7 +6,6 @@ gamemode spectator @s
 
 tag @s add dead
 
-title @s title ""
-title @s subtitle {"text": "DEATH", "color": "black"}
+title @s title {"text": "DEATH", "color": "black"}
 
 schedule function ctf:match/events/fight/tp_death_location 2t

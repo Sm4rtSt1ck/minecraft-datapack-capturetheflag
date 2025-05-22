@@ -19,7 +19,8 @@ tag @s remove just_killed
 #########################################
 
 clear @s
-team leave @s
+# team leave @s
+team join lobby @s
 gamemode adventure @s
 execute positioned as @s run spawnpoint @s
 

@@ -21,13 +21,24 @@ setworldspawn 0 -41 0
 
 team leave @a
 
+team add lobby
+team modify lobby color gold
+team modify lobby collisionRule never
+team modify lobby friendlyFire false
+team modify lobby nametagVisibility hideForOtherTeams
+team modify lobby deathMessageVisibility hideForOtherTeams
+team modify lobby prefix "⚑ "
+team modify lobby suffix " ⚑"
+
 team add team_1
 team modify team_1 friendlyFire true
 team modify team_1 nametagVisibility hideForOtherTeams
+team modify team_1 seeFriendlyInvisibles true
 
 team add team_2
 team modify team_2 friendlyFire true
 team modify team_2 nametagVisibility hideForOtherTeams
+team modify team_2 seeFriendlyInvisibles true
 
 #########################################
 # SCOREBOARDS
@@ -46,8 +57,8 @@ scoreboard objectives add status dummy
 scoreboard players set game status 1
 
 # Vote
-scoreboard objectives add map_vote dummy "Map vote"
-scoreboard players reset @a map_vote
+scoreboard objectives add map_vote dummy {"text": "🎴 VOTES FOR MAPS 🎴", "color": "green", "bold": true}
+scoreboard players reset * map_vote
 
 # Timer
 scoreboard objectives add timer dummy "Time"
@@ -56,7 +67,7 @@ scoreboard objectives add timer dummy "Time"
 scoreboard objectives add health health "hp"
 scoreboard objectives modify health rendertype hearts
 scoreboard objectives setdisplay below_name health
-scoreboard objectives modify health numberformat styled {"color":"green"}
+scoreboard objectives modify health numberformat styled {"color":"yellow"}
 
 # Unique match identifier to check if a player is in the match
 scoreboard objectives add match_id dummy
@@ -75,7 +86,7 @@ scoreboard players set team_2 rounds 0
 scoreboard objectives add money dummy "Money"
 
 # Kills and deaths counters
-scoreboard objectives add kills playerKillCount {"text": "Kills", "color": "green"}
+scoreboard objectives add kills playerKillCount [{"text": "🌢", "color": "light_purple", "bold": false}, {"text": " KILLS ", "color": "#AA99FF", "bold": true}, {"text": "🌢", "color": "light_purple", "bold": false}]
 scoreboard objectives add deaths deathCount {"text": "Deaths", "color": "red"}
 
 # Match events
@@ -99,9 +110,9 @@ scoreboard objectives add bought.item dummy
 bossbar remove ctf:match
 bossbar add ctf:match ""
 bossbar set ctf:match visible true
-bossbar set ctf:match color purple
+bossbar set ctf:match color pink
 bossbar set ctf:match max 300
-bossbar set ctf:match style notched_20
+bossbar set ctf:match style notched_10
 
 #########################################
 # OTHER

@@ -2,6 +2,8 @@ say match/swap_teams
 
 team modify team_1 displayName "defense"
 team modify team_1 color blue
+team modify team_1 prefix "⛨ "
+team modify team_1 suffix " ⛨"
 tag team_1 remove attack
 tag team_1 add defense
 tag @a[team=team_1] remove attack
@@ -9,6 +11,8 @@ tag @a[team=team_1] add defense
 
 team modify team_2 displayName "Attack"
 team modify team_2 color red
+team modify team_2 prefix "🪓 "
+team modify team_2 suffix " 🪓"
 tag team_2 remove defense
 tag team_2 add attack
 tag @a[team=team_2] remove defense
