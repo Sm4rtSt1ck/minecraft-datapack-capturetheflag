@@ -18,7 +18,7 @@ tag team_2 add attack
 tag @a[team=team_2] remove defense
 tag @a[team=team_2] add attack
 
-scoreboard players set @a[tag=player] money 2000
+scoreboard players set @a[tag=player] money 20
 
 title @a[tag=!lobby] title {"text":"SWAP TEAMS", "color": "green"}
 

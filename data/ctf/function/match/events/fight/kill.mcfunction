@@ -1,4 +1,4 @@
-scoreboard players add @s money 500
+scoreboard players add @s money 5
 title @s actionbar [{"text":"+$500","color":"green"}]
 
 title @s title ""

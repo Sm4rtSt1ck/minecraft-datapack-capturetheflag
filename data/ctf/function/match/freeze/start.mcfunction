@@ -25,7 +25,7 @@ kill @e[tag=flag]
 
 clear @a[tag=player] minecraft:black_stained_glass_pane
 
-execute as @a[scores={money=5000..}] run scoreboard players set @s money 5000
+execute as @a[scores={money=50..}] run scoreboard players set @s money 50
 
 # Give flag breaker
 # clear @a[tag=attack] minecraft:stick
