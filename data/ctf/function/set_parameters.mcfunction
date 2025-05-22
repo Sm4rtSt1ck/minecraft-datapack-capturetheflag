@@ -51,13 +51,17 @@ scoreboard players set 2 number 2
 scoreboard objectives add had_left minecraft.custom:minecraft.leave_game
 scoreboard objectives add carrot_on_stick minecraft.used:minecraft.carrot_on_a_stick
 
-# Game status (0 - lobby, 1 - vote, 2 - warmup, 3 - freeze, 4 - round, 5 - end_round, 6 - end)
-scoreboard objectives add status dummy
-# IMPORTANT! change to 0 after fully adding vote status
-scoreboard players set game status 1
+# Game state (0 - lobby, 1 - vote, 2 - warmup, 3 - freeze, 4 - round, 5 - end_round, 6 - end)
+scoreboard objectives add state dummy
+# IMPORTANT! change to 0 after fully adding vote state
+scoreboard players set game state 1
 
 # Vote
-scoreboard objectives add map_vote dummy [{"text": "🎴", "color": "light_purple", "bold": false}, {"text": " VOTES FOR MAPS ", "color": "green", "bold": true}, {"text": "🎴", "color": "light_purple", "bold": false}]
+scoreboard objectives add map_vote dummy [\
+    {"text": "🎴", "color": "light_purple", "bold": false}, \
+    {"text": " VOTES FOR MAPS ", "color": "green", "bold": true}, \
+    {"text": "🎴", "color": "light_purple", "bold": false}\
+]
 scoreboard players reset * map_vote
 
 # Timer
@@ -86,7 +90,11 @@ scoreboard players set team_2 rounds 0
 scoreboard objectives add money dummy "Money"
 
 # Kills and deaths counters
-scoreboard objectives add kills playerKillCount [{"text": "🌢", "color": "light_purple", "bold": false}, {"text": " KILLS ", "color": "#AA99FF", "bold": true}, {"text": "🌢", "color": "light_purple", "bold": false}]
+scoreboard objectives add kills playerKillCount [\
+    {"text": "🌢", "color": "light_purple", "bold": false}, \
+    {"text": " KILLS ", "color": "#AA99FF", "bold": true}, \
+    {"text": "🌢", "color": "light_purple", "bold": false}\
+]
 scoreboard objectives add deaths deathCount {"text": "Deaths", "color": "red"}
 
 # Match events

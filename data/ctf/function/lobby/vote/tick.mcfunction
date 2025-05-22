@@ -1,5 +1,5 @@
 #########################################
-# MAP 1
+# TEST MAP
 
 clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:0b}]}] carrot_on_a_stick[map_id=0]
 
@@ -18,7 +18,7 @@ item replace entity @a[tag=lobby] hotbar.0 with carrot_on_a_stick[\
 execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=0] run scoreboard players set @s map_vote 1
 
 #########################################
-# MAP 2
+# GREEN MINE
 
 clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:1b}]}] carrot_on_a_stick[map_id=1]
 
@@ -37,7 +37,7 @@ item replace entity @a[tag=lobby] hotbar.1 with carrot_on_a_stick[\
 execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=1] run scoreboard players set @s map_vote 2
 
 #########################################
-# MAP 3
+# NIGHT CLUB
 
 clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:2b}]}] carrot_on_a_stick[map_id=2]
 
@@ -54,6 +54,25 @@ item replace entity @a[tag=lobby] hotbar.2 with carrot_on_a_stick[\
 
 # Check first map choice (left hand)
 execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=2] run scoreboard players set @s map_vote 3
+
+#########################################
+# FARM
+
+clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:3b}]}] carrot_on_a_stick[map_id=3]
+
+# Give items
+item replace entity @a[tag=lobby] hotbar.3 with carrot_on_a_stick[\
+    item_model="filled_map",\
+    map_id=3,\
+    custom_data={tags: ["menu"]},\
+    custom_name="{\
+        \"shadow_color\": -16252673,\
+        \"text\" :\"Farm\"\
+    }"\
+]
+
+# Check first map choice (left hand)
+execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=3] run scoreboard players set @s map_vote 4
 
 #########################################
 # RUN GAME BUTTON

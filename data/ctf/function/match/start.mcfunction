@@ -81,4 +81,4 @@ tag @a[team=team_2] remove attack
 # GO TO THE MOST VOTED MAP
 
 function ctf:match/prepare/prepare
-schedule function ctf:match/warmup/start 60t
+# schedule function ctf:match/warmup/start 60t

@@ -4,8 +4,8 @@ gamerule fallDamage true
 
 scoreboard objectives setdisplay sidebar kills
 
-# Warmup game status
-scoreboard players set game status 2
+# Warmup game state
+scoreboard players set game state 2
 bossbar set ctf:match name {"text": "WARM-UP", "color": "green"}
 
 # 30 secs warmup timer (600 ticks)
