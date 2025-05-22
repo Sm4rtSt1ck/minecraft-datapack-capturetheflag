@@ -32,9 +32,9 @@ team modify team_2 nametagVisibility hideForOtherTeams
 #########################################
 # SCOREBOARDS
 
-# Constants
-scoreboard objectives add const dummy
-scoreboard players set 2 const 2
+# Numbers
+scoreboard objectives add number dummy
+scoreboard players set 2 number 2
 
 # Global events
 scoreboard objectives add had_left minecraft.custom:minecraft.leave_game
@@ -67,7 +67,7 @@ scoreboard players add match match_id 1
 scoreboard objectives add rounds dummy "Rounds"
 scoreboard players set max rounds 10
 scoreboard players operation swap rounds = max rounds
-scoreboard players operation swap rounds /= 2 const
+scoreboard players operation swap rounds /= 2 number
 scoreboard players set team_1 rounds 0
 scoreboard players set team_2 rounds 0
 

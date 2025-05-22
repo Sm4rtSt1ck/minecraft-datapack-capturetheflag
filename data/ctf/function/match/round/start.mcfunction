@@ -27,6 +27,6 @@ kill @e[type=arrow]
 # execute if entity @e[type=item, nbt={Item:{id:"minecraft:yellow_banner"}}] run function ctf:match/round/win_attack
 execute unless entity @e[type=armor_stand, tag=flag] run function ctf:match/round/win_attack
 
-execute if score @r[tag=admin] map_vote matches 1 run function ctf:match/maps/test_map/round
-execute if score @r[tag=admin] map_vote matches 2 run function ctf:match/maps/green_mine/round
-execute if score @r[tag=admin] map_vote matches 3 run function ctf:match/maps/night_club/round
+execute if score result map_vote matches 1 run function ctf:match/maps/test_map/round
+execute if score result map_vote matches 2 run function ctf:match/maps/green_mine/round
+execute if score result map_vote matches 3 run function ctf:match/maps/night_club/round

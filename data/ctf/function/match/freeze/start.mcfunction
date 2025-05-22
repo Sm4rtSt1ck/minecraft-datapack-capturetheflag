@@ -89,9 +89,9 @@ execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_
 execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.wither"]}}}]}] run scoreboard players set wither_trap bought.item 0
 execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.detector"]}}}]}] run scoreboard players set detector_trap bought.item 0
 
-execute if score @r[tag=admin] map_vote matches 1 as @a[tag=player] run function ctf:match/maps/test_map/freeze
-execute if score @r[tag=admin] map_vote matches 2 as @a[tag=player] run function ctf:match/maps/green_mine/freeze
-execute if score @r[tag=admin] map_vote matches 3 as @a[tag=player] run function ctf:match/maps/night_club/freeze
+execute if score result map_vote matches 1 as @a[tag=player] run function ctf:match/maps/test_map/freeze
+execute if score result map_vote matches 2 as @a[tag=player] run function ctf:match/maps/green_mine/freeze
+execute if score result map_vote matches 3 as @a[tag=player] run function ctf:match/maps/night_club/freeze
 
 
 # Give flag

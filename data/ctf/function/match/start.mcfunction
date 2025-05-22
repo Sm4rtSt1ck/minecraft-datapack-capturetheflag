@@ -24,7 +24,7 @@ scoreboard players set team_2 rounds 0
 bossbar set ctf:match value 0
 bossbar set ctf:match visible true
 bossbar set ctf:match players @a[tag=!lobby]
-bossbar set ctf:match name {"text":"MAP PREPARATION", "color": "yellow"}
+bossbar set ctf:match name {"text":"PREPARING...", "color": "yellow"}
 
 scoreboard players set @a[tag=player] money 2000
 scoreboard objectives setdisplay list deaths
@@ -76,7 +76,5 @@ tag @a[team=team_2] remove attack
 #########################################
 # GO TO THE MOST VOTED MAP
 
-# execute if score @p map_vote matches 1 run function ctf:match/maps/test_map/join
-# execute if score @s[tag=admin] map_vote matches 2 run function ctf:match/maps/green_mine/join
 function ctf:match/prepare/prepare
 schedule function ctf:match/warmup/start 60t
