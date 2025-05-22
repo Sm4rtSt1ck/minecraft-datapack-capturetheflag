@@ -1,4 +1,4 @@
-say match/end/start
+function admin:log/function {name: "match/end/start"}
 
 scoreboard players set game state 6
 # Tiemr to lobby 15 secs (300 ticks)

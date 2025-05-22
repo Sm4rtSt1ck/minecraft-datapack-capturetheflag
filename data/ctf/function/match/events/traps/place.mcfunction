@@ -1,3 +1,5 @@
+function admin:log/function {name: "match/events/traps/place"}
+
 scoreboard players set @s just_placed_trap 0
 
 

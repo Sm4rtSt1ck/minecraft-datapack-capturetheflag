@@ -1,4 +1,4 @@
-say match/maps/night_club/round
+function admin:log/function {name: "match/maps/night_club/round"}
 
 # Break the borders
 # Way 1

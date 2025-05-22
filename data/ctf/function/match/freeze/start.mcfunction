@@ -1,4 +1,4 @@
-say match/freeze/start
+function admin:log/function {name: "match/freeze/start"}
 
 scoreboard players set game state 3
 

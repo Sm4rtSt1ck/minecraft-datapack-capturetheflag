@@ -1,4 +1,4 @@
-say match/start
+function admin:log/function {name: "match/start"}
 #########################################
 # SET THE GAME SETTINGS
 

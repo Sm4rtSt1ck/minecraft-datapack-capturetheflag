@@ -1,4 +1,4 @@
-say match/prepare/clone
+function admin:log/function {name: "match/prepare/clone"}
 
 #########################################
 # LAYER 1

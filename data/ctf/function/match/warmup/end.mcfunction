@@ -1,4 +1,4 @@
-say match/warmup/end
+function admin:log/function {name: "match/warmup/end"}
 
 function ctf:match/helpers/update_score_display
 

@@ -1,5 +1,3 @@
-say tnt
-
 execute positioned as @s run summon minecraft:creeper ~ ~ ~ {\
   Fuse:0,\
   ExplosionRadius:2,\

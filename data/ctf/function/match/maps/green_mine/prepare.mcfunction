@@ -1,4 +1,4 @@
-say match/maps/green_mine/prepare
+function admin:log/function {name: "match/maps/green_mine/prepare"}
 
 title @s title [{"text": "Green", "color": "green"}, {"text": "Mine", "color": "gray"}]
 

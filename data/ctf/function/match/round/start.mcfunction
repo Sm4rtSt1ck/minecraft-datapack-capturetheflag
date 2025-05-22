@@ -1,4 +1,4 @@
-say match/round/start
+# function admin:log/function {name: "match/round/start"}
 
 scoreboard players set game state 4
 # Round timer 180 secs (3600 ticks)

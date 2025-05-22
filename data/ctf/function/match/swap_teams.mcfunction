@@ -1,4 +1,4 @@
-say match/swap_teams
+function admin:log/function {name: "match/swap_teams"}
 
 team modify team_1 displayName "defense"
 team modify team_1 color blue

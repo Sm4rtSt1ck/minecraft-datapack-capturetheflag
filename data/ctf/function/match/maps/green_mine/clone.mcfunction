@@ -1,4 +1,4 @@
-say match/maps/green_mine/clone
+function admin:log/function {name: "match/maps/green_mine/clone"}
 
 # Map entities
 summon minecraft:minecart -188.5 -34 -174.5 {Invulnerable:true, Tags:["map_entity"]}

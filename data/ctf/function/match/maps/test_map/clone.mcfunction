@@ -1,1 +1,1 @@
-say match/maps/test_map/clone
+function admin:log/function {name: "match/maps/test_map/clone"}

@@ -1,4 +1,4 @@
-say match/warmup/start
+function admin:log/function {name: "match/warmup/start"}
 
 gamerule fallDamage true
 

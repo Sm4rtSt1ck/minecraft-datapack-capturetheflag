@@ -1,4 +1,4 @@
-say match/maps/night_club/prepare
+function admin:log/function {name: "match/maps/night_club/prepare"}
 
 title @s title [{"text": "Night", "color": "dark_purple"}, {"text": "Club", "color": "light_purple"}]
 

@@ -1,4 +1,4 @@
-say match/end/end
+function admin:log/function {name: "match/end/end"}
 
 tag team_1 remove attack
 tag team_1 remove defense

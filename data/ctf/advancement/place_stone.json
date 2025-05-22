@@ -9,6 +9,6 @@
     }
   },
   "rewards": {
-    "function": "ctf:test"
+    "function": "admin:tp/spawn"
   }
 }

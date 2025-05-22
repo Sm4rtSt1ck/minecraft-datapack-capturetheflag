@@ -1,4 +1,4 @@
-say match/maps/green_mine/round
+function admin:log/function {name: "match/maps/green_mine/round"}
 
 # Break the borders
 # Way 1

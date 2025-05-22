@@ -1,4 +1,4 @@
-say match/end_round/start
+function admin:log/function {name: "match/end_round/start"}
 
 scoreboard players set game state 5
 

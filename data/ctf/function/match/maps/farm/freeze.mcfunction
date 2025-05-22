@@ -1,4 +1,4 @@
-say match/maps/farm/freeze
+function admin:log/function {name: "match/maps/farm/freeze"}
 
 # Fill the borders
 # Way 1

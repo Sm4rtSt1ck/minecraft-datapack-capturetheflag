@@ -1,3 +1,5 @@
+function admin:log/function {name: "lobby/join_all"}
+
 gamerule fallDamage false
 
 #########################################

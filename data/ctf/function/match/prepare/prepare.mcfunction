@@ -1,4 +1,4 @@
-say match/prepare/prepare
+function admin:log/function {name: "match/prepare/prepare"}
 
 title @a[tag=player] subtitle {"text":"Preparing the map...", "color": "yellow"}
 
