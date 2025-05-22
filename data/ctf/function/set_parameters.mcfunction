@@ -57,7 +57,7 @@ scoreboard objectives add status dummy
 scoreboard players set game status 1
 
 # Vote
-scoreboard objectives add map_vote dummy {"text": "🎴 VOTES FOR MAPS 🎴", "color": "green", "bold": true}
+scoreboard objectives add map_vote dummy [{"text": "🎴", "color": "light_purple", "bold": false}, {"text": " VOTES FOR MAPS ", "color": "green", "bold": true}, {"text": "🎴", "color": "light_purple", "bold": false}]
 scoreboard players reset * map_vote
 
 # Timer

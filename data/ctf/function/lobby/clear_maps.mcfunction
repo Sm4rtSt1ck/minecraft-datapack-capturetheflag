@@ -1,0 +1,1 @@
+clear @a[tag=lobby] filled_map
