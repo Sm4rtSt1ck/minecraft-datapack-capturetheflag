@@ -31,7 +31,7 @@ effect clear @s
 effect give @s minecraft:regeneration 1 127 true
 effect give @s minecraft:resistance infinite 127 true
 effect give @s minecraft:jump_boost infinite 1 true
-effect give @s minecraft:speed infinite 1 true
+effect give @s minecraft:speed infinite 0 true
 effect give @s minecraft:saturation infinite 127 true
 
 #########################################
