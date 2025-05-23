@@ -1,6 +1,6 @@
 execute positioned as @s run summon minecraft:creeper ~ ~ ~ {\
   Fuse:0,\
-  ExplosionRadius:2,\
+  ExplosionRadius:3,\
   Invulnerable:true,\
   attributes: [{id:"movement_speed", base: 0}],\
 }

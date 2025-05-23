@@ -1,4 +1,4 @@
-execute positioned as @s run summon minecraft:falling_block ~ ~ ~ {BlockState:{ Name: "anvil"},FallHurtAmount:4,FallHurtMax:20,HurtEntities:true, Motion:[0.0d,-0.8d,0.0d], CancelDrop: true, Silent: true}
+execute positioned as @s run summon minecraft:falling_block ~ ~ ~ {BlockState:{ Name: "anvil"},FallHurtAmount:6,FallHurtMax:20,HurtEntities:true, Motion:[0.0d,-1d,0.0d], CancelDrop: true, Silent: true}
 
 execute positioned as @s run playsound minecraft:block.anvil.land block @a ~ ~ ~ 1 1
 

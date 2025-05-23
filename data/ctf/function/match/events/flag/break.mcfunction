@@ -24,7 +24,7 @@ execute positioned as @e[type=armor_stand, tag=flag] run particle explosion ~ ~ 
 execute positioned as @e[type=armor_stand, tag=flag] run playsound entity.generic.explode block @a ~ ~ ~ 5 1
 
 scoreboard players add @s money 4
-title @s actionbar [{"text":"+$400","color":"green"}]
+title @s actionbar [{"text":"+$4","color":"green"}]
 
 scoreboard players set @s flag_broken 0
 scoreboard players set @s wall_flag_broken 0

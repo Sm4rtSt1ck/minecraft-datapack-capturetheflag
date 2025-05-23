@@ -11,4 +11,4 @@ execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop
     function ctf:match/freeze/shop/templates/click_item {item: leather_boots, slot: 24, cost: 10, tag: "0", item_name: '{"text": "Less fall damage"}', amount: 1, nbt: 'enchantments={levels:{feather_falling:3}}'}
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:26b}]}] run \
-    function ctf:match/freeze/shop/templates/click_item {item: potion, slot: 26, cost: 10, tag: "1", item_name: '{"text": "Potion on speed"}', amount: 1, nbt: 'potion_contents={custom_color:26711680,custom_effects:[{id:"minecraft:speed",amplifier:4,duration:400,show_particles:1b}]}'}
+    function ctf:match/freeze/shop/templates/click_item {item: potion, slot: 26, cost: 10, tag: "1", item_name: '{"text": "Potion on speed"}', amount: 1, nbt: 'potion_contents={custom_color:26711680,custom_effects:[{id:"minecraft:speed",amplifier:4,duration:160,show_particles:1b}]}'}

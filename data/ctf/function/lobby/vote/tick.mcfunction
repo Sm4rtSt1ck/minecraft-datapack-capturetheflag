@@ -75,6 +75,25 @@ item replace entity @a[tag=lobby] hotbar.3 with carrot_on_a_stick[\
 execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=3] run scoreboard players set @s map_vote 4
 
 #########################################
+# RAILWAY STATION
+
+clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:4b}]}] carrot_on_a_stick[map_id=4]
+
+# Give items
+item replace entity @a[tag=lobby] hotbar.4 with carrot_on_a_stick[\
+    item_model="filled_map",\
+    map_id=4,\
+    custom_data={tags: ["menu"]},\
+    custom_name="{\
+        \"shadow_color\": -16252673,\
+        \"text\" :\"Railway station\"\
+    }"\
+]
+
+# Check first map choice (left hand)
+execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=4] run scoreboard players set @s map_vote 5
+
+#########################################
 # RUN GAME BUTTON
 
 clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:8b}]}] carrot_on_a_stick[item_model="firework_rocket"]
@@ -100,6 +119,8 @@ execute as @r[tag=lobby, scores={carrot_on_stick=1..}] \
     run tellraw @s {"text": "No one voted for the map!", "color": "red"}
 
 #########################################
+
+execute as @a[scores={carrot_on_stick=1..}] positioned as @s run playsound ui.button.click ambient @s ~ ~ ~
 
 # Random number
 scoreboard players add random number 1

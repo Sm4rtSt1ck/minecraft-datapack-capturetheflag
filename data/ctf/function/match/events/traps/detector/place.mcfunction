@@ -8,5 +8,5 @@ execute positioned as @n[tag=!placed, tag=trap_display] run summon frog ~ ~1.4 ~
 
 execute positioned as @s run tag @n[tag=!placed, tag=trap_display] add placed
 
-scoreboard players set @s carrot_on_stick 0
+# scoreboard players set @s carrot_on_stick 0
 clear @s *[custom_data={tags: ["trap", "detector"]}] 1

@@ -1,5 +1,5 @@
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:18b}]}] run \
-    function ctf:match/freeze/shop/templates/click_item_category {item: iron_sword, slot: 18, cost: 11, tag: "", item_name: '{"text": "Iron sword"}', amount: 1, nbt: '', category: "main weapon"}
+    function ctf:match/freeze/shop/templates/click_item_category {item: iron_sword, slot: 18, cost: 10, tag: "", item_name: '{"text": "Iron sword"}', amount: 1, nbt: '', category: "main weapon"}
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:20b}]}] run \
     function ctf:match/freeze/shop/templates/click_item_category {item: diamond_sword, slot: 20, cost: 13, tag: "", item_name: '{"text": "Diamond sword"}', amount: 1, nbt: '', category: "main weapon"}
@@ -8,7 +8,7 @@ execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop
     function ctf:match/freeze/shop/templates/click_item_category {item: netherite_sword, slot: 22, cost: 15, tag: "", item_name: '{"text": "Netherite sword"}', amount: 1, nbt: '', category: "main weapon"}
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:24b}]}] run \
-    function ctf:match/freeze/shop/templates/click_item_category {item: mace, slot: 24, cost: 20, tag: "", item_name: '{"text": "Mace"}', amount: 1, nbt: 'enchantments={levels:{wind_burst:1}}', category: "main weapon"}
+    function ctf:match/freeze/shop/templates/click_item_category {item: mace, slot: 24, cost: 15, tag: "", item_name: '{"text": "Mace"}', amount: 1, nbt: 'enchantments={levels:{wind_burst:1}}', category: "main weapon"}
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:26b}]}] run \
     function ctf:match/freeze/shop/templates/click_item_category {item: bow, slot: 26, cost: 19, tag: "", item_name: '{"text": "Bow"}', amount: 1, nbt: '', category: "secondary weapon"}

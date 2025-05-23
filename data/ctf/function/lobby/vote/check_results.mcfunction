@@ -6,6 +6,10 @@ scoreboard players reset total_map_1 map_vote
 scoreboard players reset total_map_2 map_vote
 scoreboard players reset total_map_3 map_vote
 scoreboard players reset total_map_4 map_vote
+scoreboard players reset total_map_5 map_vote
+scoreboard players reset total_map_6 map_vote
+scoreboard players reset total_map_7 map_vote
+scoreboard players reset total_map_8 map_vote
 
 execute as @a run function ctf:lobby/vote/count_single
 
@@ -13,6 +17,10 @@ scoreboard players operation max map_vote = total_map_1 map_vote
 execute if score max map_vote < total_map_2 map_vote run scoreboard players operation max map_vote = total_map_2 map_vote
 execute if score max map_vote < total_map_3 map_vote run scoreboard players operation max map_vote = total_map_3 map_vote
 execute if score max map_vote < total_map_4 map_vote run scoreboard players operation max map_vote = total_map_4 map_vote
+execute if score max map_vote < total_map_5 map_vote run scoreboard players operation max map_vote = total_map_5 map_vote
+execute if score max map_vote < total_map_6 map_vote run scoreboard players operation max map_vote = total_map_6 map_vote
+execute if score max map_vote < total_map_7 map_vote run scoreboard players operation max map_vote = total_map_7 map_vote
+execute if score max map_vote < total_map_8 map_vote run scoreboard players operation max map_vote = total_map_8 map_vote
 # tellraw @a [{"text": "Map 1 vote: "}, {"score": {"name": "total_map_1", "objective": "map_vote"}}]
 # tellraw @a [{"text": "Map 2 vote: "}, {"score": {"name": "total_map_2", "objective": "map_vote"}}]
 # tellraw @a [{"text": "Map 3 vote: "}, {"score": {"name": "total_map_3", "objective": "map_vote"}}]
@@ -22,6 +30,10 @@ execute if score max map_vote = total_map_1 map_vote run scoreboard players add 
 execute if score max map_vote = total_map_2 map_vote run scoreboard players add tie map_vote 1
 execute if score max map_vote = total_map_3 map_vote run scoreboard players add tie map_vote 1
 execute if score max map_vote = total_map_4 map_vote run scoreboard players add tie map_vote 1
+execute if score max map_vote = total_map_5 map_vote run scoreboard players add tie map_vote 1
+execute if score max map_vote = total_map_6 map_vote run scoreboard players add tie map_vote 1
+execute if score max map_vote = total_map_7 map_vote run scoreboard players add tie map_vote 1
+execute if score max map_vote = total_map_8 map_vote run scoreboard players add tie map_vote 1
 # tellraw @a [{"text": "Tie: "}, {"score": {"name": "tie", "objective": "map_vote"}}]
 
 scoreboard players operation choice map_vote = random number
@@ -45,5 +57,21 @@ execute if score total_map_3 map_vote = max map_vote if score choice map_vote ma
 execute if score total_map_4 map_vote = max map_vote run scoreboard players remove choice map_vote 1
 execute if score total_map_4 map_vote = max map_vote if score choice map_vote matches 0 run scoreboard players set result map_vote 4
 # tellraw @a [{"text": "Choice after 4: "}, {"score": {"name": "choice", "objective": "map_vote"}}]
+
+execute if score total_map_5 map_vote = max map_vote run scoreboard players remove choice map_vote 1
+execute if score total_map_5 map_vote = max map_vote if score choice map_vote matches 0 run scoreboard players set result map_vote 5
+# tellraw @a [{"text": "Choice after 5: "}, {"score": {"name": "choice", "objective": "map_vote"}}]
+
+execute if score total_map_6 map_vote = max map_vote run scoreboard players remove choice map_vote 1
+execute if score total_map_6 map_vote = max map_vote if score choice map_vote matches 0 run scoreboard players set result map_vote 6
+# tellraw @a [{"text": "Choice after 6: "}, {"score": {"name": "choice", "objective": "map_vote"}}]
+
+execute if score total_map_7 map_vote = max map_vote run scoreboard players remove choice map_vote 1
+execute if score total_map_7 map_vote = max map_vote if score choice map_vote matches 0 run scoreboard players set result map_vote 7
+# tellraw @a [{"text": "Choice after 7: "}, {"score": {"name": "choice", "objective": "map_vote"}}]
+
+execute if score total_map_8 map_vote = max map_vote run scoreboard players remove choice map_vote 1
+execute if score total_map_8 map_vote = max map_vote if score choice map_vote matches 0 run scoreboard players set result map_vote 8
+# tellraw @a [{"text": "Choice after 8: "}, {"score": {"name": "choice", "objective": "map_vote"}}]
 
 execute as @a run function ctf:match/start
