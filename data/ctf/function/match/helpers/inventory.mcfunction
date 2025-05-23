@@ -1,4 +1,4 @@
-clear @a[tag=player, nbt=!{Inventory:[{id:"minecraft:black_stained_glass_pane",count:27}]}] minecraft:black_stained_glass_pane
+clear @a[tag=player, nbt=!{Inventory:[{id:"minecraft:black_stained_glass_pane",count:27,components:{"minecraft:custom_data":{tags:["shop"]}}}]}] minecraft:black_stained_glass_pane
 
 item replace entity @a[tag=player] container.9 with minecraft:black_stained_glass_pane[custom_name='""',custom_data={tags:["shop"]}]
 item replace entity @a[tag=player] container.10 with minecraft:black_stained_glass_pane[custom_name='""',custom_data={tags:["shop"]}]
@@ -29,3 +29,7 @@ item replace entity @a[tag=player] container.34 with minecraft:black_stained_gla
 item replace entity @a[tag=player] container.35 with minecraft:black_stained_glass_pane[custom_name='""',custom_data={tags:["shop"]}]
 item replace entity @a[tag=player] container.36 with minecraft:black_stained_glass_pane[custom_name='""',custom_data={tags:["shop"]}]
 kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{tags:["shop"]}}}}]
+
+# item replace entity @a[tag=player, nbt=!{Inventory:[{Slot:0b, components:{"minecraft:custom_data":{tags:["main weapon"]}}}]}] container.0 with black_stained_glass_pane[custom_name='""', custom_data={tags:["main weapon"]}]
+
+

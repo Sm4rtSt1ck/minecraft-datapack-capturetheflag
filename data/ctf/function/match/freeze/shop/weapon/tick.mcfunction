@@ -1,20 +1,20 @@
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:18b}]}] run \
-    function ctf:match/freeze/shop/templates/click_item {item: iron_sword, slot: 18, cost: 11, tag: "", item_name: '{"text": "Iron sword"}', amount: 1, nbt: ''}
+    function ctf:match/freeze/shop/templates/click_item_category {item: iron_sword, slot: 18, cost: 11, tag: "", item_name: '{"text": "Iron sword"}', amount: 1, nbt: '', category: "main weapon"}
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:20b}]}] run \
-    function ctf:match/freeze/shop/templates/click_item {item: diamond_sword, slot: 20, cost: 13, tag: "", item_name: '{"text": "Diamond sword"}', amount: 1, nbt: ''}
+    function ctf:match/freeze/shop/templates/click_item_category {item: diamond_sword, slot: 20, cost: 13, tag: "", item_name: '{"text": "Diamond sword"}', amount: 1, nbt: '', category: "main weapon"}
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:22b}]}] run \
-    function ctf:match/freeze/shop/templates/click_item {item: netherite_sword, slot: 22, cost: 15, tag: "", item_name: '{"text": "Netherite sword"}', amount: 1, nbt: ''}
+    function ctf:match/freeze/shop/templates/click_item_category {item: netherite_sword, slot: 22, cost: 15, tag: "", item_name: '{"text": "Netherite sword"}', amount: 1, nbt: '', category: "main weapon"}
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:24b}]}] run \
-    function ctf:match/freeze/shop/templates/click_item {item: mace, slot: 24, cost: 20, tag: "", item_name: '{"text": "Mace"}', amount: 1, nbt: 'enchantments={levels:{wind_burst:1}}'}
+    function ctf:match/freeze/shop/templates/click_item_category {item: mace, slot: 24, cost: 20, tag: "", item_name: '{"text": "Mace"}', amount: 1, nbt: 'enchantments={levels:{wind_burst:1}}', category: "main weapon"}
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:26b}]}] run \
-    function ctf:match/freeze/shop/templates/click_item {item: bow, slot: 26, cost: 19, tag: "", item_name: '{"text": "Bow"}', amount: 1, nbt: ''}
+    function ctf:match/freeze/shop/templates/click_item_category {item: bow, slot: 26, cost: 19, tag: "", item_name: '{"text": "Bow"}', amount: 1, nbt: '', category: "secondary weapon"}
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:27b}]}] run \
-    function ctf:match/freeze/shop/weapon/custom/buy_crossbow {slot: 27, cost: 30, item_name: '{"text": "Crossbow & fireworks"}', nbt: ''}
+    function ctf:match/freeze/shop/weapon/custom/buy_crossbow {slot: 27, cost: 30, item_name: '{"text": "Crossbow & fireworks"}', nbt: '', category: "secondary weapon"}
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:29b}]}] run \
     function ctf:match/freeze/shop/templates/click_item {item: arrow, slot: 29, cost: 2, tag: "0", item_name: '{"text": "Arrows x10"}', amount: 10, nbt: ''}
