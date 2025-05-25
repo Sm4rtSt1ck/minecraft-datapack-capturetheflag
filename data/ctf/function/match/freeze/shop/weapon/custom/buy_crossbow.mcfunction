@@ -3,13 +3,12 @@ $execute as @s[tag=attack, nbt=!{Inventory:[{components:{"minecraft:custom_data"
         item: firework_rocket, \
         nbt: 'fireworks={explosions:[\
             {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"}\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]}\
         ]}', \
         cost: 0, \
         amount: 5, \
@@ -21,13 +20,12 @@ $execute as @s[tag=defense, nbt=!{Inventory:[{components:{"minecraft:custom_data
         item: firework_rocket, \
         nbt: 'fireworks={explosions:[\
             {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"},\
-            {shape:"small_ball"}\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]}\
         ]}', \
         cost: 0, \
         amount: 5, \

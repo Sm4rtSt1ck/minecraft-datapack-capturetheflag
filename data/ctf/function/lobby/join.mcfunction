@@ -23,6 +23,7 @@ clear @s
 team join lobby @s
 gamemode adventure @s
 execute positioned as @s run spawnpoint @s
+stopsound @s
 
 #########################################
 # EFFECTS

@@ -25,7 +25,7 @@ kill @e[tag=flag]
 
 clear @a[tag=player] minecraft:black_stained_glass_pane
 
-execute as @a[scores={money=50..}] run scoreboard players set @s money 50
+execute as @a[scores={money=1500..}] run scoreboard players set @s money 1500
 
 # Give flag breaker
 # clear @a[tag=attack] minecraft:stick
@@ -42,38 +42,46 @@ give @a[tag=attack, nbt=!{Inventory:[{id: "minecraft:stick"}]}] minecraft:stick[
 
 
 # Give chainmail armor if player doesn't have it
-tag @a[nbt={Inventory:[{id:"minecraft:leather_helmet"}]}] add has_helmet
-# tag @a[nbt={Inventory:[{id:"minecraft:golden_helmet"}]}] add has_helmet
+# tag @a[nbt={Inventory:[{id:"minecraft:leather_helmet"}]}] add has_helmet
+tag @a[nbt={Inventory:[{id:"minecraft:golden_helmet"}]}] add has_helmet
 tag @a[nbt={Inventory:[{id:"minecraft:chainmail_helmet"}]}] add has_helmet
 tag @a[nbt={Inventory:[{id:"minecraft:iron_helmet"}]}] add has_helmet
 tag @a[nbt={Inventory:[{id:"minecraft:diamond_helmet"}]}] add has_helmet
 tag @a[nbt={Inventory:[{id:"minecraft:netherite_helmet"}]}] add has_helmet
-item replace entity @a[tag=player, tag=!has_helmet] armor.head with golden_helmet
-tag @a remove has_helmet
-tag @a[nbt={Inventory:[{id:"minecraft:leather_chestplate"}]}] add has_boots
-# tag @a[nbt={Inventory:[{id:"minecraft:golden_chestplate"}]}] add has_boots
+# tag @a[nbt={Inventory:[{id:"minecraft:leather_chestplate"}]}] add has_boots
+tag @a[nbt={Inventory:[{id:"minecraft:golden_chestplate"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:chainmail_chestplate"}]}] add has_chestplate
 tag @a[nbt={Inventory:[{id:"minecraft:iron_chestplate"}]}] add has_chestplate
 tag @a[nbt={Inventory:[{id:"minecraft:diamond_chestplate"}]}] add has_chestplate
 tag @a[nbt={Inventory:[{id:"minecraft:netherite_chestplate"}]}] add has_chestplate
-item replace entity @a[tag=player, tag=!has_chestplate] armor.chest with golden_chestplate
-tag @a remove has_chestplate
-tag @a[nbt={Inventory:[{id:"minecraft:leather_leggings"}]}] add has_boots
-# tag @a[nbt={Inventory:[{id:"minecraft:golden_leggings"}]}] add has_boots
+# tag @a[nbt={Inventory:[{id:"minecraft:leather_leggings"}]}] add has_boots
+tag @a[nbt={Inventory:[{id:"minecraft:golden_leggings"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:chainmail_leggings"}]}] add has_leggings
 tag @a[nbt={Inventory:[{id:"minecraft:iron_leggings"}]}] add has_leggings
 tag @a[nbt={Inventory:[{id:"minecraft:diamond_leggings"}]}] add has_leggings
 tag @a[nbt={Inventory:[{id:"minecraft:netherite_leggings"}]}] add has_leggings
-item replace entity @a[tag=player, tag=!has_leggings] armor.legs with golden_leggings
-tag @a remove has_leggings
-tag @a[nbt={Inventory:[{id:"minecraft:leather_boots"}]}] add has_boots
-# tag @a[nbt={Inventory:[{id:"minecraft:golden_boots"}]}] add has_boots
+# tag @a[nbt={Inventory:[{id:"minecraft:leather_boots"}]}] add has_boots
+tag @a[nbt={Inventory:[{id:"minecraft:golden_boots"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:chainmail_boots"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:iron_boots"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:diamond_boots"}]}] add has_boots
 tag @a[nbt={Inventory:[{id:"minecraft:netherite_boots"}]}] add has_boots
-item replace entity @a[tag=player, tag=!has_boots] armor.feet with golden_boots
+
+item replace entity @a[tag=player, tag=!has_helmet, tag=attack] armor.head with leather_helmet[minecraft:dyed_color={rgb:16711799}]
+item replace entity @a[tag=player, tag=!has_chestplate, tag=attack] armor.chest with leather_chestplate[minecraft:dyed_color={rgb:16711799}]
+item replace entity @a[tag=player, tag=!has_leggings, tag=attack] armor.legs with leather_leggings[minecraft:dyed_color={rgb:16711799}]
+item replace entity @a[tag=player, tag=!has_boots, tag=attack] armor.feet with leather_boots[minecraft:dyed_color={rgb:16711799}]
+item replace entity @a[tag=player, tag=!has_helmet, tag=defense] armor.head with leather_helmet[minecraft:dyed_color={rgb:47103}]
+item replace entity @a[tag=player, tag=!has_chestplate, tag=defense] armor.chest with leather_chestplate[minecraft:dyed_color={rgb:47103}]
+item replace entity @a[tag=player, tag=!has_leggings, tag=defense] armor.legs with leather_leggings[minecraft:dyed_color={rgb:47103}]
+item replace entity @a[tag=player, tag=!has_boots, tag=defense] armor.feet with leather_boots[minecraft:dyed_color={rgb:47103}]
+tag @a remove has_helmet
+tag @a remove has_chestplate
+tag @a remove has_leggings
 tag @a remove has_boots
+
+give @a[tag=player, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["main weapon"]}}}]}, nbt=!{Inventory:[{id:"minecraft:golden_sword"}]}] golden_sword
+
 
 effect clear @a[tag=player]
 effect give @a[tag=player] minecraft:saturation infinite 127 true

@@ -23,8 +23,8 @@ execute as @a[tag=!lobby] positioned as @s run playsound minecraft:ambient.cave 
 execute positioned as @e[type=armor_stand, tag=flag] run particle explosion ~ ~ ~ 0.8 0.8 0.8 0 10 force
 execute positioned as @e[type=armor_stand, tag=flag] run playsound entity.generic.explode block @a ~ ~ ~ 5 1
 
-scoreboard players add @s money 4
-title @s actionbar [{"text":"+$4","color":"green"}]
+scoreboard players add @s money 69
+title @s actionbar [{"text":"+$69","color":"green"}]
 
 scoreboard players set @s flag_broken 0
 scoreboard players set @s wall_flag_broken 0

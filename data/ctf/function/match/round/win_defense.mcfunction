@@ -5,7 +5,7 @@ execute as @a[tag=attack] at @s run playsound entity.bee.death ambient @s ~ ~ ~ 
 execute if score match rounds < swap rounds run scoreboard players add team_2 rounds 1
 execute if score match rounds >= swap rounds run scoreboard players add team_1 rounds 1
 
-scoreboard players add @a[tag=defense] money 25
-scoreboard players add @a[tag=attack] money 30
+scoreboard players add @a[tag=defense] money 500
+scoreboard players add @a[tag=attack] money 400
 
 function ctf:match/end_round/start

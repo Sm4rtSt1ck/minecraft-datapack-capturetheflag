@@ -26,7 +26,7 @@ bossbar set ctf:match visible true
 bossbar set ctf:match players @a[tag=!lobby]
 bossbar set ctf:match name {"text":"PREPARING...", "color": "yellow"}
 
-scoreboard players set @a[tag=player] money 20
+scoreboard players set @a[tag=player] money 200
 scoreboard objectives setdisplay list deaths
 scoreboard players reset * deaths
 scoreboard players reset * kills
