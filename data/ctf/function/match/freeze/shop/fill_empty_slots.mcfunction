@@ -27,6 +27,3 @@ item replace entity @a container.28 with minecraft:black_stained_glass_pane[cust
 item replace entity @a container.30 with minecraft:black_stained_glass_pane[custom_name='""',custom_data={tags:["shop"]}]
 item replace entity @a container.32 with minecraft:black_stained_glass_pane[custom_name='""',custom_data={tags:["shop"]}]
 item replace entity @a container.34 with minecraft:black_stained_glass_pane[custom_name='""',custom_data={tags:["shop"]}]
-
-item replace entity @a[tag=player] hotbar.8 with carrot_on_a_stick[item_model="minecraft:red_bed", custom_name='[{"text":"Exit to lobby ["}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"exit"}]
-kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{action:"exit"}}}}]
