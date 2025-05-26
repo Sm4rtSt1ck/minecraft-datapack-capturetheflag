@@ -1,7 +1,8 @@
 #########################################
 # TELEPORT
 
-spreadplayers 0 0 1 3 under -40 false @s
+spreadplayers 0.5 0.5 1 1 under -40 false @s
+execute positioned as @s run tp @s ~ ~ ~ 90 0
 
 #########################################
 # TAGS
@@ -56,4 +57,4 @@ schedule function ctf:lobby/clear_maps 60t
 # OTHER
 
 execute at @s run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1
-execute at @s run particle minecraft:firework ^ ^1.5 ^1 0.1 0.1 0.1 0.07 15 normal
+execute at @s run particle minecraft:firework ~ ~1 ~ 0.1 0.1 0.1 0.07 15 normal

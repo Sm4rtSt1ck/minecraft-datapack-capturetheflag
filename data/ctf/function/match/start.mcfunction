@@ -80,5 +80,11 @@ tag @a[team=team_2] remove attack
 #########################################
 # GO TO THE MOST VOTED MAP
 
+schedule clear ctf:match/maps/test_map/music
+schedule clear ctf:match/maps/green_mine/music
+schedule clear ctf:match/maps/night_club/music
+schedule clear ctf:match/maps/farm/music
+schedule clear ctf:match/maps/railway_station/music
+
 function ctf:match/prepare/prepare
 # schedule function ctf:match/warmup/start 60t
