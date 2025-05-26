@@ -14,6 +14,7 @@ gamerule announceAdvancements false
 gamerule doVinesSpread false
 gamerule doDaylightCycle false
 gamerule doWeatherCycle false
+gamerule spawnRadius 0
 
 defaultgamemode adventure
 setworldspawn 0 -41 0

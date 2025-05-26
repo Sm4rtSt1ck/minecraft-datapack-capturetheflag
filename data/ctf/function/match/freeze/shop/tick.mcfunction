@@ -13,7 +13,7 @@ tag @a[tag=player] remove just_clicked_shop_menu
 
 kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{tags:["shop"]}}}}]
 
-execute as @a run title @s actionbar [\
+execute as @a[tag=player] run title @s actionbar [\
     {"text":"Press [","color":"#ff9100", "shadow_color": 0, "bold": true},\
     {"keybind": "key.inventory"},\
     {"text": "] to enter the shop. "},\

@@ -8,4 +8,8 @@ execute if score warmup timer matches 40 as @a[tag=!lobby] at @s run playsound e
 execute if score warmup timer matches 20 run title @a[tag=player] title {"text":"❶", "color":"green"}
 execute if score warmup timer matches 20 as @a[tag=!lobby] at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 1
 
+execute as @a[scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[minecraft:custom_data={action:"skip"}] run tag @s add skip
+
+execute unless entity @a[tag=player, tag=!skip] run function ctf:match/warmup/skip
+
 execute if score warmup timer matches -2147483648..0 run function ctf:match/warmup/end

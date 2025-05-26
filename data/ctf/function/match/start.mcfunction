@@ -6,12 +6,13 @@ forceload add -200 -200 -72 -72
 
 kill @e[tag=trap]
 
-tag @s remove lobby
-tag @s remove dead
-tag @s add player
-clear @s
+tag @a remove lobby
+tag @a remove dead
+tag @a remove skip
+tag @a[tag=!spectator, tag=!lobby] add player
+clear @a[tag=!lobby]
 
-effect clear @a[tag=player]
+effect clear @a[tag=!lobby]
 effect give @a[tag=player] minecraft:saturation infinite 127 true
 effect give @a[tag=attack] minecraft:haste infinite 40 true
 
@@ -93,4 +94,6 @@ execute if score result map_vote matches 4 run function ctf:match/maps/farm/star
 execute if score result map_vote matches 5 run function ctf:match/maps/railway_station/start
 
 function ctf:match/prepare/prepare
+
+execute positioned as @a[tag=!lobby] run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1
 # schedule function ctf:match/warmup/start 60t

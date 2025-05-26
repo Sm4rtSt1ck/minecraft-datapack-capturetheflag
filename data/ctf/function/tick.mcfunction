@@ -23,6 +23,16 @@ execute if score game state matches 6 run function ctf:match/end/tick
 # Check if there are no players in the match
 execute if score game state matches 2..6 unless entity @a[tag=player] run function ctf:match/end/end
 
+# Global match events
+execute as @a[scores={carrot_on_stick=1..}] positioned as @s run playsound ui.button.click ambient @s ~ ~ ~
+
+execute as @a[scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[custom_data={action:"exit"}] run \
+    tellraw @s [\
+        {"text": "To exit, press ", "color": "gold"}, \
+        {"text": "here", "color": "red", "clickEvent": {"action": "run_command", "value": "/function ctf:lobby/join"}, \
+        "hoverEvent": {"action": "show_text", "contents": "*click*"}}\
+    ]
+
 #########################################
 # GLOBAL EVENTS
 

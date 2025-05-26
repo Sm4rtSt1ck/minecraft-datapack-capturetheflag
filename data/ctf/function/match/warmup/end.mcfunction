@@ -28,6 +28,8 @@ title @a[tag=player] title {"text":"LET'S WIN", "color":"green"}
 title @a[tag=defense] subtitle {"text":"Defense", "color":"blue"}
 title @a[tag=attack] subtitle {"text":"Attack", "color":"red"}
 
+execute as @a[tag=spectator] run function ctf:match/spectate
+
 function ctf:match/freeze/start
 
 execute as @a[tag=!lobby] at @s run playsound minecraft:entity.firework_rocket.launch ambient @s ~ ~ ~ 10 1

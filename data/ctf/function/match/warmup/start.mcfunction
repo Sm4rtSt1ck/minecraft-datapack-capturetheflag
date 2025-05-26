@@ -26,5 +26,7 @@ gamerule keepInventory true
 
 item replace entity @a[tag=defense] weapon.offhand with firework_rocket[fireworks={explosions:[{shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"}]}] 64
 item replace entity @a[tag=attack] weapon.offhand with firework_rocket[fireworks={explosions:[{shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"}]}] 64
-give @a[tag=player] crossbow[custom_name='{"text":"Firework shooter", "italic": false, "color": "red"}']
-give @a[tag=player] minecraft:stone_sword
+item replace entity @a[tag=player] hotbar.0 with crossbow[custom_name='{"text":"Firework shooter", "italic": false, "color": "red"}']
+item replace entity @a[tag=player] hotbar.1 with minecraft:stone_sword
+item replace entity @a[tag=player] hotbar.7 with carrot_on_a_stick[minecraft:custom_data={action:"skip"}, item_model=nether_star, custom_name='[{"text":"Skip warm-up ["}, {"keybind":"key.use"}, {"text": "] All players need to click."}]']
+item replace entity @a[tag=player] hotbar.8 with carrot_on_a_stick[minecraft:custom_data={action:"exit"}, item_model=red_bed, custom_name='[{"text":"Exit to lobby ["}, {"keybind":"key.use"}, {"text": "]"}]']
