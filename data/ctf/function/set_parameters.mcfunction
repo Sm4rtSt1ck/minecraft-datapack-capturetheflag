@@ -12,9 +12,13 @@ gamerule spectatorsGenerateChunks false
 gamerule fallDamage false
 gamerule announceAdvancements false
 gamerule doVinesSpread false
+gamerule doDaylightCycle false
+gamerule doWeatherCycle false
 
 defaultgamemode adventure
 setworldspawn 0 -41 0
+time set noon
+weather clear
 
 #########################################
 # TEAMS

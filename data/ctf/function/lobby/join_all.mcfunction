@@ -1,6 +1,10 @@
 function admin:log/function {name: "lobby/join_all"}
 
 gamerule fallDamage false
+gamerule doDaylightCycle false
+gamerule doWeatherCycle false
+time set noon
+weather clear
 
 #########################################
 
