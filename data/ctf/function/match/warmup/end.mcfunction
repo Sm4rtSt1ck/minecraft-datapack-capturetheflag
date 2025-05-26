@@ -8,6 +8,7 @@ scoreboard players set @a[tag=player] kills 0
 scoreboard players set @a[tag=player] just_used_totem 0
 scoreboard players set @a[tag=player] just_died 0
 scoreboard players set @a[tag=player] just_killed 0
+scoreboard players set @a[tag=player] just_threw_grenade 0
 
 scoreboard players set @a[tag=player] flag_placed 0
 scoreboard players set @a[tag=player] flag_broken 0

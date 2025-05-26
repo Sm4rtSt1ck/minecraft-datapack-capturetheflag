@@ -23,7 +23,42 @@ execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop
     function ctf:match/freeze/shop/templates/click_item {item: 'arrow', nbt: 'potion_contents={custom_color:39936,custom_effects:[{id:"minecraft:wither",amplifier:10,duration:2}]}', slot: 31, cost: 89, tag: "1", item_name: '{"text": "Poison arrows x10"}', amount: 10}
 
 execute as @s[tag=attack, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:33b}]}] run \
-    function ctf:match/freeze/shop/templates/click_item {item: 'firework_rocket', nbt: 'fireworks={explosions:[{shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"}]}', slot: 33, cost: 200, tag: "", item_name: '{"text": "Firework"}', amount: 5}
+    function ctf:match/freeze/shop/templates/click_item {\
+        item: 'firework_rocket', \
+        nbt: 'fireworks={explosions:[\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]},\
+            {shape:"small_ball",colors:[I;16714250],fade_colors:[I;16711850]}\
+        ]}', \
+        slot: 33, \
+        cost: 200, \
+        tag: "", \
+        item_name: '{"text": "Firework"}', \
+        amount: 5\
+    }
 
 execute as @s[tag=defense, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:33b}]}] run \
-    function ctf:match/freeze/shop/templates/click_item {item: 'firework_rocket', nbt: 'fireworks={explosions:[{shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"},{shape:"small_ball"}]}', slot: 33, cost: 200, tag: "", item_name: '{"text": "Firework"}', amount: 5}
+    function ctf:match/freeze/shop/templates/click_item {\
+        item: 'firework_rocket', \
+        nbt: 'fireworks={explosions:[\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]},\
+            {shape:"small_ball",colors:[I;1114367],fade_colors:[I;48127]}\
+        ]}', \
+        slot: 33, \
+        cost: 200, \
+        tag: "", \
+        item_name: '{"text": "Firework"}', \
+        amount: 5\
+    }
+
+execute as @s[tag=defense, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:35b}]}] run \
+    function ctf:match/freeze/shop/templates/click_item {item: 'lingering_potion', nbt: 'max_stack_size=64', slot: 35, cost: 200, tag: "he_grenade", item_name: '{"text": "Grenade"}', amount: 1}

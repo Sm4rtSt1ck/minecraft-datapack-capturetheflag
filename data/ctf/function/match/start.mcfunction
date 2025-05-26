@@ -43,6 +43,7 @@ scoreboard players reset * wall_flag_broken
 scoreboard players reset * flag_dropped
 scoreboard players reset * flag_pickedup
 scoreboard players reset * just_placed_trap
+scoreboard players reset * just_threw_grenade
 
 # Set the attacking and the defending sides
 team empty team_1

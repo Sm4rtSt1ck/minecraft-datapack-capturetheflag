@@ -15,4 +15,4 @@ $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. run fu
 }
 
 $function ctf:match/freeze/shop/templates/show_item {item: golden_chestplate, slot: $(slot), cost: $(cost), tag: "", item_name: '$(item_name)', nbt: ''}
-$function ctf:match/freeze/shop/templates/buy_item {item: air, nbt: '', cost: $(cost), amount: 1, item_name: 'none'}
+$function ctf:match/freeze/shop/templates/buy_item {item: air, nbt: '', cost: $(cost), amount: 1, item_name: 'none', tag: ""}

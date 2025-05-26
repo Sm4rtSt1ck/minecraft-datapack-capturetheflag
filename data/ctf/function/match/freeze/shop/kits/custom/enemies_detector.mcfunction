@@ -20,7 +20,8 @@ $execute if score detector_trap bought.item matches 0 run function ctf:match/fre
     ', \
     cost: $(cost), \
     amount: 1, \
-    item_name: '$(item_name)'\
+    item_name: '$(item_name)',\
+    tag: ""\
 }
 
 execute if entity @s[tag=buy_detector_kit] run scoreboard players add detector_trap bought.item 1

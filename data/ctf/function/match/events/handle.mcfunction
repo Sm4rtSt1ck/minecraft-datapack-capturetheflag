@@ -13,6 +13,7 @@ execute as @a[scores={flag_pickedup=1..}] run function ctf:match/events/flag/pic
 execute as @a[scores={just_killed=1..}] run function ctf:match/events/fight/kill
 execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
 execute as @a[scores={just_used_totem=1..}] run function ctf:match/events/fight/use_totem
+execute as @a[scores={just_threw_grenade=1..}] run function ctf:match/events/grenades/throw
 # Traps
 execute at @a[tag=player, tag=!dead] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
 execute at @e[type=arrow] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
@@ -25,6 +26,9 @@ execute at @a[tag=player, tag=!dead] as @e[tag=trap.web, tag=trap_marker, distan
 
 execute at @a[tag=player, tag=!dead] as @e[tag=trap.levitation, tag=trap_marker, distance=..2] run function ctf:match/events/traps/levitation/trigger
 execute at @a[tag=player, tag=!dead] as @e[tag=trap.wither, tag=trap_marker, distance=..2] run function ctf:match/events/traps/wither/trigger
+
+# Grenades
+execute as @e[type=armor_stand, tag=he_grenade] run function ctf:match/events/grenades/fly
 
 
 function ctf:match/events/traps/detector/trigger

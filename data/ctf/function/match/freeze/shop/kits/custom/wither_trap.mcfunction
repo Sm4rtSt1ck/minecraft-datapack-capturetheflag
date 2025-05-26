@@ -33,7 +33,8 @@ $execute if score wither_trap bought.item matches 0 run function ctf:match/freez
     }', \
     cost: $(cost), \
     amount: 1, \
-    item_name: '$(item_name)'\
+    item_name: '$(item_name)',\
+    tag: ""\
 }
 
 execute if entity @s[tag=buy_wither_trap] run scoreboard players add wither_trap bought.item 1

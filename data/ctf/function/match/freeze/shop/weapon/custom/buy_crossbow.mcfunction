@@ -12,7 +12,8 @@ $execute as @s[tag=attack, nbt=!{Inventory:[{components:{"minecraft:custom_data"
         ]}', \
         cost: 0, \
         amount: 5, \
-        item_name: 'Firework'\
+        item_name: 'Firework',\
+        tag: ''\
     }
 
 $execute as @s[tag=defense, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["$(category)"]}}}]}] if score @s money matches $(cost).. run \
@@ -29,7 +30,8 @@ $execute as @s[tag=defense, nbt=!{Inventory:[{components:{"minecraft:custom_data
         ]}', \
         cost: 0, \
         amount: 5, \
-        item_name: 'Firework'\
+        item_name: 'Firework',\
+        tag: ''\
     }
 
 $function ctf:match/freeze/shop/templates/click_item_category {\
