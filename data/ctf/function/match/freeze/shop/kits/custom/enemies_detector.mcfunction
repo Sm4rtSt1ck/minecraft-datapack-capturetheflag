@@ -9,7 +9,7 @@ $function ctf:match/freeze/shop/templates/show_item {\
     '\
 }
 
-$execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. if score detector_trap bought.item matches 1.. run tellraw @s {"text": "Someone already had an detector trap when the round started!", "color": "red"}
+$execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. if score detector_trap bought.item matches 1.. run tellraw @s {"text": "Someone already had an enemies detector when the round started!", "color": "red"}
 
 $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. if score detector_trap bought.item matches 0 run tag @s add buy_detector_kit
 $execute if score detector_trap bought.item matches 0 run function ctf:match/freeze/shop/templates/buy_item {\

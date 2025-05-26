@@ -24,6 +24,7 @@ team join lobby @s
 gamemode adventure @s
 execute positioned as @s run spawnpoint @s
 stopsound @s
+playsound minecraft:music_disc.relic ambient @s 0 1000 0 80 2
 
 #########################################
 # EFFECTS
@@ -55,3 +56,4 @@ schedule function ctf:lobby/clear_maps 60t
 # OTHER
 
 execute at @s run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1
+execute at @s run particle minecraft:firework ^ ^1.5 ^1 0.1 0.1 0.1 0.07 15 normal

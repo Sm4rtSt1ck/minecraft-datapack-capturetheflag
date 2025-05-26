@@ -18,6 +18,7 @@ gamemode survival @a[tag=defense]
 kill @e[type=item]
 kill @e[type=arrow]
 kill @e[type=trident]
+kill @e[tag=lastDeathMarker]
 # Remove the placed flag if it hadn't been broken
 execute positioned as @e[type=armor_stand, tag=flag] run fill ~-10 ~-10 ~-10 ~10 ~10 ~10 air replace yellow_banner
 execute positioned as @e[type=armor_stand, tag=flag] run fill ~-10 ~-10 ~-10 ~10 ~10 ~10 air replace yellow_wall_banner
@@ -80,7 +81,7 @@ tag @a remove has_chestplate
 tag @a remove has_leggings
 tag @a remove has_boots
 
-give @a[tag=player, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["main weapon"]}}}]}, nbt=!{Inventory:[{id:"minecraft:golden_sword"}]}] golden_sword
+give @a[tag=player, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["main weapon"]}}}]}, nbt=!{Inventory:[{id:"minecraft:golden_sword"}]}] golden_sword[custom_data={tags:["main weapon"]}]
 
 
 effect clear @a[tag=player]

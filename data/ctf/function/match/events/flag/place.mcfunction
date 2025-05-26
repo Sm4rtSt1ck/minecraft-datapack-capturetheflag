@@ -7,4 +7,5 @@ execute if score freeze timer matches 202.. run scoreboard players set freeze ti
 
 function ctf:match/events/flag/place/find_position
 execute positioned as @e[type=armor_stand,tag=flag] if block ~ ~-1 ~ air if block ~ ~-2 ~ air run fill ~-10 ~-10 ~-10 ~10 ~10 ~10 air replace yellow_wall_banner
+execute positioned as @e[type=armor_stand,tag=flag] if block ~ ~-1 ~ air if block ~ ~-2 ~ air run fill ~-10 ~-10 ~-10 ~10 ~10 ~10 air replace yellow_banner
 execute positioned as @e[type=armor_stand,tag=flag] if block ~ ~-1 ~ air if block ~ ~-2 ~ air run function ctf:match/events/flag/place/fall_loop

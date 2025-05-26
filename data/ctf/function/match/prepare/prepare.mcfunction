@@ -1,6 +1,8 @@
 function admin:log/function {name: "match/prepare/prepare"}
 
-title @a[tag=player] subtitle {"text":"Preparing the map...", "color": "yellow"}
+title @a[tag=!lobby] subtitle {"text":"Preparing the map...", "color": "yellow"}
+
+stopsound @a[tag=!lobby]
 
 kill @e[tag=clone_marker]
 execute if score result map_vote matches 1 run function ctf:match/maps/test_map/prepare

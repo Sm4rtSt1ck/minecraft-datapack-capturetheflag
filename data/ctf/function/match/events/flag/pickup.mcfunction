@@ -1,3 +1,3 @@
-effect give @s glowing infinite 1 true
+execute if score game status matches 4 run effect give @s glowing infinite 1 true
 
 scoreboard players set @s flag_pickedup 0
