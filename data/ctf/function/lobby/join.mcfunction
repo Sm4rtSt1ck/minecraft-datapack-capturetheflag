@@ -1,8 +1,8 @@
 #########################################
 # TELEPORT
 
+execute in minecraft:overworld run tp @s 0 -40 0 90 0
 spreadplayers 0.5 0.5 1 1 under -40 false @s
-execute positioned as @s run tp @s ~ ~ ~ 90 0
 
 #########################################
 # TAGS
