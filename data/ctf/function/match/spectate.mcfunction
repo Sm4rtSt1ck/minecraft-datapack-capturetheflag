@@ -1,4 +1,4 @@
-tp @s -190 -30 -190
+tp @s -150 -30 -150
 gamemode spectator @s
 tag @s add spectator
 tag @s remove player
