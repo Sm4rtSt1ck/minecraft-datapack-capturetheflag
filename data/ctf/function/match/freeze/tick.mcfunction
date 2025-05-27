@@ -1,7 +1,8 @@
 scoreboard players remove freeze timer 1
 execute store result bossbar ctf:match value run scoreboard players get freeze timer
 
-execute if score freeze timer matches 200 run title @a[tag=!lobby] title {"text": "10 SECS LEFT", "color": "green"}
+execute if score freeze timer matches 200 run title @a[tag=!lobby] title {"text": "10 SECONDS", "color": "green"}
+execute if score freeze timer matches 200 run title @a[tag=!lobby] subtitle {"text": "THE FLAG HAS BEEN PLACED", "color": "green"}
 execute if score freeze timer matches 200 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.4
 execute if score freeze timer matches 60 run title @a[tag=!lobby] title {"text": "❸", "color": "green"}
 execute if score freeze timer matches 60 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.6

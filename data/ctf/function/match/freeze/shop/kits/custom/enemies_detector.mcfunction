@@ -15,13 +15,12 @@ $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. if sco
 $execute if score detector_trap bought.item matches 0 run function ctf:match/freeze/shop/templates/buy_item {\
     item: carrot_on_a_stick, \
     nbt: '\
-        item_model=ender_eye,\
-        custom_data={tags: ["trap", "detector"]}\
+        item_model=ender_eye\
     ', \
     cost: $(cost), \
     amount: 1, \
     item_name: '$(item_name)',\
-    tag: ""\
+    tag: 'trap", "detector'\
 }
 
 execute if entity @s[tag=buy_detector_kit] run scoreboard players add detector_trap bought.item 1

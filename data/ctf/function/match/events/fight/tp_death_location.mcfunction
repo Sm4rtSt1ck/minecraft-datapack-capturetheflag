@@ -7,7 +7,7 @@ execute store result entity @n[tag=lastDeathMarker] Pos[0] double 1 run data get
 execute store result entity @n[tag=lastDeathMarker] Pos[1] double 1 run data get entity @r[tag=just_died] LastDeathLocation.pos[1]
 execute store result entity @n[tag=lastDeathMarker] Pos[2] double 1 run data get entity @r[tag=just_died] LastDeathLocation.pos[2]
 tp @r[tag=just_died] @n[tag=lastDeathMarker]
-execute positioned as @n[tag=lastDeathMarker] run particle scrape ~ ~1 ~ 0.1 0.1 0.1 1 50 normal
+execute positioned as @n[tag=lastDeathMarker] run particle scrape ~ ~1 ~ 0.1 0.1 0.1 1 50 normal @a[tag=!just_died]
 kill @n[tag=lastDeathMarker]
 execute as @r[tag=just_died] positioned as @s run playsound minecraft:entity.allay.death ambient @s ~ ~ ~ 2 0
 effect give @r[tag=just_died] blindness 3 1 true

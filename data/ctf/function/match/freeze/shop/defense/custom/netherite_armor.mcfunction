@@ -10,7 +10,7 @@ $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. run fu
     }',\
     command_2: 'function ctf:combine_commands {\
         command_1: "item replace entity @s armor.legs with minecraft:netherite_leggings",\
-        command_2: "item replace entity @s armor.feet with minecraft:netherite_boots"\
+        command_2: "item replace entity @s armor.feet with minecraft:netherite_boots[enchantments={feather_falling:1}]"\
     }'\
 }
 

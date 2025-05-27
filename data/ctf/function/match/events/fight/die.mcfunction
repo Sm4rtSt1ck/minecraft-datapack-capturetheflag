@@ -8,4 +8,4 @@ tag @s add dead
 
 title @s title {"text": "DEATH", "color": "black"}
 
-schedule function ctf:match/events/fight/tp_death_location 6t
+schedule function ctf:match/events/fight/tp_death_location 1t

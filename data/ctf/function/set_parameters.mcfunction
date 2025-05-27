@@ -7,6 +7,7 @@ gamerule mobGriefing false
 gamerule doMobSpawning false
 gamerule doFireTick false
 gamerule commandBlockOutput false
+gamerule sendCommandFeedback false
 gamerule keepInventory false
 gamerule spectatorsGenerateChunks false
 gamerule fallDamage false

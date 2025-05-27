@@ -8,7 +8,7 @@ bossbar set ctf:match max 1200
 
 gamerule fallDamage false
 
-spawnpoint @a[tag=player] -190 -30 -190
+spawnpoint @a[tag=player] -150 0 -150
 
 gamemode adventure @a[tag=attack]
 gamemode survival @a[tag=defense]
@@ -73,11 +73,11 @@ tag @a[nbt={Inventory:[{id:"minecraft:netherite_boots"}]}] add has_boots
 item replace entity @a[tag=player, tag=!has_helmet, tag=attack] armor.head with leather_helmet[minecraft:dyed_color={rgb:16711799}]
 item replace entity @a[tag=player, tag=!has_chestplate, tag=attack] armor.chest with leather_chestplate[minecraft:dyed_color={rgb:16711799}]
 item replace entity @a[tag=player, tag=!has_leggings, tag=attack] armor.legs with leather_leggings[minecraft:dyed_color={rgb:16711799}]
-item replace entity @a[tag=player, tag=!has_boots, tag=attack] armor.feet with leather_boots[minecraft:dyed_color={rgb:16711799}]
+item replace entity @a[tag=player, tag=!has_boots, tag=attack] armor.feet with leather_boots[minecraft:dyed_color={rgb:16711799}, enchantments={feather_falling:1}]
 item replace entity @a[tag=player, tag=!has_helmet, tag=defense] armor.head with leather_helmet[minecraft:dyed_color={rgb:47103}]
 item replace entity @a[tag=player, tag=!has_chestplate, tag=defense] armor.chest with leather_chestplate[minecraft:dyed_color={rgb:47103}]
 item replace entity @a[tag=player, tag=!has_leggings, tag=defense] armor.legs with leather_leggings[minecraft:dyed_color={rgb:47103}]
-item replace entity @a[tag=player, tag=!has_boots, tag=defense] armor.feet with leather_boots[minecraft:dyed_color={rgb:47103}]
+item replace entity @a[tag=player, tag=!has_boots, tag=defense] armor.feet with leather_boots[minecraft:dyed_color={rgb:47103}, enchantments={feather_falling:1}]
 tag @a remove has_helmet
 tag @a remove has_chestplate
 tag @a remove has_leggings
@@ -101,7 +101,7 @@ execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_
 execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.detector"]}}}]}] run scoreboard players set detector_trap bought.item 0
 
 execute as @a[tag=player] run function ctf:match/maps/call_current {function: "freeze"}
-
+scoreboard players set @a[tag=player] shop_category 1
 
 # Give flag
 clear @a[tag=player] minecraft:yellow_banner
