@@ -18,10 +18,10 @@ execute if score game state matches 4 run function ctf:match/round/tick
 # End of round
 execute if score game state matches 5 run function ctf:match/end_round/tick
 # End of the match
-execute if score game state matches 6 run function ctf:match/end/tick
+execute if score game state matches 7 run function ctf:match/end/tick
 
 # Check if there are no players in the match
-execute if score game state matches 2..6 unless entity @a[tag=player] run function ctf:match/end/end
+execute if score game state matches 2..7 unless entity @a[tag=player] run function ctf:match/end/end
 
 # Global match events
 execute as @a[scores={carrot_on_stick=1..}] positioned as @s run playsound ui.button.click ambient @s ~ ~ ~

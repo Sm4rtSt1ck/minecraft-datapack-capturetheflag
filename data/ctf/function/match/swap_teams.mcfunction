@@ -1,5 +1,7 @@
 function admin:log/function {name: "match/swap_teams"}
 
+scoreboard players set game state 6
+
 team modify team_1 displayName "defense"
 team modify team_1 color blue
 team modify team_1 prefix "⛨ "

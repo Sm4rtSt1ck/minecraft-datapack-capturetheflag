@@ -11,8 +11,4 @@ scoreboard players add match rounds 1
 scoreboard players set end_round timer 140
 bossbar set ctf:match max 140
 
-execute if score result map_vote matches 1 run function ctf:match/maps/test_map/end_round
-execute if score result map_vote matches 2 run function ctf:match/maps/green_mine/end_round
-execute if score result map_vote matches 3 run function ctf:match/maps/night_club/end_round
-execute if score result map_vote matches 4 run function ctf:match/maps/farm/end_round
-execute if score result map_vote matches 5 run function ctf:match/maps/railway_station/end_round
+function ctf:match/maps/call_current {function: "end_round"}

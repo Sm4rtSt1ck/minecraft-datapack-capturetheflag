@@ -56,7 +56,7 @@ scoreboard players set 2 number 2
 scoreboard objectives add had_left minecraft.custom:minecraft.leave_game
 scoreboard objectives add carrot_on_stick minecraft.used:minecraft.carrot_on_a_stick
 
-# Game state (0 - lobby, 1 - vote, 2 - warmup, 3 - freeze, 4 - round, 5 - end_round, 6 - end)
+# Game state (0 - lobby, 1 - vote, 2 - warmup, 3 - freeze, 4 - round, 5 - end_round, 6 - swap teams, 7 - end)
 scoreboard objectives add state dummy
 # IMPORTANT! change to 0 after fully adding vote state
 scoreboard players set game state 1

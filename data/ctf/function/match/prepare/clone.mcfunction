@@ -52,11 +52,7 @@ execute positioned as @n[tag=clone_marker] run clone ~96 ~32 ~96 ~127 ~63 ~127 -
 # CLONING FOR CURRENT MAP
 
 kill @e[tag=map_entity]
-execute if score result map_vote matches 1 run function ctf:match/maps/test_map/clone
-execute if score result map_vote matches 2 run function ctf:match/maps/green_mine/clone
-execute if score result map_vote matches 3 run function ctf:match/maps/night_club/clone
-execute if score result map_vote matches 4 run function ctf:match/maps/farm/clone
-execute if score result map_vote matches 5 run function ctf:match/maps/railway_station/clone
+function ctf:match/maps/call_current {function: "clone"}
 
 #########################################
 # OTHER
@@ -70,5 +66,5 @@ kill @e[tag=clone_marker]
 # FUNCTIONS
 
 execute if score game state matches 1 run function ctf:match/warmup/start
-execute if score game state matches 3..5 run function ctf:match/helpers/update_score_display
-execute if score game state matches 3..5 run schedule function ctf:match/freeze/start 100t
+execute if score game state matches 3..6 run function ctf:match/helpers/update_score_display
+execute if score game state matches 3..6 run schedule function ctf:match/freeze/start 100t
