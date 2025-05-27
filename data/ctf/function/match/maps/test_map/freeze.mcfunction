@@ -11,8 +11,8 @@ fill -196 -50 -189 -198 -36 -189 minecraft:light_blue_stained_glass_pane replace
 # Attack team
 # execute if score match rounds < swap rounds run spreadplayers -194 -162 1 3 under -50 false @a[team=team_1]
 # execute if score match rounds >= swap rounds run spreadplayers -194 -162 1 3 under -50 false @a[team=team_2]
-spreadplayers -194 -162 1 3 under -50 false @a[tag=attack]
+spreadplayers -194 -162 1 3 under -50 false @s[tag=attack]
 # defense team
 # execute if score match rounds >= swap rounds run spreadplayers -167 -169 1 3 under -50 false @a[team=team_1]
 # execute if score match rounds < swap rounds run spreadplayers -167 -169 1 3 under -50 false @a[team=team_2]
-spreadplayers -167 -169 1 3 under -50 false @a[tag=defense]
+spreadplayers -167 -169 1 3 under -50 false @s[tag=defense]

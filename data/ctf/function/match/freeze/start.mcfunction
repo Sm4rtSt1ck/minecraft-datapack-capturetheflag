@@ -24,6 +24,8 @@ execute positioned as @e[type=armor_stand, tag=flag] run fill ~-10 ~-10 ~-10 ~10
 execute positioned as @e[type=armor_stand, tag=flag] run fill ~-10 ~-10 ~-10 ~10 ~10 ~10 air replace yellow_wall_banner
 kill @e[tag=flag]
 
+scoreboard players reset * just_used_chorus
+
 clear @a[tag=player] minecraft:black_stained_glass_pane
 
 execute as @a[scores={money=1500..}] run scoreboard players set @s money 1500
@@ -98,11 +100,11 @@ execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_
 execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.wither"]}}}]}] run scoreboard players set wither_trap bought.item 0
 execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.detector"]}}}]}] run scoreboard players set detector_trap bought.item 0
 
-execute if score result map_vote matches 1 run function ctf:match/maps/test_map/freeze
-execute if score result map_vote matches 2 run function ctf:match/maps/green_mine/freeze
-execute if score result map_vote matches 3 run function ctf:match/maps/night_club/freeze
-execute if score result map_vote matches 4 run function ctf:match/maps/farm/freeze
-execute if score result map_vote matches 5 run function ctf:match/maps/railway_station/freeze
+execute if score result map_vote matches 1 as @a[tag=player] run function ctf:match/maps/test_map/freeze
+execute if score result map_vote matches 2 as @a[tag=player] run function ctf:match/maps/green_mine/freeze
+execute if score result map_vote matches 3 as @a[tag=player] run function ctf:match/maps/night_club/freeze
+execute if score result map_vote matches 4 as @a[tag=player] run function ctf:match/maps/farm/freeze
+execute if score result map_vote matches 5 as @a[tag=player] run function ctf:match/maps/railway_station/freeze
 
 
 # Give flag

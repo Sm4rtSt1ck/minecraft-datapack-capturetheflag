@@ -12,3 +12,6 @@ execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:26b}]}] run \
     function ctf:match/freeze/shop/templates/click_item {item: potion, slot: 26, cost: 250, tag: "1", item_name: '{"text": "Potion on speed"}', amount: 1, nbt: 'potion_contents={custom_color:26711680,custom_effects:[{id:"minecraft:speed",amplifier:4,duration:160,show_particles:1b}]}'}
+
+execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:27b}]}] run \
+    function ctf:match/freeze/shop/templates/click_item {item: chorus_fruit, slot: 27, cost: 50, tag: "", item_name: '{"text": "Chorus fruit (do not use during the setup phase)"}', amount: 1, nbt: ''}

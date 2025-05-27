@@ -113,6 +113,7 @@ scoreboard objectives add flag_broken minecraft.mined:minecraft.yellow_banner
 scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.yellow_wall_banner
 scoreboard objectives add just_placed_trap minecraft.used:minecraft.frog_spawn_egg
 scoreboard objectives add just_threw_grenade minecraft.used:minecraft.lingering_potion
+scoreboard objectives add just_used_chorus minecraft.used:minecraft.chorus_fruit
 
 # Shop
 scoreboard objectives add shop_category dummy
