@@ -9,6 +9,13 @@ kill @e[tag=flag]
 kill @e[tag=trap]
 kill @e[tag=map_entity]
 
+clear @a[tag=player]
+
+effect clear @a[tag=player]
+effect give @a[tag=player] saturation infinite 127 true
+effect give @a[tag=player] resistance infinite 127 true
+effect give @a[tag=player] regeneration 1 127 true
+
 execute as @a[team=team_1] run function ctf:match/end/sort_top_players
 execute as @a[team=team_2] run function ctf:match/end/sort_top_players
 
