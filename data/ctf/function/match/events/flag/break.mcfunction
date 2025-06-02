@@ -29,9 +29,8 @@ execute positioned as @n[type=armor_stand, tag=flag] run summon item ~ ~ ~ {Glow
   ]\
 }}}
 
-kill @e[type=armor_stand, tag=flag]
 
-effect give @a[tag=defense,tag=!spectator,tag=!died] blindness 5 1 false
+effect give @a[tag=defense,tag=!spectator,tag=!died] blindness 3 1 false
 execute as @a[tag=!lobby] positioned as @s run playsound minecraft:ambient.cave ambient @s ~ ~ ~ 0.35 1
 execute as @a[tag=!lobby] positioned as @s run playsound minecraft:ambient.cave ambient @s ~ ~ ~ 0.35 1
 execute as @a[tag=!lobby] positioned as @s run playsound minecraft:ambient.cave ambient @s ~ ~ ~ 0.35 1
@@ -53,6 +52,8 @@ execute positioned as @e[type=armor_stand, tag=flag] run playsound entity.generi
 
 scoreboard players add @s money 69
 title @s actionbar [{"text":"+$69","color":"green"}]
+
+kill @e[type=armor_stand, tag=flag]
 
 scoreboard players set @s flag_broken 0
 scoreboard players set @s wall_flag_broken 0

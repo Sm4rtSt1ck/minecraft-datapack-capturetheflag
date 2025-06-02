@@ -5,6 +5,12 @@ tag team_1 remove defense
 tag team_2 remove attack
 tag team_2 remove defense
 
+kill @e[tag=flag]
+kill @e[tag=trap]
+kill @e[tag=map_entity]
+kill @e[tag=win_trigger]
+kill @e[tag=spawn_spot]
+
 forceload remove -200 -200 -72 -72
 
 tellraw @a [{"text": "If something went wrong, ", "color": "#ff8800"},\

@@ -2,12 +2,8 @@ function admin:log/function {name: "match/end/start"}
 
 scoreboard players set game state 7
 # Tiemr to lobby 30 secs (300 ticks)
-scoreboard players set end timer 600
-bossbar set ctf:match max 600
-
-kill @e[tag=flag]
-kill @e[tag=trap]
-kill @e[tag=map_entity]
+scoreboard players set end timer 300
+bossbar set ctf:match max 300
 
 clear @a[tag=player]
 

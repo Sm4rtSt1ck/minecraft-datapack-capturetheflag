@@ -148,6 +148,8 @@ kill @e[tag=map_entity]
 kill @e[tag=clone_marker]
 kill @e[tag=lastDeathMarker]
 kill @e[tag=trap]
+kill @e[tag=win_trigger]
+# kill @e[tag=spawn_spot]
 # kill @e[tag=tnt_marker]
 
 #########################################
