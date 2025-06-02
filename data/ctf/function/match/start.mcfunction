@@ -4,10 +4,6 @@ function admin:log/function {name: "match/start"}
 
 forceload add -200 -200 -72 -72
 
-kill @e[tag=trap]
-# kill @e[tag=spawn_spot]
-kill @e[tag=win_trigger]
-
 tag @a remove lobby
 tag @a remove dead
 tag @a remove skip
