@@ -9,6 +9,7 @@ execute as @a[scores={flag_broken=1..}] run function ctf:match/events/flag/break
 execute as @a[scores={wall_flag_broken=1..}] run function ctf:match/events/flag/break
 execute as @a[scores={flag_dropped=1..}] run function ctf:match/events/flag/drop
 execute as @a[scores={flag_pickedup=1..}] run function ctf:match/events/flag/pickup
+execute as @e[type=armor_stand, tag=flag] at @s unless block ~ ~ ~ yellow_banner unless block ~ ~ ~ yellow_wall_banner run function ctf:match/events/flag/break
 # Fight
 execute as @a[scores={just_killed=1..}] run function ctf:match/events/fight/kill
 execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die

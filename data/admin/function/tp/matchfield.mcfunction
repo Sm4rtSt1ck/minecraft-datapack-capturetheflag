@@ -1,1 +1,1 @@
-tp @s -170 -20 -160
+function admin:tp/tp {xyz: "-170 -20 -160"}

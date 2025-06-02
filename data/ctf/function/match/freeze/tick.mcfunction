@@ -2,7 +2,6 @@ scoreboard players remove freeze timer 1
 execute store result bossbar ctf:match value run scoreboard players get freeze timer
 
 execute if score freeze timer matches 200 run title @a[tag=!lobby] title {"text": "10 SECONDS", "color": "green"}
-execute if score freeze timer matches 200 run title @a[tag=!lobby] subtitle {"text": "THE FLAG HAS BEEN PLACED", "color": "green"}
 execute if score freeze timer matches 200 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.4
 execute if score freeze timer matches 60 run title @a[tag=!lobby] title {"text": "❸", "color": "green"}
 execute if score freeze timer matches 60 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.6
@@ -19,6 +18,7 @@ execute if score freeze timer matches 20 as @a[tag=!lobby] at @s run playsound m
 
 # execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
 execute as @a[scores={flag_placed=1..}] run function ctf:match/events/flag/place
+execute as @a[scores={flag_dropped=1..}] run function ctf:match/events/flag/drop
 execute as @a[scores={just_placed_trap=1..}] run function ctf:match/events/traps/place
 execute as @a[scores={just_threw_grenade=1..}] run function ctf:match/events/grenades/throw
 execute as @a[scores={just_used_chorus=1..}] run function ctf:match/events/misc/chorus

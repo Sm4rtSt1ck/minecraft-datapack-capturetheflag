@@ -1,1 +1,1 @@
-tp @s 299 -48 168
+function admin:tp/tp {xyz: "299 -48 168"}

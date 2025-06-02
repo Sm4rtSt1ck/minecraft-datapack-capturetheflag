@@ -1,7 +1,7 @@
 #########################################
 # EVENTS HANDLING
 
-execute as @a[scores={just_died=1..}] run function ctf:lobby/events/die
+execute as @a[tag=lobby, scores={just_died=1..}] run function ctf:lobby/events/die
 
 #########################################
 # OTHER

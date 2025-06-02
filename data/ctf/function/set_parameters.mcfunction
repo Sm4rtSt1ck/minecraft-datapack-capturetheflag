@@ -1,22 +1,30 @@
 #########################################
 # GAMERULES AND WORLD PARAMETERS
 
-gamerule naturalRegeneration false
-gamerule doImmediateRespawn true
-gamerule mobGriefing false
+# Mobs and world
 gamerule doMobSpawning false
-gamerule doFireTick false
-gamerule commandBlockOutput false
-gamerule sendCommandFeedback false
-gamerule keepInventory false
-gamerule spectatorsGenerateChunks false
-gamerule fallDamage false
-gamerule announceAdvancements false
+gamerule mobGriefing true
+gamerule doMobLoot false
 gamerule doVinesSpread false
+gamerule doFireTick false
 gamerule doDaylightCycle false
 gamerule doWeatherCycle false
+gamerule doTileDrops false
+# Players
 gamerule spawnRadius 0
-
+gamerule fallDamage false
+gamerule keepInventory false
+gamerule naturalRegeneration false
+gamerule doImmediateRespawn true
+gamerule announceAdvancements false
+gamerule spectatorsGenerateChunks false
+# Commands and something else
+gamerule commandBlockOutput false
+gamerule sendCommandFeedback false
+gamerule reducedDebugInfo true
+gamerule commandModificationBlockLimit 2097152
+# Other settings
+difficulty normal
 defaultgamemode adventure
 setworldspawn 0 -41 0
 time set noon
