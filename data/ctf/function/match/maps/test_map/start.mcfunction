@@ -1,2 +1,2 @@
 title @s title {"text": "Test map 1", "color": "blue"}
-schedule function ctf:match/maps/test_map/music 200t
+execute if score music settings matches 1 run schedule function ctf:match/maps/test_map/music 200t

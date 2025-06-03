@@ -12,7 +12,7 @@ weather clear
 #########################################
 # SCOREBOARDS
 
-scoreboard objectives setdisplay sidebar map_vote_player
+scoreboard objectives setdisplay sidebar settings
 scoreboard players reset * map_vote_player
 
 # IMPORTANT! change to 0 after fully adding vote state

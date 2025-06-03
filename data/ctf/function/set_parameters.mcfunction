@@ -57,6 +57,9 @@ team modify team_2 seeFriendlyInvisibles true
 #########################################
 # SCOREBOARDS
 
+# Settings
+scoreboard objectives add settings dummy {"text": "⚙ SETTINGS ⚙", "color": "aqua", "bold": true}
+
 # Numbers
 scoreboard objectives add number dummy
 scoreboard players set 2 number 2
@@ -160,6 +163,10 @@ kill @e[tag=trap]
 kill @e[tag=win_trigger]
 
 #########################################
+
+
+# Set default settings
+function ctf:set_default_settings
 
 # Join to lobby
 function ctf:lobby/join_all
