@@ -1,6 +1,7 @@
 title @a[tag=!lobby] title {"text": "The flag has been broken!", "color": "dark_red"}
 execute as @e[type=item,nbt={Item:{id:"minecraft:yellow_banner"}}] run data merge entity @s {Glowing:true}
 execute positioned as @n[type=armor_stand, tag=flag] run summon item ~ ~ ~ {Glowing:true, PickupDelay:10, Invulnerable: true, Tags:["flag"], Item:{id:"minecraft:yellow_banner", count:1, components: {\
+  custom_name: '{"text": "Flag", "color":"red", "italic": false}',\
   "minecraft:banner_patterns": [\
     {\
       "color": "red",\

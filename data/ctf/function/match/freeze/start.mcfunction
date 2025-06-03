@@ -105,6 +105,7 @@ execute as @a[tag=player] run function ctf:match/maps/call_current {function: "f
 scoreboard players set @a[tag=player] shop_category 1
 
 # Give flag
+clear @a[tag=player] minecraft:yellow_banner
 clear @a[tag=player] minecraft:armor_stand[item_model="minecraft:yellow_banner"]
 
 # give @r[tag=defense] minecraft:yellow_banner ONLY AFTER CALL MAP FREEZE FUNCTION
@@ -112,6 +113,7 @@ clear @a[tag=player] minecraft:armor_stand[item_model="minecraft:yellow_banner"]
 # give @p minecraft:armor_stand[item_model=yellow_banner, entity_data={id:"minecraft:armor_stand", Tags: ["flag"], Marker: true}]
 # summon item ~ ~ ~ {Item: {components:{item_model:"minecraft:yellow_banner", entity_data: {id: "minecraft:armor_stand", Marker: true}}}}
 execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, Invulnerable: true, PickupDelay:20, Tags:["flag"], Item:{id:"minecraft:armor_stand", count:1,  components: {\
+  custom_name: '{"text": "Flag", "color":"red", "italic": false}',\
   entity_data: {id: "minecraft:armor_stand", Marker: true, Invisible: true, Tags: ["flag"]},\
   item_model:"minecraft:yellow_banner",\
   "minecraft:banner_patterns": [\

@@ -4,6 +4,6 @@ execute positioned as @e[type=armor_stand,tag=flag] if block ~ ~-1 ~ air run pla
 
 execute if score freeze timer matches ..1 run scoreboard players set freeze timer 2
 
-execute positioned as @e[type=armor_stand,tag=flag] unless block ~ ~-1 ~ air run function ctf:match/events/flag/place/place_fallen
+execute as @e[type=armor_stand,tag=flag] positioned as @s unless block ~ ~-1 ~ air run function ctf:match/events/flag/place/place_fallen
 
 execute positioned as @e[type=armor_stand,tag=flag] if block ~ ~-1 ~ air run schedule function ctf:match/events/flag/place/fall_loop 1t
