@@ -1,4 +1,4 @@
-# PARENT: vote/results/check
+# PARENT: lobby/vote/results/check
 # This function counts the number of votes for each map when called for each player
 
 execute if score @s map_vote_player matches 1 run scoreboard players add total_map_1 map_vote 1

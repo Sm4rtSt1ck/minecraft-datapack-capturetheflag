@@ -3,9 +3,6 @@
 
 execute if score game state matches 0..1 run function ctf:lobby/tick
 
-# Vote
-execute if score game state = vote state run function ctf:lobby/vote/tick
-
 #########################################
 # MATCH TICKS
 

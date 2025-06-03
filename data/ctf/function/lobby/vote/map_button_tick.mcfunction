@@ -1,4 +1,4 @@
-# PARENT: vote/tick
+# PARENT: lobby/vote/tick
 
 $clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:$(slot)b}]}] carrot_on_a_stick[map_id=$(id)]
 

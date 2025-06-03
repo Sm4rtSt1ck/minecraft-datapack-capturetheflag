@@ -16,7 +16,7 @@ scoreboard objectives setdisplay sidebar map_vote_player
 scoreboard players reset * map_vote_player
 
 # IMPORTANT! change to 0 after fully adding vote state
-scoreboard players operation game state = vote state
+scoreboard players operation game state = lobby state
 
 #########################################
 # OTHER
