@@ -1,6 +1,6 @@
 function admin:log/function {name: "match/freeze/start"}
 
-scoreboard players set game state 3
+scoreboard players operation game state = freeze state
 
 # 60 secs freeze before round start (1200 ticks)
 scoreboard players set freeze timer 1200
@@ -25,6 +25,7 @@ execute positioned as @e[type=armor_stand, tag=flag] run fill ~-10 ~-10 ~-10 ~10
 kill @e[tag=flag]
 
 scoreboard players reset * just_used_chorus
+scoreboard players reset * just_threw_grenade
 
 clear @a[tag=player] minecraft:black_stained_glass_pane
 

@@ -1,6 +1,6 @@
 # function admin:log/function {name: "match/round/start"}
 
-scoreboard players set game state 4
+scoreboard players operation game state = round state
 # Round timer 180 secs (3600 ticks)
 scoreboard players set round timer 3600
 bossbar set ctf:match max 3600

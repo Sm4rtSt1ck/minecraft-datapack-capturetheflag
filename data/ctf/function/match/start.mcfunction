@@ -1,39 +1,48 @@
 function admin:log/function {name: "match/start"}
+
 #########################################
-# SET THE GAME SETTINGS
+# GLOBAL
 
 forceload add -200 -200 -72 -72
+
+#########################################
+# TAGS
 
 tag @a remove lobby
 tag @a remove dead
 tag @a remove skip
 tag @a[tag=!spectator, tag=!lobby] add player
-clear @a[tag=!lobby]
 
-stopsound @a[tag=!lobby]
+#########################################
+# EFFECTS
 
 effect clear @a[tag=!lobby]
 effect give @a[tag=player] minecraft:saturation infinite 127 true
 effect give @a[tag=attack] minecraft:haste infinite 40 true
 
+#########################################
+# SCOREBOARDS
+
+# Unique match identifier
 scoreboard players add match match_id 1
 scoreboard players operation @a[tag=!lobby] match_id = match match_id
 
+# Rounds
 scoreboard players set match rounds 0
 scoreboard players set team_1 rounds 0
 scoreboard players set team_2 rounds 0
-bossbar set ctf:match value 0
-bossbar set ctf:match visible true
-bossbar set ctf:match players @a[tag=!lobby]
-bossbar set ctf:match name {"text":"PREPARING...", "color": "yellow"}
 
-scoreboard players set @a[tag=player] money 200
-scoreboard objectives setdisplay list deaths
+# Kills and deaths counters
 scoreboard players reset * deaths
+scoreboard objectives setdisplay list deaths
 scoreboard players reset * kills
-# Display players with no kills
 scoreboard players set @a[tag=player] kills 0
+scoreboard objectives setdisplay sidebar kills
 
+# Money
+scoreboard players set @a[tag=player] money 200
+
+# Events
 scoreboard players reset * just_used_totem
 scoreboard players reset * just_died
 scoreboard players reset * just_killed
@@ -44,6 +53,9 @@ scoreboard players reset * flag_dropped
 scoreboard players reset * flag_pickedup
 scoreboard players reset * just_placed_trap
 scoreboard players reset * just_threw_grenade
+
+#########################################
+# TEAMS
 
 # Set the attacking and the defending sides
 team empty team_1
@@ -57,6 +69,12 @@ team modify team_2 displayName "defense"
 team modify team_2 color blue
 team modify team_2 prefix "⛨ "
 team modify team_2 suffix " ⛨"
+
+#########################################
+# PLAYERS
+
+clear @a[tag=!lobby]
+stopsound @a[tag=!lobby]
 
 # Join teams 10 players
 team join team_2 @r[tag=player]
@@ -82,15 +100,24 @@ tag @a[team=team_2] remove attack
 #########################################
 # GO TO THE MOST VOTED MAP
 
+# Bossbar
+bossbar set ctf:match value 0
+bossbar set ctf:match visible true
+bossbar set ctf:match players @a[tag=!lobby]
+bossbar set ctf:match name {"text":"PREPARING...", "color": "yellow"}
+execute positioned as @a[tag=!lobby] run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1
+
+# Stop map music loops
 schedule clear ctf:match/maps/test_map/music
 schedule clear ctf:match/maps/green_mine/music
 schedule clear ctf:match/maps/night_club/music
 schedule clear ctf:match/maps/farm/music
 schedule clear ctf:match/maps/railway_station/music
 
+execute as @a[tag=spectator] run function ctf:match/spectate
+
 function ctf:match/maps/call_current {function: "start"}
 
 function ctf:match/prepare/prepare
 
-execute positioned as @a[tag=!lobby] run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1
 # schedule function ctf:match/warmup/start 60t

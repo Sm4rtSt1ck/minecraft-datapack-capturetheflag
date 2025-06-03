@@ -1,6 +1,6 @@
 function admin:log/function {name: "match/end_round/start"}
 
-scoreboard players set game state 5
+scoreboard players operation game state = end_round state
 
 effect clear @a[tag=player, nbt={Inventory:[{id:"minecraft:yellow_banner"}]}] minecraft:glowing
 

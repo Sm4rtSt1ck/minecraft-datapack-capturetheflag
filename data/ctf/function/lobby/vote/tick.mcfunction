@@ -1,97 +1,16 @@
 #########################################
-# TEST MAP
+# MAP BUTTONS
 
-clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:0b}]}] carrot_on_a_stick[map_id=0]
-
-# Give items
-item replace entity @a[tag=lobby] hotbar.0 with carrot_on_a_stick[\
-    item_model="filled_map",\
-    map_id=0,\
-    custom_data={tags: ["menu"]},\
-    custom_name="{\
-        \"shadow_color\": -16252673,\
-        \"text\" :\"Test map\"\
-    }"\
-]
-
-# Check first map choice (left hand)
-execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=0] run scoreboard players set @s map_vote 1
-
-#########################################
-# GREEN MINE
-
-clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:1b}]}] carrot_on_a_stick[map_id=1]
-
-# Give items
-item replace entity @a[tag=lobby] hotbar.1 with carrot_on_a_stick[\
-    item_model="filled_map",\
-    map_id=1,\
-    custom_data={tags: ["menu"]},\
-    custom_name="{\
-        \"shadow_color\": -16252673,\
-        \"text\" :\"GreenMine\"\
-    }"\
-]
-
-# Check first map choice (left hand)
-execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=1] run scoreboard players set @s map_vote 2
-
-#########################################
-# NIGHT CLUB
-
-clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:2b}]}] carrot_on_a_stick[map_id=2]
-
-# Give items
-item replace entity @a[tag=lobby] hotbar.2 with carrot_on_a_stick[\
-    item_model="filled_map",\
-    map_id=2,\
-    custom_data={tags: ["menu"]},\
-    custom_name="{\
-        \"shadow_color\": -16252673,\
-        \"text\" :\"Night Club\"\
-    }"\
-]
-
-# Check first map choice (left hand)
-execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=2] run scoreboard players set @s map_vote 3
-
-#########################################
-# FARM
-
-clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:3b}]}] carrot_on_a_stick[map_id=3]
-
-# Give items
-item replace entity @a[tag=lobby] hotbar.3 with carrot_on_a_stick[\
-    item_model="filled_map",\
-    map_id=3,\
-    custom_data={tags: ["menu"]},\
-    custom_name="{\
-        \"shadow_color\": -16252673,\
-        \"text\" :\"Farm\"\
-    }"\
-]
-
-# Check first map choice (left hand)
-execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=3] run scoreboard players set @s map_vote 4
-
-#########################################
-# RAILWAY STATION
-
-clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:4b}]}] carrot_on_a_stick[map_id=4]
-
-# Give items
-item replace entity @a[tag=lobby] hotbar.4 with carrot_on_a_stick[\
-    item_model="filled_map",\
-    map_id=4,\
-    custom_data={tags: ["menu"]},\
-    custom_name="{\
-        \"shadow_color\": -16252673,\
-        \"text\" :\"Railway station\"\
-    }"\
-]
-
-# Check first map choice (left hand)
-execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=4] run scoreboard players set @s map_vote 5
+# Test map
+function ctf:lobby/vote/map_button_tick {slot: 0, id: 0, name: "Test map", score: 1}
+# Green mine
+function ctf:lobby/vote/map_button_tick {slot: 1, id: 1, name: "Green mine", score: 2}
+# Night club
+function ctf:lobby/vote/map_button_tick {slot: 2, id: 2, name: "Night club", score: 3}
+# Farm
+function ctf:lobby/vote/map_button_tick {slot: 3, id: 3, name: "Farm", score: 4}
+# Railway station
+function ctf:lobby/vote/map_button_tick {slot: 4, id: 4, name: "Railway station", score: 5}
 
 #########################################
 # SPECTATING BUTTON
@@ -143,16 +62,23 @@ item replace entity @a[tag=lobby] hotbar.8 with carrot_on_a_stick[\
 
 # Check pressing
 execute if items entity @r[tag=lobby, scores={carrot_on_stick=1..}] weapon.mainhand *[item_model="firework_rocket"] \
-    if entity @r[scores={map_vote=-2147483647..2147483647}] \
-        run function ctf:lobby/vote/check_results
+    if entity @r[scores={map_vote_player=-2147483647..2147483647}] \
+        run function ctf:lobby/vote/results/check
 execute as @r[tag=lobby, scores={carrot_on_stick=1..}] \
     if items entity @s weapon.mainhand *[item_model="firework_rocket"] \
-    unless entity @a[scores={map_vote=-2147483648..2147483647}] \
+    unless entity @a[scores={map_vote_player=-2147483648..2147483647}] \
         run tellraw @s {"text": "No one voted for the map!", "color": "red"}
 
 #########################################
+# OTHER
 
 # Random number
 scoreboard players add random number 1
 
-title @a[tag=lobby] actionbar [{"color":"blue","text":"Press "},{"color":"light_purple","text":"["},{"keybind":"key.use", "color": "light_purple"},{"color":"light_purple", "text":"]"},{"color":"blue","text":" to vote"}]
+title @a[tag=lobby] actionbar [\
+    {"color":"blue","text":"Press "},\
+    {"color":"light_purple","text":"["},\
+    {"keybind":"key.use", "color": "light_purple"},\
+    {"color":"light_purple", "text":"]"},\
+    {"color":"blue","text":" to vote"}\
+]

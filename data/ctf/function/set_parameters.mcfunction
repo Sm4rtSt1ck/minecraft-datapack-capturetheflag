@@ -67,16 +67,25 @@ scoreboard objectives add carrot_on_stick minecraft.used:minecraft.carrot_on_a_s
 
 # Game state (0 - lobby, 1 - vote, 2 - warmup, 3 - freeze, 4 - round, 5 - end_round, 6 - swap teams, 7 - end)
 scoreboard objectives add state dummy
-# IMPORTANT! change to 0 after fully adding vote state
-scoreboard players set game state 1
+scoreboard players set lobby state 0
+scoreboard players set vote state 1
+scoreboard players set warmup state 2
+scoreboard players set freeze state 3
+scoreboard players set round state 4
+scoreboard players set end_round state 5
+scoreboard players set swap state 6
+scoreboard players set end state 7
+# IMPORTANT! change to lobby after fully adding vote state
+scoreboard players operation game state = vote state
 
 # Vote
-scoreboard objectives add map_vote dummy [\
+scoreboard objectives add map_vote dummy
+scoreboard objectives add map_vote_player dummy [\
     {"text": "🎴", "color": "light_purple", "bold": false}, \
     {"text": " VOTES FOR MAPS ", "color": "green", "bold": true}, \
     {"text": "🎴", "color": "light_purple", "bold": false}\
 ]
-scoreboard players reset * map_vote
+scoreboard players reset * map_vote_player
 
 # Timer
 scoreboard objectives add timer dummy "Time"
@@ -149,8 +158,6 @@ kill @e[tag=clone_marker]
 kill @e[tag=lastDeathMarker]
 kill @e[tag=trap]
 kill @e[tag=win_trigger]
-# kill @e[tag=spawn_spot]
-# kill @e[tag=tnt_marker]
 
 #########################################
 

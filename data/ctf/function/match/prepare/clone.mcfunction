@@ -27,6 +27,6 @@ kill @e[tag=clone_marker]
 #########################################
 # FUNCTIONS
 
-execute if score game state matches 1 run function ctf:match/warmup/start
+execute if score game state = vote state run function ctf:match/warmup/start
 execute if score game state matches 3..6 run function ctf:match/helpers/update_score_display
 execute if score game state matches 3..6 run schedule function ctf:match/freeze/start 100t
