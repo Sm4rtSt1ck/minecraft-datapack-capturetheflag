@@ -14,6 +14,7 @@ execute as @a[tag=!lobby] at @s run playsound minecraft:entity.firework_rocket.l
 scoreboard players set @a[tag=player] flag_broken 0
 scoreboard players set @a[tag=player] wall_flag_broken 0
 scoreboard players set @a[tag=player] flag_pickedup 0
+scoreboard players set @a[tag=player] just_threw_grenade 0
 
 gamemode adventure @a[tag=defense]
 

@@ -1,7 +1,8 @@
 #########################################
 # LOBBY TICKS
 
-execute if score game state matches 0..1 run function ctf:lobby/tick
+# execute if score game state matches 0..1 run function ctf:lobby/tick
+execute if entity @a[tag=lobby] run function ctf:lobby/tick
 
 #########################################
 # MATCH TICKS

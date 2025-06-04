@@ -6,10 +6,13 @@ $clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:$
 $item replace entity @a[tag=lobby] hotbar.$(slot) with carrot_on_a_stick[\
     item_model="$(item_model)",\
     custom_data={tags: ["menu"]},\
-    custom_name="{\
-        \"shadow_color\": -16252673,\
-        \"text\" :\"$(name)\"\
-    }"\
+    custom_name='{\
+        "shadow_color": -5745664,\
+        "color": "gold",\
+        "italic": false,\
+        "bold": true,\
+        "text" :"$(name)"\
+    }'\
 ]
 
 # Check first map choice (left hand)

@@ -20,28 +20,26 @@ clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:7b
 
 # Give an item
 item replace entity @a[tag=lobby, tag=!spectator] hotbar.7 with carrot_on_a_stick[\
-    item_model=ender_eye,\
+    item_model=ender_pearl,\
     custom_name='[\
-        {"shadow_color":-65536,"text":"Spectate "},\
-        {"color":"#00e1ff","text":"["},\
-        {"color":"#00e1ff","keybind":"key.use"},\
-        {"color":"#00e1ff","text":"]"}]',\
+        {"color":"#ffbb00","text":"Spectator mode: ", "bold": true, "italic": false},\
+        {"shadow_color":-5767168, "color":"red","text":"OFF"}\
+    ]',\
     custom_data={tags:["menu"]}\
 ]
 item replace entity @a[tag=lobby, tag=spectator] hotbar.7 with carrot_on_a_stick[\
-    item_model=ender_pearl,\
+    item_model=ender_eye,\
     custom_name='[\
-        {"shadow_color":-65536,"text":"Do not spectate "},\
-        {"color":"#00e1ff","text":"["},\
-        {"color":"#00e1ff","keybind":"key.use"},\
-        {"color":"#00e1ff","text":"]"}]',\
+        {"color":"#ffbb00","text":"Spectator mode: ", "bold": true, "italic": false},\
+        {"shadow_color":-12935680,"color":"green","text":"ON"}\
+    ]',\
     custom_data={tags:["menu"]}\
 ]
 
 # Check pressing
-execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[item_model=ender_eye] \
-        run tag @s add spectator
 execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[item_model=ender_pearl] \
+        run tag @s add spectator
+execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[item_model=ender_eye] \
         run tag @s remove spectator
 
 #########################################
@@ -52,11 +50,7 @@ clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:8b
 # Give an item
 item replace entity @a[tag=lobby] hotbar.8 with carrot_on_a_stick[\
     item_model="firework_rocket",\
-    custom_name='[\
-        {"shadow_color":-65536,"text":"Launch! "},\
-        {"color":"light_purple","text":"["},\
-        {"color":"light_purple","keybind":"key.use"},\
-        {"color":"light_purple","text":"]"}]',\
+    custom_name='{"shadow_color":-6029142,"color":"#ff32ff","text":"LAUNCH", "italic": false, "bold": true}',\
     custom_data={tags:["menu"]}\
 ]
 
@@ -76,7 +70,7 @@ execute as @r[tag=lobby, scores={carrot_on_stick=1..}] \
 scoreboard players add random number 1
 
 title @a[tag=lobby] actionbar [\
-    {"color":"blue","text":"Press "},\
+    {"color":"blue","text":"Press ", "italic": false, "bold": true, "shadow_color": -11009878},\
     {"color":"light_purple","text":"["},\
     {"keybind":"key.use", "color": "light_purple"},\
     {"color":"light_purple", "text":"]"},\
