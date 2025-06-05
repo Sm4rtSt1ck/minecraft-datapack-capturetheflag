@@ -92,7 +92,10 @@ scoreboard objectives add map_vote_player dummy [\
 scoreboard players reset * map_vote_player
 
 # Timer
-scoreboard objectives add timer dummy "Time"
+scoreboard objectives add timer dummy
+
+# Ultimate
+scoreboard objectives add ultimate dummy
 
 # Health
 scoreboard objectives add health health "hp"
@@ -104,6 +107,7 @@ scoreboard objectives modify health numberformat styled {"color":"yellow"}
 scoreboard objectives add match_id dummy
 # To prevent bla bla lba
 scoreboard players add match match_id 1
+scoreboard objectives add player_id dummy
 
 # Rounds
 scoreboard objectives add rounds dummy "Rounds"
@@ -159,6 +163,7 @@ kill @e[tag=clone_marker]
 kill @e[tag=lastDeathMarker]
 kill @e[tag=trap]
 kill @e[tag=win_trigger]
+kill @e[tag=inventory]
 
 #########################################
 

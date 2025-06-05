@@ -35,10 +35,17 @@ function ctf:match/helpers/pickup_restrict
 # ATTACK TEAM TRAPS
 function ctf:match/events/traps/detector/trigger
 
+# ULTIMATE
+execute as @a[tag=player, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[minecraft:custom_data={action:"ultimate"}] run function ctf:match/events/ultimate/check_points
+
 function ctf:match/freeze/shop/tick
 
 clear @a[tag=player, nbt=!{Inventory:[{Slot:8b, components:{"minecraft:custom_data":{action:"exit"}}}]}] carrot_on_a_stick[custom_data={action:"exit"}]
 item replace entity @a[tag=player] hotbar.8 with carrot_on_a_stick[item_model="minecraft:red_bed", custom_name='[{"text":"Exit to lobby ["}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"exit"}]
 kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{action:"exit"}}}}]
+
+clear @a[tag=player, nbt=!{Inventory:[{Slot:7b, components:{"minecraft:custom_data":{action:"ultimate"}}}]}] carrot_on_a_stick[custom_data={action:"ultimate"}]
+item replace entity @a[tag=player] hotbar.7 with carrot_on_a_stick[item_model="minecraft:blaze_rod", custom_name='[{"text":"ULTIMATE [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
+kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{action:"ultimate"}}}}]
 
 execute if score freeze timer matches -2147483648..0 run function ctf:match/round/start

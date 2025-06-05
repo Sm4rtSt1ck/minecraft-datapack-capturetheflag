@@ -34,4 +34,13 @@ execute if score game state matches 3..6 if score @s match_id = match match_id r
 
 #########################################
 
+execute unless score @s player_id matches -2147483648..2147483647 run \
+    function ctf:combine_commands {\
+        command_1: "scoreboard players operation @s player_id = max player_id",\
+        command_2: "function ctf:combine_commands {\
+            command_1: 'scoreboard players add @s player_id 1', \
+            command_2: 'scoreboard players add max player_id 1'\
+        }"\
+    }
+
 scoreboard players set @s had_left 0

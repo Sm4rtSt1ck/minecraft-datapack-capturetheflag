@@ -24,10 +24,14 @@ scoreboard players set @a[tag=player] money 200
 
 title @a[tag=!lobby] title {"text":"SWAP TEAMS", "color": "green"}
 
-clear @a[tag=player]
 gamemode spectator @a[tag=player]
 
+execute as @a[tag=player] run function ctf:match/events/ultimate/stop
+# ONLY AFTER ULTIMATE STOPPING
+clear @a[tag=player]
+
 kill @e[tag=trap]
+
 
 function ctf:match/prepare/prepare
 

@@ -54,6 +54,8 @@ execute positioned as @e[type=armor_stand, tag=flag] run playsound entity.generi
 scoreboard players add @s money 69
 title @s actionbar [{"text":"+$69","color":"green"}]
 
+function ctf:match/events/ultimate/add_point {points: 40}
+
 kill @e[type=armor_stand, tag=flag]
 
 scoreboard players set @s flag_broken 0

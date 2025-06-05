@@ -8,11 +8,12 @@ execute if score music settings matches 0 run \
     setblock 1 -40 28 cherry_wall_sign{\
         front_text:{\
             messages:[\
-                '"MUSIC"',\
-                '{"text":"DEFAULT: ON"}',\
+                '{"text":"MUSIC", "color": "gold", "bold": true, "shadow_color":-7513088}',\
+                '"Default: ON"',\
                 '{"text":""}',\
                 '{\
                     "text":"OFF",\
+                    "bold": true,\
                     "shadow_color":-10092544,\
                     "color":"red",\
                     "clickEvent":{"action":"run_command","value":"/function ctf:lobby/settings/music"}\
@@ -24,11 +25,12 @@ execute if score music settings matches 1 run \
     setblock 1 -40 28 cherry_wall_sign{\
         front_text:{\
             messages:[\
-                '"MUSIC"',\
-                '{"text":"DEFAULT: ON"}',\
+                '{"text":"MUSIC", "color": "gold", "bold": true, "shadow_color":-7513088}',\
+                '"Default: ON"',\
                 '{"text":""}',\
                 '{\
                     "text":"ON",\
+                    "bold": true,\
                     "shadow_color":-16751104,\
                     "color":"green",\
                     "clickEvent":{"action":"run_command","value":"/function ctf:lobby/settings/music"}\

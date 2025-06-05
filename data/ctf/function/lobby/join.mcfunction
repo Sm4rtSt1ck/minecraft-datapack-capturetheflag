@@ -20,6 +20,8 @@ tag @s remove just_killed
 #########################################
 # OTHER PLAYER SETTINGS
 
+function ctf:match/events/ultimate/stop
+# ONLY AFTER ULTIMATE STOPPING
 clear @s
 team join lobby @s
 gamemode adventure @s

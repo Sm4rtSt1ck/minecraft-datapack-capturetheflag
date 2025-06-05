@@ -36,8 +36,7 @@ execute as @a[scores={money=1500..}] run scoreboard players set @s money 1500
 give @a[tag=attack, nbt=!{Inventory:[{id: "minecraft:stick"}]}] minecraft:stick[\
     can_break={predicates:[{blocks:[\
         "yellow_banner",\
-        "yellow_wall_banner",\
-        "cobweb"\
+        "yellow_wall_banner"\
         ]}]\
     },\
     custom_name='{"color":"#31fff5","text":"BREAKER", "italic": false}',\
@@ -47,29 +46,29 @@ give @a[tag=attack, nbt=!{Inventory:[{id: "minecraft:stick"}]}] minecraft:stick[
 
 # Give chainmail armor if player doesn't have it
 # tag @a[nbt={Inventory:[{id:"minecraft:leather_helmet"}]}] add has_helmet
-tag @a[nbt={Inventory:[{id:"minecraft:golden_helmet"}]}] add has_helmet
-tag @a[nbt={Inventory:[{id:"minecraft:chainmail_helmet"}]}] add has_helmet
-tag @a[nbt={Inventory:[{id:"minecraft:iron_helmet"}]}] add has_helmet
-tag @a[nbt={Inventory:[{id:"minecraft:diamond_helmet"}]}] add has_helmet
-tag @a[nbt={Inventory:[{id:"minecraft:netherite_helmet"}]}] add has_helmet
-# tag @a[nbt={Inventory:[{id:"minecraft:leather_chestplate"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:golden_chestplate"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:chainmail_chestplate"}]}] add has_chestplate
-tag @a[nbt={Inventory:[{id:"minecraft:iron_chestplate"}]}] add has_chestplate
-tag @a[nbt={Inventory:[{id:"minecraft:diamond_chestplate"}]}] add has_chestplate
-tag @a[nbt={Inventory:[{id:"minecraft:netherite_chestplate"}]}] add has_chestplate
-# tag @a[nbt={Inventory:[{id:"minecraft:leather_leggings"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:golden_leggings"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:chainmail_leggings"}]}] add has_leggings
-tag @a[nbt={Inventory:[{id:"minecraft:iron_leggings"}]}] add has_leggings
-tag @a[nbt={Inventory:[{id:"minecraft:diamond_leggings"}]}] add has_leggings
-tag @a[nbt={Inventory:[{id:"minecraft:netherite_leggings"}]}] add has_leggings
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:golden_helmet"}]}] add has_helmet
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:chainmail_helmet"}]}] add has_helmet
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:iron_helmet"}]}] add has_helmet
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:diamond_helmet"}]}] add has_helmet
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:netherite_helmet"}]}] add has_helmet
+# tag @a[nbt={Inventory:[{id:"minecraft:leather_chestplate"}]}] add has_chestplate
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:golden_chestplate"}]}] add has_chestplate
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:chainmail_chestplate"}]}] add has_chestplate
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:iron_chestplate"}]}] add has_chestplate
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:diamond_chestplate"}]}] add has_chestplate
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:netherite_chestplate"}]}] add has_chestplate
+# tag @a[nbt={Inventory:[{id:"minecraft:leather_leggings"}]}] add has_leggings
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:golden_leggings"}]}] add has_leggings
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:chainmail_leggings"}]}] add has_leggings
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:iron_leggings"}]}] add has_leggings
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:diamond_leggings"}]}] add has_leggings
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:netherite_leggings"}]}] add has_leggings
 # tag @a[nbt={Inventory:[{id:"minecraft:leather_boots"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:golden_boots"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:chainmail_boots"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:iron_boots"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:diamond_boots"}]}] add has_boots
-tag @a[nbt={Inventory:[{id:"minecraft:netherite_boots"}]}] add has_boots
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:golden_boots"}]}] add has_boots
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:chainmail_boots"}]}] add has_boots
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:iron_boots"}]}] add has_boots
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:diamond_boots"}]}] add has_boots
+tag @a[tag=player, nbt={Inventory:[{id:"minecraft:netherite_boots"}]}] add has_boots
 
 item replace entity @a[tag=player, tag=!has_helmet, tag=attack] armor.head with leather_helmet[minecraft:dyed_color={rgb:16711799}]
 item replace entity @a[tag=player, tag=!has_chestplate, tag=attack] armor.chest with leather_chestplate[minecraft:dyed_color={rgb:16711799}]
@@ -92,7 +91,6 @@ effect give @a[tag=player] minecraft:saturation infinite 127 true
 effect give @a[tag=player] minecraft:regeneration 1 127 true
 effect give @a[tag=player] minecraft:resistance infinite 127 true
 effect give @a[tag=defense] minecraft:mining_fatigue infinite 4 true
-effect give @a[tag=attack] minecraft:haste infinite 40 true
 
 execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.tnt"]}}}]}] run scoreboard players set tnt_trap bought.item 0
 execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.anvil"]}}}]}] run scoreboard players set anvil_trap bought.item 0

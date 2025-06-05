@@ -18,13 +18,14 @@ setblock 0 -40 28 air
 setblock 0 -40 28 cherry_wall_sign{\
     front_text:{\
         messages:[\
-            '"ROUNDS TO WIN"',\
-            '{"text":"DEFAULT: 6"}',\
+            '{"text":"ROUNDS TO WIN", "color": "gold", "bold": true, "shadow_color":-7513088}',\
+            '{"text":"Default: 6"}',\
             '{"text":""}',\
             '{\
                 "score": {"name": "Rounds_to_win", "objective": "settings"},\
                 "shadow_color":-16747111,\
                 "color":"#00e1ff",\
+                "bold": true,\
                 "clickEvent":{"action":"run_command","value":"/function ctf:lobby/settings/rounds"}\
             }'\
         ]\

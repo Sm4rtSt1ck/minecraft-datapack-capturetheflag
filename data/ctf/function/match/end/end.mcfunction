@@ -10,6 +10,7 @@ kill @e[tag=trap]
 kill @e[tag=map_entity]
 kill @e[tag=win_trigger]
 kill @e[tag=spawn_spot]
+kill @e[tag=inventory]
 
 forceload remove -200 -200 -72 -72
 

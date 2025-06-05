@@ -23,15 +23,18 @@ execute at @e[type=wind_charge] as @e[tag=trap.tnt, tag=trap_marker, distance=..
 
 execute at @a[tag=player, tag=!dead] positioned ~-0.125 ~1 ~-0.125 as @e[tag=trap.anvil, tag=trap_marker, dx=0.25, dy=256, dz=0.25] run function ctf:match/events/traps/anvil/trigger
 
-execute at @a[tag=player, tag=!dead] as @e[tag=trap.web, tag=trap_marker, distance=..2] run function ctf:match/events/traps/web/trigger
+execute at @a[tag=player, tag=!dead] as @e[tag=trap.web, tag=trap_marker, tag=!triggered, distance=..2] run function ctf:match/events/traps/web/trigger
 
 execute at @a[tag=player, tag=!dead] as @e[tag=trap.levitation, tag=trap_marker, distance=..2] run function ctf:match/events/traps/levitation/trigger
 execute at @a[tag=player, tag=!dead] as @e[tag=trap.wither, tag=trap_marker, distance=..2] run function ctf:match/events/traps/wither/trigger
 
-# Grenades
-execute as @e[type=armor_stand, tag=he_grenade] run function ctf:match/events/grenades/fly
-
-
 function ctf:match/events/traps/detector/trigger
 
 execute as @e[tag=trap_display] positioned as @s unless entity @n[tag=trap_marker, distance=1.2..1.5] run kill @s
+
+# Grenades
+execute as @e[type=armor_stand, tag=he_grenade] run function ctf:match/events/grenades/fly
+
+# Ultimate
+execute as @a[tag=player, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[minecraft:custom_data={action:"ultimate"}] run function ctf:match/events/ultimate/check_points
+execute as @a[tag=player, tag=ultimate] run function ctf:match/events/ultimate/tick

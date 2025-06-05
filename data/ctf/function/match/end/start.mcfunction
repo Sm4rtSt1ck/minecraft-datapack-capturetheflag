@@ -5,6 +5,8 @@ scoreboard players operation game state = end state
 scoreboard players set end timer 300
 bossbar set ctf:match max 300
 
+execute as @a[tag=player] run function ctf:match/events/ultimate/stop
+# ONLY AFTER ULTIMATE STOPPING
 clear @a[tag=player]
 
 effect clear @a[tag=player]

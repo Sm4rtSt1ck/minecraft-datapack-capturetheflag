@@ -18,7 +18,6 @@ tag @a[tag=!spectator, tag=!lobby] add player
 
 effect clear @a[tag=!lobby]
 effect give @a[tag=player] minecraft:saturation infinite 127 true
-effect give @a[tag=attack] minecraft:haste infinite 40 true
 
 #########################################
 # SCOREBOARDS
@@ -115,6 +114,7 @@ schedule clear ctf:match/maps/farm/music
 schedule clear ctf:match/maps/railway_station/music
 
 execute as @a[tag=spectator] run function ctf:match/spectate
+execute as @a[tag=player] run function ctf:match/events/ultimate/reset_value
 
 function ctf:match/maps/call_current {function: "start"}
 
