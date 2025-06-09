@@ -11,6 +11,7 @@ forceload add -200 -200 -72 -72
 tag @a remove lobby
 tag @a remove dead
 tag @a remove skip
+tag @a remove ultimate
 tag @a[tag=!spectator, tag=!lobby] add player
 
 #########################################

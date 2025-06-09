@@ -1,6 +1,9 @@
 tag @s remove top1
 tag @s remove top2
 tag @s remove top3
+
+gamemode adventure @s
+
 scoreboard players set max1 number 0
 scoreboard players set max2 number 0
 scoreboard players set max3 number 0
