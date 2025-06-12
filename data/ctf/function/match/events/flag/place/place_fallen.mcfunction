@@ -1,3 +1,6 @@
+execute positioned as @s unless block ~ ~ ~ air run tp @s ~ ~1 ~
+execute positioned as @s unless block ~ ~ ~ air run tp @s ~ ~-1 ~
+
 execute positioned as @s unless block ~ ~ ~ air run tp @s ~-1 ~ ~
 execute positioned as @s unless block ~ ~ ~ air run tp @s ~2 ~ ~
 execute positioned as @s unless block ~ ~ ~ air run tp @s ~-1 ~ ~-1
