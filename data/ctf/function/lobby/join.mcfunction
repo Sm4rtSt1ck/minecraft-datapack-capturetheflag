@@ -13,6 +13,8 @@ tag @s remove spectator
 tag @s remove attack
 tag @s remove defense
 tag @s remove dead
+# DON'T REMOVE THE LINE BELOW
+tag @s remove bomber
 tag @s remove just_used_totem
 tag @s remove just_died
 tag @s remove just_killed

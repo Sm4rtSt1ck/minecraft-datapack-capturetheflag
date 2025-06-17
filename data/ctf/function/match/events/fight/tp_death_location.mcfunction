@@ -1,7 +1,3 @@
-# tp @r[tag=just_died] @r[tag=just_killed]
-
-# say I've died
-
 summon armor_stand -190 0 -190 {Invisible:1b,Marker:1b,Tags:["lastDeathMarker"]}
 execute store result entity @n[tag=lastDeathMarker] Pos[0] double 1 run data get entity @n[tag=just_died] LastDeathLocation.pos[0]
 execute store result entity @n[tag=lastDeathMarker] Pos[1] double 1 run data get entity @n[tag=just_died] LastDeathLocation.pos[1]

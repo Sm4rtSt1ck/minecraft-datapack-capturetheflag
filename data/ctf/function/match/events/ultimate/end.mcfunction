@@ -11,8 +11,15 @@ effect clear @s minecraft:jump_boost
 clear @s *[custom_data={tags:["ultimate"]}]
 attribute @s minecraft:scale base reset
 
-kill @n[type=trident]
+execute positioned as @s run kill @n[type=trident]
+
 weather clear
 
+execute positioned as @s[tag=bomber] run clear @s tnt
+execute positioned as @s[tag=bomber] run summon creeper ~ ~ ~ {ExplosionRadius: 4, Fuse: 0}
+execute as @s[tag=bomber] run function ctf:match/events/fight/die
+tag @s[tag=bomber] remove just_died
+
+tag @s remove bomber
 tag @s remove ultimate
 tag @s remove invisible

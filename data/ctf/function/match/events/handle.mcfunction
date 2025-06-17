@@ -16,17 +16,17 @@ execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
 execute as @a[scores={just_used_totem=1..}] run function ctf:match/events/fight/use_totem
 execute as @a[scores={just_threw_grenade=1..}] run function ctf:match/events/grenades/throw
 # Traps
-execute at @a[tag=player, tag=!dead] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
+execute at @a[tag=player, tag=!dead, tag=!invisible] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
 execute at @e[type=arrow] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
 execute at @e[type=firework_rocket] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
 execute at @e[type=wind_charge] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
 
-execute at @a[tag=player, tag=!dead] positioned ~-0.125 ~1 ~-0.125 as @e[tag=trap.anvil, tag=trap_marker, dx=0.25, dy=256, dz=0.25] run function ctf:match/events/traps/anvil/trigger
+execute at @a[tag=player, tag=!dead, tag=!invisible] positioned ~-0.125 ~1 ~-0.125 as @e[tag=trap.anvil, tag=trap_marker, dx=0.25, dy=256, dz=0.25] run function ctf:match/events/traps/anvil/trigger
 
-execute at @a[tag=player, tag=!dead] as @e[tag=trap.web, tag=trap_marker, tag=!triggered, distance=..2] run function ctf:match/events/traps/web/trigger
+execute at @a[tag=player, tag=!dead, tag=!invisible] as @e[tag=trap.web, tag=trap_marker, tag=!triggered, distance=..2] run function ctf:match/events/traps/web/trigger
 
-execute at @a[tag=player, tag=!dead] as @e[tag=trap.levitation, tag=trap_marker, distance=..2] run function ctf:match/events/traps/levitation/trigger
-execute at @a[tag=player, tag=!dead] as @e[tag=trap.wither, tag=trap_marker, distance=..2] run function ctf:match/events/traps/wither/trigger
+execute at @a[tag=player, tag=!dead, tag=!invisible] as @e[tag=trap.levitation, tag=trap_marker, distance=..2] run function ctf:match/events/traps/levitation/trigger
+execute at @a[tag=player, tag=!dead, tag=!invisible] as @e[tag=trap.wither, tag=trap_marker, distance=..2] run function ctf:match/events/traps/wither/trigger
 
 function ctf:match/events/traps/detector/trigger
 

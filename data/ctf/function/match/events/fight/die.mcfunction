@@ -1,3 +1,5 @@
+function admin:log/function {name: "match/events/fight/die"}
+
 scoreboard players set @s just_died 0
 
 # execute positioned as @s run spawnpoint @s ~ ~ ~ ~

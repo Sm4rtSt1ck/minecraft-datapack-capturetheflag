@@ -36,3 +36,4 @@ tag @s add ultimate
 execute if score @s ultimate_category matches 1 run function ctf:match/events/ultimate/categories/ghost
 execute if score @s ultimate_category matches 2 run function ctf:match/events/ultimate/categories/scale
 execute if score @s ultimate_category matches 3 run function ctf:match/events/ultimate/categories/trident
+execute if score @s ultimate_category matches 4 run function ctf:match/events/ultimate/categories/bomber

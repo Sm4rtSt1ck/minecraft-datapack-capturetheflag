@@ -6,3 +6,6 @@ execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:22b}]}] run \
     function ctf:match/freeze/shop/templates/ultimate {item: trident, slot: 22, cost: 200, tag: "", item_name: '{"text": "Piercing killer"}', category: 3}
+
+execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:24b}]}] run \
+    function ctf:match/freeze/shop/templates/ultimate {item: tnt, slot: 24, cost: 200, tag: "", item_name: '{"text": "Suicide bomber"}', category: 4}
