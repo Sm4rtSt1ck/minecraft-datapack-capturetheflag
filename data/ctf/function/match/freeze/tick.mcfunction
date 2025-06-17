@@ -45,7 +45,10 @@ item replace entity @a[tag=player] hotbar.8 with carrot_on_a_stick[item_model="m
 kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{action:"exit"}}}}]
 
 clear @a[tag=player, nbt=!{Inventory:[{Slot:7b, components:{"minecraft:custom_data":{action:"ultimate"}}}]}] carrot_on_a_stick[custom_data={action:"ultimate"}]
-item replace entity @a[tag=player] hotbar.7 with carrot_on_a_stick[item_model="minecraft:blaze_rod", custom_name='[{"text":"ULTIMATE [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
+item replace entity @a[tag=player, scores={ultimate_category=0}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:blaze_rod", custom_name='[{"text":"ULTIMATE (Default) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
+item replace entity @a[tag=player, scores={ultimate_category=1}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:skeleton_skull", custom_name='[{"text":"ULTIMATE (Ghost) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
+item replace entity @a[tag=player, scores={ultimate_category=2}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:armadillo_scute", custom_name='[{"text":"ULTIMATE (Microman) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
+item replace entity @a[tag=player, scores={ultimate_category=3}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:trident", custom_name='[{"text":"ULTIMATE (Piercing killer) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
 kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{action:"ultimate"}}}}]
 
 execute if score freeze timer matches -2147483648..0 run function ctf:match/round/start

@@ -96,6 +96,7 @@ scoreboard objectives add timer dummy
 
 # Ultimate
 scoreboard objectives add ultimate dummy
+scoreboard objectives add ultimate_category dummy
 
 # Health
 scoreboard objectives add health health "hp"

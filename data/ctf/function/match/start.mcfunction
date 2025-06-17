@@ -54,6 +54,9 @@ scoreboard players reset * flag_pickedup
 scoreboard players reset * just_placed_trap
 scoreboard players reset * just_threw_grenade
 
+# Ultimate
+scoreboard players set @a[tag=player] ultimate_category 0
+
 #########################################
 # TEAMS
 

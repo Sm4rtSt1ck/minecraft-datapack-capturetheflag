@@ -35,11 +35,10 @@ execute as @a[scores={money=1500..}] run scoreboard players set @s money 1500
 # clear @a[tag=attack] minecraft:stick
 give @a[tag=attack, nbt=!{Inventory:[{id: "minecraft:stick"}]}] minecraft:stick[\
     can_break={predicates:[{blocks:[\
-        "yellow_banner",\
-        "yellow_wall_banner"\
-        ]}]\
+        "yellow_banner"\
+        ]}], show_in_tooltip: false\
     },\
-    custom_name='{"color":"#31fff5","text":"BREAKER", "italic": false}',\
+    custom_name='{"color":"#31fff5","text":"FLAG BREAKER", "italic": false}',\
     enchantments={knockback:1b}\
 ] 1
 

@@ -8,6 +8,7 @@ execute as @a[tag=player, scores={shop_category=1}] run function ctf:match/freez
 execute as @a[tag=player, scores={shop_category=2}] run function ctf:match/freeze/shop/defense/tick
 execute as @a[tag=player, scores={shop_category=3}] run function ctf:match/freeze/shop/stuff/tick
 execute as @a[tag=player, scores={shop_category=4}] run function ctf:match/freeze/shop/kits/tick
+execute as @a[tag=player, scores={shop_category=5}] run function ctf:match/freeze/shop/ultimate/tick
 
 tag @a[tag=player] remove just_clicked_shop_menu
 

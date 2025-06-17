@@ -29,16 +29,10 @@ execute positioned as @s[nbt={Inventory:[{id:"minecraft:yellow_banner"}]}] run s
 }}}
 clear @s yellow_banner
 
-function ctf:match/helpers/save_inventory
-clear @s
-
-effect give @s minecraft:invisibility infinite 1 true
-effect give @s minecraft:speed infinite 1 true
-effect give @s minecraft:weakness infinite 127 true
-effect give @s minecraft:resistance infinite 127 true
-
-scoreboard players set @s timer 200
-
 scoreboard players reset @s ultimate
 
 tag @s add ultimate
+
+execute if score @s ultimate_category matches 1 run function ctf:match/events/ultimate/categories/ghost
+execute if score @s ultimate_category matches 2 run function ctf:match/events/ultimate/categories/scale
+execute if score @s ultimate_category matches 3 run function ctf:match/events/ultimate/categories/trident
