@@ -79,7 +79,7 @@ scoreboard players set round state 4
 scoreboard players set end_round state 5
 scoreboard players set swap state 6
 scoreboard players set end state 7
-# IMPORTANT! change to lobby after fully adding vote state
+
 scoreboard players operation game state = lobby state
 
 # Vote

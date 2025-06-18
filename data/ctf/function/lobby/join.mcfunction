@@ -40,22 +40,6 @@ effect give @s minecraft:speed infinite 0 true
 effect give @s minecraft:saturation infinite 127 true
 
 #########################################
-# FIX BUG WITH MAPS DISPLAY
-
-item replace entity @s container.10 with filled_map[map_id=0]
-item replace entity @s container.11 with filled_map[map_id=1]
-item replace entity @s container.12 with filled_map[map_id=2]
-item replace entity @s container.13 with filled_map[map_id=3]
-item replace entity @s container.14 with filled_map[map_id=4]
-item replace entity @s container.15 with filled_map[map_id=5]
-item replace entity @s container.16 with filled_map[map_id=6]
-item replace entity @s container.17 with filled_map[map_id=7]
-item replace entity @s container.18 with filled_map[map_id=8]
-item replace entity @s container.19 with filled_map[map_id=9]
-
-schedule function ctf:lobby/clear_maps 60t
-
-#########################################
 # OTHER
 
 stopsound @s

@@ -18,7 +18,7 @@ weather clear
 execute positioned as @s[tag=bomber] run clear @s tnt
 execute positioned as @s[tag=bomber] run summon creeper ~ ~ ~ {ExplosionRadius: 4, Fuse: 0}
 execute as @s[tag=bomber] run function ctf:match/events/fight/die
-tag @s[tag=bomber] remove just_died
+# tag @s[tag=bomber] remove just_died
 
 tag @s remove bomber
 tag @s remove ultimate

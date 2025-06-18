@@ -45,23 +45,23 @@ execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon
 #########################################
 # RUN GAME BUTTON
 
-clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:8b}]}] carrot_on_a_stick[item_model="firework_rocket"]
+# clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:8b}]}] carrot_on_a_stick[item_model="firework_rocket"]
 
-# Give an item
-item replace entity @a[tag=lobby] hotbar.8 with carrot_on_a_stick[\
-    item_model="firework_rocket",\
-    custom_name='{"shadow_color":-6029142,"color":"#ff32ff","text":"LAUNCH", "italic": false, "bold": true}',\
-    custom_data={tags:["menu"]}\
-]
+# # Give an item
+# item replace entity @a[tag=lobby] hotbar.8 with carrot_on_a_stick[\
+#     item_model="firework_rocket",\
+#     custom_name='{"shadow_color":-6029142,"color":"#ff32ff","text":"LAUNCH", "italic": false, "bold": true}',\
+#     custom_data={tags:["menu"]}\
+# ]
 
-# Check pressing
-execute if items entity @r[tag=lobby, scores={carrot_on_stick=1..}] weapon.mainhand *[item_model="firework_rocket"] \
-    if entity @r[scores={map_vote_player=-2147483647..2147483647}] \
-        run function ctf:lobby/vote/results/check
-execute as @r[tag=lobby, scores={carrot_on_stick=1..}] \
-    if items entity @s weapon.mainhand *[item_model="firework_rocket"] \
-    unless entity @a[scores={map_vote_player=-2147483648..2147483647}] \
-        run tellraw @s {"text": "No one voted for the map!", "color": "red"}
+# # Check pressing
+# execute if items entity @r[tag=lobby, scores={carrot_on_stick=1..}] weapon.mainhand *[item_model="firework_rocket"] \
+#     if entity @r[scores={map_vote_player=-2147483647..2147483647}] \
+#         run function ctf:lobby/vote/results/check
+# execute as @r[tag=lobby, scores={carrot_on_stick=1..}] \
+#     if items entity @s weapon.mainhand *[item_model="firework_rocket"] \
+#     unless entity @a[scores={map_vote_player=-2147483648..2147483647}] \
+#         run tellraw @s {"text": "No one voted for the map!", "color": "red"}
 
 #########################################
 # OTHER
@@ -76,3 +76,23 @@ title @a[tag=lobby] actionbar [\
     {"color":"light_purple", "text":"]"},\
     {"color":"blue","text":" to vote"}\
 ]
+
+scoreboard players remove vote timer 1
+execute store result bossbar ctf:match value run scoreboard players get vote timer
+execute if score vote timer matches ..0 run function ctf:combine_commands {\
+    command_1: "execute if entity @r[scores={map_vote_player=-2147483647..2147483647}] run function ctf:lobby/vote/results/check",\
+    command_2: "execute unless entity @r[scores={map_vote_player=-2147483647..2147483647}] run function ctf:lobby/vote/cancel"\
+}
+execute unless entity @a[tag=!voted] if score vote timer matches 101.. run scoreboard players set vote timer 100
+
+execute if score vote timer matches 100 run title @a subtitle ""
+execute if score vote timer matches 100 run title @a title {"text":"❺", "color":"green"}
+execute if score vote timer matches 100 as @a at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.4
+execute if score vote timer matches 80 run title @a title {"text":"❹", "color":"green"}
+execute if score vote timer matches 80 as @a at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.55
+execute if score vote timer matches 60 run title @a title {"text":"❸", "color":"green"}
+execute if score vote timer matches 60 as @a at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.65
+execute if score vote timer matches 40 run title @a title {"text":"❷", "color":"green"}
+execute if score vote timer matches 40 as @a at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.825
+execute if score vote timer matches 20 run title @a title {"text":"❶", "color":"green"}
+execute if score vote timer matches 20 as @a at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 1

@@ -19,6 +19,7 @@ tag @a[tag=!spectator, tag=!lobby] add player
 
 effect clear @a[tag=!lobby]
 effect give @a[tag=player] minecraft:saturation infinite 127 true
+effect give @a[tag=!lobby] minecraft:blindness 5 0 true
 
 #########################################
 # SCOREBOARDS
@@ -55,7 +56,7 @@ scoreboard players reset * just_placed_trap
 scoreboard players reset * just_threw_grenade
 
 # Ultimate
-scoreboard players set @a[tag=player] ultimate_category 0
+scoreboard players set @a[tag=player] ultimate_category 1
 
 #########################################
 # TEAMS
@@ -78,6 +79,7 @@ team modify team_2 suffix " ⛨"
 
 clear @a[tag=!lobby]
 stopsound @a[tag=!lobby]
+tp @a[tag=!lobby] 0 100000 0
 
 # Join teams 10 players
 team join team_2 @r[tag=player]
@@ -107,7 +109,7 @@ tag @a[team=team_2] remove attack
 bossbar set ctf:match value 0
 bossbar set ctf:match visible true
 bossbar set ctf:match players @a[tag=!lobby]
-bossbar set ctf:match name {"text":"PREPARING...", "color": "yellow"}
+bossbar set ctf:match name {"text":"PREPARING...", "color": "yellow", "bold": true}
 execute positioned as @a[tag=!lobby] run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1
 
 # Stop map music loops

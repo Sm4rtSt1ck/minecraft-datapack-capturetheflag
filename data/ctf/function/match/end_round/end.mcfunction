@@ -4,6 +4,7 @@ execute as @a[tag=player, tag=ultimate] run function ctf:match/events/ultimate/e
 execute as @a[tag=player] run function ctf:match/events/ultimate/add_point {points: 80}
 
 tag @a[tag=player] remove dead
+tag @a[tag=player] remove just_died
 
 execute if score team_1 rounds <= swap rounds if score team_2 rounds <= swap rounds unless score match rounds = swap rounds run function ctf:match/freeze/start
 execute if score match rounds = swap rounds run function ctf:match/swap_teams

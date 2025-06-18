@@ -1,34 +1,7 @@
-title @a[tag=!lobby] title {"text": "The flag has been broken!", "color": "dark_red"}
+title @a[tag=!lobby] title ""
+title @a[tag=!lobby] subtitle {"text": "THE FLAG HAS BEEN BROKEN", "color": "red"}
 execute as @e[type=item,nbt={Item:{id:"minecraft:yellow_banner"}}] run data merge entity @s {Glowing:true}
-execute positioned as @n[type=armor_stand, tag=flag] run summon item ~ ~ ~ {Glowing:true, PickupDelay:10, Invulnerable: true, Tags:["flag"], Item:{id:"minecraft:yellow_banner", count:1, components: {\
-  custom_name: '{"text": "FLAG", "color":"red", "italic": false}',\
-  "minecraft:banner_patterns": [\
-    {\
-      "color": "red",\
-      "pattern": "minecraft:curly_border"\
-    },\
-    {\
-      "color": "orange",\
-      "pattern": "minecraft:gradient"\
-    },\
-    {\
-      "color": "red",\
-      "pattern": "minecraft:circle"\
-    },\
-    {\
-      "color": "red",\
-      "pattern": "minecraft:cross"\
-    },\
-    {\
-      "color": "orange",\
-      "pattern": "minecraft:flower"\
-    },\
-    {\
-      "color": "red",\
-      "pattern": "minecraft:triangle_top"\
-    }\
-  ]\
-}}}
+function ctf:match/helpers/summon_flag {target: '@n[type=armor_stand, tag=flag]'}
 
 
 effect give @a[tag=defense,tag=!spectator,tag=!died] blindness 3 1 false

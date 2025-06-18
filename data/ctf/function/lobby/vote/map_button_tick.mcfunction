@@ -32,6 +32,10 @@ $item replace entity @a[tag=lobby, scores={map_vote_player=$(score)}] hotbar.$(s
 
 # Check map choice
 $execute as @a[tag=lobby, scores={carrot_on_stick=1.., map_vote_player=$(score)}] if items entity @s weapon.mainhand *[minecraft:map_id=$(id)] run tag @s add unvote
-$execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=$(id)] run scoreboard players set @s map_vote_player $(score)
+$execute as @a[tag=lobby, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand *[minecraft:map_id=$(id)] run function ctf:combine_commands {\
+    command_1: "scoreboard players set @s map_vote_player $(score)",\
+    command_2: "tag @s add voted"\
+}
 scoreboard players reset @a[tag=unvote] map_vote_player
+tag @a[tag=unvote] remove voted
 tag @a remove unvote

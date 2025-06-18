@@ -18,7 +18,7 @@ bossbar set ctf:match max 600
 #########################################
 # VISUAL
 
-bossbar set ctf:match name {"text": "WARM-UP", "color": "green"}
+bossbar set ctf:match name {"text": "WARM-UP", "color": "green", "bold": true}
 
 title @a[tag=!lobby] title {"text":"WARM-UP", "color": "green"}
 title @a[tag=!lobby] subtitle {"text":"30 seconds", "color": "yellow"}
@@ -32,6 +32,8 @@ tp @a[tag=defense] -74 -51 26 90 0
 execute as @a[tag=attack] positioned as @s run spawnpoint @s ~ ~ ~ -90
 execute as @a[tag=defense] positioned as @s run spawnpoint @s ~ ~ ~ 90
 
+effect give @a[tag=player] minecraft:resistance 1 127 true
+
 #########################################
 # GIVE ITEMS
 
@@ -42,5 +44,5 @@ item replace entity @a[tag=player] hotbar.0 with crossbow[custom_name='{"text":"
 item replace entity @a[tag=player] hotbar.1 with minecraft:stone_sword
 
 # Menu items
-item replace entity @a[tag=player] hotbar.7 with carrot_on_a_stick[minecraft:custom_data={action:"skip"}, item_model=nether_star, custom_name='[{"text":"Skip warm-up ["}, {"keybind":"key.use"}, {"text": "] All players need to click."}]']
-item replace entity @a[tag=player] hotbar.8 with carrot_on_a_stick[minecraft:custom_data={action:"exit"}, item_model=red_bed, custom_name='[{"text":"Exit to lobby ["}, {"keybind":"key.use"}, {"text": "]"}]']
+item replace entity @a[tag=player] hotbar.7 with carrot_on_a_stick[minecraft:custom_data={action:"skip"}, item_model=nether_star, custom_name='[{"text":"SKIP WARM-UP (all players need to click) [", "color": "gold", "bold": true, "italic": false}, {"keybind":"key.use"}, {"text": "]"}]']
+item replace entity @a[tag=player] hotbar.8 with carrot_on_a_stick[minecraft:custom_data={action:"exit"}, item_model=red_bed, custom_name='[{"text":"EXIT TO LOBBY [", "color": "red", "bold": true, "italic": false}, {"keybind":"key.use"}, {"text": "]"}]']
