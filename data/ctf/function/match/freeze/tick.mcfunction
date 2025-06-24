@@ -1,7 +1,7 @@
 scoreboard players remove freeze timer 1
 execute store result bossbar ctf:match value run scoreboard players get freeze timer
 
-execute if score freeze timer matches 200 run title @a[tag=!lobby] title {"text": "10 SECONDS", "color": "green"}
+execute if score freeze timer matches 200 run title @a[tag=!lobby] title {"text": "10 SECONDS LEFT", "color": "green"}
 execute if score freeze timer matches 200 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.4
 execute if score freeze timer matches 60 run title @a[tag=!lobby] title {"text": "❸", "color": "green"}
 execute if score freeze timer matches 60 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.6
@@ -50,6 +50,7 @@ item replace entity @a[tag=player, scores={ultimate_category=1}] hotbar.7 with c
 item replace entity @a[tag=player, scores={ultimate_category=2}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:armadillo_scute", custom_name='[{"text":"ULTIMATE (Microman) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
 item replace entity @a[tag=player, scores={ultimate_category=3}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:trident", custom_name='[{"text":"ULTIMATE (Piercing killer) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
 item replace entity @a[tag=player, scores={ultimate_category=4}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:tnt", custom_name='[{"text":"ULTIMATE (Suicide bomber) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
+item replace entity @a[tag=player, scores={ultimate_category=5}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:dragon_head", custom_name='[{"text":"ULTIMATE (Foot eater) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
 kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{action:"ultimate"}}}}]
 
 execute if score freeze timer matches -2147483648..0 run function ctf:match/round/start

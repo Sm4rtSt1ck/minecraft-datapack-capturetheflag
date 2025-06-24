@@ -22,6 +22,7 @@ function ctf:match/maps/call_current {function: "clone"}
 execute positioned as @e[tag=clone_marker] run forceload remove ~ ~ ~127 ~127
 
 kill @e[type=item, tag=!map_entity]
+function ctf:match/prepare/entity_clone/clone
 kill @e[tag=clone_marker]
 
 #########################################

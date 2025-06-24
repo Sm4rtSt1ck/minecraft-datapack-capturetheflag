@@ -21,7 +21,6 @@ kill @e[type=trident]
 kill @e[tag=lastDeathMarker]
 # Remove the placed flag if it hadn't been broken
 execute positioned as @e[type=armor_stand, tag=flag] run fill ~-10 ~-10 ~-10 ~10 ~10 ~10 air replace yellow_banner
-execute positioned as @e[type=armor_stand, tag=flag] run fill ~-10 ~-10 ~-10 ~10 ~10 ~10 air replace yellow_wall_banner
 kill @e[tag=flag]
 
 scoreboard players reset * just_used_chorus

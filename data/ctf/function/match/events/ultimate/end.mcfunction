@@ -7,6 +7,7 @@ effect clear @s minecraft:speed
 effect clear @s minecraft:weakness
 effect clear @s minecraft:resistance
 effect clear @s minecraft:jump_boost
+effect clear @s minecraft:slowness
 
 clear @s *[custom_data={tags:["ultimate"]}]
 attribute @s minecraft:scale base reset

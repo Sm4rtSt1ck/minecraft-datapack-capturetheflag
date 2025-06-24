@@ -94,13 +94,32 @@ scoreboard players reset * map_vote_player
 # Timer
 scoreboard objectives add timer dummy
 
+# Entity cloning
+scoreboard objectives add originX dummy
+scoreboard objectives add originY dummy
+scoreboard objectives add originZ dummy
+scoreboard objectives add targetX dummy
+scoreboard objectives add targetY dummy
+scoreboard objectives add targetZ dummy
+
+scoreboard objectives add posX dummy
+scoreboard objectives add posY dummy
+scoreboard objectives add posZ dummy
+
+scoreboard objectives add offsetX dummy
+scoreboard objectives add offsetY dummy
+scoreboard objectives add offsetZ dummy
+
+scoreboard objectives add destX dummy
+scoreboard objectives add destY dummy
+scoreboard objectives add destZ dummy
+
 # Ultimate
 scoreboard objectives add ultimate dummy
 scoreboard objectives add ultimate_category dummy
 
 # Health
 scoreboard objectives add health health "hp"
-scoreboard objectives modify health rendertype hearts
 scoreboard objectives setdisplay below_name health
 scoreboard objectives modify health numberformat styled {"color":"yellow"}
 

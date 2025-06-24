@@ -32,6 +32,8 @@ tp @a[tag=defense] -74 -51 26 90 0
 execute as @a[tag=attack] positioned as @s run spawnpoint @s ~ ~ ~ -90
 execute as @a[tag=defense] positioned as @s run spawnpoint @s ~ ~ ~ 90
 
+effect clear @a[tag=player] minecraft:blindness
+effect clear @a[tag=player] minecraft:resistance
 effect give @a[tag=player] minecraft:resistance 1 127 true
 
 #########################################

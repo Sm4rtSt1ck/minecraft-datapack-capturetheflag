@@ -19,7 +19,8 @@ tag @a[tag=!spectator, tag=!lobby] add player
 
 effect clear @a[tag=!lobby]
 effect give @a[tag=player] minecraft:saturation infinite 127 true
-effect give @a[tag=!lobby] minecraft:blindness 5 0 true
+effect give @a[tag=!lobby] minecraft:blindness 10 0 true
+effect give @a[tag=!lobby] minecraft:resistance 10 0 true
 
 #########################################
 # SCOREBOARDS
