@@ -16,6 +16,7 @@ kill @e[type=item, nbt={Item:{id:"minecraft:leather_helmet"}}]
 kill @e[type=item, nbt={Item:{id:"minecraft:leather_chestplate"}}]
 kill @e[type=item, nbt={Item:{id:"minecraft:leather_leggings"}}]
 kill @e[type=item, nbt={Item:{id:"minecraft:leather_boots"}}]
+kill @e[type=item, nbt={Item:{id:"minecraft:golden_sword"}}]
 # kill @e[type=item, nbt={Item:{id:"minecraft:golden_sword"}}]
 
 
