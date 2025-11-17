@@ -43,6 +43,6 @@ effect give @s minecraft:saturation infinite 127 true
 # OTHER
 
 stopsound @s
-execute if score music settings matches 1 run playsound minecraft:music_disc.relic ambient @s 0 1000 0 70 2
+execute if score Music settings matches 1 run playsound minecraft:music_disc.relic ambient @s 0 1000 0 70 2
 execute at @s run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1
 execute at @s run particle minecraft:firework ~ ~1 ~ 0.1 0.1 0.1 0.07 15 normal

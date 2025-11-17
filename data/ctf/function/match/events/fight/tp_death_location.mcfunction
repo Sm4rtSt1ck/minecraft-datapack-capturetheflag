@@ -18,5 +18,7 @@ kill @e[type=item, nbt={Item:{id:"minecraft:leather_leggings"}}]
 kill @e[type=item, nbt={Item:{id:"minecraft:leather_boots"}}]
 # kill @e[type=item, nbt={Item:{id:"minecraft:golden_sword"}}]
 
+execute as @a[tag=just_died, tag=ultimate] run function ctf:match/events/ultimate/end
+
 
 tag @a[tag=just_died] remove just_died

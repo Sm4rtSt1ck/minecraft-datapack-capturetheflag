@@ -1,10 +1,10 @@
-execute if score music settings matches 0 run scoreboard players set music settings 2
-execute if score music settings matches 1 run scoreboard players set music settings 0
-execute if score music settings matches 2 run scoreboard players set music settings 1
+execute if score Music settings matches 0 run scoreboard players set Music settings 2
+execute if score Music settings matches 1 run scoreboard players set Music settings 0
+execute if score Music settings matches 2 run scoreboard players set Music settings 1
 
 setblock 1 -40 28 air
 
-execute if score music settings matches 0 run \
+execute if score Music settings matches 0 run \
     setblock 1 -40 28 cherry_wall_sign{\
         front_text:{\
             messages:[\
@@ -21,7 +21,7 @@ execute if score music settings matches 0 run \
             ]\
         }\
     } replace
-execute if score music settings matches 1 run \
+execute if score Music settings matches 1 run \
     setblock 1 -40 28 cherry_wall_sign{\
         front_text:{\
             messages:[\
@@ -39,5 +39,5 @@ execute if score music settings matches 1 run \
         }\
     } replace
 
-execute if score music settings matches 0 run stopsound @a ambient
-execute if score music settings matches 1 run playsound minecraft:music_disc.relic ambient @a[tag=lobby] 0 1000 0 80 2
+execute if score Music settings matches 0 run stopsound @a ambient
+execute if score Music settings matches 1 run playsound minecraft:music_disc.relic ambient @a[tag=lobby] 0 1000 0 80 2
