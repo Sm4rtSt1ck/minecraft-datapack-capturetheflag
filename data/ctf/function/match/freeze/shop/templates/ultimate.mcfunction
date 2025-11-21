@@ -3,4 +3,4 @@ $execute if score @s[tag=!just_clicked_shop_menu] money matches $(cost).. unless
     command_2: "scoreboard players remove @s money $(cost)"\
 }
 
-$function ctf:match/freeze/shop/templates/show_item {item: $(item), slot: $(slot), cost: $(cost), tag: "", item_name: '$(item_name)', nbt: ''}
+$function ctf:match/freeze/shop/templates/show_item {item: $(item), slot: $(slot), cost: $(cost), tag: "", item_name: '$(item_name)', nbt: 'attribute_modifiers={modifiers: []}'}

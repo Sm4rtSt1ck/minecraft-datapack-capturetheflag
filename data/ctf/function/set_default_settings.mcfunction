@@ -1,4 +1,4 @@
-scoreboard players set swap rounds 5
+scoreboard players set swap rounds 8
 
 
 scoreboard players set Music settings 1

@@ -38,9 +38,9 @@ $function ctf:match/freeze/shop/templates/click_item_category {\
     item: crossbow, \
     slot: $(slot), \
     cost: $(cost), \
-    tag: "", \
-    item_name: $(item_name), \
+    tag: '', \
+    item_name: '$(item_name)', \
     amount: 1, \
     nbt: 'enchantments={levels:{multishot:1}}', \
-    category: "$(category)"\
+    category: '$(category)'\
 }

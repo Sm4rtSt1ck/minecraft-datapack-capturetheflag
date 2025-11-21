@@ -16,9 +16,17 @@ execute positioned as @s run kill @n[type=trident]
 
 weather clear
 
-execute positioned as @s[tag=bomber] run clear @s tnt
-execute positioned as @s[tag=bomber] run summon creeper ~ ~ ~ {ExplosionRadius: 4, Fuse: 0}
-execute as @s[tag=bomber] run function ctf:match/events/fight/die
+execute positioned as @s[tag=bomber] run function ctf:combine_commands {\
+    command_1: "function ctf:combine_commands {\
+        command_1: 'clear @s tnt',\
+        command_2: 'particle minecraft:campfire_cosy_smoke ~ ~ ~ 0 0 0 0.5 200 normal'\
+    }",\
+    command_2: "function ctf:combine_commands {\
+        command_1: 'summon creeper ~ ~ ~ {ExplosionRadius: 4, Fuse: 0}',\
+        command_2: 'function ctf:match/events/fight/die'\
+    }"\
+}
+
 # tag @s[tag=bomber] remove just_died
 
 tag @s remove bomber

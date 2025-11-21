@@ -15,3 +15,6 @@ execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop
 
 execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:27b}]}] run \
     function ctf:match/freeze/shop/templates/click_item {item: chorus_fruit, slot: 27, cost: 50, tag: "", item_name: '{"text": "Chorus fruit (do not use during the setup phase)"}', amount: 1, nbt: ''}
+
+execute as @s[nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["shop", "item"]}}, Slot:29b}]}] run \
+    function ctf:match/freeze/shop/templates/click_item_category {item: 'lingering_potion', nbt: 'max_stack_size=64', slot: 29, cost: 50, tag: "he_grenade_item", item_name: '{"text": "Grenade"}', amount: 1, category: "he_grenade"}

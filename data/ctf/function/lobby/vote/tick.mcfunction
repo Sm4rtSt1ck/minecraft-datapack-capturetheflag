@@ -86,13 +86,13 @@ execute if score vote timer matches ..0 run function ctf:combine_commands {\
 execute unless entity @a[tag=!voted] if score vote timer matches 101.. run scoreboard players set vote timer 100
 
 execute if score vote timer matches 100 run title @a subtitle ""
-execute if score vote timer matches 100 run title @a title {"text":"❺", "color":"green"}
+execute if score vote timer matches 100 run title @a title {"text":"❺", "color":"blue"}
 execute if score vote timer matches 100 as @a at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.4
-execute if score vote timer matches 80 run title @a title {"text":"❹", "color":"green"}
+execute if score vote timer matches 80 run title @a title {"text":"❹", "color":"light_purple"}
 execute if score vote timer matches 80 as @a at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.55
-execute if score vote timer matches 60 run title @a title {"text":"❸", "color":"green"}
+execute if score vote timer matches 60 run title @a title {"text":"❸", "color":"red"}
 execute if score vote timer matches 60 as @a at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.65
-execute if score vote timer matches 40 run title @a title {"text":"❷", "color":"green"}
+execute if score vote timer matches 40 run title @a title {"text":"❷", "color":"gold"}
 execute if score vote timer matches 40 as @a at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 0.825
 execute if score vote timer matches 20 run title @a title {"text":"❶", "color":"green"}
 execute if score vote timer matches 20 as @a at @s run playsound entity.experience_orb.pickup ambient @s ~ ~ ~ 1 1

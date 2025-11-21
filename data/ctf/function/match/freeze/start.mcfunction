@@ -28,7 +28,7 @@ scoreboard players reset * just_threw_grenade
 
 clear @a[tag=player] minecraft:black_stained_glass_pane
 
-execute as @a[scores={money=1500..}] run scoreboard players set @s money 1500
+execute as @a[scores={money=1000..}] run scoreboard players set @s money 1000
 
 # Give flag breaker
 # clear @a[tag=attack] minecraft:stick
@@ -38,7 +38,7 @@ give @a[tag=attack, nbt=!{Inventory:[{id: "minecraft:stick"}]}] minecraft:stick[
         ]}], show_in_tooltip: false\
     },\
     custom_name='{"color":"#31fff5","text":"FLAG BREAKER", "italic": false}',\
-    enchantments={knockback:1b}\
+    enchantments={knockback:3b}\
 ] 1
 
 
@@ -81,7 +81,7 @@ tag @a remove has_chestplate
 tag @a remove has_leggings
 tag @a remove has_boots
 
-give @a[tag=player, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["main weapon"]}}}]}, nbt=!{Inventory:[{id:"minecraft:golden_sword"}]}] golden_sword[custom_data={tags:["main weapon"]}]
+give @a[tag=player, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["main weapon"]}}}]}, nbt=!{Inventory:[{id:"minecraft:golden_sword"}]}] golden_sword[enchantments={knockback:2b, sweeping_edge:3b}, custom_data={tags:["main weapon"]}]
 
 
 effect clear @a[tag=player]

@@ -24,8 +24,8 @@ execute as @a[tag=!lobby] positioned as @s run playsound minecraft:ambient.cave 
 execute positioned as @e[type=armor_stand, tag=flag] run particle explosion ~ ~ ~ 0.8 0.8 0.8 0 10 force
 execute positioned as @e[type=armor_stand, tag=flag] run playsound entity.generic.explode block @a ~ ~ ~ 5 1
 
-scoreboard players add @s money 69
-title @s actionbar [{"text":"+$69","color":"green"}]
+scoreboard players add @s money 20
+title @s actionbar [{"text":"+$20","color":"green"}]
 
 function ctf:match/events/ultimate/add_point {points: 40}
 

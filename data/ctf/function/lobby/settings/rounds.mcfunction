@@ -1,4 +1,14 @@
-execute if score Rounds_to_win settings matches 10 run scoreboard players set Rounds_to_win settings 0
+execute if score Rounds_to_win settings matches 20 run scoreboard players set Rounds_to_win settings 0
+execute if score Rounds_to_win settings matches 19 run scoreboard players set Rounds_to_win settings 20
+execute if score Rounds_to_win settings matches 18 run scoreboard players set Rounds_to_win settings 19
+execute if score Rounds_to_win settings matches 17 run scoreboard players set Rounds_to_win settings 18
+execute if score Rounds_to_win settings matches 16 run scoreboard players set Rounds_to_win settings 17
+execute if score Rounds_to_win settings matches 15 run scoreboard players set Rounds_to_win settings 16
+execute if score Rounds_to_win settings matches 14 run scoreboard players set Rounds_to_win settings 15
+execute if score Rounds_to_win settings matches 13 run scoreboard players set Rounds_to_win settings 14
+execute if score Rounds_to_win settings matches 12 run scoreboard players set Rounds_to_win settings 13
+execute if score Rounds_to_win settings matches 11 run scoreboard players set Rounds_to_win settings 12
+execute if score Rounds_to_win settings matches 10 run scoreboard players set Rounds_to_win settings 11
 execute if score Rounds_to_win settings matches 9 run scoreboard players set Rounds_to_win settings 10
 execute if score Rounds_to_win settings matches 8 run scoreboard players set Rounds_to_win settings 9
 execute if score Rounds_to_win settings matches 7 run scoreboard players set Rounds_to_win settings 8
@@ -19,7 +29,7 @@ setblock 0 -40 28 cherry_wall_sign{\
     front_text:{\
         messages:[\
             '{"text":"ROUNDS TO WIN", "color": "gold", "bold": true, "shadow_color":-7513088}',\
-            '{"text":"Default: 6"}',\
+            '{"text":"Default: 9"}',\
             '{"text":""}',\
             '{\
                 "score": {"name": "Rounds_to_win", "objective": "settings"},\
