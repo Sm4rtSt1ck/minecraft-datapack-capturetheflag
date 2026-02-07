@@ -64,6 +64,7 @@ scoreboard objectives add settings dummy {"text": "⚙ SETTINGS ⚙", "color": "
 scoreboard objectives add number dummy
 scoreboard players set 1 number 1
 scoreboard players set 2 number 2
+scoreboard players set 3 number 3
 
 # Global events
 scoreboard objectives add had_left minecraft.custom:minecraft.leave_game

@@ -1,5 +1,6 @@
 function ctf:match/helpers/summon_flag {target: '@s[nbt={Inventory:[{id:"minecraft:yellow_banner"}]}]'}
 clear @s yellow_banner
+execute as @s run function ctf:match/events/flag/drop
 
 scoreboard players reset @s ultimate
 
