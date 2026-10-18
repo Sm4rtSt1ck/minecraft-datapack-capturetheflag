@@ -4,6 +4,10 @@
         {
             "id": "ctf_guns:push",
             "required": false
+        },
+        {
+            "id": "ctf_guns:rifle",
+            "required": false
         }
     ]
 }

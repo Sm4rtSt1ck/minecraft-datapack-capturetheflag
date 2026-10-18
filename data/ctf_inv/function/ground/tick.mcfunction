@@ -22,7 +22,7 @@ execute as @e[type=item, tag=ctf.r.guard] at @s run function ctf_inv:ground/own/
 execute as @e[type=item, tag=ctf.r.ammo_bow] at @s run function ctf_inv:ground/own/ammo_bow
 execute as @e[type=item, tag=ctf.r.ammo_fire_bow] at @s run function ctf_inv:ground/own/ammo_fire_bow
 execute as @e[type=item, tag=ctf.r.ammo_punch_bow] at @s run function ctf_inv:ground/own/ammo_punch_bow
-execute as @e[type=item, tag=ctf.r.ammo_power_bow] at @s run function ctf_inv:ground/own/ammo_power_bow
+execute as @e[type=item, tag=ctf.r.ammo_rifle] at @s run function ctf_inv:ground/own/ammo_rifle
 execute as @e[type=item, tag=ctf.r.ammo_sniper] at @s run function ctf_inv:ground/own/ammo_sniper
 execute as @e[type=item, tag=ctf.r.ammo_crossbow] at @s run function ctf_inv:ground/own/ammo_crossbow
 execute as @e[type=item, tag=ctf.r.wind] at @s run function ctf_inv:ground/own/wind
@@ -40,7 +40,7 @@ tag @a remove ctf.res.guard
 tag @a remove ctf.res.ammo_bow
 tag @a remove ctf.res.ammo_fire_bow
 tag @a remove ctf.res.ammo_punch_bow
-tag @a remove ctf.res.ammo_power_bow
+tag @a remove ctf.res.ammo_rifle
 tag @a remove ctf.res.ammo_sniper
 tag @a remove ctf.res.ammo_crossbow
 tag @a remove ctf.res.wind

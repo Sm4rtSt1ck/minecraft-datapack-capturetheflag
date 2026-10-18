@@ -11,5 +11,5 @@ execute if score #slot shop.tmp matches 26 run return run function ctf_shop:prod
 execute if score #slot shop.tmp matches 27 run return run function ctf_shop:product/bow {wpn: "bow", cost: 180, name: '{"text": "Bow", "color": "white", "italic": false}', enchantments: 'piercing: 4, power: 1'}
 execute if score #slot shop.tmp matches 29 run return run function ctf_shop:product/bow {wpn: "fire_bow", cost: 230, name: '{"text": "Fire bow", "color": "aqua", "italic": false}', enchantments: 'piercing: 4, power: 1, flame: 1'}
 execute if score #slot shop.tmp matches 31 run return run function ctf_shop:product/bow {wpn: "punch_bow", cost: 220, name: '{"text": "Punch bow", "color": "light_purple", "italic": false}', enchantments: 'piercing: 4, power: 1, punch: 2'}
-execute if score #slot shop.tmp matches 33 run return run function ctf_shop:product/bow {wpn: "power_bow", cost: 400, name: '{"text": "Power bow", "color": "gold", "italic": false}', enchantments: 'piercing: 4, power: 5'}
+execute if score #slot shop.tmp matches 33 run return run function ctf_shop:product/rifle {cost: 470}
 execute if score #slot shop.tmp matches 35 run return run function ctf_shop:product/sniper {cost: 450}

@@ -44,7 +44,7 @@ scoreboard players set #kill.mace econ 40
 scoreboard players set #kill.bow econ 45
 scoreboard players set #kill.fire_bow econ 40
 scoreboard players set #kill.punch_bow econ 40
-scoreboard players set #kill.power_bow econ 15
+scoreboard players set #kill.rifle econ 25
 scoreboard players set #kill.crossbow econ 20
 scoreboard players set #kill.sniper econ 15
 scoreboard players set #kill.ultimate econ 20

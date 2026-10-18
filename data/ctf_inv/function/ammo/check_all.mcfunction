@@ -3,6 +3,6 @@ execute unless items entity @s container.* *[custom_data~{ctf_ammo:1b}] unless i
 function ctf_inv:ammo/check {type: "bow", max: 30}
 function ctf_inv:ammo/check {type: "fire_bow", max: 24}
 function ctf_inv:ammo/check {type: "punch_bow", max: 24}
-function ctf_inv:ammo/check {type: "power_bow", max: 16}
+function ctf_inv:ammo/check {type: "rifle", max: 90}
 function ctf_inv:ammo/check {type: "sniper", max: 20}
 function ctf_inv:ammo/check {type: "crossbow", max: 5}

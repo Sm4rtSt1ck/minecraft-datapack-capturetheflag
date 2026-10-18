@@ -20,8 +20,6 @@ gamemode adventure @a[tag=defense]
 
 # Lock inventory slots 9-35
 execute as @a[tag=player] run function ctf_shop:lock
-# No exit button during the round
-execute as @a[tag=player] run function ctf_inv:exit/remove
 # Chorus fruits become edible
 execute as @a[tag=player] at @s run function ctf_inv:limits/normalize_chorus
 execute as @a[tag=player] run function ctf:match/events/ultimate/render

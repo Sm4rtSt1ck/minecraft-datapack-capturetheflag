@@ -2,7 +2,7 @@
 function ctf_inv:ammo/cap {type: "bow", below: 29}
 function ctf_inv:ammo/cap {type: "fire_bow", below: 23}
 function ctf_inv:ammo/cap {type: "punch_bow", below: 23}
-function ctf_inv:ammo/cap {type: "power_bow", below: 15}
+function ctf_inv:ammo/cap {type: "rifle", below: 89}
 function ctf_inv:ammo/cap {type: "sniper", below: 19}
 function ctf_inv:ammo/cap {type: "crossbow", below: 4}
 

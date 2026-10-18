@@ -12,4 +12,4 @@ function ctf_shop:ui/product {slot: 27, model: "bow", cost: 180, name: '{"text":
 function ctf_shop:ui/product {slot: 29, model: "bow", cost: 230, name: '{"text": "Fire bow", "color": "aqua", "italic": false}', extra: 'enchantment_glint_override=true'}
 function ctf_shop:ui/product {slot: 31, model: "bow", cost: 220, name: '{"text": "Punch bow", "color": "light_purple", "italic": false}', extra: 'enchantment_glint_override=true'}
 function ctf_shop:ui/product {slot: 35, model: "spyglass", cost: 450, name: '{"text": "Sniper rifle", "color": "dark_red", "italic": false}', extra: 'enchantment_glint_override=true'}
-function ctf_shop:ui/product {slot: 33, model: "bow", cost: 400, name: '{"text": "Power bow", "color": "gold", "italic": false}', extra: 'enchantment_glint_override=true'}
+function ctf_shop:ui/product {slot: 33, model: "iron_horse_armor", cost: 470, name: '{"text": "Assault rifle", "color": "yellow", "italic": false}', extra: 'enchantment_glint_override=true'}

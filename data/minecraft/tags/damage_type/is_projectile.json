@@ -2,7 +2,11 @@
     "replace": false,
     "values": [
         {
-            "id": "ctf_sniper:bullet",
+            "id": "ctf_guns:sniper",
+            "required": false
+        },
+        {
+            "id": "ctf_guns:rifle",
             "required": false
         }
     ]

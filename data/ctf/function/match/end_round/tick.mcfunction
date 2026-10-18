@@ -12,6 +12,10 @@ kill @e[type=tnt]
 
 function ctf_shop:tick
 function ctf_sniper:tick
+function ctf_guns:tick
+
+# Exit button in the crafting grid
+execute as @a[tag=player, gamemode=!spectator] run function ctf_inv:exit/tick
 function ctf_inv:tick
 
 #########################################

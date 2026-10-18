@@ -37,6 +37,7 @@ execute as @a[tag=player, scores={carrot_on_stick=1..}] if items entity @s weapo
 
 function ctf_shop:tick
 function ctf_sniper:tick
+function ctf_guns:tick
 # Bows and crossbows can't shoot
 function ctf_inv:freeze_shots
 

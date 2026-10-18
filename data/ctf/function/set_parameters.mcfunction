@@ -185,6 +185,15 @@ scoreboard objectives add ult.tmp dummy
 scoreboard objectives add bow_used minecraft.used:minecraft.bow
 scoreboard objectives add xbow_used minecraft.used:minecraft.crossbow
 
+# Guns (ctf_guns): temporary values; assault rifle: shot cooldown, trigger held,
+# burst length (spread), rounds in the magazine, reload ticks
+scoreboard objectives add gun.tmp dummy
+scoreboard objectives add rf.cd dummy
+scoreboard objectives add rf.hold dummy
+scoreboard objectives add rf.spray dummy
+scoreboard objectives add rf.mag dummy
+scoreboard objectives add rf.reload dummy
+
 # Sniper rifle (ctf_sniper)
 #   sn.aim - ticks of aiming, sn.seen - aimed since the last tick, sn.reload - ticks until the next shot
 scoreboard objectives add sn.aim dummy

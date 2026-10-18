@@ -2,10 +2,6 @@
     "replace": false,
     "values": [
         {
-            "id": "ctf_sniper:bullet",
-            "required": false
-        },
-        {
             "id": "ctf_guns:push",
             "required": false
         }

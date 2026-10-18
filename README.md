@@ -180,7 +180,7 @@ pay less:
 | Ultimate (any kill during an active ultimate) | $20 | |
 | Grenade | $30 | |
 | Trap | $30 | |
-| Power bow | $15 | almost one-shot, like an AWP |
+| Assault rifle | $25 | strong at close range |
 | Sniper rifle | $15 | like an AWP |
 | Anything else | $30 | |
 
@@ -240,25 +240,40 @@ sword.
 | Bow (Power I, Piercing IV) + 30 arrows | $180 | ~9 dmg per full shot |
 | Punch bow (Power I, Punch II) + 24 arrows | $220 | knocks enemies off ledges |
 | Fire bow (Power I, Flame) + 24 arrows | $230 | + fire |
-| Power bow (Power V) + 16 arrows | $400 | ~15 dmg per full shot |
+| Assault rifle + 30 + 90 rounds | $470 | 6 shots/s, every bullet hits (no damage cooldown): ~1.05 dmg in iron, ~1.8 in leather |
 | Crossbow (Multishot) + 5 fireworks | $420 | 7-star fireworks, ~19 area dmg per rocket |
-| Sniper rifle + 20 rounds | $450 | ignores armor: one-shot in leather, 15 in gold, 10 in iron; no bullet drop, real scope zoom |
+| Sniper rifle + 20 rounds | $450 | 20 dmg in leather (one-shot), ~19.3 in gold, ~17.5 in iron; no bullet drop, real scope zoom |
 
 **Sniper rifle** ([`ctf_sniper`](data/ctf_sniper/function/)). It is a spyglass: hold right click to
 aim (real zoom with lower mouse sensitivity), **release to shoot**. The bullet is hitscan:
-a ray from the eyes, no travel time and no drop, stopped by solid blocks, up to 100 blocks.
+a ray from the eyes, no travel time and no drop, stopped by solid blocks, up to 181 blocks.
 
 * Switching the hotbar slot (or dropping the rifle) while aiming cancels the shot.
 * Each shot uses 1 sniper round; 3 s reload between shots, shown as a progress bar on the actionbar.
-* Damage ignores armor (damage type `ctf_sniper:bullet`) and depends on the target's armor
-  points instead: 0–7 (leather) → 20, 8–11 (gold) → 15, 12–15 (iron) → 10, 16+ → 7. Shields block it.
+* Damage is reduced by vanilla armor: 21.19 → exactly 20 in leather. Shields block it.
+* A hit knocks the target back harder than a normal hit.
 * Shooting a trap sets it off; the shooter gets the kill credit for it.
 * A shot after less than 0.5 s of aiming (no-scope) gets a random spread of up to 8°.
 * Shots are possible during the round and after it ends (end_round), not during freeze.
   Aiming that started during freeze never fires (even if released after the round started);
   the tracer and the sound give away the sniper.
 * Damage is dealt by the shooter, so the kill is credited normally. Armor and shields reduce it.
-* Settings: [`ctf_sniper:config`](data/ctf_sniper/function/config.mcfunction).
+* Settings: [`ctf_sniper:config`](data/ctf_sniper/function/config.mcfunction) (reload, scope, spread),
+  [`ctf_guns:config`](data/ctf_guns/function/config.mcfunction) (damage, range).
+
+**Assault rifle** ([`ctf_guns`](data/ctf_guns/function/)). Hold right click to shoot: 6 shots per second.
+It is an item with an endless `consumable` use time; while it is "used", the
+`ctf_guns:rifle_use` advancement fires every tick; the pause between shots alternates (3-3-4 ticks) for exactly 6 shots/s.
+
+* Its damage type `ctf_guns:rifle` bypasses the damage cooldown, so every bullet deals damage.
+  2.35 per bullet, reduced by vanilla armor: ~1.05 in iron, ~1.45 in gold, ~1.8 in leather.
+* Small knockback (the target gets 75% knockback resistance during the hit).
+* Magazine 30, reserve 90 (slot 7); automatic reload (2.5 s, progress bar) when the magazine is empty.
+  Switching the slot cancels the reload. Ammo is shown on the actionbar.
+* The spread grows during a burst and resets when the trigger is released; sneaking halves it.
+* Thin yellow tracer, up to 181 blocks. Shooting a trap sets it off.
+* Both guns share the ray code (`ctf_guns:ray`). The damage types are registry entries:
+  after adding or changing them, restart the world (`/reload` is not enough).
 
 ### Defense
 
@@ -310,7 +325,7 @@ weapon instance: you can pick up ammo dropped by anyone, but only for the weapon
 | Bow | white arrows | 30 |
 | Fire bow | orange arrows | 24 |
 | Punch bow | purple arrows | 24 |
-| Power bow | gold arrows | 16 |
+| Assault rifle | rifle rounds (iron nuggets) | 90 (+30 in the magazine) |
 | Sniper rifle | dark red rounds | 20 |
 | Crossbow | fireworks | 5 |
 | Mace | wind charges | 10 |
@@ -347,7 +362,7 @@ Limited items (see the tables above) are restricted **twice**:
 
 Items are moved to their slots automatically. Items with no free place are
 dropped; nothing is ever destroyed by the inventory UI. The exit button is
-in the top-left slot of the 2×2 crafting grid (freeze and match end) and
+in the top-left slot of the 2×2 crafting grid (freeze, round, end of round, match end) and
 asks for confirmation.
 
 
