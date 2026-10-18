@@ -1,5 +1,5 @@
 # Runs as a buffer item. Layout:
-#   1 primary | 2 secondary | 3 grenade | 4-6 free | 7 arrows | 8 stick/flag | 9 ultimate
+#   1 primary | 2 secondary | 3 grenade | 4-6 free | 7 ammo | 8 stick/flag | 9 ultimate
 #   offhand: shield / wind charge / totem / fireworks only
 
 # UI items are never kept
@@ -18,7 +18,7 @@ execute if items entity @s contents stick run return run function ctf_inv:stash/
 execute if items entity @s contents *[custom_data~{tags:["main weapon"]}] run return run function ctf_inv:stash/to {slot: "hotbar.0"}
 execute if items entity @s contents *[custom_data~{tags:["secondary weapon"]}] run return run function ctf_inv:stash/to {slot: "hotbar.1"}
 execute if items entity @s contents *[custom_data~{tags:["he_grenade"]}] run return run function ctf_inv:stash/to {slot: "hotbar.2"}
-execute if items entity @s contents arrow run return run function ctf_inv:stash/to {slot: "hotbar.6"}
+execute if items entity @s contents *[custom_data~{ctf_ammo:1b}] run return run function ctf_inv:stash/to_ammo
 execute if items entity @s contents yellow_banner run return run function ctf_inv:stash/to_flag
 execute if items entity @s contents armor_stand run return run function ctf_inv:stash/to_flag
 

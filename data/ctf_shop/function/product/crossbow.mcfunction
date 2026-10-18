@@ -1,4 +1,4 @@
-# Crossbow + 5 fireworks in the team color (into the offhand if it's empty). cost
+# Crossbow + its fireworks (offhand if it's empty, see ctf_inv:ammo/fill_all). cost
 $execute store result score #ok shop.tmp run function ctf_shop:buy/group {\
     item: "crossbow", \
     name: '{"text": "Crossbow & fireworks"}', \
@@ -11,7 +11,4 @@ $execute store result score #ok shop.tmp run function ctf_shop:buy/group {\
     offhand: 0, \
     free: 0\
 }
-execute unless score #ok shop.tmp matches 1 run return 0
-
-execute if entity @s[tag=attack] run function ctf_shop:product/fireworks {colors: "16714250", fade: "16711850"}
-execute if entity @s[tag=defense] run function ctf_shop:product/fireworks {colors: "1114367", fade: "48127"}
+execute if score #ok shop.tmp matches 1 run function ctf_inv:ammo/fill_all

@@ -5,3 +5,4 @@ function ctf_inv:limits/one {pred: 'shield', max: 1}
 function ctf_inv:limits/one {pred: 'potion[custom_data~{lim:"regen"}]', max: 1}
 function ctf_inv:limits/one {pred: 'potion[custom_data~{lim:"speed"}]', max: 1}
 function ctf_inv:limits/one {pred: 'chorus_fruit', max: 3}
+function ctf_inv:limits/one {pred: 'wind_charge', max: 10}

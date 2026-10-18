@@ -1,6 +1,6 @@
 # Keep costs in sync with click.mcfunction
 
-function ctf_shop:ui/product {slot: 18, model: "wind_charge", cost: 120, name: '{"text": "Wind charge 5x"}', extra: ''}
+function ctf_shop:ui/product {slot: 18, model: "wind_charge", cost: 120, name: '{"text": "Wind charges +5 (max 10)"}', extra: ''}
 function ctf_shop:ui/product {slot: 20, model: "potion", cost: 120, name: '{"text": "Potion on regeneration"}', extra: 'potion_contents={custom_color:16711680}'}
 function ctf_shop:ui/product {slot: 22, model: "leather_boots", cost: 50, name: '{"text": "Less fall damage"}', extra: 'enchantment_glint_override=true'}
 function ctf_shop:ui/product {slot: 24, model: "totem_of_undying", cost: 350, name: '{"text": "Totem of undying (regen. 3.5-4 hearts)"}', extra: ''}

@@ -1,4 +1,4 @@
-# Bow + 30 arrows (arrows go to slot 7). cost, name, enchantments, wpn
+# Bow + its own arrows (slot 7, see ctf_inv:ammo/fill_all). cost, name, enchantments, wpn
 $execute store result score #ok shop.tmp run function ctf_shop:buy/group {\
     item: "bow", \
     name: '$(name)', \
@@ -11,4 +11,4 @@ $execute store result score #ok shop.tmp run function ctf_shop:buy/group {\
     offhand: 0, \
     free: 0\
 }
-execute if score #ok shop.tmp matches 1 run give @s arrow 30
+execute if score #ok shop.tmp matches 1 run function ctf_inv:ammo/fill_all

@@ -24,6 +24,8 @@ execute positioned as @e[type=armor_stand, tag=flag] run fill ~-10 ~-10 ~-10 ~10
 kill @e[tag=flag]
 
 scoreboard players reset * just_used_chorus
+scoreboard players reset * bow_used
+scoreboard players reset * xbow_used
 scoreboard players reset * just_threw_grenade
 
 execute as @a[tag=player] run function ctf_econ:cap
@@ -94,6 +96,8 @@ execute as @a[tag=player] run function ctf_shop:open
 execute as @a[tag=player] at @s run function ctf_shop:limits/reset
 # Chorus fruits can't be eaten during freeze
 execute as @a[tag=player] at @s run function ctf_inv:limits/normalize_chorus
+# Ammo of every weapon and the mace wind charges are restored to max
+execute as @a[tag=player] at @s run function ctf_inv:ammo/fill_all
 # Ultimate bar (XP is lost on death)
 execute as @a[tag=player] run function ctf:match/events/ultimate/render
 # Hotbar layout: gives the stick and the ultimate, ...

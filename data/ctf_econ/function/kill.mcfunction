@@ -19,5 +19,6 @@ execute if items entity @s weapon.mainhand *[custom_data~{wpn:"bow"}] run return
 execute if items entity @s weapon.mainhand *[custom_data~{wpn:"fire_bow"}] run return run function ctf_econ:give {key: "kill.fire_bow", reason: "kill (fire bow)"}
 execute if items entity @s weapon.mainhand *[custom_data~{wpn:"punch_bow"}] run return run function ctf_econ:give {key: "kill.punch_bow", reason: "kill (punch bow)"}
 execute if items entity @s weapon.mainhand *[custom_data~{wpn:"power_bow"}] run return run function ctf_econ:give {key: "kill.power_bow", reason: "kill (power bow)"}
+execute if items entity @s weapon.mainhand *[custom_data~{wpn:"sniper"}] run return run function ctf_econ:give {key: "kill.sniper", reason: "kill (sniper rifle)"}
 execute if items entity @s weapon.mainhand *[custom_data~{wpn:"crossbow"}] run return run function ctf_econ:give {key: "kill.crossbow", reason: "kill (crossbow)"}
 function ctf_econ:give {key: "kill.other", reason: "kill"}

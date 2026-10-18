@@ -16,6 +16,9 @@ execute if entity @e[type=item, tag=ctf.buf, limit=1] run function ctf_inv:api/p
 # Carry limits: extra grenades, potions, chorus... are dropped
 function ctf_inv:limits/enforce
 
+# Ammo: only for the weapon the player has, at most max per weapon
+function ctf_inv:ammo/check_all
+
 # Stick and ultimate are always in their slots
 function ctf_inv:layout/ensure
 

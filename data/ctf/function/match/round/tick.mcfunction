@@ -16,6 +16,7 @@ execute at @e[type=armor_stand, tag=flag] run particle minecraft:ash ~ ~ ~ 0.5 1
 
 # Locked inventory (slots 9-35)
 function ctf_shop:tick
+function ctf_sniper:tick
 
 # Hotbar layout and items on the ground
 function ctf_inv:tick

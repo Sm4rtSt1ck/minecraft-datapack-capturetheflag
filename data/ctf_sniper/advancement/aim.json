@@ -1,0 +1,18 @@
+{
+    "criteria": {
+        "aim": {
+            "trigger": "minecraft:using_item",
+            "conditions": {
+                "item": {
+                    "items": "minecraft:spyglass",
+                    "predicates": {
+                        "minecraft:custom_data": "{wpn:\"sniper\"}"
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "ctf_sniper:internal/aiming"
+    }
+}

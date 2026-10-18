@@ -11,8 +11,8 @@ execute if items entity @s hotbar.4 #ctf_inv:bound run function ctf_inv:api/stas
 execute if items entity @s hotbar.4 *[custom_data~{bind:1b}] run function ctf_inv:api/stash {slot: "hotbar.4"}
 execute if items entity @s hotbar.5 #ctf_inv:bound run function ctf_inv:api/stash {slot: "hotbar.5"}
 execute if items entity @s hotbar.5 *[custom_data~{bind:1b}] run function ctf_inv:api/stash {slot: "hotbar.5"}
-# 7 - arrows
-execute if items entity @s hotbar.6 * unless items entity @s hotbar.6 arrow run function ctf_inv:api/stash {slot: "hotbar.6"}
+# 7 - ammo of the ranged weapon
+execute if items entity @s hotbar.6 * unless items entity @s hotbar.6 *[custom_data~{ctf_ammo:1b}] run function ctf_inv:api/stash {slot: "hotbar.6"}
 # 8 - stick (attack) / flag
 execute if items entity @s hotbar.7 * unless items entity @s hotbar.7 #ctf_inv:flag_slot run function ctf_inv:api/stash {slot: "hotbar.7"}
 # 9 - ultimate

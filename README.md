@@ -181,6 +181,7 @@ pay less:
 | Grenade | $30 | |
 | Trap | $30 | |
 | Power bow | $15 | almost one-shot, like an AWP |
+| Sniper rifle | $15 | like an AWP |
 | Anything else | $30 | |
 
 Bought weapons carry `custom_data={wpn:"<id>"}`; this is how the kill
@@ -235,12 +236,29 @@ sword.
 | Iron sword (Fire Aspect I) | $130 | 6 dmg (9.6 DPS) + fire |
 | Diamond sword | $200 | 7 dmg (11.2 DPS) |
 | Netherite sword | $270 | 8 dmg (12.8 DPS) |
-| Mace (Wind Burst I) | $300 | 6 dmg, 0.6 speed; huge damage when falling, hard to use |
+| Mace (Wind Burst I) + 10 wind charges | $340 | 6 dmg, 0.6 speed; huge damage when falling, hard to use |
 | Bow (Power I, Piercing IV) + 30 arrows | $180 | ~9 dmg per full shot |
-| Punch bow (Power I, Punch II) + 30 arrows | $220 | knocks enemies off ledges |
-| Fire bow (Power I, Flame) + 30 arrows | $230 | + fire |
-| Power bow (Power V) + 30 arrows | $400 | ~15 dmg per full shot |
+| Punch bow (Power I, Punch II) + 24 arrows | $220 | knocks enemies off ledges |
+| Fire bow (Power I, Flame) + 24 arrows | $230 | + fire |
+| Power bow (Power V) + 16 arrows | $400 | ~15 dmg per full shot |
 | Crossbow (Multishot) + 5 fireworks | $420 | 7-star fireworks, ~19 area dmg per rocket |
+| Sniper rifle + 20 rounds | $450 | ignores armor: one-shot in leather, 15 in gold, 10 in iron; no bullet drop, real scope zoom |
+
+**Sniper rifle** ([`ctf_sniper`](data/ctf_sniper/function/)). It is a spyglass: hold right click to
+aim (real zoom with lower mouse sensitivity), **release to shoot**. The bullet is hitscan:
+a ray from the eyes, no travel time and no drop, stopped by solid blocks, up to 100 blocks.
+
+* Switching the hotbar slot (or dropping the rifle) while aiming cancels the shot.
+* Each shot uses 1 sniper round; 3 s reload between shots, shown as a progress bar on the actionbar.
+* Damage ignores armor (damage type `ctf_sniper:bullet`) and depends on the target's armor
+  points instead: 0–7 (leather) → 20, 8–11 (gold) → 15, 12–15 (iron) → 10, 16+ → 7. Shields block it.
+* Shooting a trap sets it off; the shooter gets the kill credit for it.
+* A shot after less than 0.5 s of aiming (no-scope) gets a random spread of up to 8°.
+* Shots are possible during the round and after it ends (end_round), not during freeze.
+  Aiming that started during freeze never fires (even if released after the round started);
+  the tracer and the sound give away the sniper.
+* Damage is dealt by the shooter, so the kill is credited normally. Armor and shields reduce it.
+* Settings: [`ctf_sniper:config`](data/ctf_sniper/function/config.mcfunction).
 
 ### Defense
 
@@ -254,7 +272,7 @@ sword.
 
 | Item | Price | Limit per round |
 | --- | --- | --- |
-| Wind charge ×5 | $120 | — |
+| Wind charges +5 ($24 each) | $120 | at most 10 in the inventory |
 | Regeneration potion (Regen II, 10 s, +8 HP) | $120 | 1 |
 | Less fall damage boots (Feather Falling III) | $50 | — |
 | Totem of undying | $350 | 1 (can't be owned together with a shield) |
@@ -281,6 +299,29 @@ Traps activate when attackers enter a small radius around them.
 
 Free. The selected ultimate is shown in hotbar slot 9.
 
+### Ammo
+
+Every ranged weapon has its **own ammo** (different arrow colors, see
+[`ctf_inv:ammo`](data/ctf_inv/function/ammo/)). Ammo works by weapon type, not by
+weapon instance: you can pick up ammo dropped by anyone, but only for the weapon you have.
+
+| Weapon | Ammo | Max |
+| --- | --- | --- |
+| Bow | white arrows | 30 |
+| Fire bow | orange arrows | 24 |
+| Punch bow | purple arrows | 24 |
+| Power bow | gold arrows | 16 |
+| Sniper rifle | dark red rounds | 20 |
+| Crossbow | fireworks | 5 |
+| Mace | wind charges | 10 |
+
+* A purchase gives the max ammo; at the start of every freeze phase the ammo is restored to max.
+* You can't carry more than max; extra ammo is dropped.
+* Ammo without its weapon is dropped, so dropping a weapon drops its ammo too.
+* Shot arrows can't be picked up.
+* Bows and crossbows can't shoot during freeze: the projectile is removed and the ammo is given back.
+* Wind charges can also be bought separately, but at most 10 can be in the inventory.
+
 ### Round limits
 
 Limited items (see the tables above) are restricted **twice**:
@@ -299,7 +340,7 @@ Limited items (see the tables above) are restricted **twice**:
 | 2 | secondary weapon |
 | 3 | grenade |
 | 4–6 | any other items |
-| 7 | arrows |
+| 7 | ammo of the ranged weapon |
 | 8 | attackers: flag breaker until the flag is broken; then the flag only |
 | 9 | ultimate |
 | Offhand | only shield, wind charge, totem, fireworks |

@@ -181,6 +181,17 @@ scoreboard objectives add kc.tmp dummy
 scoreboard objectives add ult.dur dummy
 scoreboard objectives add ult.tmp dummy
 
+# Shots of bows / crossbows (cancelled during freeze, ctf_inv:freeze_shots)
+scoreboard objectives add bow_used minecraft.used:minecraft.bow
+scoreboard objectives add xbow_used minecraft.used:minecraft.crossbow
+
+# Sniper rifle (ctf_sniper)
+#   sn.aim - ticks of aiming, sn.seen - aimed since the last tick, sn.reload - ticks until the next shot
+scoreboard objectives add sn.aim dummy
+scoreboard objectives add sn.seen dummy
+scoreboard objectives add sn.reload dummy
+scoreboard objectives add sn.tmp dummy
+
 # Shop (ctf_shop)
 # 0 = locked inventory, 1..5 = shop category
 scoreboard objectives add shop_category dummy

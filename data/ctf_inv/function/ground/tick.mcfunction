@@ -1,6 +1,9 @@
 # XP orbs (dropped on death) would change the ultimate bar of the player who picks them up
 kill @e[type=experience_orb]
 
+# Shot arrows can't be picked up (ammo is restored every round instead)
+execute as @e[type=arrow, tag=!ctf.arrow] run function ctf_inv:ground/arrow
+
 # New item entities are classified once (tags ctf.r.<kind>), UI items are killed
 execute as @e[type=item, tag=!ctf.seen] run function ctf_inv:ground/classify
 
@@ -16,7 +19,13 @@ execute as @e[type=item, tag=ctf.r.main] at @s run function ctf_inv:ground/own/m
 execute as @e[type=item, tag=ctf.r.sec] at @s run function ctf_inv:ground/own/sec
 execute as @e[type=item, tag=ctf.r.he] at @s run function ctf_inv:ground/own/he
 execute as @e[type=item, tag=ctf.r.guard] at @s run function ctf_inv:ground/own/guard
-execute as @e[type=item, tag=ctf.r.arrow] at @s run function ctf_inv:ground/own/arrow
+execute as @e[type=item, tag=ctf.r.ammo_bow] at @s run function ctf_inv:ground/own/ammo_bow
+execute as @e[type=item, tag=ctf.r.ammo_fire_bow] at @s run function ctf_inv:ground/own/ammo_fire_bow
+execute as @e[type=item, tag=ctf.r.ammo_punch_bow] at @s run function ctf_inv:ground/own/ammo_punch_bow
+execute as @e[type=item, tag=ctf.r.ammo_power_bow] at @s run function ctf_inv:ground/own/ammo_power_bow
+execute as @e[type=item, tag=ctf.r.ammo_sniper] at @s run function ctf_inv:ground/own/ammo_sniper
+execute as @e[type=item, tag=ctf.r.ammo_crossbow] at @s run function ctf_inv:ground/own/ammo_crossbow
+execute as @e[type=item, tag=ctf.r.wind] at @s run function ctf_inv:ground/own/wind
 execute as @e[type=item, tag=ctf.r.off] at @s run function ctf_inv:ground/own/off
 execute as @e[type=item, tag=ctf.r.free] at @s run function ctf_inv:ground/own/free
 execute as @e[type=item, tag=ctf.r.regen] at @s run function ctf_inv:ground/own/regen
@@ -28,7 +37,13 @@ tag @a remove ctf.res.main
 tag @a remove ctf.res.sec
 tag @a remove ctf.res.he
 tag @a remove ctf.res.guard
-tag @a remove ctf.res.arrow
+tag @a remove ctf.res.ammo_bow
+tag @a remove ctf.res.ammo_fire_bow
+tag @a remove ctf.res.ammo_punch_bow
+tag @a remove ctf.res.ammo_power_bow
+tag @a remove ctf.res.ammo_sniper
+tag @a remove ctf.res.ammo_crossbow
+tag @a remove ctf.res.wind
 tag @a remove ctf.res.off
 tag @a remove ctf.res.free
 tag @a remove ctf.res.regen

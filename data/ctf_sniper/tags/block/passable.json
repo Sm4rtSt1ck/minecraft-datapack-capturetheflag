@@ -1,0 +1,29 @@
+{
+    "values": [
+        "#minecraft:replaceable",
+        "#minecraft:small_flowers",
+        "#minecraft:banners",
+        "#minecraft:all_signs",
+        "#minecraft:buttons",
+        "#minecraft:rails",
+        "#minecraft:wool_carpets",
+        "#minecraft:saplings",
+        "minecraft:cobweb",
+        "minecraft:torch",
+        "minecraft:wall_torch",
+        "minecraft:soul_torch",
+        "minecraft:soul_wall_torch",
+        "minecraft:redstone_torch",
+        "minecraft:redstone_wall_torch",
+        "minecraft:redstone_wire",
+        "minecraft:lever",
+        "minecraft:ladder",
+        "minecraft:light",
+        "minecraft:tripwire",
+        "minecraft:tripwire_hook",
+        "minecraft:sugar_cane",
+        "minecraft:moss_carpet",
+        "minecraft:pale_moss_carpet",
+        "minecraft:flower_pot"
+    ]
+}

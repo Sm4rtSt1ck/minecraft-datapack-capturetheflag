@@ -11,6 +11,7 @@ kill @e[type=tnt]
 
 
 function ctf_shop:tick
+function ctf_sniper:tick
 function ctf_inv:tick
 
 #########################################

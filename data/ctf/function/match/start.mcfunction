@@ -43,6 +43,8 @@ scoreboard objectives setdisplay sidebar kills
 
 # Money (ctf_econ:config)
 function ctf_econ:reset
+# Sniper rifle settings
+function ctf_sniper:config
 
 # Events
 scoreboard players reset * just_used_totem

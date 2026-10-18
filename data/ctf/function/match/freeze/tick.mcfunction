@@ -36,6 +36,9 @@ function ctf:match/events/traps/detector/trigger
 execute as @a[tag=player, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[minecraft:custom_data~{action:"ultimate"}] run function ctf:match/events/ultimate/check_points
 
 function ctf_shop:tick
+function ctf_sniper:tick
+# Bows and crossbows can't shoot
+function ctf_inv:freeze_shots
 
 # Exit button in the crafting grid
 execute as @a[tag=player, gamemode=!spectator] run function ctf_inv:exit/tick
