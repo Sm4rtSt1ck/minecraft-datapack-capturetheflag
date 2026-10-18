@@ -18,6 +18,12 @@ scoreboard players set @a[tag=player] just_threw_grenade 0
 
 gamemode adventure @a[tag=defense]
 
+# Lock inventory slots 9-35
+execute as @a[tag=player] run function ctf_shop:lock
+# No exit button during the round
+execute as @a[tag=player] run function ctf_inv:exit/remove
+execute as @a[tag=player] run function ctf_inv:api/refresh
+
 effect clear @a[tag=player] minecraft:resistance
 effect clear @a[tag=defense] minecraft:mining_fatigue
 

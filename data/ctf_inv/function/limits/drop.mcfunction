@@ -1,0 +1,43 @@
+# Drops n items matching pred (they look like the first matching stack). pred, n
+summon item ~ ~1 ~ {Item: {id: "minecraft:stone", count: 1}, PickupDelay: 40s, Tags: ["ctf.lim_new"]}
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s weapon.offhand $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s weapon.offhand
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s player.cursor $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s player.cursor
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s hotbar.0 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s hotbar.0
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s hotbar.1 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s hotbar.1
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s hotbar.2 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s hotbar.2
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s hotbar.3 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s hotbar.3
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s hotbar.4 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s hotbar.4
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s hotbar.5 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s hotbar.5
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s hotbar.6 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s hotbar.6
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s hotbar.7 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s hotbar.7
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s hotbar.8 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s hotbar.8
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.9 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.9
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.10 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.10
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.11 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.11
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.12 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.12
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.13 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.13
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.14 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.14
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.15 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.15
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.16 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.16
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.17 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.17
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.18 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.18
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.19 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.19
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.20 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.20
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.21 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.21
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.22 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.22
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.23 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.23
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.24 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.24
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.25 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.25
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.26 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.26
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.27 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.27
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.28 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.28
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.29 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.29
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.30 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.30
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.31 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.31
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.32 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.32
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.33 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.33
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.34 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.34
+$execute if items entity @e[type=item, tag=ctf.lim_new, limit=1] contents stone if items entity @s container.35 $(pred) run item replace entity @e[type=item, tag=ctf.lim_new, limit=1] contents from entity @s container.35
+$data modify entity @e[type=item, tag=ctf.lim_new, limit=1] Item.count set value $(n)
+$clear @s $(pred) $(n)
+tag @e[type=item, tag=ctf.lim_new] remove ctf.lim_new

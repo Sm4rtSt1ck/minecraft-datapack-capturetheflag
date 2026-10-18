@@ -36,5 +36,5 @@ execute as @e[tag=trap_display] positioned as @s unless entity @n[tag=trap_marke
 execute as @e[type=armor_stand, tag=he_grenade] run function ctf:match/events/grenades/fly
 
 # Ultimate
-execute as @a[tag=player, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[minecraft:custom_data={action:"ultimate"}] run function ctf:match/events/ultimate/check_points
+execute as @a[tag=player, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[minecraft:custom_data~{action:"ultimate"}] run function ctf:match/events/ultimate/check_points
 execute as @a[tag=player, tag=ultimate] run function ctf:match/events/ultimate/tick

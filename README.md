@@ -195,6 +195,23 @@ data/
  │     ├ log/
  │     └ tp/
  │
+ ├ ctf_shop/          inventory shop & inventory lock (open / lock / tick)
+ │  └ function/
+ │     ├ internal/    change detection, click dispatch, rendering
+ │     ├ ui/          glass, menu buttons, display items, actionbar
+ │     ├ page/        render + click for each category
+ │     ├ buy/         purchase templates (give, group, unique, ultimate)
+ │     └ product/     non-standard products (armor, bows, crossbow...)
+ │
+ ├ ctf_inv/           hotbar layout, exit button, items on the ground
+ │  ├ advancement/    inventory_changed -> layout is checked only after a change
+ │  ├ tags/item/      offhand / flag_slot / bound items
+ │  └ function/
+ │     ├ layout/      take misplaced items out, give stick & ultimate, pickup caps
+ │     ├ stash/       put items back by the rules (or drop them, never destroy)
+ │     ├ ground/      pickup restrictions (one item of a kind per player per tick)
+ │     └ exit/        exit button + yes/no confirmation in the 2x2 crafting grid
+ │
  └ ctf/
     ├ function/
     │  ├ load.mcfunction

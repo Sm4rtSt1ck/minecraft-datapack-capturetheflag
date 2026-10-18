@@ -1,0 +1,10 @@
+{
+    "criteria": {
+        "changed": {
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "rewards": {
+        "function": "ctf_inv:internal/inventory_changed"
+    }
+}

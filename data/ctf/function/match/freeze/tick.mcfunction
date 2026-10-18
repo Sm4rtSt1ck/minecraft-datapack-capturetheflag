@@ -29,28 +29,18 @@ execute as @e[tag=trap_display] positioned as @s unless entity @n[tag=trap_marke
 execute as @a[scores={just_threw_grenade=1..}] run function ctf:match/events/grenades/throw
 execute as @e[type=armor_stand, tag=he_grenade] run function ctf:match/events/grenades/fly
 
-# Restrict picking up
-function ctf:match/helpers/pickup_restrict
-
 # ATTACK TEAM TRAPS
 function ctf:match/events/traps/detector/trigger
 
 # ULTIMATE
-execute as @a[tag=player, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[minecraft:custom_data={action:"ultimate"}] run function ctf:match/events/ultimate/check_points
+execute as @a[tag=player, scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[minecraft:custom_data~{action:"ultimate"}] run function ctf:match/events/ultimate/check_points
 
-function ctf:match/freeze/shop/tick
+function ctf_shop:tick
 
-clear @a[tag=player, nbt=!{Inventory:[{Slot:8b, components:{"minecraft:custom_data":{action:"exit"}}}]}] carrot_on_a_stick[custom_data={action:"exit"}]
-item replace entity @a[tag=player] hotbar.8 with carrot_on_a_stick[item_model="minecraft:red_bed", custom_name='[{"text":"EXIT TO LOBBY [", "color": "red", "bold": true, "italic": false}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"exit"}]
-kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{action:"exit"}}}}]
+# Exit button in the crafting grid
+execute as @a[tag=player, gamemode=!spectator] run function ctf_inv:exit/tick
 
-clear @a[tag=player, nbt=!{Inventory:[{Slot:7b, components:{"minecraft:custom_data":{action:"ultimate"}}}]}] carrot_on_a_stick[custom_data={action:"ultimate"}]
-item replace entity @a[tag=player, scores={ultimate_category=0}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:blaze_rod", custom_name='[{"text":"ULTIMATE (Default) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
-item replace entity @a[tag=player, scores={ultimate_category=1}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:skeleton_skull", custom_name='[{"text":"ULTIMATE (Ghost) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
-item replace entity @a[tag=player, scores={ultimate_category=2}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:armadillo_scute", custom_name='[{"text":"ULTIMATE (Microman) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
-item replace entity @a[tag=player, scores={ultimate_category=3}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:trident", custom_name='[{"text":"ULTIMATE (Piercing killer) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
-item replace entity @a[tag=player, scores={ultimate_category=4}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:tnt", custom_name='[{"text":"ULTIMATE (Suicide bomber) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
-item replace entity @a[tag=player, scores={ultimate_category=5}] hotbar.7 with carrot_on_a_stick[item_model="minecraft:dragon_head", custom_name='[{"text":"ULTIMATE (Foot eater) [", "color": "#f94bff", "bold": true, "italic": false, "shadow_color": -8379784}, {"keybind":"key.use"}, {"text": "]"}]',custom_data={action:"ultimate"}]
-kill @e[type=item,nbt={Item:{components:{"minecraft:custom_data":{action:"ultimate"}}}}]
+# Hotbar layout and items on the ground
+function ctf_inv:tick
 
 execute if score freeze timer matches -2147483648..0 run function ctf:match/round/start

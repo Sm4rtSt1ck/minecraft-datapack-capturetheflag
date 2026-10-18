@@ -10,8 +10,8 @@ execute positioned as @e[type=tnt] run summon minecraft:creeper ~ ~ ~ {\
 kill @e[type=tnt]
 
 
-function ctf:match/helpers/pickup_restrict
-function ctf:match/helpers/inventory
+function ctf_shop:tick
+function ctf_inv:tick
 
 #########################################
 # EVENTS

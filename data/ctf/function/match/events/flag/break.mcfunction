@@ -31,5 +31,10 @@ function ctf:match/events/ultimate/add_point {points: 40}
 
 kill @e[type=armor_stand, tag=flag]
 
+# Attackers lose the flag breaker: slot 8 is now only for the flag
+scoreboard players set broken flag_state 1
+clear @a[tag=attack] stick
+execute as @a[tag=player] run function ctf_inv:api/refresh
+
 scoreboard players set @s flag_broken 0
 scoreboard players set @s wall_flag_broken 0

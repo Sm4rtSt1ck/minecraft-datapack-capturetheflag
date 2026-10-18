@@ -1,3 +1,5 @@
+# Items picked up during the ultimate are kept (load_inventory overwrites the hotbar)
+execute if entity @s[tag=ultimate, tag=player] at @s run function ctf_inv:api/stash_hotbar
 function ctf:match/helpers/load_inventory
 # clear @s
 xp set @s 0
@@ -32,3 +34,6 @@ execute positioned as @s[tag=bomber] run function ctf:combine_commands {\
 tag @s remove bomber
 tag @s remove ultimate
 tag @s remove invisible
+
+execute if entity @e[type=item, tag=ctf.buf, limit=1] at @s run function ctf_inv:api/place
+function ctf_inv:api/refresh

@@ -26,20 +26,10 @@ kill @e[tag=flag]
 scoreboard players reset * just_used_chorus
 scoreboard players reset * just_threw_grenade
 
-clear @a[tag=player] minecraft:black_stained_glass_pane
-
 execute as @a[scores={money=1000..}] run scoreboard players set @s money 1000
 
-# Give flag breaker
-# clear @a[tag=attack] minecraft:stick
-give @a[tag=attack, nbt=!{Inventory:[{id: "minecraft:stick"}]}] minecraft:stick[\
-    can_break={predicates:[{blocks:[\
-        "yellow_banner"\
-        ]}], show_in_tooltip: false\
-    },\
-    custom_name='{"color":"#31fff5","text":"FLAG BREAKER", "italic": false}',\
-    enchantments={knockback:3b}\
-] 1
+# Flag breaker: given to attackers in slot 8 by ctf_inv (ctf_inv:layout/ensure)
+scoreboard players set broken flag_state 0
 
 
 # Give chainmail armor if player doesn't have it
@@ -81,7 +71,8 @@ tag @a remove has_chestplate
 tag @a remove has_leggings
 tag @a remove has_boots
 
-give @a[tag=player, nbt=!{Inventory:[{components:{"minecraft:custom_data":{tags:["main weapon"]}}}]}, nbt=!{Inventory:[{id:"minecraft:golden_sword"}]}] golden_sword[enchantments={knockback:2b, sweeping_edge:3b}, custom_data={tags:["main weapon"]}]
+execute as @a[tag=player] unless items entity @s container.* *[custom_data~{tags:["main weapon"]}] unless items entity @s weapon.offhand *[custom_data~{tags:["main weapon"]}] run \
+    give @s golden_sword[enchantments={knockback:2b, sweeping_edge:3b}, custom_data={tags:["main weapon"], bind:1b}]
 
 
 effect clear @a[tag=player]
@@ -98,7 +89,11 @@ execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_
 execute unless entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:frog_spawn_egg", components:{"minecraft:entity_data":{Tags:["trap", "trap_display", "trap.detector"]}}}]}] run scoreboard players set detector_trap bought.item 0
 
 execute as @a[tag=player] run function ctf:match/maps/call_current {function: "freeze"}
-scoreboard players set @a[tag=player] shop_category 1
+execute as @a[tag=player] run function ctf_shop:open
+# Round purchase limits (grenade, totem, shield, potions, chorus)
+execute as @a[tag=player] at @s run function ctf_shop:limits/reset
+# Hotbar layout: gives the stick and the ultimate, ...
+execute as @a[tag=player] run function ctf_inv:api/refresh
 
 # Give flag
 clear @a[tag=player] minecraft:yellow_banner

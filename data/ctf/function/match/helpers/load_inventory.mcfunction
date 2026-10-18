@@ -13,6 +13,7 @@ execute as @e[tag=inventory] if score @s player_id = @p[tag=loading_inventory] p
 execute as @e[tag=inventory] if score @s player_id = @p[tag=loading_inventory] player_id run item replace entity @p[tag=loading_inventory] armor.chest from entity @s container.10
 execute as @e[tag=inventory] if score @s player_id = @p[tag=loading_inventory] player_id run item replace entity @p[tag=loading_inventory] armor.legs from entity @s container.11
 execute as @e[tag=inventory] if score @s player_id = @p[tag=loading_inventory] player_id run item replace entity @p[tag=loading_inventory] armor.feet from entity @s container.12
+execute as @e[tag=inventory] if score @s player_id = @p[tag=loading_inventory] player_id run item replace entity @p[tag=loading_inventory] hotbar.8 from entity @s container.13
 
 execute as @e[tag=inventory] if score @s player_id = @p[tag=loading_inventory] player_id run kill @s
 

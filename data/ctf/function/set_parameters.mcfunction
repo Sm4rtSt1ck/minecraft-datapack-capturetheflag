@@ -159,9 +159,29 @@ scoreboard objectives add just_placed_trap minecraft.used:minecraft.frog_spawn_e
 scoreboard objectives add just_threw_grenade minecraft.used:minecraft.lingering_potion
 scoreboard objectives add just_used_chorus minecraft.used:minecraft.chorus_fruit
 
-# Shop
+# Shop (ctf_shop)
+# 0 = locked inventory, 1..5 = shop category
 scoreboard objectives add shop_category dummy
 scoreboard objectives add bought.item dummy
+# Number of UI items in slots 9-35 (27 = intact)
+scoreboard objectives add shop.n dummy
+# Temporary values (#miss, #slot, #ok, #clock, ...)
+scoreboard objectives add shop.tmp dummy
+# Round limits: items carried at the start of freeze + bought during freeze
+scoreboard objectives add shop.lim.he dummy
+scoreboard objectives add shop.lim.totem dummy
+scoreboard objectives add shop.lim.shield dummy
+scoreboard objectives add shop.lim.regen dummy
+scoreboard objectives add shop.lim.speed dummy
+scoreboard objectives add shop.lim.chorus dummy
+
+# Inventory layout (ctf_inv)
+# Temporary values
+scoreboard objectives add inv.tmp dummy
+# 1 = exit confirmation (yes/no) is shown in the crafting grid
+scoreboard objectives add exit_confirm dummy
+# "broken" = 1 after the flag has been broken in the current round
+scoreboard objectives add flag_state dummy
 
 #########################################
 # BOSSBAR

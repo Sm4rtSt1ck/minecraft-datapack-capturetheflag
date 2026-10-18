@@ -15,5 +15,6 @@ execute positioned as @s run item replace entity @n[tag=just_summoned, tag=inven
 execute positioned as @s run item replace entity @n[tag=just_summoned, tag=inventory] container.10 from entity @s armor.chest
 execute positioned as @s run item replace entity @n[tag=just_summoned, tag=inventory] container.11 from entity @s armor.legs
 execute positioned as @s run item replace entity @n[tag=just_summoned, tag=inventory] container.12 from entity @s armor.feet
+execute positioned as @s run item replace entity @n[tag=just_summoned, tag=inventory] container.13 from entity @s hotbar.8
 
 execute positioned as @s run tag @n[tag=just_summoned, tag=inventory] remove just_summoned

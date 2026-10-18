@@ -1,0 +1,29 @@
+# Moves non-UI items out of slots 9-35 (see ctf_inv:api/stash)
+execute if items entity @s container.9 * unless items entity @s container.9 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.9"}
+execute if items entity @s container.10 * unless items entity @s container.10 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.10"}
+execute if items entity @s container.11 * unless items entity @s container.11 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.11"}
+execute if items entity @s container.12 * unless items entity @s container.12 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.12"}
+execute if items entity @s container.13 * unless items entity @s container.13 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.13"}
+execute if items entity @s container.14 * unless items entity @s container.14 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.14"}
+execute if items entity @s container.15 * unless items entity @s container.15 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.15"}
+execute if items entity @s container.16 * unless items entity @s container.16 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.16"}
+execute if items entity @s container.17 * unless items entity @s container.17 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.17"}
+execute if items entity @s container.18 * unless items entity @s container.18 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.18"}
+execute if items entity @s container.19 * unless items entity @s container.19 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.19"}
+execute if items entity @s container.20 * unless items entity @s container.20 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.20"}
+execute if items entity @s container.21 * unless items entity @s container.21 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.21"}
+execute if items entity @s container.22 * unless items entity @s container.22 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.22"}
+execute if items entity @s container.23 * unless items entity @s container.23 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.23"}
+execute if items entity @s container.24 * unless items entity @s container.24 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.24"}
+execute if items entity @s container.25 * unless items entity @s container.25 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.25"}
+execute if items entity @s container.26 * unless items entity @s container.26 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.26"}
+execute if items entity @s container.27 * unless items entity @s container.27 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.27"}
+execute if items entity @s container.28 * unless items entity @s container.28 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.28"}
+execute if items entity @s container.29 * unless items entity @s container.29 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.29"}
+execute if items entity @s container.30 * unless items entity @s container.30 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.30"}
+execute if items entity @s container.31 * unless items entity @s container.31 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.31"}
+execute if items entity @s container.32 * unless items entity @s container.32 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.32"}
+execute if items entity @s container.33 * unless items entity @s container.33 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.33"}
+execute if items entity @s container.34 * unless items entity @s container.34 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.34"}
+execute if items entity @s container.35 * unless items entity @s container.35 *[custom_data~{ctf_ui:{}}] run function ctf_inv:api/stash {slot: "container.35"}
+function ctf_inv:api/place

@@ -1,0 +1,29 @@
+# Finds slots that don't hold their own UI item
+# Result: #miss = number of such slots, #slot = the last one
+execute unless items entity @s container.9 *[custom_data~{ctf_ui:{slot:9}}] run function ctf_shop:internal/miss {slot:9}
+execute unless items entity @s container.10 *[custom_data~{ctf_ui:{slot:10}}] run function ctf_shop:internal/miss {slot:10}
+execute unless items entity @s container.11 *[custom_data~{ctf_ui:{slot:11}}] run function ctf_shop:internal/miss {slot:11}
+execute unless items entity @s container.12 *[custom_data~{ctf_ui:{slot:12}}] run function ctf_shop:internal/miss {slot:12}
+execute unless items entity @s container.13 *[custom_data~{ctf_ui:{slot:13}}] run function ctf_shop:internal/miss {slot:13}
+execute unless items entity @s container.14 *[custom_data~{ctf_ui:{slot:14}}] run function ctf_shop:internal/miss {slot:14}
+execute unless items entity @s container.15 *[custom_data~{ctf_ui:{slot:15}}] run function ctf_shop:internal/miss {slot:15}
+execute unless items entity @s container.16 *[custom_data~{ctf_ui:{slot:16}}] run function ctf_shop:internal/miss {slot:16}
+execute unless items entity @s container.17 *[custom_data~{ctf_ui:{slot:17}}] run function ctf_shop:internal/miss {slot:17}
+execute unless items entity @s container.18 *[custom_data~{ctf_ui:{slot:18}}] run function ctf_shop:internal/miss {slot:18}
+execute unless items entity @s container.19 *[custom_data~{ctf_ui:{slot:19}}] run function ctf_shop:internal/miss {slot:19}
+execute unless items entity @s container.20 *[custom_data~{ctf_ui:{slot:20}}] run function ctf_shop:internal/miss {slot:20}
+execute unless items entity @s container.21 *[custom_data~{ctf_ui:{slot:21}}] run function ctf_shop:internal/miss {slot:21}
+execute unless items entity @s container.22 *[custom_data~{ctf_ui:{slot:22}}] run function ctf_shop:internal/miss {slot:22}
+execute unless items entity @s container.23 *[custom_data~{ctf_ui:{slot:23}}] run function ctf_shop:internal/miss {slot:23}
+execute unless items entity @s container.24 *[custom_data~{ctf_ui:{slot:24}}] run function ctf_shop:internal/miss {slot:24}
+execute unless items entity @s container.25 *[custom_data~{ctf_ui:{slot:25}}] run function ctf_shop:internal/miss {slot:25}
+execute unless items entity @s container.26 *[custom_data~{ctf_ui:{slot:26}}] run function ctf_shop:internal/miss {slot:26}
+execute unless items entity @s container.27 *[custom_data~{ctf_ui:{slot:27}}] run function ctf_shop:internal/miss {slot:27}
+execute unless items entity @s container.28 *[custom_data~{ctf_ui:{slot:28}}] run function ctf_shop:internal/miss {slot:28}
+execute unless items entity @s container.29 *[custom_data~{ctf_ui:{slot:29}}] run function ctf_shop:internal/miss {slot:29}
+execute unless items entity @s container.30 *[custom_data~{ctf_ui:{slot:30}}] run function ctf_shop:internal/miss {slot:30}
+execute unless items entity @s container.31 *[custom_data~{ctf_ui:{slot:31}}] run function ctf_shop:internal/miss {slot:31}
+execute unless items entity @s container.32 *[custom_data~{ctf_ui:{slot:32}}] run function ctf_shop:internal/miss {slot:32}
+execute unless items entity @s container.33 *[custom_data~{ctf_ui:{slot:33}}] run function ctf_shop:internal/miss {slot:33}
+execute unless items entity @s container.34 *[custom_data~{ctf_ui:{slot:34}}] run function ctf_shop:internal/miss {slot:34}
+execute unless items entity @s container.35 *[custom_data~{ctf_ui:{slot:35}}] run function ctf_shop:internal/miss {slot:35}

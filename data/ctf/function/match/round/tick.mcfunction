@@ -14,11 +14,11 @@ kill @e[type=tnt]
 execute at @e[type=armor_stand, tag=flag] run effect give @a[tag=attack, distance=..5] minecraft:blindness 2 1 true
 execute at @e[type=armor_stand, tag=flag] run particle minecraft:ash ~ ~ ~ 0.5 1 0.5 0 20 normal
 
-# Restrict picking up
-function ctf:match/helpers/pickup_restrict
+# Locked inventory (slots 9-35)
+function ctf_shop:tick
 
-# Fill inventory
-function ctf:match/helpers/inventory
+# Hotbar layout and items on the ground
+function ctf_inv:tick
 
 #########################################
 # TIMER
