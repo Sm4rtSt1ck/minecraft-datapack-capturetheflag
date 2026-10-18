@@ -1,6 +1,4 @@
-scoreboard players add @s money 30
-
-title @s actionbar [{"text":"+$30","color":"green"}]
+function ctf_econ:give {key: "bring", reason: "the flag was delivered"}
 
 function ctf:match/events/ultimate/add_point {points: 60}
 

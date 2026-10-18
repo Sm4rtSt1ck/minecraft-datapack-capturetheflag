@@ -2,6 +2,7 @@
 # ("main weapon", "secondary weapon", "he_grenade", "shield or totem").
 # The bought item gets custom_data={tags:["<group>"], bind:<bind>}. Returns 1 on success, 0 otherwise.
 # item, name, components, count, cost, group
+# wpn: weapon id for the kill reward (ctf_econ:kill), "" for other items
 # bind:    1b - the item has its own hotbar slot (ctf_inv), 0b - free slot / offhand
 # offhand: 1 - goes into the offhand if it's empty
 # free:    1 - needs a free hotbar slot (4-6) when not going into the offhand
@@ -16,8 +17,8 @@ $execute if items entity @s player.crafting.* *[custom_data~{tags:["$(group)"]}]
 $execute store result score #ok shop.tmp run function ctf_shop:internal/space {offhand: $(offhand), free: $(free)}
 execute if score #ok shop.tmp matches 0 run return run function ctf_shop:feedback/no_space
 
-$execute if score #off shop.tmp matches 1 run item replace entity @s weapon.offhand with $(item)[custom_name='$(name)', custom_data={tags:["$(group)"], bind:$(bind)}, $(components)] $(count)
-$execute if score #off shop.tmp matches 0 run give @s $(item)[custom_name='$(name)', custom_data={tags:["$(group)"], bind:$(bind)}, $(components)] $(count)
+$execute if score #off shop.tmp matches 1 run item replace entity @s weapon.offhand with $(item)[custom_name='$(name)', custom_data={tags:["$(group)"], bind:$(bind), wpn:"$(wpn)"}, $(components)] $(count)
+$execute if score #off shop.tmp matches 0 run give @s $(item)[custom_name='$(name)', custom_data={tags:["$(group)"], bind:$(bind), wpn:"$(wpn)"}, $(components)] $(count)
 $scoreboard players remove @s money $(cost)
 function ctf_shop:feedback/bought
 return 1

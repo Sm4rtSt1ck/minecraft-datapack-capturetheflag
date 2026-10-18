@@ -159,6 +159,13 @@ scoreboard objectives add just_placed_trap minecraft.used:minecraft.frog_spawn_e
 scoreboard objectives add just_threw_grenade minecraft.used:minecraft.lingering_potion
 scoreboard objectives add just_used_chorus minecraft.used:minecraft.chorus_fruit
 
+# Economy (ctf_econ): settings (#...), loss streaks, temporary values
+scoreboard objectives add econ dummy
+scoreboard objectives add econ.tmp dummy
+# Teamkills: the attack team is red, the defense team is blue
+scoreboard objectives add tk.red teamkill.red
+scoreboard objectives add tk.blue teamkill.blue
+
 # Shop (ctf_shop)
 # 0 = locked inventory, 1..5 = shop category
 scoreboard objectives add shop_category dummy

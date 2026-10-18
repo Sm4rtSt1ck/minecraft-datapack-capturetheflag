@@ -41,8 +41,8 @@ scoreboard players reset * kills
 scoreboard players set @a[tag=player] kills 0
 scoreboard objectives setdisplay sidebar kills
 
-# Money
-scoreboard players set @a[tag=player] money 200
+# Money (ctf_econ:config)
+function ctf_econ:reset
 
 # Events
 scoreboard players reset * just_used_totem

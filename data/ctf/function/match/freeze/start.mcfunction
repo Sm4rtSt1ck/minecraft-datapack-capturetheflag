@@ -26,7 +26,7 @@ kill @e[tag=flag]
 scoreboard players reset * just_used_chorus
 scoreboard players reset * just_threw_grenade
 
-execute as @a[scores={money=1000..}] run scoreboard players set @s money 1000
+execute as @a[tag=player] run function ctf_econ:cap
 
 # Flag breaker: given to attackers in slot 8 by ctf_inv (ctf_inv:layout/ensure)
 scoreboard players set broken flag_state 0
@@ -72,7 +72,7 @@ tag @a remove has_leggings
 tag @a remove has_boots
 
 execute as @a[tag=player] unless items entity @s container.* *[custom_data~{tags:["main weapon"]}] unless items entity @s weapon.offhand *[custom_data~{tags:["main weapon"]}] run \
-    give @s golden_sword[enchantments={knockback:2b, sweeping_edge:3b}, custom_data={tags:["main weapon"], bind:1b}]
+    give @s golden_sword[enchantments={knockback:2b, sweeping_edge:3b}, custom_data={tags:["main weapon"], bind:1b, wpn:"golden_sword"}]
 
 
 effect clear @a[tag=player]

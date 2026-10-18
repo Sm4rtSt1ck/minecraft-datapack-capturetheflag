@@ -1,5 +1,6 @@
-scoreboard players add @s money 100
-title @s actionbar [{"text":"+$50","color":"green"}]
+function ctf_econ:kill
+scoreboard players set @s tk.red 0
+scoreboard players set @s tk.blue 0
 
 title @s title ""
 title @s subtitle {"text": "KILL", "color": "red"}

@@ -1,4 +1,4 @@
-# Bow + 30 arrows (arrows go to slot 7). cost, name, enchantments
+# Bow + 30 arrows (arrows go to slot 7). cost, name, enchantments, wpn
 $execute store result score #ok shop.tmp run function ctf_shop:buy/group {\
     item: "bow", \
     name: '$(name)', \
@@ -6,6 +6,7 @@ $execute store result score #ok shop.tmp run function ctf_shop:buy/group {\
     count: 1, \
     cost: $(cost), \
     group: "secondary weapon", \
+    wpn: "$(wpn)", \
     bind: "1b", \
     offhand: 0, \
     free: 0\
