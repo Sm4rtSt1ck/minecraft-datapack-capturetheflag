@@ -1,5 +1,6 @@
-# Items picked up during the ultimate are kept (load_inventory overwrites the hotbar)
-execute if entity @s[tag=ultimate, tag=player] at @s run function ctf_inv:api/stash_hotbar
+# Items picked up during the ultimate are kept (load_inventory overwrites the hotbar).
+# Not for the bomber: he dies, his inventory must be dropped, not given back
+execute if entity @s[tag=ultimate, tag=player, tag=!bomber] at @s run function ctf_inv:api/stash_hotbar
 function ctf:match/helpers/load_inventory
 # clear @s
 
@@ -21,18 +22,7 @@ weather clear
 execute if entity @s[tag=bomber] run scoreboard players operation #owner kc.tmp = @s player_id
 execute if entity @s[tag=bomber] positioned as @s as @a[tag=player, distance=..8] run function ctf:match/events/credit/mark {time: 60, src: 3}
 
-execute positioned as @s[tag=bomber] run function ctf:combine_commands {\
-    command_1: "function ctf:combine_commands {\
-        command_1: 'clear @s tnt',\
-        command_2: 'particle minecraft:campfire_cosy_smoke ~ ~ ~ 0 0 0 0.5 200 normal'\
-    }",\
-    command_2: "function ctf:combine_commands {\
-        command_1: 'summon creeper ~ ~ ~ {ExplosionRadius: 4, Fuse: 0}',\
-        command_2: 'function ctf:match/events/fight/die'\
-    }"\
-}
-
-# tag @s[tag=bomber] remove just_died
+execute if entity @s[tag=bomber, tag=player] at @s run function ctf:match/events/ultimate/categories/bomber_explode
 
 tag @s remove bomber
 tag @s remove ultimate
