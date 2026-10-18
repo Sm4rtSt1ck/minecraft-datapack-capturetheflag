@@ -2,6 +2,12 @@ function admin:log/function {name: "match/events/fight/die"}
 
 scoreboard players set @s just_died 0
 
+# Kill credit for grenades, traps and ultimates: the game credits nobody for them
+# (creeper explosions, falling anvils, effects). A vanilla player kill has priority.
+execute unless score @s kc.died matches 1.. if score @s kc.time matches 1.. run function ctf:match/events/credit/victim
+scoreboard players set @s kc.died 0
+scoreboard players reset @s kc.time
+
 # execute positioned as @s run spawnpoint @s ~ ~ ~ ~
 tag @s add just_died
 gamemode spectator @s

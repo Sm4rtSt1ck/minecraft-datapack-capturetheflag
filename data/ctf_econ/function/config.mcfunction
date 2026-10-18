@@ -47,4 +47,7 @@ scoreboard players set #kill.punch_bow econ 40
 scoreboard players set #kill.power_bow econ 15
 scoreboard players set #kill.crossbow econ 20
 scoreboard players set #kill.ultimate econ 20
+# Kills credited by ctf:match/events/credit (the game credits nobody for them)
+scoreboard players set #kill.grenade econ 30
+scoreboard players set #kill.trap econ 30
 scoreboard players set #kill.other econ 30

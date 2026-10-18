@@ -22,6 +22,9 @@ gamemode adventure @a[tag=defense]
 execute as @a[tag=player] run function ctf_shop:lock
 # No exit button during the round
 execute as @a[tag=player] run function ctf_inv:exit/remove
+# Chorus fruits become edible
+execute as @a[tag=player] at @s run function ctf_inv:limits/normalize_chorus
+execute as @a[tag=player] run function ctf:match/events/ultimate/render
 execute as @a[tag=player] run function ctf_inv:api/refresh
 
 effect clear @a[tag=player] minecraft:resistance

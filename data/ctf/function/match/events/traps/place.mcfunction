@@ -15,4 +15,8 @@ execute as @n[tag=!placed, tag=trap_display, tag=trap.wither] run function ctf:m
 execute as @n[tag=!placed, tag=trap_display, tag=trap.detector] run function ctf:match/events/traps/detector/place
 # execute at @s as @n[tag=!placed, tag=trap.something run function ctf:match/events/traps/place_something
 
+# Owner of the new trap (kill credit)
+execute at @s run scoreboard players operation @e[tag=trap_marker, tag=!kc.owned, distance=..8] kc.owner = @s player_id
+execute at @s run tag @e[tag=trap_marker, tag=!kc.owned, distance=..8] add kc.owned
+
 tag @n[tag=!placed, tag=trap_display] add placed

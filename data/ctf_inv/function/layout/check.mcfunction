@@ -6,6 +6,9 @@ execute if entity @s[tag=ultimate] run return 0
 # The inventory was just closed: wait until ctf_inv:exit/after_close (keep the tag)
 execute if entity @s[tag=ctf.exit_closed] run return run tag @s add ctf.inv_dirty
 
+# All chorus fruits must be the same item to stack
+function ctf_inv:limits/normalize_chorus
+
 # Everything in a wrong slot is taken out and put back by the rules
 function ctf_inv:layout/take_misplaced
 execute if entity @e[type=item, tag=ctf.buf, limit=1] run function ctf_inv:api/place

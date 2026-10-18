@@ -32,6 +32,10 @@ function ctf:match/events/traps/detector/trigger
 
 execute as @e[tag=trap_display] positioned as @s unless entity @n[tag=trap_marker, distance=1.2..1.5] run kill @s
 
+# Kill credit: effect clouds of traps mark players inside; the credit expires
+execute as @e[type=area_effect_cloud, tag=kc.cloud] at @s run function ctf:match/events/credit/cloud
+scoreboard players remove @a[scores={kc.time=1..}] kc.time 1
+
 # Grenades
 execute as @e[type=armor_stand, tag=he_grenade] run function ctf:match/events/grenades/fly
 

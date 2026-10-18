@@ -1,3 +1,6 @@
+# XP orbs (dropped on death) would change the ultimate bar of the player who picks them up
+kill @e[type=experience_orb]
+
 # New item entities are classified once (tags ctf.r.<kind>), UI items are killed
 execute as @e[type=item, tag=!ctf.seen] run function ctf_inv:ground/classify
 

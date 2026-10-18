@@ -166,6 +166,21 @@ scoreboard objectives add econ.tmp dummy
 scoreboard objectives add tk.red teamkill.red
 scoreboard objectives add tk.blue teamkill.blue
 
+# Kill credit for grenades / traps / ultimates (ctf:match/events/credit)
+#   kc.owner - player_id of the owner (on trap markers, grenades, effect clouds)
+#   kc.by / kc.time / kc.src - on a player: who hit him, ticks left, source (1 grenade, 2 trap, 3 ultimate)
+#   kc.died - the player was killed by a player (vanilla kill credit)
+scoreboard objectives add kc.owner dummy
+scoreboard objectives add kc.by dummy
+scoreboard objectives add kc.time dummy
+scoreboard objectives add kc.src dummy
+scoreboard objectives add kc.died minecraft.killed_by:minecraft.player
+scoreboard objectives add kc.tmp dummy
+
+# Ultimate bar (ctf:match/events/ultimate/render)
+scoreboard objectives add ult.dur dummy
+scoreboard objectives add ult.tmp dummy
+
 # Shop (ctf_shop)
 # 0 = locked inventory, 1..5 = shop category
 scoreboard objectives add shop_category dummy

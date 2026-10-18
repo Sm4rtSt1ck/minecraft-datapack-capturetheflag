@@ -11,3 +11,7 @@ execute if score @s ultimate_category matches 2 run function ctf:match/events/ul
 execute if score @s ultimate_category matches 3 run function ctf:match/events/ultimate/categories/trident
 execute if score @s ultimate_category matches 4 run function ctf:match/events/ultimate/categories/bomber
 execute if score @s ultimate_category matches 5 run function ctf:match/events/ultimate/categories/foot_eater
+
+# The bar shows the time left of the ultimate
+scoreboard players operation @s ult.dur = @s timer
+function ctf:match/events/ultimate/render

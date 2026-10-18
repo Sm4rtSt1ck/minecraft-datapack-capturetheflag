@@ -177,13 +177,28 @@ pay less:
 | Diamond sword | $35 | |
 | Netherite sword | $30 | the best melee weapon |
 | Crossbow | $20 | very high burst damage |
-| Ultimate | $20 | |
+| Ultimate (any kill during an active ultimate) | $20 | |
+| Grenade | $30 | |
+| Trap | $30 | |
 | Power bow | $15 | almost one-shot, like an AWP |
 | Anything else | $30 | |
 
 Bought weapons carry `custom_data={wpn:"<id>"}`; this is how the kill
-reward finds the weapon. Kills by traps and grenades aren't credited to
-any player by the game, so they give no money.
+reward finds the weapon.
+
+**Grenades, traps and ultimates.** The game credits nobody for these kills
+(creeper explosions, falling anvils, effect clouds), so they are credited by
+[`ctf:match/events/credit`](data/ctf/function/match/events/credit/):
+
+* every trap marker, grenade and trap effect cloud stores its owner (`kc.owner`);
+* when it goes off, every player in its damage radius is marked with the owner
+  for a short time (3 s for explosions and anvils, 10 s for wither / levitation);
+* if a marked player dies within that time and **no player** got the vanilla
+  kill credit, the owner gets the kill (+1 kill, money, ultimate points);
+* no reward for killing yourself or a teammate.
+
+The foot eater ultimate deals its damage `by` the ultimate player, so the game
+credits those kills itself.
 
 Teamkills are detected with the `teamkill.red` / `teamkill.blue` criteria:
 the attack team is always red and the defense team is always blue.

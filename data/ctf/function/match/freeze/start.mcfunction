@@ -92,6 +92,10 @@ execute as @a[tag=player] run function ctf:match/maps/call_current {function: "f
 execute as @a[tag=player] run function ctf_shop:open
 # Round purchase limits (grenade, totem, shield, potions, chorus)
 execute as @a[tag=player] at @s run function ctf_shop:limits/reset
+# Chorus fruits can't be eaten during freeze
+execute as @a[tag=player] at @s run function ctf_inv:limits/normalize_chorus
+# Ultimate bar (XP is lost on death)
+execute as @a[tag=player] run function ctf:match/events/ultimate/render
 # Hotbar layout: gives the stick and the ultimate, ...
 execute as @a[tag=player] run function ctf_inv:api/refresh
 
