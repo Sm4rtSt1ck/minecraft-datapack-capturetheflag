@@ -294,6 +294,7 @@ It is an item with an endless `consumable` use time; while it is "used", the
 | Speed potion (Speed V, 8 s) | $90 | 1 |
 | Chorus fruit | $40 | 3 |
 | Grenade | $60 | 1 |
+| Smoke grenade (5-block smoke cloud, 20 s) | $50 | 1 |
 
 ### Traps (defenders) and detector (attackers)
 

@@ -19,7 +19,7 @@ execute if items entity @s contents *[custom_data~{tags:["main weapon"]}] run re
 execute if items entity @s contents *[custom_data~{tags:["secondary weapon"]}] run return run function ctf_inv:stash/to {slot: "hotbar.1"}
 execute if items entity @s contents *[custom_data~{tags:["he_grenade"]}] run return run function ctf_inv:stash/to {slot: "hotbar.2"}
 execute if items entity @s contents *[custom_data~{ctf_ammo:1b}] run return run function ctf_inv:stash/to_ammo
-execute if items entity @s contents yellow_banner run return run function ctf_inv:stash/to_flag
+execute if items entity @s contents magenta_banner run return run function ctf_inv:stash/to_flag
 execute if items entity @s contents armor_stand run return run function ctf_inv:stash/to_flag
 
 # Offhand items: offhand first, then a free slot

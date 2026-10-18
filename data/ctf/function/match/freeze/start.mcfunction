@@ -13,20 +13,24 @@ spawnpoint @a[tag=player] -150 0 -150
 gamemode adventure @a[tag=attack]
 gamemode survival @a[tag=defense]
 
-# kill @e[type=item, nbt={Item:{id:"minecraft:yellow_banner"}}]
+# kill @e[type=item, nbt={Item:{id:"minecraft:magenta_banner"}}]
 # kill @e[type=item, nbt={Item:{id:"minecraft:stick"}}]
 kill @e[type=item]
 kill @e[type=arrow]
 kill @e[type=trident]
 kill @e[tag=lastDeathMarker]
 # Remove the placed flag if it hadn't been broken
-execute positioned as @e[type=armor_stand, tag=flag] run fill ~-10 ~-10 ~-10 ~10 ~10 ~10 air replace yellow_banner
+execute positioned as @e[type=armor_stand, tag=flag] run fill ~-10 ~-10 ~-10 ~10 ~10 ~10 air replace magenta_banner
 kill @e[tag=flag]
 
 scoreboard players reset * just_used_chorus
 scoreboard players reset * bow_used
 scoreboard players reset * xbow_used
 scoreboard players reset * just_threw_grenade
+scoreboard players reset * just_threw_smoke
+# Smoke clouds of the last round
+kill @e[type=marker, tag=ctf.smoke]
+kill @e[type=marker, tag=ctf.smoke_fly]
 
 execute as @a[tag=player] run function ctf_econ:cap
 
@@ -60,11 +64,11 @@ tag @a[tag=player, nbt={Inventory:[{id:"minecraft:iron_boots"}]}] add has_boots
 tag @a[tag=player, nbt={Inventory:[{id:"minecraft:diamond_boots"}]}] add has_boots
 tag @a[tag=player, nbt={Inventory:[{id:"minecraft:netherite_boots"}]}] add has_boots
 
-item replace entity @a[tag=player, tag=!has_helmet, tag=attack] armor.head with leather_helmet[minecraft:dyed_color={rgb:16711799}]
+# item replace entity @a[tag=player, tag=!has_helmet, tag=attack] armor.head with leather_helmet[minecraft:dyed_color={rgb:16711799}]
 item replace entity @a[tag=player, tag=!has_chestplate, tag=attack] armor.chest with leather_chestplate[minecraft:dyed_color={rgb:16711799}]
 item replace entity @a[tag=player, tag=!has_leggings, tag=attack] armor.legs with leather_leggings[minecraft:dyed_color={rgb:16711799}]
 item replace entity @a[tag=player, tag=!has_boots, tag=attack] armor.feet with leather_boots[minecraft:dyed_color={rgb:16711799}, enchantments={feather_falling:1}]
-item replace entity @a[tag=player, tag=!has_helmet, tag=defense] armor.head with leather_helmet[minecraft:dyed_color={rgb:47103}]
+# item replace entity @a[tag=player, tag=!has_helmet, tag=defense] armor.head with leather_helmet[minecraft:dyed_color={rgb:47103}]
 item replace entity @a[tag=player, tag=!has_chestplate, tag=defense] armor.chest with leather_chestplate[minecraft:dyed_color={rgb:47103}]
 item replace entity @a[tag=player, tag=!has_leggings, tag=defense] armor.legs with leather_leggings[minecraft:dyed_color={rgb:47103}]
 item replace entity @a[tag=player, tag=!has_boots, tag=defense] armor.feet with leather_boots[minecraft:dyed_color={rgb:47103}, enchantments={feather_falling:1}]
@@ -104,41 +108,17 @@ execute as @a[tag=player] run function ctf:match/events/ultimate/render
 execute as @a[tag=player] run function ctf_inv:api/refresh
 
 # Give flag
-clear @a[tag=player] minecraft:yellow_banner
-clear @a[tag=player] minecraft:armor_stand[item_model="minecraft:yellow_banner"]
+clear @a[tag=player] minecraft:magenta_banner
+clear @a[tag=player] minecraft:armor_stand[item_model="minecraft:magenta_banner"]
 
-# give @r[tag=defense] minecraft:yellow_banner ONLY AFTER CALL MAP FREEZE FUNCTION
-# execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, PickupDelay:30, Tags:["flag"],Item:{id:"minecraft:yellow_banner",count:1}}
-# give @p minecraft:armor_stand[item_model=yellow_banner, entity_data={id:"minecraft:armor_stand", Tags: ["flag"], Marker: true}]
-# summon item ~ ~ ~ {Item: {components:{item_model:"minecraft:yellow_banner", entity_data: {id: "minecraft:armor_stand", Marker: true}}}}
-execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, Invulnerable: true, PickupDelay:20, Tags:["flag"], Item:{id:"minecraft:armor_stand", count:1,  components: {\
+# give @r[tag=defense] minecraft:magenta_banner ONLY AFTER CALL MAP FREEZE FUNCTION
+# execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, PickupDelay:30, Tags:["flag"],Item:{id:"minecraft:magenta_banner",count:1}}
+# give @p minecraft:armor_stand[item_model=magenta_banner, entity_data={id:"minecraft:armor_stand", Tags: ["flag"], Marker: true}]
+# summon item ~ ~ ~ {Item: {components:{item_model:"minecraft:magenta_banner", entity_data: {id: "minecraft:armor_stand", Marker: true}}}}
+execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, Invulnerable: true, PickupDelay:20, Tags:["flag", "ctf.flag_new"], Item:{id:"minecraft:armor_stand", count:1, components: {\
   custom_name: '{"text": "FLAG", "color":"red", "italic": false}',\
   entity_data: {id: "minecraft:armor_stand", Marker: true, Invisible: true, Tags: ["flag"]},\
-  item_model:"minecraft:yellow_banner",\
-  "minecraft:banner_patterns": [\
-    {\
-      "color": "red",\
-      "pattern": "minecraft:curly_border"\
-    },\
-    {\
-      "color": "orange",\
-      "pattern": "minecraft:gradient"\
-    },\
-    {\
-      "color": "red",\
-      "pattern": "minecraft:circle"\
-    },\
-    {\
-      "color": "red",\
-      "pattern": "minecraft:cross"\
-    },\
-    {\
-      "color": "orange",\
-      "pattern": "minecraft:flower"\
-    },\
-    {\
-      "color": "red",\
-      "pattern": "minecraft:triangle_top"\
-    }\
-  ]\
+  item_model:"minecraft:magenta_banner"\
 }}}
+# The banner patterns: ctf:match/helpers/flag/config
+execute as @e[type=item, tag=ctf.flag_new] run function ctf:match/helpers/flag/apply_item

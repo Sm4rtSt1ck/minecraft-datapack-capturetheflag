@@ -9,12 +9,14 @@ execute as @a[scores={flag_broken=1..}] run function ctf:match/events/flag/break
 execute as @a[scores={wall_flag_broken=1..}] run function ctf:match/events/flag/break
 execute as @a[scores={flag_dropped=1..}] run function ctf:match/events/flag/drop
 execute as @a[scores={flag_pickedup=1..}] run function ctf:match/events/flag/pickup
-execute as @e[type=armor_stand, tag=flag] at @s unless block ~ ~ ~ yellow_banner unless block ~ ~ ~ yellow_wall_banner run function ctf:match/events/flag/break
+execute as @e[type=armor_stand, tag=flag] at @s unless block ~ ~ ~ magenta_banner unless block ~ ~ ~ magenta_wall_banner run function ctf:match/events/flag/break
 # Fight
 execute as @a[scores={just_killed=1..}] run function ctf:match/events/fight/kill
 execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
 execute as @a[scores={just_used_totem=1..}] run function ctf:match/events/fight/use_totem
 execute as @a[scores={just_threw_grenade=1..}] run function ctf:match/events/grenades/throw
+execute as @a[scores={just_threw_smoke=1..}] run function ctf:match/events/grenades/smoke/throw
+function ctf:match/events/grenades/smoke/tick
 # Traps
 execute at @a[tag=player, tag=!dead, tag=!invisible] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
 execute at @e[type=arrow] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger

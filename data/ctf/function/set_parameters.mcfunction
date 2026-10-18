@@ -151,12 +151,15 @@ scoreboard objectives add just_killed playerKillCount
 scoreboard objectives add just_died deathCount
 scoreboard objectives add just_used_totem minecraft.used:minecraft.totem_of_undying
 scoreboard objectives add flag_placed minecraft.used:minecraft.armor_stand
-scoreboard objectives add flag_dropped minecraft.dropped:minecraft.yellow_banner
-scoreboard objectives add flag_pickedup minecraft.picked_up:minecraft.yellow_banner
-scoreboard objectives add flag_broken minecraft.mined:minecraft.yellow_banner
-scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.yellow_wall_banner
+scoreboard objectives add flag_dropped minecraft.dropped:minecraft.magenta_banner
+scoreboard objectives add flag_pickedup minecraft.picked_up:minecraft.magenta_banner
+scoreboard objectives add flag_broken minecraft.mined:minecraft.magenta_banner
+scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.magenta_wall_banner
 scoreboard objectives add just_placed_trap minecraft.used:minecraft.frog_spawn_egg
 scoreboard objectives add just_threw_grenade minecraft.used:minecraft.lingering_potion
+# Smoke grenades (ctf:match/events/grenades/smoke): throws and cloud ticks left
+scoreboard objectives add just_threw_smoke minecraft.used:minecraft.splash_potion
+scoreboard objectives add smoke.t dummy
 scoreboard objectives add just_used_chorus minecraft.used:minecraft.chorus_fruit
 
 # Economy (ctf_econ): settings (#...), loss streaks, temporary values
@@ -216,6 +219,7 @@ scoreboard objectives add shop.lim.shield dummy
 scoreboard objectives add shop.lim.regen dummy
 scoreboard objectives add shop.lim.speed dummy
 scoreboard objectives add shop.lim.chorus dummy
+scoreboard objectives add shop.lim.smoke dummy
 
 # Inventory layout (ctf_inv)
 # Temporary values

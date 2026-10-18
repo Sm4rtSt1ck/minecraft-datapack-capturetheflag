@@ -3,6 +3,7 @@
 function ctf_shop:ui/product {slot: 18, model: "golden_chestplate", cost: 150, name: '{"text": "Gold armor"}', extra: ''}
 function ctf_shop:ui/product {slot: 20, model: "iron_chestplate", cost: 250, name: '{"text": "Iron armor"}', extra: ''}
 # function ctf_shop:ui/product {slot: 22, model: "netherite_chestplate", cost: 1500, name: '{"text": "Netherite armor"}', extra: ''}
+function ctf_shop:ui/product {slot: 22, model: "leather_boots", cost: 50, name: '{"text": "Less fall damage"}', extra: 'enchantment_glint_override=true'}
 
 execute if entity @s[tag=attack] run function ctf_shop:ui/product {slot: 24, model: "shield", cost: 90, name: '{"text": "Shield"}', extra: 'base_color="orange", banner_patterns=[\
     {"pattern":"gradient","color":"black"},\
@@ -15,3 +16,5 @@ execute if entity @s[tag=defense] run function ctf_shop:ui/product {slot: 24, mo
     {"pattern":"gradient_up","color":"light_blue"},\
     {"pattern":"flower","color":"light_blue"}\
 ]'}
+
+function ctf_shop:ui/product {slot: 26, model: "totem_of_undying", cost: 350, name: '{"text": "Totem of undying (regen. 3.5-4 hearts)"}', extra: ''}

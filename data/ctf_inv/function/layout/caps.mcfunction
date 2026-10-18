@@ -9,6 +9,9 @@ tag @s remove ctf.can.flag
 tag @s remove ctf.can.regen
 tag @s remove ctf.can.speed
 tag @s remove ctf.can.chorus
+tag @s remove ctf.can.smoke
+tag @s remove ctf.can.trap_def
+tag @s remove ctf.can.trap_att
 
 execute unless function ctf_inv:layout/has_main run tag @s add ctf.can.main
 execute unless function ctf_inv:layout/has_sec run tag @s add ctf.can.sec
@@ -28,6 +31,13 @@ execute if score #n inv.tmp matches 1..2 run tag @s add ctf.can.chorus
 
 # Ammo and wind charges
 function ctf_inv:ammo/caps_all
+
+function ctf_inv:limits/count {pred: '*[custom_data~{tags:["smoke_grenade"]}]'}
+execute if score #n inv.tmp matches ..0 if entity @s[tag=ctf.can.free] run tag @s add ctf.can.smoke
+
+# Traps: only for their team
+execute if entity @s[tag=defense, tag=ctf.can.free] run tag @s add ctf.can.trap_def
+execute if entity @s[tag=attack, tag=ctf.can.free] run tag @s add ctf.can.trap_att
 
 # Flag in freeze: any defender (the flag pushes out whatever lies in slot 8)
 execute if entity @s[tag=defense] if score game state = freeze state run tag @s add ctf.can.flag

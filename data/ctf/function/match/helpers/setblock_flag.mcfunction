@@ -1,1 +1,4 @@
-$execute positioned as $(target) run setblock ~ ~ ~ yellow_banner[rotation=$(rotation)]{"patterns": [{"color": "red","pattern": "minecraft:curly_border"},{"color": "orange","pattern": "minecraft:gradient"},{"color": "red","pattern": "minecraft:circle"},{"color": "red","pattern": "minecraft:cross"},{"color": "orange","pattern": "minecraft:flower"},{"color": "red","pattern": "minecraft:triangle_top"}]}
+# Places the flag block at the target. target, rotation
+$execute positioned as $(target) run setblock ~ ~ ~ magenta_banner[rotation=$(rotation)]
+execute unless data storage ctf:flag patterns run function ctf:match/helpers/flag/config
+$execute positioned as $(target) run data modify block ~ ~ ~ patterns set from storage ctf:flag patterns

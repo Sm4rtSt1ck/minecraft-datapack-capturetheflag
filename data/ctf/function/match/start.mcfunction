@@ -46,6 +46,8 @@ function ctf_econ:reset
 # Gun settings
 function ctf_guns:config
 function ctf_sniper:config
+# The flag look
+function ctf:match/helpers/flag/config
 
 # Events
 scoreboard players reset * just_used_totem

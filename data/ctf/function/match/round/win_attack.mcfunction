@@ -8,7 +8,7 @@ execute as @a[tag=defense] at @s run playsound entity.bee.death ambient @s ~ ~ ~
 execute if score match rounds < swap rounds run scoreboard players add team_1 rounds 1
 execute if score match rounds >= swap rounds run scoreboard players add team_2 rounds 1
 
-clear @a[tag=attack] minecraft:yellow_banner
+clear @a[tag=attack] minecraft:magenta_banner
 
 effect clear @a[tag=attack] minecraft:glowing
 

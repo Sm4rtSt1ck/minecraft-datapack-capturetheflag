@@ -2,7 +2,7 @@ function admin:log/function {name: "match/end_round/start"}
 
 scoreboard players operation game state = end_round state
 
-effect clear @a[tag=player, nbt={Inventory:[{id:"minecraft:yellow_banner"}]}] minecraft:glowing
+effect clear @a[tag=player, nbt={Inventory:[{id:"minecraft:magenta_banner"}]}] minecraft:glowing
 
 
 function ctf:match/helpers/update_score_display

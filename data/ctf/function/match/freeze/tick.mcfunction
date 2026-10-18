@@ -27,6 +27,8 @@ execute as @e[tag=trap_display] positioned as @s unless entity @n[tag=trap_marke
 
 # Grenades
 execute as @a[scores={just_threw_grenade=1..}] run function ctf:match/events/grenades/throw
+execute as @a[scores={just_threw_smoke=1..}] run function ctf:match/events/grenades/smoke/throw
+function ctf:match/events/grenades/smoke/tick
 execute as @e[type=armor_stand, tag=he_grenade] run function ctf:match/events/grenades/fly
 
 # ATTACK TEAM TRAPS

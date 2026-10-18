@@ -12,3 +12,5 @@ function ctf_inv:limits/count {pred: 'potion[custom_data~{lim:"speed"}]'}
 scoreboard players operation @s shop.lim.speed = #n inv.tmp
 function ctf_inv:limits/count {pred: 'chorus_fruit'}
 scoreboard players operation @s shop.lim.chorus = #n inv.tmp
+function ctf_inv:limits/count {pred: '*[custom_data~{tags:["smoke_grenade"]}]'}
+scoreboard players operation @s shop.lim.smoke = #n inv.tmp
