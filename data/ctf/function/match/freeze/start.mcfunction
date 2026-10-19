@@ -38,44 +38,8 @@ execute as @a[tag=player] run function ctf_econ:cap
 scoreboard players set broken flag_state 0
 
 
-# Give chainmail armor if player doesn't have it
-# tag @a[nbt={Inventory:[{id:"minecraft:leather_helmet"}]}] add has_helmet
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:golden_helmet"}]}] add has_helmet
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:chainmail_helmet"}]}] add has_helmet
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:iron_helmet"}]}] add has_helmet
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:diamond_helmet"}]}] add has_helmet
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:netherite_helmet"}]}] add has_helmet
-# tag @a[nbt={Inventory:[{id:"minecraft:leather_chestplate"}]}] add has_chestplate
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:golden_chestplate"}]}] add has_chestplate
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:chainmail_chestplate"}]}] add has_chestplate
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:iron_chestplate"}]}] add has_chestplate
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:diamond_chestplate"}]}] add has_chestplate
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:netherite_chestplate"}]}] add has_chestplate
-# tag @a[nbt={Inventory:[{id:"minecraft:leather_leggings"}]}] add has_leggings
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:golden_leggings"}]}] add has_leggings
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:chainmail_leggings"}]}] add has_leggings
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:iron_leggings"}]}] add has_leggings
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:diamond_leggings"}]}] add has_leggings
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:netherite_leggings"}]}] add has_leggings
-# tag @a[nbt={Inventory:[{id:"minecraft:leather_boots"}]}] add has_boots
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:golden_boots"}]}] add has_boots
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:chainmail_boots"}]}] add has_boots
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:iron_boots"}]}] add has_boots
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:diamond_boots"}]}] add has_boots
-tag @a[tag=player, nbt={Inventory:[{id:"minecraft:netherite_boots"}]}] add has_boots
-
-# item replace entity @a[tag=player, tag=!has_helmet, tag=attack] armor.head with leather_helmet[minecraft:dyed_color={rgb:16711799}]
-item replace entity @a[tag=player, tag=!has_chestplate, tag=attack] armor.chest with leather_chestplate[minecraft:dyed_color={rgb:16711799}]
-item replace entity @a[tag=player, tag=!has_leggings, tag=attack] armor.legs with leather_leggings[minecraft:dyed_color={rgb:16711799}]
-item replace entity @a[tag=player, tag=!has_boots, tag=attack] armor.feet with leather_boots[minecraft:dyed_color={rgb:16711799}, enchantments={feather_falling:1}]
-# item replace entity @a[tag=player, tag=!has_helmet, tag=defense] armor.head with leather_helmet[minecraft:dyed_color={rgb:47103}]
-item replace entity @a[tag=player, tag=!has_chestplate, tag=defense] armor.chest with leather_chestplate[minecraft:dyed_color={rgb:47103}]
-item replace entity @a[tag=player, tag=!has_leggings, tag=defense] armor.legs with leather_leggings[minecraft:dyed_color={rgb:47103}]
-item replace entity @a[tag=player, tag=!has_boots, tag=defense] armor.feet with leather_boots[minecraft:dyed_color={rgb:47103}, enchantments={feather_falling:1}]
-tag @a remove has_helmet
-tag @a remove has_chestplate
-tag @a remove has_leggings
-tag @a remove has_boots
+# Body armor: the team leather set for players without a set (ctf_inv:armor)
+execute as @a[tag=player] at @s run function ctf_inv:armor/freeze_default
 
 execute as @a[tag=player] unless items entity @s container.* *[custom_data~{tags:["main weapon"]}] unless items entity @s weapon.offhand *[custom_data~{tags:["main weapon"]}] run \
     give @s golden_sword[enchantments={knockback:2b, sweeping_edge:3b}, custom_data={tags:["main weapon"], bind:1b, wpn:"golden_sword"}]

@@ -7,6 +7,12 @@ execute if items entity @s contents *[custom_data~{ctf_craft:{}}] run return run
 execute if items entity @s contents *[custom_data~{action:"exit"}] run return run kill @s
 execute if items entity @s contents *[custom_data~{action:"ultimate"}] run return run kill @s
 execute if items entity @s contents stick run return run kill @s
+# Leggings / boots of a set exist only while worn (the set is its chestplate)
+execute if items entity @s contents *[custom_data~{ctf_part:1b}] run return run kill @s
+
+# Armor: picked up only into an empty armor slot (and put on right away)
+execute if items entity @s contents *[custom_data~{ctf_set:{}}] run return run tag @s add ctf.r.armor
+execute if items entity @s contents #ctf_inv:helmets run return run tag @s add ctf.r.helmet
 
 # Restricted pickup (see ctf_inv:ground/tick)
 execute if items entity @s contents magenta_banner run return run tag @s add ctf.r.banner

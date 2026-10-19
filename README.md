@@ -315,6 +315,23 @@ Traps activate when attackers enter a small radius around them.
 
 Free. The selected ultimate is shown in hotbar slot 9.
 
+### Body armor
+
+Chestplate, leggings and boots work as **one set** ([`ctf_inv:armor`](data/ctf_inv/function/armor/));
+the helmet is separate.
+
+* The set is its chestplate: it stores the material and the boots. When it is put on, the
+  leggings and boots appear; they exist only while it is worn.
+* All three pieces have the same durability and damage, so they wear out and break together.
+* Taking off any piece turns the whole set into one chestplate in the inventory; dropping any
+  piece drops the whole set.
+* A picked up chestplate / helmet is put on automatically if its armor slot is empty. Armor is
+  picked up only into an empty armor slot.
+* "Less fall damage" replaces the boots of the worn set (Feather Falling III, same durability).
+* Every set gets a random id (`sid`) when it is assembled, so parts of another set are never
+  mixed with it (e.g. when another chestplate is put on over the worn one).
+* Without body armor a player gets the team leather set at the start of freeze.
+
 ### Ammo
 
 Every ranged weapon has its **own ammo** (different arrow colors, see

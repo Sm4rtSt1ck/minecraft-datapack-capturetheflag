@@ -9,6 +9,9 @@ execute if entity @s[tag=ctf.exit_closed] run return run tag @s add ctf.inv_dirt
 # All chorus fruits must be the same item to stack
 function ctf_inv:limits/normalize_chorus
 
+# Body armor: chestplate + leggings + boots work as one set (the helmet is separate)
+function ctf_inv:armor/check
+
 # Everything in a wrong slot is taken out and put back by the rules
 function ctf_inv:layout/take_misplaced
 execute if entity @e[type=item, tag=ctf.buf, limit=1] run function ctf_inv:api/place

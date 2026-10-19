@@ -10,6 +10,8 @@ tag @s remove ctf.can.regen
 tag @s remove ctf.can.speed
 tag @s remove ctf.can.chorus
 tag @s remove ctf.can.smoke
+tag @s remove ctf.can.armor
+tag @s remove ctf.can.helmet
 tag @s remove ctf.can.trap_def
 tag @s remove ctf.can.trap_att
 
@@ -38,6 +40,10 @@ execute if score #n inv.tmp matches ..0 if entity @s[tag=ctf.can.free] run tag @
 # Traps: only for their team
 execute if entity @s[tag=defense, tag=ctf.can.free] run tag @s add ctf.can.trap_def
 execute if entity @s[tag=attack, tag=ctf.can.free] run tag @s add ctf.can.trap_att
+
+# Armor: only into an empty armor slot
+execute unless items entity @s armor.chest * run tag @s add ctf.can.armor
+execute unless items entity @s armor.head * run tag @s add ctf.can.helmet
 
 # Flag in freeze: any defender (the flag pushes out whatever lies in slot 8)
 execute if entity @s[tag=defense] if score game state = freeze state run tag @s add ctf.can.flag

@@ -32,6 +32,8 @@ execute as @e[type=item, tag=ctf.r.regen] at @s run function ctf_inv:ground/own/
 execute as @e[type=item, tag=ctf.r.speed] at @s run function ctf_inv:ground/own/speed
 execute as @e[type=item, tag=ctf.r.chorus] at @s run function ctf_inv:ground/own/chorus
 execute as @e[type=item, tag=ctf.r.smoke] at @s run function ctf_inv:ground/own/smoke
+execute as @e[type=item, tag=ctf.r.armor] at @s run function ctf_inv:ground/own/armor
+execute as @e[type=item, tag=ctf.r.helmet] at @s run function ctf_inv:ground/own/helmet
 execute as @e[type=item, tag=ctf.r.trap_def] at @s run function ctf_inv:ground/own/trap_def
 execute as @e[type=item, tag=ctf.r.trap_att] at @s run function ctf_inv:ground/own/trap_att
 
@@ -53,5 +55,7 @@ tag @a remove ctf.res.regen
 tag @a remove ctf.res.speed
 tag @a remove ctf.res.chorus
 tag @a remove ctf.res.smoke
+tag @a remove ctf.res.armor
+tag @a remove ctf.res.helmet
 tag @a remove ctf.res.trap_def
 tag @a remove ctf.res.trap_att
