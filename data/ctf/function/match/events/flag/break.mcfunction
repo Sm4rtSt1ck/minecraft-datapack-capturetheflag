@@ -32,6 +32,8 @@ kill @e[type=armor_stand, tag=flag]
 
 # Attackers lose the flag breaker: slot 8 is now only for the flag
 scoreboard players set broken flag_state 1
+# Loot crate task
+execute if entity @s[type=player, tag=attack] run function ctf_loot:task {id: "flag_break"}
 clear @a[tag=attack] stick
 execute as @a[tag=player] run function ctf_inv:api/refresh
 

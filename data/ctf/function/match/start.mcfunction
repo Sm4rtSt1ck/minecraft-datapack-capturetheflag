@@ -48,6 +48,10 @@ function ctf_guns:config
 function ctf_sniper:config
 # The flag look
 function ctf:match/helpers/flag/config
+# Loot crates
+function ctf_loot:config
+scoreboard players reset * loot.best
+scoreboard players reset * loot.kills
 
 # Events
 scoreboard players reset * just_used_totem

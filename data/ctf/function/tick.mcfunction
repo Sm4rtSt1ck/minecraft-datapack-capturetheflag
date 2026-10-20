@@ -34,6 +34,12 @@ execute as @a[scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand c
     ]
 
 #########################################
+# EFFECTS AND LOOT CRATES (also used by the tests)
+
+function ctf_fx:tick
+function ctf_loot:tick
+
+#########################################
 # GLOBAL EVENTS
 
 execute as @a[scores={carrot_on_stick=1..}] positioned as @s run playsound ui.button.click ambient @s ~ ~ ~

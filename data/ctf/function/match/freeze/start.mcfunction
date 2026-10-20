@@ -62,6 +62,8 @@ execute as @a[tag=player] run function ctf:match/maps/call_current {function: "f
 execute as @a[tag=player] run function ctf_shop:open
 # Round purchase limits (grenade, totem, shield, potions, chorus)
 execute as @a[tag=player] at @s run function ctf_shop:limits/reset
+# Loot crates for the attackers (landing points: ctf:match/maps/<map>/loot)
+function ctf_loot:freeze_start
 # Chorus fruits can't be eaten during freeze
 execute as @a[tag=player] at @s run function ctf_inv:limits/normalize_chorus
 # Ammo of every weapon and the mace wind charges are restored to max

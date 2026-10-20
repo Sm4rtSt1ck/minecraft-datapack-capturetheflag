@@ -384,6 +384,24 @@ in the top-left slot of the 2×2 crafting grid (freeze, round, end of round, mat
 asks for confirmation.
 
 
+## Loot Crates (attackers)
+
+An attacker who completes a task by chance during a round (break or deliver the flag, kill with
+bare hands, with a wind charge, with an enemy's own trap, 5 kills) gets a shulker box with a
+reward at the start of the next freeze phase. It falls from the sky onto his base, only he can
+open it, and it disappears when the round starts. Rarity depends on the task.
+
+Full description of the tasks, rarities, settings and landing points: [MECHANICS.md](MECHANICS.md#loot-crates-attackers).
+
+
+## Tests
+
+Manual tests live in [`ctf_test`](data/ctf_test/function/). `/function ctf_test:help` lists them
+(click a line to put the command into the chat): camera shake, explosion, dropping a crate
+onto any coordinates with any rarity, counting a task as done, dropping the crates of freeze.
+
+Reusable effects: [`ctf_fx`](data/ctf_fx/function/) (`ctf_fx:shake`, `ctf_fx:explosion`).
+
 ## Features
 
 * Fully vanilla datapack

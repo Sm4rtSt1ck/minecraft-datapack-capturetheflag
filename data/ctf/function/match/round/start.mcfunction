@@ -35,4 +35,7 @@ kill @e[type=arrow]
 # execute if entity @e[type=item, nbt={Item:{id:"minecraft:magenta_banner"}}] run function ctf:match/round/win_attack
 execute unless entity @e[type=armor_stand, tag=flag] run function ctf:match/round/win_attack
 
+# Loot crates disappear
+function ctf_loot:round_start
+
 function ctf:match/maps/call_current {function: "round"}

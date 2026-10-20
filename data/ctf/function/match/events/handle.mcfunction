@@ -18,17 +18,18 @@ execute as @a[scores={just_threw_grenade=1..}] run function ctf:match/events/gre
 execute as @a[scores={just_threw_smoke=1..}] run function ctf:match/events/grenades/smoke/throw
 function ctf:match/events/grenades/smoke/tick
 # Traps
-execute at @a[tag=player, tag=!dead, tag=!invisible] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
-execute at @e[type=arrow] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
-execute at @e[type=firework_rocket] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
-execute at @e[type=wind_charge] as @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/tnt/trigger
+# An attacker who sets a trap off (by walking or shooting) gets the kill credit (ctf:match/events/traps/touch)
+execute as @a[tag=player, tag=!dead, tag=!invisible] at @s if entity @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/touch {trap: "tnt"}
+execute as @e[type=arrow] at @s if entity @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/by_projectile {trap: "tnt"}
+execute as @e[type=firework_rocket] at @s if entity @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/by_projectile {trap: "tnt"}
+execute as @e[type=wind_charge] at @s if entity @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/by_projectile {trap: "tnt"}
 
-execute at @a[tag=player, tag=!dead, tag=!invisible] positioned ~-0.125 ~1 ~-0.125 as @e[tag=trap.anvil, tag=trap_marker, dx=0.25, dy=256, dz=0.25] run function ctf:match/events/traps/anvil/trigger
+execute as @a[tag=player, tag=!dead, tag=!invisible] at @s positioned ~-0.125 ~1 ~-0.125 if entity @e[tag=trap.anvil, tag=trap_marker, dx=0.25, dy=256, dz=0.25] run function ctf:match/events/traps/touch_anvil
 
 execute at @a[tag=player, tag=!dead, tag=!invisible] as @e[tag=trap.web, tag=trap_marker, tag=!triggered, distance=..2] run function ctf:match/events/traps/web/trigger
 
-execute at @a[tag=player, tag=!dead, tag=!invisible] as @e[tag=trap.levitation, tag=trap_marker, distance=..2] run function ctf:match/events/traps/levitation/trigger
-execute at @a[tag=player, tag=!dead, tag=!invisible] as @e[tag=trap.wither, tag=trap_marker, distance=..2] run function ctf:match/events/traps/wither/trigger
+execute as @a[tag=player, tag=!dead, tag=!invisible] at @s if entity @e[tag=trap.levitation, tag=trap_marker, distance=..2] run function ctf:match/events/traps/touch {trap: "levitation"}
+execute as @a[tag=player, tag=!dead, tag=!invisible] at @s if entity @e[tag=trap.wither, tag=trap_marker, distance=..2] run function ctf:match/events/traps/touch {trap: "wither"}
 
 function ctf:match/events/traps/detector/trigger
 

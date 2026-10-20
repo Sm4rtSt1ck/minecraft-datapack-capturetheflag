@@ -204,6 +204,15 @@ scoreboard objectives add sn.seen dummy
 scoreboard objectives add sn.reload dummy
 scoreboard objectives add sn.tmp dummy
 
+# Effects (ctf_fx): camera shake step
+scoreboard objectives add fx.shake dummy
+
+# Loot crates (ctf_loot): falling tick, best task of the round (rarity rank), kills of the round, temporary values
+scoreboard objectives add loot.t dummy
+scoreboard objectives add loot.best dummy
+scoreboard objectives add loot.kills dummy
+scoreboard objectives add loot.tmp dummy
+
 # Shop (ctf_shop)
 # 0 = locked inventory, 1..5 = shop category
 scoreboard objectives add shop_category dummy
