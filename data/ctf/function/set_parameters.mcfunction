@@ -204,6 +204,12 @@ scoreboard objectives add sn.seen dummy
 scoreboard objectives add sn.reload dummy
 scoreboard objectives add sn.tmp dummy
 
+# Death camera (ctf:match/events/fight/deathcam): ticks, killer / owner player_id, temporary values
+scoreboard objectives add dc.t dummy
+scoreboard objectives add dc.killer dummy
+scoreboard objectives add dc.owner dummy
+scoreboard objectives add dc.tmp dummy
+
 # Effects (ctf_fx): camera shake step
 scoreboard objectives add fx.shake dummy
 

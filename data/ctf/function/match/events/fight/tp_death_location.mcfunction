@@ -1,9 +1,5 @@
-summon armor_stand -190 0 -190 {Invisible:1b,Marker:1b,Tags:["lastDeathMarker"]}
-execute store result entity @n[tag=lastDeathMarker] Pos[0] double 1 run data get entity @n[tag=just_died] LastDeathLocation.pos[0]
-execute store result entity @n[tag=lastDeathMarker] Pos[1] double 1 run data get entity @n[tag=just_died] LastDeathLocation.pos[1]
-execute store result entity @n[tag=lastDeathMarker] Pos[2] double 1 run data get entity @n[tag=just_died] LastDeathLocation.pos[2]
-tp @a[tag=just_died] @n[tag=lastDeathMarker]
-kill @n[tag=lastDeathMarker]
+# Every victim to his own death location (several players can die in the same tick)
+execute as @a[tag=just_died] run function ctf:match/events/fight/tp_own_death_location
 
 execute positioned as @a[tag=just_died] run particle scrape ~ ~1 ~ 0.1 0.1 0.1 1 50 normal @a[tag=!just_died]
 execute as @a[tag=just_died] positioned as @s run playsound minecraft:entity.allay.death ambient @s ~ ~ ~ 2 0
@@ -20,6 +16,9 @@ kill @e[type=item, nbt={Item:{id:"minecraft:golden_sword"}}]
 # kill @e[type=item, nbt={Item:{id:"minecraft:golden_sword"}}]
 
 execute as @a[tag=just_died, tag=ultimate] run function ctf:match/events/ultimate/end
+
+# Death camera: 3.5 seconds from the eyes of an enderman, looking at the killer
+execute as @a[tag=just_died, gamemode=spectator] at @s run function ctf:match/events/fight/deathcam/start
 
 
 tag @a[tag=just_died] remove just_died

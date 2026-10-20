@@ -2,6 +2,9 @@ function admin:log/function {name: "match/freeze/start"}
 
 scoreboard players operation game state = freeze state
 
+# A death camera of the last round ends right away
+function ctf:match/events/fight/deathcam/stop_all
+
 # 60 secs freeze before round start (1200 ticks)
 scoreboard players set freeze timer 1200
 bossbar set ctf:match max 1200

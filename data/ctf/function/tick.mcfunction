@@ -38,6 +38,7 @@ execute as @a[scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand c
 
 function ctf_fx:tick
 function ctf_loot:tick
+function ctf:match/events/fight/deathcam/tick
 
 #########################################
 # GLOBAL EVENTS

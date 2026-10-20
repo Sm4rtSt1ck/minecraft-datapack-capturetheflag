@@ -1,6 +1,7 @@
 function admin:log/function {name: "match/end/start"}
 
 scoreboard players operation game state = end state
+function ctf:match/events/fight/deathcam/stop_all
 # Tiemr to lobby 30 secs (300 ticks)
 scoreboard players set end timer 300
 bossbar set ctf:match max 300

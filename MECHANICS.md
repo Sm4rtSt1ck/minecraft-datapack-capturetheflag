@@ -88,3 +88,25 @@ id to `tasks` in the config.
 * `ctf_test:loot/freeze` - drop the crates like at the start of freeze;
 * `ctf_test:loot/clear` - remove all crates with the explosion;
 * `ctf_test:loot/reload_config` - apply changes of the config.
+
+
+## Death Camera
+
+Code: [`ctf:match/events/fight/deathcam`](data/ctf/function/match/events/fight/deathcam/).
+
+After a death (when the player is moved to his death location) his camera is put for **3.5 seconds**
+into a tiny invisible enderman (no AI, silent, invulnerable, no gravity). The game shows the world
+in negative from the eyes of an enderman. The enderman keeps turning to the **killer**.
+
+* No killer (fall, void, own explosion) - no death camera.
+* The killer is highlighted **only for the victim**: particles around him are shown to this player
+  only (a real glowing outline is seen by everyone). They are cyan, so in the negative view they look red.
+* The camera is forced: if the player leaves it (sneak), he is put back the next tick.
+* Entering: the blindness of the death fades out. Leaving: a blindness fades in shortly before the
+  end and fades out after it. The negative view itself switches on / off instantly (it is the game's
+  own camera effect).
+* The start of freeze, the team swap, the end of the match and leaving to the lobby end it right away.
+* The tiny enderman still makes a few portal particles (the client always spawns them) and its eyes
+  may be seen by others as two dots.
+
+Test: `/function ctf_test:fx/deathcam` (looks at the nearest other player, makes you a spectator).

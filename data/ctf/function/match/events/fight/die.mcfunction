@@ -18,7 +18,10 @@ title @s title {"text": "DEATH", "color": "black"}
 
 effect give @s blindness 3 1 true
 
-execute if entity @n[tag=just_killed] run title @s subtitle [{"selector": "@n[tag=just_killed]"}, {"text": " has ", "color": "gold"}, {"score": {"name": "@n[tag=just_killed]", "objective": "health"}, "color": "red"}, {"text": " hp left!", "color": "gold"}]
-tag @n[tag=just_killed] remove just_killed
+# The killer of this player (dc.killer: ctf:match/events/fight/killer or the kill credit)
+scoreboard players operation #k dc.tmp = @s dc.killer
+execute as @a if score @s player_id = #k dc.tmp run tag @s add ctf.killer_of_victim
+execute if entity @a[tag=ctf.killer_of_victim] run title @s subtitle [{"selector": "@a[tag=ctf.killer_of_victim]"}, {"text": " has ", "color": "gold"}, {"score": {"name": "@a[tag=ctf.killer_of_victim, limit=1]", "objective": "health"}, "color": "red"}, {"text": " hp left!", "color": "gold"}]
+tag @a remove ctf.killer_of_victim
 
 schedule function ctf:match/events/fight/tp_death_location 6t

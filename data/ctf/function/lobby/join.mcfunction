@@ -23,6 +23,7 @@ tag @s remove just_killed
 # OTHER PLAYER SETTINGS
 
 function ctf:match/events/ultimate/stop
+execute if entity @s[tag=ctf.dc_on] run function ctf:match/events/fight/deathcam/stop
 # ONLY AFTER ULTIMATE STOPPING
 clear @s
 team join lobby @s
