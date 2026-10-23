@@ -1,6 +1,19 @@
 # One step of the sniper bullet (0.25 blocks; #dist counts quarter blocks)
 scoreboard players add #dist gun.tmp 1
-execute unless block ~ ~ ~ #ctf_guns:passable run return run function ctf_guns:ray/hit_block
+# Thin shapes (doors, trapdoors, gates, fences): a 3/16 plate may lie between two steps, so next to
+# a non-passable block the way from the last step is checked every 1/8 block (ray/fine_sniper)
+execute store success score #nb gun.tmp unless block ~ ~ ~ #ctf_guns:passable
+scoreboard players set #fh gun.tmp 0
+execute if score #nb gun.tmp matches 1 run function ctf_guns:ray/fine_sniper
+execute if score #nb gun.tmp matches 0 if score #pb gun.tmp matches 1 run function ctf_guns:ray/fine_sniper
+scoreboard players operation #pb gun.tmp = #nb gun.tmp
+execute if score #fh gun.tmp matches 1 run return 0
+execute if score #nb gun.tmp matches 1 if function ctf_guns:ray/solid run return run function ctf_guns:ray/hit_block
+
+# Invisible walls (loot crate reward) stop the bullet too
+execute positioned ~-0.99 ~-0.99 ~-0.99 as @e[type=armor_stand, tag=ctf.wall, dx=0, dy=0, dz=0] positioned ~0.98 ~0.98 ~0.98 if entity @s[dx=0, dy=0, dz=0] run tag @s add gun.wall
+execute if entity @e[type=armor_stand, tag=gun.wall, limit=1] run return run function ctf_guns:ray/hit_wall
+
 
 # A trap marker is hit -> the trap goes off
 execute positioned ~ ~-0.25 ~ as @e[type=frog, tag=trap_marker, tag=!trap.detector, tag=!triggered, distance=..0.45, limit=1] run tag @s add gun.trap

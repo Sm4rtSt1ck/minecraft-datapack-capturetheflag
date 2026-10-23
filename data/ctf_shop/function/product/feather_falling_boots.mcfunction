@@ -6,6 +6,7 @@ execute if items entity @s armor.chest *[custom_data~{ctf_set:{ff3:1b}}] run ret
 
 item modify entity @s armor.chest {function: "minecraft:set_custom_data", tag: "{ctf_set:{feet:'leather_boots', feet_extra:'enchantments={levels:{feather_falling:3}}, ', ff3:1b}}"}
 function ctf_inv:armor/reassemble
+function ctf_inv:armor/sound
 
 $scoreboard players remove @s money $(cost)
 function ctf_shop:feedback/bought

@@ -6,5 +6,5 @@
 #   extra      - extra components of the chestplate and the leggings, ending with ", " (or "")
 #   feet       - boots item id; feet_extra - its extra components, ending with ", " (or "")
 clear @s *[custom_data~{ctf_part:1b}]
-$item replace entity @s armor.chest with minecraft:$(mat)_chestplate[$(extra)max_damage=$(max), custom_data={ctf_set:{mat:"$(mat)", extra:"$(extra)", feet:"$(feet)", feet_extra:"$(feet_extra)"}}]
+$item replace entity @s armor.chest with minecraft:$(mat)_chestplate[$(extra)max_damage=$(max), custom_data={ctf_set:{mat:"$(mat)", max:$(max), extra:"$(extra)", feet:"$(feet)", feet_extra:"$(feet_extra)"}}]
 function ctf_inv:armor/assemble

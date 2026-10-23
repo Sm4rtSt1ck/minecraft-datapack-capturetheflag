@@ -15,8 +15,9 @@ Code: [`ctf_loot`](data/ctf_loot/function/), settings: [`ctf_loot:config`](data/
    player gets a chat message.
 3. At the start of the **next freeze phase** a shulker box falls for every such attacker onto a
    landing point of the map near the attackers' spawn.
-4. Only its **owner** can open it (a click on the box). The reward goes straight into his
-   inventory and the box disappears. Other players get the message that the crate is not theirs.
+4. The reward **lies inside the box**: the owner opens it and decides whether to take it. Anyone can
+   open the box, but the reward is bound to its owner (`ctf_bound`, `ctf_owner`): if another player
+   takes it, it goes straight back into the box; dropped on the ground, only the owner can pick it up.
 5. A crate that wasn't opened disappears with an explosion when the round starts: the reward is lost.
 
 Crates are only for the attacking side. A task completed in the last round of a half (before the
@@ -60,10 +61,11 @@ otherwise the crate gives the test item of the rarity.
 4 damage to every enemy within 3 blocks in front of the player and sets the ground on fire for
 5 seconds (fire blocks around, like a molotov; fire doesn't spread because `doFireTick` is off).
 8 seconds cooldown; a sound when it is ready. Burn kills are credited to the owner.
-Not a "main weapon": it is carried in a free slot next to the bought sword.
+A main weapon (slot 1): it replaces the default golden sword; with another main weapon it can't be
+taken (it goes back into the box) - drop your weapon first.
 
 **Walls** (`ctf_loot:reward/walls`), 3 pieces. Invisible invulnerable armor stands without gravity:
-arrows bounce off them (vanilla behavior). Brown particles show where they are. They are removed when
+arrows bounce off them (vanilla behavior), bullets of the sniper rifle / assault rifle stop at them. Brown particles show where they are. They are removed when
 the end of round phase ends.
 
 **Stun trap** (`ctf_loot:reward/stun`). An invisible marker with faint pale particles. The first enemy
@@ -83,8 +85,7 @@ armor stand is placed exactly where the player looks, like in survival. Adventur
 * Landing: the shulker box (rarity color), a white (pale oak) sign above it with the rarity and
   the owner's name, a TNT-like explosion (particles + sound, no damage) and a camera shake for
   attackers within 25 blocks.
-* The box is never opened as a container: an invisible `interaction` entity over it catches the
-  clicks and checks the clicker's UUID.
+* The reward is put into the middle slot of the box.
 
 ### Settings
 

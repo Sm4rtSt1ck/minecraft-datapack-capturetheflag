@@ -6,3 +6,4 @@ execute if score #slot shop.tmp matches 20 run return run function ctf_shop:prod
 execute if score #slot shop.tmp matches 22 run return run function ctf_shop:product/feather_falling_boots {cost: 50}
 execute if score #slot shop.tmp matches 24 run return run function ctf_shop:product/shield
 execute if score #slot shop.tmp matches 26 run return run function ctf_shop:product/totem
+execute if score #slot shop.tmp matches 27 run return run function ctf_shop:product/helmet {cost: 40}

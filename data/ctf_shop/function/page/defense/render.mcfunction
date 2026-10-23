@@ -18,3 +18,7 @@ execute if entity @s[tag=defense] run function ctf_shop:ui/product {slot: 24, mo
 ]'}
 
 function ctf_shop:ui/product {slot: 26, model: "totem_of_undying", cost: 350, name: '{"text": "Totem of undying (regen. 3.5-4 hearts)"}', extra: ''}
+
+# Team leather helmet (under the armor sets)
+execute if entity @s[tag=attack] run function ctf_shop:ui/product {slot: 27, model: "leather_helmet", cost: 40, name: '{"text": "Leather helmet"}', extra: 'dyed_color={rgb:16711799}'}
+execute if entity @s[tag=defense] run function ctf_shop:ui/product {slot: 27, model: "leather_helmet", cost: 40, name: '{"text": "Leather helmet"}', extra: 'dyed_color={rgb:47103}'}

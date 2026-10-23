@@ -1,4 +1,4 @@
-# The crate lands: shulker box + sign with the owner's name, the click catcher, explosion, shake
+# The crate lands: shulker box with the reward inside + sign with the owner's name, explosion, shake
 function ctf_loot:fall/place with entity @s data.r
 function ctf_loot:fall/place_at with entity @s data
 function ctf_loot:fall/sign_name with entity @s data

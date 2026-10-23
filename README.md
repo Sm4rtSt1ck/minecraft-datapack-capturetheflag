@@ -281,6 +281,7 @@ It is an item with an endless `consumable` use time; while it is "used", the
 | --- | --- | --- |
 | Gold armor (full set) | $150 | 11 armor points (default leather: 7) |
 | Iron armor (full set) | $250 | 15 armor points, ~60% less damage |
+| Leather helmet | $40 | team color, +1 armor point (also comes with every armor set) |
 | Shield | $90 | low durability; can't be owned together with a totem |
 
 ### Stuff
@@ -323,10 +324,13 @@ the helmet is separate.
 * The set is its chestplate: it stores the material and the boots. When it is put on, the
   leggings and boots appear; they exist only while it is worn.
 * All three pieces have the same durability and damage, so they wear out and break together.
-* Taking off any piece turns the whole set into one chestplate in the inventory; dropping any
-  piece drops the whole set.
-* A picked up chestplate / helmet is put on automatically if its armor slot is empty. Armor is
-  picked up only into an empty armor slot.
+* Armor is only worn, never kept in the inventory: a chestplate / helmet that gets into the
+  inventory (shift-click, closing the inventory with it on the cursor) is put back on, or dropped
+  if that armor slot is taken.
+* Taking any piece with the cursor turns the whole set into one chestplate on the cursor (to drop
+  it outside the window); dropping any piece drops the whole set.
+* Armor on the ground is never picked up into the inventory: walking over it puts it straight on
+  if that armor slot is empty, even with a full inventory (`ctf_inv:ground/wear`).
 * "Less fall damage" replaces the boots of the worn set (Feather Falling III, same durability).
 * Every set gets a random id (`sid`) when it is assembled, so parts of another set are never
   mixed with it (e.g. when another chestplate is put on over the worn one).

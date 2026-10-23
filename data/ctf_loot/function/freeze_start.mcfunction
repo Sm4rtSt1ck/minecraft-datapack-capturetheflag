@@ -15,3 +15,5 @@ scoreboard players reset * loot.kills
 scoreboard players reset * loot.dmg
 tag @a remove loot.unkill
 data remove storage ctf_loot:best players
+# Click catchers of an older version of the crates
+kill @e[type=interaction, tag=ctf.loot_click]

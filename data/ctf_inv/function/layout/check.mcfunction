@@ -9,6 +9,13 @@ execute if entity @s[tag=ctf.exit_closed] run return run tag @s add ctf.inv_dirt
 # All chorus fruits must be the same item to stack
 function ctf_inv:limits/normalize_chorus
 
+# Loot crate rewards: another player's reward goes back into its crate; a reward main weapon
+# can't be kept next to another main weapon
+function ctf_inv:owned/check
+
+# A picked up / taken main weapon replaces the default golden sword
+execute if items entity @s container.* golden_sword[custom_data~{tags:["main weapon"]}] run function ctf_inv:layout/golden_replace
+
 # Body armor: chestplate + leggings + boots work as one set (the helmet is separate)
 function ctf_inv:armor/check
 

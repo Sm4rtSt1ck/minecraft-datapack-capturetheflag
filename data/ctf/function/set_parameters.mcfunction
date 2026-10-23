@@ -246,14 +246,8 @@ scoreboard objectives add shop.lim.smoke dummy
 scoreboard objectives add inv.tmp dummy
 # 1 = exit confirmation (yes/no) is shown in the crafting grid
 scoreboard objectives add exit_confirm dummy
-# Body armor sets (ctf_inv:armor): id of the assembled set, pickups of chestplates / helmets
+# Body armor sets (ctf_inv:armor): id of the assembled set
 scoreboard objectives add arm.sid dummy
-scoreboard objectives add pk.chest_l minecraft.picked_up:minecraft.leather_chestplate
-scoreboard objectives add pk.chest_g minecraft.picked_up:minecraft.golden_chestplate
-scoreboard objectives add pk.chest_i minecraft.picked_up:minecraft.iron_chestplate
-scoreboard objectives add pk.helm_l minecraft.picked_up:minecraft.leather_helmet
-scoreboard objectives add pk.helm_g minecraft.picked_up:minecraft.golden_helmet
-scoreboard objectives add pk.helm_i minecraft.picked_up:minecraft.iron_helmet
 # "broken" = 1 after the flag has been broken in the current round
 scoreboard objectives add flag_state dummy
 
