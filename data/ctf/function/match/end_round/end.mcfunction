@@ -3,6 +3,9 @@ function admin:log/function {name: "match/end_round/end"}
 execute as @a[tag=player, tag=ultimate] run function ctf:match/events/ultimate/end
 execute as @a[tag=player] run function ctf:match/events/ultimate/add_point {points: 80}
 
+# Loot crate rewards in the world (walls, stun traps, fire areas) are removed
+function ctf_loot:items/clear
+
 tag @a[tag=player] remove dead
 tag @a[tag=player] remove just_died
 

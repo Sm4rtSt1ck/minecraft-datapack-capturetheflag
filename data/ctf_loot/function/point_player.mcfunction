@@ -6,3 +6,4 @@ execute if score @s loot.best matches 3 run data modify storage ctf_loot:tmp p.r
 execute if score @s loot.best matches 4 run data modify storage ctf_loot:tmp p.rarity set value "legendary"
 execute if score @s loot.best matches 5 run data modify storage ctf_loot:tmp p.rarity set value "mythic"
 function ctf_loot:drop_for with storage ctf_loot:tmp p
+tellraw @s {"text": "Your loot crate is falling onto your base!", "color": "gold"}

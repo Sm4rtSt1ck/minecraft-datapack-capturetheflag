@@ -24,14 +24,16 @@ teams swap) gives no crate, because the player is a defender in the next round.
 
 ### Tasks
 
-| Task | Rarity | How it is detected |
-| --- | --- | --- |
-| Deliver the flag to the base | Common | the flag delivery (`ctf:match/events/flag/bring`) |
-| Break the flag | Rare | the flag breaking (`ctf:match/events/flag/break`), the player who broke it |
-| Kill an enemy with their own trap | Epic | a defender is killed by a trap set off by the attacker: by walking into it, shooting it (bow, crossbow, sniper rifle, assault rifle, fireworks, wind charges) or setting it off otherwise. Any defender counts, not only the one who placed the trap |
-| Kill an enemy with bare hands | Legendary | a kill with an empty main hand |
-| Kill 5 enemies in one round | Mythic | kills of the round (any weapon, grenades, traps); only if the enemy team has at least 5 players in the match |
-| Kill an enemy with a flying wind charge | Mythic | advancement `player_killed_entity` with the killing blow by a `wind_charge` (a direct hit) |
+| Task | Rarity | Reward | How it is detected |
+| --- | --- | --- | --- |
+| Deliver the flag to the base | Common | Stun trap | the flag delivery (`ctf:match/events/flag/bring`) |
+| Break the flag | Rare | test item | the flag breaking (`ctf:match/events/flag/break`), the player who broke it |
+| Take more than 20 damage in one round and stay alive ("unkillable") | Rare | 3 walls | stat `damage_taken` of the round (totems and regeneration make it possible); checked for alive players only |
+| Kill an enemy with their own trap | Epic | test item | a defender is killed by a trap set off by the attacker: by walking into it, shooting it (bow, crossbow, sniper rifle, assault rifle, fireworks, wind charges) or setting it off otherwise. Any defender counts, not only the one who placed the trap |
+| Kill 10 enemies in this match | Epic | Inferno blade | kills of the whole match (both sides), once per match, counted at the start of freeze |
+| Kill an enemy with bare hands | Legendary | test item | a kill with an empty main hand |
+| Kill 5 enemies in one round | Mythic | test item | kills of the round (any weapon, grenades, traps); only if the enemy team has at least 5 players in the match |
+| Kill an enemy with a flying wind charge | Mythic | test item | advancement `player_killed_entity` with the killing blow by a `wind_charge` (a direct hit) |
 
 Teamkills never count. Kills, money and the kill credit of traps / grenades are described in the
 [README](README.md#kill-rewards).
@@ -49,6 +51,30 @@ Teamkills never count. Kills, money and the kill credit of traps / grenades are 
 The rewards are test items for now; every rarity has one `reward` in the config (an item for `give`,
 components allowed).
 
+### Rewards
+
+A task with its own reward gives it (`reward` in the config: function `ctf_loot:reward/<reward>`),
+otherwise the crate gives the test item of the rarity.
+
+**Inferno blade** (`ctf_loot:reward/inferno`). A netherite sword (Fire Aspect I). A hit also deals
+4 damage to every enemy within 3 blocks in front of the player and sets the ground on fire for
+5 seconds (fire blocks around, like a molotov; fire doesn't spread because `doFireTick` is off).
+8 seconds cooldown; a sound when it is ready. Burn kills are credited to the owner.
+Not a "main weapon": it is carried in a free slot next to the bought sword.
+
+**Walls** (`ctf_loot:reward/walls`), 3 pieces. Invisible invulnerable armor stands without gravity:
+arrows bounce off them (vanilla behavior). Brown particles show where they are. They are removed when
+the end of round phase ends.
+
+**Stun trap** (`ctf_loot:reward/stun`). An invisible marker with faint pale particles. The first enemy
+of the player who placed it that comes within 1.5 blocks sets it off: every enemy within 2.5 blocks
+is stunned for 3 seconds (almost no movement, no jumping, no hitting, nausea). Removed at the end of
+the round like the walls.
+
+**Placing in adventure mode.** Walls and stun traps are spawn eggs of an armor stand with
+`can_place_on` for any block: in adventure mode an item can be used on the blocks listed there, so the
+armor stand is placed exactly where the player looks, like in survival. Adventure mode stays on.
+
 ### The fall
 
 * The crate falls from **30 blocks** above its landing point, accelerating: 30 blocks in 30 ticks.
@@ -65,7 +91,8 @@ components allowed).
 [`ctf_loot:config`](data/ctf_loot/function/config.mcfunction):
 
 * `rarities` - for every rarity: sign text, box, trail colors, text color, reward;
-* `tasks` - for every task: rarity rank (1 common .. 5 mythic) and chat text;
+* `tasks` - for every task: rarity rank (1 common .. 5 mythic), chat text and the reward;
+* `unkillable` - damage needed (tenths of HP), `kills_total` - kills needed in the match;
 * `kills` - the "kills" task: kills needed and the minimum number of enemies.
 
 **Landing points:** `ctf:match/maps/<map>/loot.mcfunction`, one line per point (the block where the
@@ -87,6 +114,7 @@ id to `tasks` in the config.
 * `ctf_test:loot/task {id}` - count a task as done (any phase), `ctf_test:loot/best` - your best task;
 * `ctf_test:loot/freeze` - drop the crates like at the start of freeze;
 * `ctf_test:loot/clear` - remove all crates with the explosion;
+* `ctf_test:loot/reward {id}` - get a reward: inferno / walls / stun;
 * `ctf_test:loot/reload_config` - apply changes of the config.
 
 

@@ -217,6 +217,11 @@ scoreboard objectives add fx.shake dummy
 scoreboard objectives add loot.t dummy
 scoreboard objectives add loot.best dummy
 scoreboard objectives add loot.kills dummy
+# Loot crate tasks / rewards: kills of the match, damage taken (tenths of HP), Inferno cooldown, stun ticks
+scoreboard objectives add loot.ktotal dummy
+scoreboard objectives add loot.dmg minecraft.custom:minecraft.damage_taken
+scoreboard objectives add loot.cd dummy
+scoreboard objectives add loot.stun dummy
 scoreboard objectives add loot.tmp dummy
 
 # Shop (ctf_shop)

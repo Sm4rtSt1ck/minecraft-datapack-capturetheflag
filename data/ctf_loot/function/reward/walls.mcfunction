@@ -1,0 +1,3 @@
+# 3 invisible walls (invulnerable armor stands deflect arrows). A spawn egg of an armor stand:
+# "can_place_on" lets it be used in adventure mode, it is placed where the player looks
+give @s bat_spawn_egg[item_model="minecraft:armor_stand", custom_name='{"text": "Wall", "color": "#a07040", "italic": false}', lore=['{"text": "An invisible wall that deflects arrows", "color": "gray", "italic": false}', '{"text": "Removed at the end of the round", "color": "dark_gray", "italic": false}'], can_place_on={predicates: [{}], show_in_tooltip: false}, entity_data={id: "minecraft:armor_stand", Invisible: 1b, Invulnerable: 1b, NoGravity: 1b, Silent: 1b, DisabledSlots: 4144959, Tags: ["ctf.wall"]}, custom_data={ctf_reward: 1b}] 3

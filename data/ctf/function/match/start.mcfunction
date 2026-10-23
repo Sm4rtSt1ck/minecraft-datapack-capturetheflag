@@ -52,6 +52,8 @@ function ctf:match/helpers/flag/config
 function ctf_loot:config
 scoreboard players reset * loot.best
 scoreboard players reset * loot.kills
+scoreboard players reset * loot.ktotal
+tag @a remove loot.k10
 
 # Events
 scoreboard players reset * just_used_totem

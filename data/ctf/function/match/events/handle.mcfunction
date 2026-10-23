@@ -13,6 +13,8 @@ execute as @e[type=armor_stand, tag=flag] at @s unless block ~ ~ ~ magenta_banne
 # Fight
 execute as @a[scores={just_killed=1..}] run function ctf:match/events/fight/kill
 execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
+# Loot crate task "unkillable" (after the deaths: only alive players)
+execute as @a[tag=attack, tag=player, tag=!dead, tag=!loot.unkill, gamemode=!spectator, scores={loot.dmg=1..}] run function ctf_loot:unkillable
 tag @a remove just_killed
 execute as @a[scores={just_used_totem=1..}] run function ctf:match/events/fight/use_totem
 execute as @a[scores={just_threw_grenade=1..}] run function ctf:match/events/grenades/throw

@@ -6,6 +6,11 @@ $data modify storage ctf_loot:tmp d set value {x: $(x), y: $(y), z: $(z), rarity
 $data modify storage ctf_loot:tmp d.r set from storage ctf_loot:config rarities.$(rarity)
 execute store result storage ctf_loot:tmp d.owner int 1 run scoreboard players get @s player_id
 data modify storage ctf_loot:tmp d.uuid set from entity @s UUID
+# The reward: the function of the best task (ctf_loot:reward/<name>), otherwise the test item of the rarity
+data modify storage ctf_loot:tmp d.reward_fn set value ""
+data modify storage ctf_loot:tmp d.reward_item set from storage ctf_loot:tmp d.r.reward
+execute store result storage ctf_loot:tmp rw.pid int 1 run scoreboard players get @s player_id
+function ctf_loot:internal/reward_of_best with storage ctf_loot:tmp rw
 $scoreboard players set #y loot.tmp $(y)
 scoreboard players add #y loot.tmp 1
 execute store result storage ctf_loot:tmp d.sy int 1 run scoreboard players get #y loot.tmp

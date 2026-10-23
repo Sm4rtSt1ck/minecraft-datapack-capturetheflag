@@ -1,0 +1,3 @@
+# owner, reward_fn
+$execute as @a if score @s player_id matches $(owner) run function ctf_loot:reward/$(reward_fn)
+$execute as @a if score @s player_id matches $(owner) at @s run playsound minecraft:entity.player.levelup master @s ~ ~ ~ 0.6 1.6
