@@ -186,6 +186,12 @@ static: no runtime loops over a registry, no macro calls in hot paths.
   `EVENTS`. `ctf_maps:gen` generates `ctf_maps:api/call/<event>` (replaced the macro
   `call_current`); the vote buttons, the vote count and the music stop loop over `MAPS`. The maps
   themselves are hand-written `ctf_maps:map/<id>/<event>`.
+- `registry/econ.bolt` (4d): `WEAPON_KILLS` (wpn, chat name, money: `ctf_econ:kill` and the
+  `#kill.*` scores of `ctf_econ:config`), `KILLS` (the other kill rewards). The other money values
+  stay in `ctf_econ:config`.
+- `registry/loot.bolt` (4d): `RARITIES` (rank = number), `TASKS` (rarity, text, reward), task
+  settings. `ctf_loot:config` puts them into the storage `ctf_loot:config` (the runtime reads
+  the storage, as before); `ctf_loot:point_player` maps the rank to the rarity.
 - `ctf_inv:lib` `count(pred)` = `ctf_inv:limits/count` without a macro call. The macro
   `limits/count` / `limits/one` stay for callers with a runtime predicate (`ctf_shop`).
 
@@ -254,7 +260,7 @@ the old order of the calls, so keep it when adding entries.
   button in the 2x2 crafting grid, bound loot rewards, and the chorus fruit in freeze.
 - `ctf_shop` - the shop inside the inventory (slots 9-35 hold paper UI items, `custom_data.ctf_ui`).
   It has a fast path (count of UI items == 27) and pages with `render` + `click` per page.
-- `ctf_econ` - CS-like economy; all money values are in its `config`.
+- `ctf_econ` - CS-like economy; money values in its `config`, kill rewards in `registry/econ.bolt`.
 - `ctf_guns` - hitscan rays (`ray/*`), the assault rifle; `ctf_sniper` - the sniper (spyglass).
 - `ctf_loot` - loot crates for attackers' tasks, and rewards: Inferno blade, walls, stun trap,
   Creepenator.

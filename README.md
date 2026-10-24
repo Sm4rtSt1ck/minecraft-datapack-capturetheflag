@@ -95,9 +95,9 @@ The economy is modeled on Counter-Strike: winning pays a lot, losing pays a
 growing **loss bonus**, and cheap or hard-to-use weapons pay more per kill
 than strong ones. Money is spent in the shop during the **freeze phase**.
 
-All money values live in one file:
-[`data/ctf_econ/function/config.mcfunction`](src/data/ctf_econ/function/config.mcfunction).
-It is loaded at the start of every match, so balance changes need only a `/reload`.
+The money values live in [`ctf_econ:config`](src/data/ctf_econ/function/config.mcfunction)
+(start, max, round rewards, loss bonus, objectives, teamkill) and the kill rewards in
+[`registry/econ.bolt`](registry/econ.bolt). After a change: `beet build`, then `/reload`.
 
 ### Starting money and limit
 
@@ -478,7 +478,7 @@ data/
  │     ├ buy/         purchase templates (give, group, unique, ultimate)
  │     └ product/     non-standard products (armor, bows, crossbow...)
  │
- ├ ctf_econ/          economy: config (all money values), kill rewards, round rewards, loss bonus
+ ├ ctf_econ/          economy: config (money values; kill rewards: registry/econ.bolt), round rewards, loss bonus
  │
  ├ ctf_inv/           hotbar layout, exit button, items on the ground
  │  ├ advancement/    inventory_changed -> layout is checked only after a change

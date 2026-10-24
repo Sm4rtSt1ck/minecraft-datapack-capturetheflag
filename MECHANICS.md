@@ -5,7 +5,8 @@ Detailed description of the game mechanics. A short overview is in the [README](
 
 ## Loot Crates (attackers)
 
-Code: [`ctf_loot`](src/data/ctf_loot/function/), settings: [`ctf_loot:config`](src/data/ctf_loot/function/config.mcfunction).
+Code: [`ctf_loot`](src/data/ctf_loot/function/), settings: [`registry/loot.bolt`](registry/loot.bolt) (put into the storage `ctf_loot:config` by
+[`ctf_loot:config`](src/data/ctf_loot/function/config.mcfunction)).
 
 ### How it works
 
@@ -111,10 +112,11 @@ armor stand is placed exactly where the player looks, like in survival. Adventur
 
 ### Settings
 
-[`ctf_loot:config`](src/data/ctf_loot/function/config.mcfunction):
+[`registry/loot.bolt`](registry/loot.bolt) (`beet build`, then `/reload`):
 
-* `rarities` - for every rarity: sign text, box, trail colors, text color, reward;
-* `tasks` - for every task: rarity rank (1 common .. 5 mythic), chat text and the reward;
+* `RARITIES` - for every rarity, from common to mythic (its rank): sign text, box, trail colors,
+  text color, reward;
+* `TASKS` - for every task: its rarity, chat text and the reward;
 * `unkillable` - damage needed (tenths of HP), `kills_total` - kills needed in the match;
 * `kills` - the "kills" task: kills needed and the minimum number of enemies.
 

@@ -1,0 +1,105 @@
+# LOOT CRATES REGISTRY. Read at build time by bolt: ctf_loot:config puts it into the storage
+# ctf_loot:config (rarities, tasks, task settings). Full description: MECHANICS.md
+#
+# During a round (and end_round) an attacker can complete tasks by chance. At the start of the
+# next freeze a shulker box with a reward falls for him (for the rarest task he completed),
+# onto a landing point of the map (ctf_maps:map/<map>/loot). Only he can open it.
+
+# RARITIES, from the most common one: rank = number in the list (1..5).
+#   name - sign text; box - the shulker box; from_color -> color - the falling trail (RGB 0..1);
+#   text_color; reward - the test item of the rarity (for "give"; for now wool blocks)
+RARITIES = [
+    {
+        "id": "common",
+        "name": "COMMON",
+        "box": "light_gray_shulker_box",
+        "from_color": [0.25, 0.25, 0.25],
+        "color": [0.62, 0.62, 0.62],
+        "text_color": "gray",
+        "reward": "light_gray_wool"},
+    {
+        "id": "rare",
+        "name": "RARE",
+        "box": "blue_shulker_box",
+        "from_color": [0.05, 0.12, 0.4],
+        "color": [0.15, 0.35, 1.0],
+        "text_color": "blue",
+        "reward": "blue_wool"
+    },
+    {
+        "id": "epic",
+        "name": "EPIC",
+        "box": "purple_shulker_box",
+        "from_color": [0.22, 0.03, 0.35],
+        "color": [0.6, 0.1, 0.9],
+        "text_color": "dark_purple",
+        "reward": "purple_wool"
+    },
+    {
+        "id": "legendary",
+        "name": "LEGENDARY",
+        "box": "yellow_shulker_box",
+        "from_color": [0.4, 0.28, 0.0],
+        "color": [1.0, 0.75, 0.0],
+        "text_color": "gold",
+        "reward": "yellow_wool"
+    },
+    {
+        "id": "mythic",
+        "name": "MYTHIC",
+        "box": "red_shulker_box",
+        "from_color": [0.2, 0.0, 0.01],
+        "color": [0.55, 0.0, 0.03],
+        "text_color": "dark_red",
+        "reward": "red_wool"
+    },
+]
+
+
+# TASKS: the rarity of the crate, chat text (no quotes) and the reward: a function
+# ctf_loot:reward/<reward>. A task without "reward" gives the test item of its rarity.
+# A task is completed by ctf_loot:task {id: "<id>"} (only the tasks listed here count).
+TASKS = [
+    {
+        "id": "flag_bring",
+        "rarity": "common",
+        "text": "Deliver the flag",
+        "reward": "stun"
+    },
+    {
+        "id": "unkillable",
+        "rarity": "rare",
+        "text": "Take more than 20 damage in one round and stay alive",
+        "reward": "walls"
+    },
+    {
+        "id": "kills_total",
+        "rarity": "epic",
+        "text": "Kill 10 enemies in this match",
+        "reward": "inferno"
+    },
+    {
+        "id": "enemy_trap",
+        "rarity": "epic",
+        "text": "Kill an enemy with their own trap",
+        "reward": "creep"
+    },
+    # {"id": "flag_break", "rarity": "rare", "text": "Break the flag"},
+    # {"id": "fist", "rarity": "legendary", "text": "Kill an enemy with bare hands"},
+    # {"id": "kills", "rarity": "mythic", "text": "Kill 5 enemies in one round"},
+    # {"id": "wind", "rarity": "mythic", "text": "Kill an enemy with a flying wind charge"},
+]
+
+
+# The "kills" task: how many kills in one round, and the minimum number of enemies in the match
+KILLS = {"count": 5, "min_enemies": 5}
+# The "unkillable" task: damage taken in one round (tenths of HP: 200 = 20 HP) - more than that
+UNKILLABLE = {"damage": 200}
+# The "kills_total" task: kills in the whole match
+KILLS_TOTAL = {"count": 10}
+
+
+def rank(rarity):
+    for i in range(len(RARITIES)):
+        if RARITIES[i]["id"] == rarity:
+            return i + 1

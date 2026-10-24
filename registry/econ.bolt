@@ -1,0 +1,39 @@
+# ECONOMY REGISTRY: kill rewards. Read at build time by bolt (ctf_econ:kill, ctf_econ:config).
+# The other money values (start, max, round wins, loss bonus, objectives, teamkill) are in
+# ctf_econ:config.
+# Cheap / hard weapons pay more per kill than strong ones.
+
+# The weapon in the killer's main hand (custom_data wpn:"<wpn>"), checked in this order.
+#   name - the reason in the chat: "+$40 kill (golden sword)"; money - score #kill.<wpn> econ
+WEAPON_KILLS = [
+    {"wpn": "golden_sword", "name": "golden sword", "money": 40},
+    {"wpn": "iron_sword", "name": "iron sword", "money": 50},
+    {"wpn": "diamond_sword", "name": "diamond sword", "money": 35},
+    {"wpn": "netherite_sword", "name": "netherite sword", "money": 30},
+    {"wpn": "mace", "name": "mace", "money": 40},
+    {"wpn": "bow", "name": "bow", "money": 45},
+    {"wpn": "fire_bow", "name": "fire bow", "money": 40},
+    {"wpn": "punch_bow", "name": "punch bow", "money": 40},
+    {"wpn": "rifle", "name": "assault rifle", "money": 25},
+    {"wpn": "inferno", "name": "inferno blade", "money": 30},
+    {"wpn": "sniper", "name": "sniper rifle", "money": 15},
+    {"wpn": "crossbow", "name": "crossbow", "money": 20},
+]
+
+# The other kill rewards (score #kill.<id> econ)
+KILLS = [
+    # Bare hands, the flag breaker (ctf_econ:kill)
+    {"id": "fist", "money": 150},
+    {"id": "stick", "money": 150},
+    # Any kill during an active ultimate
+    {"id": "ultimate", "money": 20},
+    # Kills credited by ctf_fight:internal/credit (the game credits nobody for them)
+    {"id": "grenade", "money": 30},
+    {"id": "trap", "money": 30},
+    # Creepenator: a creeper explosion (to the player who made the creeper) / killing a creeper
+    # (the player in it dies)
+    {"id": "creepenator", "money": 30},
+    {"id": "creeper", "money": 30},
+    # Any other weapon
+    {"id": "other", "money": 30},
+]

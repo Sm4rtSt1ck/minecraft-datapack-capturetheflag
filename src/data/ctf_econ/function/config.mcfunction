@@ -1,4 +1,6 @@
-# ECONOMY SETTINGS. All money values of the game are set here (run at match start).
+# ECONOMY SETTINGS. All money values of the game are set here (run at match start);
+# the kill rewards: registry/econ.bolt.
+from registry:econ import WEAPON_KILLS, KILLS
 # Similar to CS: wins pay a lot, losses pay a growing loss bonus,
 # cheap / hard weapons pay more per kill than strong ones.
 
@@ -33,26 +35,8 @@ scoreboard players set #broken_loss econ 80
 # Teamkill penalty
 scoreboard players set #teamkill econ 30
 
-# Kill reward by the weapon in the killer's main hand
-scoreboard players set #kill.fist econ 150
-scoreboard players set #kill.stick econ 150
-scoreboard players set #kill.golden_sword econ 40
-scoreboard players set #kill.iron_sword econ 50
-scoreboard players set #kill.diamond_sword econ 35
-scoreboard players set #kill.netherite_sword econ 30
-scoreboard players set #kill.mace econ 40
-scoreboard players set #kill.bow econ 45
-scoreboard players set #kill.fire_bow econ 40
-scoreboard players set #kill.punch_bow econ 40
-scoreboard players set #kill.rifle econ 25
-scoreboard players set #kill.crossbow econ 20
-scoreboard players set #kill.sniper econ 15
-scoreboard players set #kill.inferno econ 30
-scoreboard players set #kill.ultimate econ 20
-# Kills credited by ctf_fight:internal/credit (the game credits nobody for them)
-scoreboard players set #kill.grenade econ 30
-scoreboard players set #kill.trap econ 30
-# Creepenator: a creeper explosion (to the player who made the creeper) / killing a creeper (the player in it dies)
-scoreboard players set #kill.creepenator econ 30
-scoreboard players set #kill.creeper econ 30
-scoreboard players set #kill.other econ 30
+# Kill rewards (registry/econ.bolt)
+for w in WEAPON_KILLS:
+    scoreboard players set f"#kill.{w['wpn']}" econ w["money"]
+for k in KILLS:
+    scoreboard players set f"#kill.{k['id']}" econ k["money"]
