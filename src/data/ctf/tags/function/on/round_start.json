@@ -1,11 +1,11 @@
 {
     "values": [
-        "ctf:match/events/flag/on/round_start",
-        "ctf:match/events/grenades/on/round_start",
+        "ctf_flag:on/round_start",
+        "ctf_grenades:on/round_start",
         "ctf_shop:on/round_start",
-        "ctf:match/events/ultimate/render_all",
+        "ctf_ult:on/render_all",
         "ctf_inv:on/round_start",
         "ctf_loot:round_start",
-        "ctf:match/maps/on/round_start"
+        "ctf_maps:on/round_start"
     ]
 }

@@ -2,7 +2,7 @@
 #
 # During a round (and end_round) an attacker can complete tasks by chance. At the start of the
 # next freeze a shulker box with a reward falls for him (for the rarest task he completed),
-# onto a landing point of the map (ctf:match/maps/<map>/loot). Only he can open it.
+# onto a landing point of the map (ctf_maps:map/<map>/loot). Only he can open it.
 
 # RARITIES (rank 1..5): sign text, shulker box, falling trail (from_color -> color, RGB 0..1),
 # text color, reward (an item for "give"; for now test wool blocks)

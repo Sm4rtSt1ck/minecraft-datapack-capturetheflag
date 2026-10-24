@@ -1,7 +1,7 @@
 {
     "values": [
         "ctf:match/rules/instant_tnt",
-        "ctf:match/events/flag/tick/round",
+        "ctf_flag:tick/round",
         "ctf_shop:tick",
         "ctf_sniper:tick",
         "ctf_guns:tick",

@@ -102,5 +102,6 @@ function #ctf:config
 # Modules: starting money, event scores, ultimates, the map start (title, music)
 function #ctf:on/match_start
 
-function ctf:match/prepare/prepare
+# Modules: the map is cloned, then warm-up (match start) or freeze (swap) starts
+function #ctf:on/prepare
 

@@ -1,6 +1,6 @@
 {
     "values": [
-        "ctf:match/events/fight/deathcam/stop_all",
+        "ctf_fight:on/round_cleanup",
         "ctf_loot:reward/creep/stop_all"
     ]
 }

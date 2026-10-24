@@ -1,0 +1,2 @@
+title @s title [{"text": "Green", "color": "green"}, {"text": "Mine", "color": "gray"}]
+execute if score Music settings matches 1 run schedule function ctf_maps:map/green_mine/music 200t

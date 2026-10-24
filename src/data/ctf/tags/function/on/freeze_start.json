@@ -1,15 +1,14 @@
 {
     "values": [
-        "ctf:match/events/flag/on/freeze_start",
-        "ctf:match/events/misc/chorus/on/freeze_start",
-        "ctf:match/events/grenades/on/freeze_start",
+        "ctf_flag:on/freeze_start",
+        "ctf_grenades:on/freeze_start",
         "ctf_econ:on/freeze_start",
         "ctf_inv:on/freeze_start",
-        "ctf:match/maps/on/freeze_start",
+        "ctf_maps:on/freeze_start",
         "ctf_shop:on/freeze_start",
         "ctf_loot:freeze_start",
-        "ctf:match/events/ultimate/render_all",
+        "ctf_ult:on/render_all",
         "ctf_inv:on/freeze_refresh",
-        "ctf:match/events/flag/on/freeze_give"
+        "ctf_flag:on/freeze_give"
     ]
 }

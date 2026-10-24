@@ -23,17 +23,7 @@ execute if score game state matches 2..7 unless entity @a[tag=player] run functi
 execute if score game state matches 2..7 run function ctf:match/keep_spectators_in_bounds
 
 #########################################
-# GLOBAL MATCH EVENTS
-
-execute as @a[scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[custom_data={action:"exit"}] run \
-    tellraw @s [\
-        {"text": "To exit, press ", "color": "gold"}, \
-        {"text": "here", "color": "red", "clickEvent": {"action": "run_command", "value": "/function ctf:lobby/join"}, \
-        "hoverEvent": {"action": "show_text", "contents": "*click*"}}\
-    ]
-
-#########################################
-# EVERY TICK: effects, loot crates, death camera (also used by the tests)
+# EVERY TICK: the exit button message, effects, loot crates, death camera (also used by the tests)
 
 function #ctf:tick/global
 

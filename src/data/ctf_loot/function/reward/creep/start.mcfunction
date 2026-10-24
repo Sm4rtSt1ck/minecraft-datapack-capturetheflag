@@ -1,7 +1,7 @@
 # The player becomes a creeper: his camera is put into a creeper (forced spectate) that lives its own
 # life. It blows up -> the player dies (the kill goes to loot.cby, who made him a creeper); it is
 # killed -> the player dies with it, killed by its killer; the round ends -> he is back (stop_all).
-execute if entity @s[tag=ultimate] run function ctf:match/events/ultimate/end
+execute if entity @s[tag=ultimate] run function ctf_ult:api/end
 # The flag can't stay with him
 execute if function ctf_inv:api/has_flag run function ctf_loot:reward/creep/drop_flag
 

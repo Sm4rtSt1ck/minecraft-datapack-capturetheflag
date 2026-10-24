@@ -19,6 +19,6 @@ spectate @e[type=creeper, tag=loot.creeper_mine, limit=1] @s
 # blast radius is marked for the player who made the creeper
 scoreboard players reset #owner kc.tmp
 execute if score @s loot.cby matches -2147483648.. run scoreboard players operation #owner kc.tmp = @s loot.cby
-execute as @e[type=creeper, tag=loot.creeper_mine, limit=1] at @s if entity @a[tag=player, gamemode=!spectator, distance=..3.5] as @a[tag=player, distance=..7] run function ctf:match/events/credit/mark {time: 10, src: 5}
-execute as @e[type=creeper, tag=loot.creeper_mine, limit=1] at @s if entity @a[tag=player, gamemode=!spectator, distance=..3.5] run function ctf:match/events/credit/mark_traps {r: 7}
+execute as @e[type=creeper, tag=loot.creeper_mine, limit=1] at @s if entity @a[tag=player, gamemode=!spectator, distance=..3.5] as @a[tag=player, distance=..7] run function ctf_fight:api/credit/mark {time: 10, src: 5}
+execute as @e[type=creeper, tag=loot.creeper_mine, limit=1] at @s if entity @a[tag=player, gamemode=!spectator, distance=..3.5] run function ctf_fight:api/credit/mark_traps {r: 7}
 tag @e[type=creeper, tag=loot.creeper_mine] remove loot.creeper_mine

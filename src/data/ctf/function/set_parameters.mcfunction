@@ -157,7 +157,7 @@ scoreboard objectives add flag_broken minecraft.mined:minecraft.magenta_banner
 scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.magenta_wall_banner
 scoreboard objectives add just_placed_trap minecraft.used:minecraft.frog_spawn_egg
 scoreboard objectives add just_threw_grenade minecraft.used:minecraft.lingering_potion
-# Smoke grenades (ctf:match/events/grenades/smoke): throws and cloud ticks left
+# Smoke grenades (ctf_grenades:internal/smoke): throws and cloud ticks left
 scoreboard objectives add just_threw_smoke minecraft.used:minecraft.splash_potion
 scoreboard objectives add smoke.t dummy
 scoreboard objectives add just_used_chorus minecraft.used:minecraft.chorus_fruit
@@ -169,7 +169,7 @@ scoreboard objectives add econ.tmp dummy
 scoreboard objectives add tk.red teamkill.red
 scoreboard objectives add tk.blue teamkill.blue
 
-# Kill credit for grenades / traps / ultimates (ctf:match/events/credit)
+# Kill credit for grenades / traps / ultimates (ctf_fight:internal/credit)
 #   kc.owner - player_id of the owner (on trap markers, grenades, effect clouds)
 #   kc.by / kc.time / kc.src - on a player: who hit him, ticks left, source (1 grenade, 2 trap, 3 ultimate,
 #   4 inferno, 5 Creepenator creeper explosion, 6 a killed Creepenator creeper)
@@ -180,10 +180,10 @@ scoreboard objectives add kc.time dummy
 scoreboard objectives add kc.src dummy
 scoreboard objectives add kc.died minecraft.killed_by:minecraft.player
 scoreboard objectives add kc.tmp dummy
-# kc.hit - on a player: player_id of the last player who hurt him (ctf:match/events/credit/hit)
+# kc.hit - on a player: player_id of the last player who hurt him (ctf_fight:internal/credit/hit)
 scoreboard objectives add kc.hit dummy
 
-# Ultimate bar (ctf:match/events/ultimate/render)
+# Ultimate bar (ctf_ult:internal/render)
 scoreboard objectives add ult.dur dummy
 scoreboard objectives add ult.tmp dummy
 
@@ -207,7 +207,7 @@ scoreboard objectives add sn.seen dummy
 scoreboard objectives add sn.reload dummy
 scoreboard objectives add sn.tmp dummy
 
-# Death camera (ctf:match/events/fight/deathcam): ticks, killer / owner player_id, temporary values
+# Death camera (ctf_fight:internal/deathcam): ticks, killer / owner player_id, temporary values
 scoreboard objectives add dc.t dummy
 scoreboard objectives add dc.killer dummy
 scoreboard objectives add dc.owner dummy
@@ -286,5 +286,5 @@ kill @e[tag=inventory]
 # Set default settings
 function ctf:set_default_settings
 
-# Join to lobby
-function ctf:lobby/join_all
+# Modules: the lobby signs show the default settings, everyone goes to the lobby
+function #ctf:on/reset

@@ -1,7 +1,7 @@
 {
     "values": [
-        "ctf:match/events/ultimate/stop",
-        "ctf:match/events/fight/deathcam/on/player_reset",
+        "ctf_ult:on/player_reset",
+        "ctf_fight:on/player_reset",
         "ctf_loot:on/player_reset"
     ]
 }

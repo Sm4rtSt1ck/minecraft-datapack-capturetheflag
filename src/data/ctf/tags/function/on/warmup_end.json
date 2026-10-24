@@ -1,8 +1,8 @@
 {
     "values": [
-        "ctf:match/events/fight/on/warmup_end",
-        "ctf:match/events/grenades/on/warmup_end",
-        "ctf:match/events/flag/on/warmup_end",
-        "ctf:match/events/traps/on/warmup_end"
+        "ctf_fight:on/warmup_end",
+        "ctf_grenades:on/warmup_end",
+        "ctf_flag:on/warmup_end",
+        "ctf_traps:on/warmup_end"
     ]
 }

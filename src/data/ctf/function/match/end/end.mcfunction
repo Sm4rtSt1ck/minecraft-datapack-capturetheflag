@@ -20,4 +20,5 @@ tellraw @a [{"text": "If something went wrong, ", "color": "#ff8800"},\
              "hoverEvent": {"action": "show_text", "contents": "*click*"}, "color": "red"},\
             {"text": ". This will reset the datapack settings.", "color": "#ff8800"}]
 
-function ctf:lobby/join_all
+# Modules: everyone goes to the lobby
+function #ctf:on/match_end

@@ -6,7 +6,7 @@ function ctf_loot:items/clear
 execute as @a[tag=attack, tag=player, tag=!loot.k10] run function ctf_loot:kills_total
 
 tag @a[tag=attack, tag=player, scores={loot.best=1..}] add ctf.loot_pending
-function ctf:match/maps/call_current {function: "loot"}
+function ctf_maps:api/call_current {function: "loot"}
 tellraw @a[tag=ctf.loot_pending] {"text": "No free landing point for your loot crate on this map", "color": "red"}
 tag @a remove ctf.loot_pending
 scoreboard players reset * loot.best

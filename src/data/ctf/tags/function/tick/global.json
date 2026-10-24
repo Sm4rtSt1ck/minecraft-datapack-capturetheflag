@@ -1,7 +1,8 @@
 {
     "values": [
+        "ctf_lobby:tick/global",
         "ctf_fx:tick",
         "ctf_loot:tick",
-        "ctf:match/events/fight/deathcam/tick"
+        "ctf_fight:tick"
     ]
 }

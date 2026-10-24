@@ -1,4 +1,5 @@
 # #ctf:on/freeze_start (before the shop opens)
+scoreboard players reset * just_used_chorus
 scoreboard players reset * bow_used
 scoreboard players reset * xbow_used
 

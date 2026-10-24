@@ -1,0 +1,27 @@
+{
+    "criteria": {
+        "hit": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_properties",
+                        "entity": "this",
+                        "predicate": {
+                            "type": "minecraft:frog",
+                            "nbt": "{Tags:[\"trap_marker\"]}"
+                        }
+                    }
+                ],
+                "damage": {
+                    "type": {
+                        "is_direct": true
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "ctf_traps:internal/hit_by_hand"
+    }
+}

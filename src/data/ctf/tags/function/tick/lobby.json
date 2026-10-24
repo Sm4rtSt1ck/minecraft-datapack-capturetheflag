@@ -1,5 +1,5 @@
 {
     "values": [
-        "ctf:lobby/tick"
+        "ctf_lobby:tick/lobby"
     ]
 }

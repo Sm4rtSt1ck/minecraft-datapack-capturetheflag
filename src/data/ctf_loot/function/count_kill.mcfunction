@@ -1,4 +1,4 @@
-# Kills of the round (also grenade / trap kills, ctf:match/events/credit/award) -> the "kills" task
+# Kills of the round (also grenade / trap kills, ctf_fight:internal/credit/award) -> the "kills" task
 scoreboard players add @s loot.kills 1
 execute store result score #need loot.tmp run data get storage ctf_loot:config kills.count
 execute if score @s loot.kills < #need loot.tmp run return 0

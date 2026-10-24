@@ -5,7 +5,7 @@ Detailed description of the game mechanics. A short overview is in the [README](
 
 ## Loot Crates (attackers)
 
-Code: [`ctf_loot`](data/ctf_loot/function/), settings: [`ctf_loot:config`](data/ctf_loot/function/config.mcfunction).
+Code: [`ctf_loot`](src/data/ctf_loot/function/), settings: [`ctf_loot:config`](src/data/ctf_loot/function/config.mcfunction).
 
 ### How it works
 
@@ -27,8 +27,8 @@ teams swap) gives no crate, because the player is a defender in the next round.
 
 | Task | Rarity | Reward | How it is detected |
 | --- | --- | --- | --- |
-| Deliver the flag to the base | Common | Stun trap | the flag delivery (`ctf:match/events/flag/bring`) |
-| Break the flag | Rare | test item | the flag breaking (`ctf:match/events/flag/break`), the player who broke it |
+| Deliver the flag to the base | Common | Stun trap | the flag delivery (`ctf_flag:internal/bring`) |
+| Break the flag | Rare | test item | the flag breaking (`ctf_flag:internal/break`), the player who broke it |
 | Take more than 20 damage in one round and stay alive ("unkillable") | Rare | 3 walls | stat `damage_taken` of the round (totems and regeneration make it possible); checked for alive players only |
 | Kill an enemy with their own trap | Epic | Creepenator | a defender is killed by a trap set off by the attacker: by walking into it, shooting it (bow, crossbow, sniper rifle, assault rifle, fireworks, wind charges) or setting it off otherwise. Any defender counts, not only the one who placed the trap |
 | Kill 10 enemies in this match | Epic | Inferno blade | kills of the whole match (both sides), once per match, counted at the start of freeze |
@@ -111,14 +111,14 @@ armor stand is placed exactly where the player looks, like in survival. Adventur
 
 ### Settings
 
-[`ctf_loot:config`](data/ctf_loot/function/config.mcfunction):
+[`ctf_loot:config`](src/data/ctf_loot/function/config.mcfunction):
 
 * `rarities` - for every rarity: sign text, box, trail colors, text color, reward;
 * `tasks` - for every task: rarity rank (1 common .. 5 mythic), chat text and the reward;
 * `unkillable` - damage needed (tenths of HP), `kills_total` - kills needed in the match;
 * `kills` - the "kills" task: kills needed and the minimum number of enemies.
 
-**Landing points:** `ctf:match/maps/<map>/loot.mcfunction`, one line per point (the block where the
+**Landing points:** `ctf_maps:map/<map>/loot.mcfunction`, one line per point (the block where the
 box lands). Every crate needs its own point, so a map needs as many points as attackers can be:
 
 ```mcfunction
@@ -144,7 +144,7 @@ id to `tasks` in the config.
 
 ## Death Camera
 
-Code: [`ctf:match/events/fight/deathcam`](data/ctf/function/match/events/fight/deathcam/).
+Code: [`ctf_fight:internal/deathcam`](src/data/ctf_fight/function/internal/deathcam/).
 
 After a death (when the player is moved to his death location) his camera is put for **3.5 seconds**
 into a tiny invisible enderman (no AI, silent, invulnerable, no gravity). The game shows the world

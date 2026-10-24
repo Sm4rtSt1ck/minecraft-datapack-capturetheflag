@@ -1,6 +1,6 @@
 {
     "values": [
-        "ctf:match/events/ultimate/on/end_round_end",
+        "ctf_ult:on/end_round_end",
         "ctf_loot:items/clear"
     ]
 }

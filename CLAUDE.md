@@ -122,7 +122,7 @@ through tags.
 - Don't remove code or comments the user wrote on purpose without asking. Examples: disabled shop
   products, alternative map spawns, the `elevator` map function, `admin:tp/*`.
 
-## Architecture (as of the last commit before the migration, plus the stage 2 hooks)
+## Architecture (after stage 3)
 
 **Game state:** `game state` against constants in the `state` objective:
 
@@ -146,13 +146,23 @@ the old order of the calls, so keep it when adding entries.
 - `#ctf:config` - module settings (`ctf:load` and match start).
 - `#ctf:tick/<phase>`: `lobby`, `global` (every tick), `freeze`, `round`, `end_round`, `end`.
   `combat` holds the fight events and is included by `round` and `end_round`. A phase tick
-  decrements its timer, runs its tag, then checks its own end / win conditions.
+  decrements its timer, runs its tag, then checks its own end / win conditions. `round_win` runs
+  after the defense win checks of the round (the flag delivery).
 - `#ctf:on/<event>`: `match_start`, `warmup_end`, `round_cleanup` (death cameras, Creepenator: start
   of freeze, swap, end), `freeze_start`, `round_start`, `round_win` (storage
   `ctf:round won {winner, loser, reason}`), `end_round_start`, `end_round_end`, `swap`,
-  `player_reset` (as a player, before his inventory is cleared: swap, end, lobby join).
-- Handlers: `<module>:on/<event>`, `<module>:tick/<phase>`; for the mechanics still inside `ctf`:
-  `ctf:match/events/<mechanic>/on|tick/...`, `ctf:match/maps/on/...`.
+  `player_reset` (as a player, before his inventory is cleared: swap, end, lobby join), `prepare`
+  (the map is cloned, then warm-up or freeze starts), `match_end`, `reset` (`ctf:set_parameters`),
+  `player_join` (as the player).
+- Handlers: `<module>:on/<event>`, `<module>:tick/<phase>`, `<module>:tick` (every tick).
+- The core (`ctf`) never calls a module function, not even in a `clickEvent` string. Modules call
+  each other only through `api/`. Storages (`ctf:flag`, `ctf:ultimate`, `ctf:round`) and the bossbar
+  `ctf:match` kept their ids.
+- **Function ids are also stored in the world:** the lobby signs (`ctf_lobby:internal/settings/*`,
+  rewritten by `ctf_lobby:internal/settings/update_signs`) and the laboratory elevator command
+  block at 155 -48 262 (`ctf_maps:map/laboratory/elevator`). Renaming them needs an update in the
+  world. Three dead command blocks still call removed functions (`ctf:match/event/*`, a
+  `yellow_banner` check).
 
 - **Freeze:** buying, placing the flag and traps.
 - **Round:** inventory slots 9-35 are locked with glass panes.
@@ -167,8 +177,14 @@ the old order of the calls, so keep it when adding entries.
 
 **Modules:**
 
-- `ctf` - phases, lobby, maps, flag, fight, traps, grenades, ultimates. This is the monolith that
-  stage 3 splits.
+- `ctf` - the core: phases, teams, timers, hooks, all scoreboard objectives (`set_parameters`),
+  the round rules (`match/rules`).
+- `ctf_lobby` - the lobby, the map vote, the settings signs, joining the server / the lobby.
+- `ctf_maps` - the maps (`map/<map>/<event>`, the dispatch `api/call_current`), map cloning
+  (`internal/prepare`).
+- `ctf_flag` - the flag: placing, breaking, carrying, delivery; its look (`config`).
+- `ctf_fight` - kills, deaths, kill credit (`credit/*`), the death camera.
+- `ctf_traps`, `ctf_grenades` (HE and smoke), `ctf_ult` (ultimates and their bar).
 - `ctf_inv` - the hotbar layout and the item rules:
 
   | Slot | Content |
@@ -185,7 +201,7 @@ the old order of the calls, so keep it when adding entries.
   It also handles: the layout check on `inventory_changed` (`ctf.inv_dirty`), item buffers
   (`api/stash` + `api/place`), carry limits, ammo per weapon, ground pickup rights
   (`ctf.can.<kind>` on players, `ctf.r.<kind>` on items, the claim system), armor sets, the exit
-  button in the 2x2 crafting grid, and bound loot rewards.
+  button in the 2x2 crafting grid, bound loot rewards, and the chorus fruit in freeze.
 - `ctf_shop` - the shop inside the inventory (slots 9-35 hold paper UI items, `custom_data.ctf_ui`).
   It has a fast path (count of UI items == 27) and pages with `render` + `click` per page.
 - `ctf_econ` - CS-like economy; all money values are in its `config`.
@@ -211,7 +227,7 @@ the old order of the calls, so keep it when adding entries.
 | `ctf_bound:1b, ctf_owner:<player_id>` | loot reward |
 | `action:"ultimate"\|"exit"\|"skip"` | buttons |
 
-**Kill credit for kills the game credits to nobody** (`ctf:match/events/credit`):
+**Kill credit for kills the game credits to nobody** (`ctf_fight:*/credit`):
 
 - `kc.owner` - on trap markers, grenades and clouds.
 - On a player: `kc.by` (who), `kc.time` (ticks left), `kc.src`.
@@ -225,7 +241,7 @@ the old order of the calls, so keep it when adding entries.
 
 - trap markers (`trap_marker`) are always **frogs** with 1024 HP and no knockback;
 - trap displays (`trap_display`) and `win_trigger` are always **armor stands**.
-- Any damage to a trap marker sets the trap off; a direct melee hit removes it (`ctf:trap_hit`).
+- Any damage to a trap marker sets the trap off; a direct melee hit removes it (`ctf_traps:trap_hit`).
 
 ## Minecraft gotchas learned in this project
 

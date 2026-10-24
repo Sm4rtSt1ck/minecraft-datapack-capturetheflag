@@ -6,6 +6,6 @@
         "ctf_guns:tick",
         "ctf_inv:tick/match",
         "#ctf:tick/combat",
-        "ctf:match/events/ultimate/tick/end_round"
+        "ctf_ult:tick/end_round"
     ]
 }

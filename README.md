@@ -96,7 +96,7 @@ growing **loss bonus**, and cheap or hard-to-use weapons pay more per kill
 than strong ones. Money is spent in the shop during the **freeze phase**.
 
 All money values live in one file:
-[`data/ctf_econ/function/config.mcfunction`](data/ctf_econ/function/config.mcfunction).
+[`data/ctf_econ/function/config.mcfunction`](src/data/ctf_econ/function/config.mcfunction).
 It is loaded at the start of every match, so balance changes need only a `/reload`.
 
 ### Starting money and limit
@@ -189,7 +189,7 @@ reward finds the weapon.
 
 **Grenades, traps and ultimates.** The game credits nobody for these kills
 (creeper explosions, falling anvils, effect clouds), so they are credited by
-[`ctf:match/events/credit`](data/ctf/function/match/events/credit/):
+[`ctf_fight:internal/credit`](src/data/ctf_fight/function/internal/credit/):
 
 * every trap marker, grenade and trap effect cloud stores its owner (`kc.owner`);
 * when it goes off, every player in its damage radius is marked with the owner
@@ -244,7 +244,7 @@ sword.
 | Crossbow (Multishot) + 5 fireworks | $420 | 7-star fireworks, ~19 area dmg per rocket |
 | Sniper rifle + 20 rounds | $450 | 20 dmg in leather (one-shot), ~19.3 in gold, ~17.5 in iron; no bullet drop, real scope zoom |
 
-**Sniper rifle** ([`ctf_sniper`](data/ctf_sniper/function/)). It is a spyglass: hold right click to
+**Sniper rifle** ([`ctf_sniper`](src/data/ctf_sniper/function/)). It is a spyglass: hold right click to
 aim (real zoom with lower mouse sensitivity), **release to shoot**. The bullet is hitscan:
 a ray from the eyes, no travel time and no drop, stopped by solid blocks, up to 181 blocks.
 
@@ -258,10 +258,10 @@ a ray from the eyes, no travel time and no drop, stopped by solid blocks, up to 
   Aiming that started during freeze never fires (even if released after the round started);
   the tracer and the sound give away the sniper.
 * Damage is dealt by the shooter, so the kill is credited normally. Armor and shields reduce it.
-* Settings: [`ctf_sniper:config`](data/ctf_sniper/function/config.mcfunction) (reload, scope, spread),
-  [`ctf_guns:config`](data/ctf_guns/function/config.mcfunction) (damage, range).
+* Settings: [`ctf_sniper:config`](src/data/ctf_sniper/function/config.mcfunction) (reload, scope, spread),
+  [`ctf_guns:config`](src/data/ctf_guns/function/config.mcfunction) (damage, range).
 
-**Assault rifle** ([`ctf_guns`](data/ctf_guns/function/)). Hold right click to shoot: 6 shots per second.
+**Assault rifle** ([`ctf_guns`](src/data/ctf_guns/function/)). Hold right click to shoot: 6 shots per second.
 It is an item with an endless `consumable` use time; while it is "used", the
 `ctf_guns:rifle_use` advancement fires every tick; the pause between shots alternates (3-3-4 ticks) for exactly 6 shots/s.
 
@@ -312,14 +312,14 @@ Only one kit of each trap can exist per round on the whole server.
 
 Traps activate when attackers enter a small radius around them.
 
-* Any damage to a trap sets it off (`ctf:match/events/traps/hurt`): a bullet, an arrow, crossbow
+* Any damage to a trap sets it off (`ctf_traps:internal/hurt`): a bullet, an arrow, crossbow
   fireworks, a wind charge, a trident, a grenade or another trap going off nearby (chain reactions),
   fire, the wither cloud... The player who shoots it (any team) gets the kill credit; a trap set off by an
   explosion (a grenade, another trap, the bomber) credits its kills to the owner of that explosion,
-  so a chain reaction keeps the first owner (`ctf:match/events/credit/mark_traps`). The trap markers have
+  so a chain reaction keeps the first owner (`ctf_fight:api/credit/mark_traps`). The trap markers have
   1024 HP, so damage never kills them before they go off.
 * A hit with the hand (any melee hit) removes a trap without setting it off
-  (`ctf:match/events/traps/hit_by_hand`).
+  (`ctf_traps:internal/hit_by_hand`).
 
 ### Ultimates
 
@@ -327,7 +327,7 @@ Free. The selected ultimate is shown in hotbar slot 9.
 
 ### Body armor
 
-Chestplate, leggings and boots work as **one set** ([`ctf_inv:armor`](data/ctf_inv/function/armor/));
+Chestplate, leggings and boots work as **one set** ([`ctf_inv:armor`](src/data/ctf_inv/function/armor/));
 the helmet is separate.
 
 * The set is its chestplate: it stores the material and the boots. When it is put on, the
@@ -348,7 +348,7 @@ the helmet is separate.
 ### Ammo
 
 Every ranged weapon has its **own ammo** (different arrow colors, see
-[`ctf_inv:ammo`](data/ctf_inv/function/ammo/)). Ammo works by weapon type, not by
+[`ctf_inv:ammo`](src/data/ctf_inv/function/ammo/)). Ammo works by weapon type, not by
 weapon instance: you can pick up ammo dropped by anyone, but only for the weapon you have.
 
 | Weapon | Ammo | Max |
@@ -409,11 +409,11 @@ Full description of the tasks, rarities, settings and landing points: [MECHANICS
 
 ## Tests
 
-Manual tests live in [`ctf_test`](data/ctf_test/function/). `/function ctf_test:help` lists them
+Manual tests live in [`ctf_test`](src/data/ctf_test/function/). `/function ctf_test:help` lists them
 (click a line to put the command into the chat): camera shake, explosion, dropping a crate
 onto any coordinates with any rarity, counting a task as done, dropping the crates of freeze.
 
-Reusable effects: [`ctf_fx`](data/ctf_fx/function/) (`ctf_fx:shake`, `ctf_fx:explosion`).
+Reusable effects: [`ctf_fx`](src/data/ctf_fx/function/) (`ctf_fx:shake`, `ctf_fx:explosion`).
 
 ## Features
 
