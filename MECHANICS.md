@@ -123,11 +123,12 @@ armor stand is placed exactly where the player looks, like in survival. Adventur
 * `UNKILLABLE` - damage needed (tenths of HP), `KILLS_TOTAL` - kills needed in the match;
 * `KILLS` - the "kills" task: kills needed and the minimum number of enemies.
 
-**Landing points:** `ctf_maps:map/<map>/loot.mcfunction`, one line per point (the block where the
-box lands). Every crate needs its own point, so a map needs as many points as attackers can be:
+**Landing points:** `"loot"` of the map in [`registry/maps.bolt`](registry/maps.bolt), one point
+per crate (the block where the box lands). Every crate needs its own point, so a map needs as many
+points as attackers can be:
 
-```mcfunction
-function ctf_loot:point {x: -170, y: -49, z: -115}
+```python
+"loot": [[-167, -49, -115], [-167, -49, -118], ...],
 ```
 
 **New task:** call `function ctf_loot:task {id: "<id>"}` as the player where it happens and add the

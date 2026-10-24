@@ -1,0 +1,31 @@
+# Build-time helpers for the map functions (bolt): the coordinates come from registry/maps.bolt.
+# They write commands into the calling function.
+
+# fill <area> <block>
+def fill_area(area, block):
+    fill (area[0]) (area[1]) (area[2]) (area[3]) (area[4]) (area[5]) (block)
+
+# fill <area> <block> replace <what>
+def fill_replace(area, block, what):
+    fill (area[0]) (area[1]) (area[2]) (area[3]) (area[4]) (area[5]) (block) replace (what)
+
+# The executing player of the side is spread around the side's spawn of the map
+def spawn(map, side):
+    _s = map["spawns"][side]
+    spreadplayers (_s["center"][0]) (_s["center"][1]) (_s["spread"]) (_s["range"]) under (_s["under"]) false @s[tag=f"{side}"]
+
+# The map template marker (its chunk is force loaded): ctf_maps:map/<id>/prepare
+def template_marker(map):
+    _t = map["template"]
+    forceload add (int(_t[0])) (int(_t[2]))
+    summon armor_stand (_t[0]) (_t[1]) (_t[2]) {Marker:true, Tags:["clone_marker"]}
+
+# The flag is delivered here: ctf_maps:map/<id>/clone
+def win_trigger(map):
+    _w = map["win_trigger"]
+    summon minecraft:armor_stand (_w[0]) (_w[1]) (_w[2]) {Marker: true, Invisible: true, Tags: ["win_trigger"]}
+
+# Loot crate landing points: ctf_maps:map/<id>/loot
+def loot_points(map):
+    for _pt in map["loot"]:
+        function ctf_loot:point {x: (_pt[0]), y: (_pt[1]), z: (_pt[2])}

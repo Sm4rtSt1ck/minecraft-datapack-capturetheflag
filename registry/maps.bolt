@@ -1,17 +1,255 @@
 # MAPS REGISTRY. Read at build time by bolt (ctf_maps, ctf_lobby).
 # The number of a map (score "result map_vote", the vote) is its index in MAPS + 1.
-# The map itself is hand-written: ctf_maps:map/<id>/<event> (start, prepare, clone, freeze, round,
-# end_round, loot, music).
-#   name - the vote button in the lobby
-#   vote_slot - the hotbar slot of the button
-#   map_item - map_id of the button (a filled map)
+# Every map works the same way; its functions ctf_maps:map/<id>/<event> are generated from its
+# entry here (ctf_maps:gen). The world layout: registry/world.bolt.
+# A point is [x, y, z], an area (fill) is [x1, y1, z1, x2, y2, z2].
+#
+#   name, vote_slot, map_item - the vote button in the lobby: name, hotbar slot, map_id of the map
+#   title - JSON text shown at the match start
+#   time - the map has its own daylight: the daylight cycle is on, the time is set at the start
+#   music - disc, pitch, period (ticks: when it is played again); None - no music
+#   template - the corner of the map template: it is cloned into the arena (ctf_maps:internal/prepare)
+#   prepare_fills - fills of the arena right after the template marker (bug fixes)
+#   entities - summoned at the clone: entity, point, NBT
+#   win_trigger - the flag is delivered here
+#   spawns - every freeze: each side is spread around [x, z], under y, with spread distance and range
+#   wall_block - the block of the borders
+#   walls - the borders, in order. Closed in freeze ("block" replaces "replaces", by default the
+#           wall_block replaces air), opened in round:
+#             open - "replace": only the wall block is removed (default), "all": the whole area,
+#                    None: never opened
+#             open_area - another area when it is opened
+#             fx - the opening is shown: particles [particle, [dx, dy, dz], speed, count] at the point
+#                  "at" and the sound at "sound_at" (by default "at")
+#   areas, points - the named coordinates used above
+#   loot - loot crate landing points (the block where a box lands)
+
+def fx(at, particles, sound_at=None):
+    if sound_at is None:
+        sound_at = at
+    return {"at": at, "particles": particles, "sound_at": sound_at}
+
 MAPS = [
-    {"id": "test_map", "name": "Test map", "vote_slot": 0, "map_item": 0},
-    {"id": "green_mine", "name": "Green mine", "vote_slot": 1, "map_item": 1},
-    {"id": "night_club", "name": "Night club", "vote_slot": 2, "map_item": 2},
-    {"id": "farm", "name": "Farm", "vote_slot": 3, "map_item": 3},
-    {"id": "railway_station", "name": "Railway station", "vote_slot": 4, "map_item": 4},
+    {
+        "id": "test_map",
+        "name": "Test map",
+        "vote_slot": 0,
+        "map_item": 0,
+        "title": {"text": "Test map 1", "color": "blue"},
+        "music": {"disc": "minecraft:music_disc.creator", "pitch": 2, "period": "1760"},
+        "template": [-97.5, -53, 43.5],
+        "win_trigger": [-194, -50, -168],
+        "spawns": {
+            "attack": {"center": [-194, -162], "under": -50, "spread": 1, "range": 3},
+            "defense": {"center": [-167, -169], "under": -50, "spread": 1, "range": 3},
+        },
+        "wall_block": "minecraft:light_blue_stained_glass_pane",
+        "walls": [
+            {
+                "area": "way1",
+                "fx": fx("way1", [["minecraft:explosion_emitter", [0, 5, 0], 1, 3], ["minecraft:cloud", [2, 5, 1], 0, 30]])
+            },
+            {
+                "area": "way2",
+                "fx": fx("way2", [["minecraft:explosion_emitter", [0, 5, 1], 1, 6], ["minecraft:cloud", [1, 5, 3], 0, 40]])
+            },
+            {
+                "area": "way3",
+                "fx": fx("way3", [["minecraft:explosion_emitter", [0, 5, 0], 1, 3], ["minecraft:cloud", [2, 5, 1], 0, 30]])
+            },
+            {
+                "area": "way4"},
+            {
+                "area": "way4_2"},
+        ],
+        "areas": {
+            "way1": [-190, -51, -146, -193, -36, -146],
+            "way2": [-193, -51, -182, -193, -36, -188],
+            "way3": [-193, -51, -189, -199, -36, -189],
+            "way4": [-193, -35, -181, -190, -51, -181],
+            "way4_2": [-189, -36, -146, -189, -51, -149],
+        },
+        "points": {
+            "way1": [-190, -42.5, -145.5],
+            "way2": [-192.5, -43.5, -184.5],
+            "way3": [-196.5, -43.5, -188.5],
+        },
+        "loot": [
+            [-197, -50, -168],
+            [-194, -50, -168],
+            [-191, -50, -168],
+            [-197, -50, -154],
+            [-194, -50, -154],
+            [-191, -50, -154]
+        ],
+    },
+    {
+        "id": "green_mine",
+        "name": "Green mine",
+        "vote_slot": 1,
+        "map_item": 1,
+        "title": [{"text": "Green", "color": "green"}, {"text": "Mine", "color": "gray"}],
+        "music": {"disc": "minecraft:music_disc.chirp", "pitch": 1, "period": "3700t"},
+        "template": [0.5, -52, 100.5],
+        "entities": [
+            ["minecraft:minecart", "minecart", {"Invulnerable": True, "Tags": ["map_entity"]}],
+            ["minecraft:area_effect_cloud", "chest_minecart", {"Duration": -1, "Age": -2147483648, "WaitTime": -2147483648, "Passengers": [{"id": "minecraft:chest_minecart", "Invulnerable": False, "Tags": ["map_entity"]}], "Tags": ["map_entity"]}],
+            ["minecraft:area_effect_cloud", "furnace_minecart", {"Duration": -1, "Age": -2147483648, "WaitTime": -2147483648, "Passengers": [{"id": "minecraft:furnace_minecart", "Invulnerable": False, "Tags": ["map_entity"]}], "Tags": ["map_entity"]}],
+        ],
+        "win_trigger": [-171, -35, -170],
+        "spawns": {
+            "attack": {"center": [-170, -172], "under": -36, "spread": 1, "range": 2},
+            "defense": {"center": [-136, -132], "under": -41, "spread": 1, "range": 2},
+        },
+        "wall_block": "minecraft:lime_stained_glass_pane",
+        "walls": [
+            {"area": "way1", "open": "all", "fx": fx("way1", [["minecraft:explosion_emitter", [0, 0, 0], 0, 1], ["minecraft:cloud", [1, 1, 1], 0, 10]])},
+            {"area": "way2", "open": "all", "fx": fx("way2", [["minecraft:explosion_emitter", [0, 0, 0], 0, 1], ["minecraft:cloud", [1, 1, 1], 0, 10]])},
+        ],
+        "areas": {
+            "way1": [-152, -49, -171, -152, -50, -173],
+            "way2": [-166, -36, -169, -168, -34, -169],
+        },
+        "points": {
+            "way1": [-151.5, -49, -171.5],
+            "way2": [-166.5, -34.5, -168.5],
+            "minecart": [-163.5, -34, -149.5],
+            "chest_minecart": [-135.5, -44, -126.5],
+            "furnace_minecart": [-137.5, -44, -126.5],
+        },
+        "loot": [
+            [-167, -36, -174],
+            [-167, -36, -172],
+            [-169, -36, -173],
+            [-171, -36, -173],
+            [-172, -35, -173],
+            [-166, -36, -170]
+        ],
+    },
+    {
+        "id": "night_club",
+        "name": "Night club",
+        "vote_slot": 2,
+        "map_item": 2,
+        "title": [{"text": "Night", "color": "dark_purple"}, {"text": "Club", "color": "light_purple"}],
+        "music": {"disc": "minecraft:music_disc.pigstep", "pitch": 1, "period": "2960t"},
+        "template": [150.5, -54, 100.5],
+        "win_trigger": [-181, -50, -153],
+        "spawns": {
+            "attack": {"center": [-181, -152.5], "under": -49, "spread": 1, "range": 2},
+            "defense": {"center": [-138.5, -115.5], "under": -42, "spread": 1, "range": 2},
+        },
+        "wall_block": "minecraft:light_blue_stained_glass_pane",
+        "walls": [
+            {"area": "way1", "fx": fx("way1", [["minecraft:explosion", [0.5, 0.5, 0.5], 0, 10], ["minecraft:cloud", [0.5, 0.5, 0.5], 0, 20]], "way1_sound")},
+            {"area": "way2", "fx": fx("way2", [["minecraft:explosion", [0.5, 0.5, 0.5], 0, 10], ["minecraft:cloud", [1, 0.5, 1], 0.1, 30]])},
+            # The cage of the attackers' spawn: its lava is removed, its walls and roof
+            {"area": "cage_lava", "block": "air", "replaces": "lava", "open": None},
+            {"area": "cage_north"},
+            {"area": "cage_east"},
+            {"area": "cage_south"},
+            {"area": "cage_roof", "block": "minecraft:light_blue_stained_glass"},
+        ],
+        "areas": {
+            "way1": [-182, -50, -157, -180, -48, -157],
+            "way2": [-180, -50, -149, -183, -48, -149],
+            "cage_lava": [-177, -48, -157, -184, -52, -149],
+            "cage_north": [-188, -52, -158, -177, -48, -158],
+            "cage_east": [-177, -48, -157, -177, -52, -149],
+            "cage_south": [-178, -52, -148, -188, -48, -148],
+            "cage_roof": [-177, -47, -158, -187, -47, -148],
+        },
+        "points": {
+            "way1": [-180.5, -48.5, -156.5],
+            "way1_sound": [-176.5, -48.5, -196.5],
+            "way2": [-181, -48.5, -148.5],
+        },
+        "loot": [
+            [-183, -50, -156],
+            [-179, -50, -156],
+            [-179, -50, -150],
+            [-183, -50, -150],
+            [-179, -50, -153],
+            [-183, -50, -153]
+        ],
+    },
+    {
+        "id": "farm",
+        "name": "Farm",
+        "vote_slot": 3,
+        "map_item": 3,
+        "title": {"text": "Farm", "color": "gold"},
+        "time": 11000,
+        "music": {"disc": "minecraft:music_disc.strad", "pitch": 1, "period": "3760t"},
+        "template": [250, -52, 100],
+        # Fix of the dirt path bug
+        "prepare_fills": [{"area": "dirt_path", "block": "air", "replaces": "dirt_path"}],
+        "win_trigger": [-173, -49, -111],
+        "spawns": {
+            "attack": {"center": [-171, -116], "under": -49, "spread": 1, "range": 3},
+            "defense": {"center": [-148, -168], "under": -40, "spread": 1, "range": 3},
+        },
+        "wall_block": "minecraft:prismarine_wall",
+        "walls": [
+            {"area": "way1", "fx": fx("way1", [["minecraft:explosion_emitter", [0, 2, 3], 0, 2], ["minecraft:cloud", [0, 2, 3], 0, 30]])},
+            {"area": "way2", "fx": fx("way2", [["minecraft:explosion_emitter", [3, 2, 0], 0, 2], ["minecraft:cloud", [3, 2, 0], 0, 40]])},
+            {"area": "way3", "open_area": "way3_open", "fx": fx("way3", [["minecraft:explosion_emitter", [0, 2, 3], 0, 2], ["minecraft:cloud", [0, 2, 3], 0, 30]])},
+            {"area": "way4", "block": "minecraft:prismarine_slab"},
+        ],
+        "areas": {
+            "dirt_path": [-146, -50, -156, -182, -50, -123],
+            "way1": [-181, -42, -122, -181, -52, -108],
+            "way2": [-166, -42, -122, -181, -52, -122],
+            "way3": [-165, -42, -108, -165, -52, -122],
+            "way3_open": [-165, -42, -108, -165, -52, -123],
+            "way4": [-165, -41, -122, -181, -41, -108],
+        },
+        "points": {
+            "way1": [-180, -46, -116],
+            "way2": [-172, -45.5, -121],
+            "way3": [-165, -46, -116],
+        },
+        "loot": [
+            [-167, -49, -115],
+            [-167, -49, -118],
+            [-179, -49, -112],
+            [-179, -49, -114],
+            [-178, -49, -118],
+            [-167, -49, -112]
+        ],
+    },
+    {
+        "id": "railway_station",
+        "name": "Railway station",
+        "vote_slot": 4,
+        "map_item": 4,
+        "title": {"text": "Railway station", "color": "dark_green"},
+        "music": None,
+        "template": [0, -53, 250],
+        "win_trigger": [-137, -50, -109],
+        "spawns": {
+            "attack": {"center": [-139, -110], "under": -49, "spread": 1, "range": 1},
+            "defense": {"center": [-186, -150], "under": -47, "spread": 1, "range": 3},
+        },
+        "wall_block": "minecraft:light_blue_stained_glass_pane",
+        "walls": [
+            {"area": "way1", "fx": fx("way1", [["minecraft:explosion", [0.2, 0.3, 0.3], 1, 3], ["minecraft:cloud", [0.2, 0.3, 0.3], 0, 10]])},
+        ],
+        "areas": {
+            "way1": [-141, -51, -109, -141, -49, -111],
+        },
+        "points": {
+            "way1": [-140.5, -49.5, -109.5],
+        },
+        # function ctf_loot:point {x: 0, y: 0, z: 0}
+        "loot": [],
+    },
 ]
 
 # The events of a map: ctf_maps:api/call/<event> runs ctf_maps:map/<map>/<event> of the current map
 EVENTS = ["start", "prepare", "clone", "freeze", "round", "end_round", "loot"]
+
+def map_data(id):
+    for m in MAPS:
+        if m["id"] == id:
+            return m

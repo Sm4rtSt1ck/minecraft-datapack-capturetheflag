@@ -1,8 +1,11 @@
+# The coordinates: registry/world.bolt
+from registry:world import LOBBY
+
 #########################################
 # TELEPORT
 
-execute in minecraft:overworld run tp @s 0 -40 0 90 0
-spreadplayers 0.5 0.5 1 1 under -40 false @s
+execute in minecraft:overworld run tp @s (LOBBY["spawn"][0]) (LOBBY["spawn"][1]) (LOBBY["spawn"][2]) (LOBBY["spawn_rotation"][0]) (LOBBY["spawn_rotation"][1])
+spreadplayers (LOBBY["spread"][0]) (LOBBY["spread"][1]) 1 1 under (LOBBY["spread_under"]) false @s
 
 #########################################
 # TAGS
@@ -44,6 +47,6 @@ effect give @s minecraft:saturation infinite 127 true
 # OTHER
 
 stopsound @s
-execute if score Music settings matches 1 run playsound minecraft:music_disc.relic ambient @s 0 1000 0 70 2
+execute if score Music settings matches 1 run playsound minecraft:music_disc.relic ambient @s (LOBBY["music"][0]) (LOBBY["music"][1]) (LOBBY["music"][2]) 70 2
 execute at @s run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1
 execute at @s run particle minecraft:firework ~ ~1 ~ 0.1 0.1 0.1 0.07 15 normal

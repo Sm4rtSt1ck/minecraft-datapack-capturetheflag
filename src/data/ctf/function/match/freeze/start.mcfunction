@@ -1,3 +1,4 @@
+from registry:world import ARENA
 function admin:log/function {name: "match/freeze/start"}
 
 scoreboard players operation game state = freeze state
@@ -12,7 +13,7 @@ bossbar set ctf:match max 1200
 
 gamerule fallDamage false
 
-spawnpoint @a[tag=player] -150 0 -150
+spawnpoint @a[tag=player] (ARENA["respawn"][0]) (ARENA["respawn"][1]) (ARENA["respawn"][2])
 
 gamemode adventure @a[tag=attack]
 gamemode survival @a[tag=defense]

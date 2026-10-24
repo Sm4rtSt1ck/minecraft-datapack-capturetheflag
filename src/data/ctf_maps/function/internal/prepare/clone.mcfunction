@@ -1,10 +1,12 @@
+# The arena: registry/world.bolt
+from registry:world import ARENA
 function admin:log/function {name: "match/prepare/clone"}
 
 #########################################
 # LAYER 1
 
 # Row 1
-execute positioned as @n[tag=clone_marker] run clone ~ ~ ~ ~127 ~63 ~127 -200 -52 -200
+execute positioned as @n[tag=clone_marker] run clone ~ ~ ~ ~127 ~63 ~127 (ARENA["corner"][0]) (ARENA["corner"][1]) (ARENA["corner"][2])
 
 #########################################
 # CLONING FOR CURRENT MAP

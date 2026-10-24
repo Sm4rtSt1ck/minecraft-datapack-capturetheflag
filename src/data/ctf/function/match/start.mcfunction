@@ -1,9 +1,11 @@
+from registry:world import ARENA, HOLD
 function admin:log/function {name: "match/start"}
 
 #########################################
 # GLOBAL
 
-forceload add -200 -200 -72 -72
+# The arena (registry/world.bolt)
+forceload add (ARENA["corner"][0]) (ARENA["corner"][2]) (ARENA["corner"][0] + ARENA["size"][0]) (ARENA["corner"][2] + ARENA["size"][2])
 
 #########################################
 # TAGS
@@ -62,7 +64,7 @@ team modify team_2 suffix " ⛨"
 
 clear @a[tag=!lobby]
 stopsound @a[tag=!lobby]
-tp @a[tag=!lobby] 0 100000 0
+tp @a[tag=!lobby] (HOLD[0]) (HOLD[1]) (HOLD[2])
 
 # Join teams 10 players
 team join team_2 @r[tag=player]

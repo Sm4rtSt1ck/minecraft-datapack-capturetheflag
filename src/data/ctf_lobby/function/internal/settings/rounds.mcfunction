@@ -1,3 +1,6 @@
+# The coordinates: registry/world.bolt
+from registry:world import LOBBY
+
 execute if score Rounds_to_win settings matches 20 run scoreboard players set Rounds_to_win settings 0
 execute if score Rounds_to_win settings matches 19 run scoreboard players set Rounds_to_win settings 20
 execute if score Rounds_to_win settings matches 18 run scoreboard players set Rounds_to_win settings 19
@@ -22,10 +25,10 @@ execute if score Rounds_to_win settings matches 0 run scoreboard players set Rou
 scoreboard players operation swap rounds = Rounds_to_win settings
 scoreboard players operation swap rounds -= 1 number
 
-setblock 0 -40 28 air
+setblock (LOBBY["sign_rounds"][0]) (LOBBY["sign_rounds"][1]) (LOBBY["sign_rounds"][2]) air
 
 
-setblock 0 -40 28 cherry_wall_sign{\
+setblock (LOBBY["sign_rounds"][0]) (LOBBY["sign_rounds"][1]) (LOBBY["sign_rounds"][2]) cherry_wall_sign{\
     front_text:{\
         messages:[\
             '{"text":"ROUNDS TO WIN", "color": "gold", "bold": true, "shadow_color":-7513088}',\

@@ -1,4 +1,6 @@
-tp @s -150 -30 -150
+# The coordinates: registry/world.bolt
+from registry:world import ARENA
+tp @s (ARENA["spectate"][0]) (ARENA["spectate"][1]) (ARENA["spectate"][2])
 gamemode spectator @s
 tag @s add spectator
 tag @s remove player

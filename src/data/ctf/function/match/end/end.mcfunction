@@ -1,3 +1,4 @@
+from registry:world import ARENA
 function admin:log/function {name: "match/end/end"}
 
 tag team_1 remove attack
@@ -12,7 +13,7 @@ kill @e[tag=win_trigger]
 kill @e[tag=spawn_spot]
 kill @e[tag=inventory]
 
-forceload remove -200 -200 -72 -72
+forceload remove (ARENA["corner"][0]) (ARENA["corner"][2]) (ARENA["corner"][0] + ARENA["size"][0]) (ARENA["corner"][2] + ARENA["size"][2])
 
 tellraw @a [{"text": "If something went wrong, ", "color": "#ff8800"},\
             {"text": "click here", \

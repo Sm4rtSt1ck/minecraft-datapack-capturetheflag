@@ -6,3 +6,92 @@ for e in EVENTS:
     function f"ctf_maps:api/call/{e}":
         for i in range(len(MAPS)):
             execute if score result map_vote matches (i + 1) run function f"ctf_maps:map/{MAPS[i]['id']}/{e}"
+
+
+# The functions of every map (registry MAPS): all maps work the same way
+from registry:world import ARENA
+from ctf_maps:lib import fill_area, fill_replace, spawn, template_marker, win_trigger, loot_points
+
+for _m in MAPS:
+    _id = _m["id"]
+    _a = _m["areas"]
+    _p = _m["points"]
+
+    # Match start (as the starting player): the title, the music loop, the daylight
+    function f"ctf_maps:map/{_id}/start":
+        title @s title (_m["title"])
+        if _m["music"]:
+            execute if score Music settings matches 1 run schedule function f"ctf_maps:map/{_id}/music" 200t
+        if "time" in _m:
+            gamerule doDaylightCycle true
+            time set (_m["time"])
+
+    # The music loop (stopped by ctf_maps:on/match_start)
+    function f"ctf_maps:map/{_id}/music":
+        if _m["music"]:
+            _mu = _m["music"]
+            execute if score game state matches 2..6 run playsound (_mu["disc"]) master @a[tag=!lobby] (ARENA["music"][0]) (ARENA["music"][1]) (ARENA["music"][2]) 70 (_mu["pitch"])
+            execute if score game state matches 2..6 run schedule function f"ctf_maps:map/{_id}/music" (_mu["period"])
+
+    # The template is found by its marker (ctf_maps:internal/prepare)
+    function f"ctf_maps:map/{_id}/prepare":
+        function admin:log/function {name: (f"match/maps/{_id}/prepare")}
+        template_marker(_m)
+        if "prepare_fills" in _m:
+            for _f in _m["prepare_fills"]:
+                fill_replace(_a[_f["area"]], _f["block"], _f["replaces"])
+
+    # After the template is cloned into the arena
+    function f"ctf_maps:map/{_id}/clone":
+        function admin:log/function {name: (f"match/maps/{_id}/clone")}
+        if "entities" in _m:
+            for _e in _m["entities"]:
+                summon (_e[0]) (_p[_e[1]][0]) (_p[_e[1]][1]) (_p[_e[1]][2]) (_e[2])
+        win_trigger(_m)
+
+    # Start of freeze (as every player): the borders are closed, the player goes to his spawn
+    function f"ctf_maps:map/{_id}/freeze":
+        function admin:log/function {name: (f"match/maps/{_id}/freeze")}
+        for _w in _m["walls"]:
+            _block = _m["wall_block"]
+            if "block" in _w:
+                _block = _w["block"]
+            _what = "air"
+            if "replaces" in _w:
+                _what = _w["replaces"]
+            fill_replace(_a[_w["area"]], _block, _what)
+        spawn(_m, "attack")
+        spawn(_m, "defense")
+
+    # Start of the round: the borders are opened
+    function f"ctf_maps:map/{_id}/round":
+        function admin:log/function {name: (f"match/maps/{_id}/round")}
+        for _w in _m["walls"]:
+            _open = "replace"
+            if "open" in _w:
+                _open = _w["open"]
+            if _open is None:
+                continue
+            _area = _a[_w["area"]]
+            if "open_area" in _w:
+                _area = _a[_w["open_area"]]
+            if _open == "all":
+                fill_area(_area, "minecraft:air")
+            else:
+                _block = _m["wall_block"]
+                if "block" in _w:
+                    _block = _w["block"]
+                fill_replace(_area, "minecraft:air", _block)
+            if "fx" in _w:
+                _at = _p[_w["fx"]["at"]]
+                for _pa in _w["fx"]["particles"]:
+                    particle (_pa[0]) (_at[0]) (_at[1]) (_at[2]) (_pa[1][0]) (_pa[1][1]) (_pa[1][2]) (_pa[2]) (_pa[3]) normal
+                _so = _p[_w["fx"]["sound_at"]]
+                playsound block.end_gateway.spawn block @a (_so[0]) (_so[1]) (_so[2]) 1
+
+    function f"ctf_maps:map/{_id}/end_round":
+        pass
+
+    # Loot crate landing points (ctf_loot:freeze_start)
+    function f"ctf_maps:map/{_id}/loot":
+        loot_points(_m)

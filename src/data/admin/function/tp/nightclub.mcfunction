@@ -1,1 +1,4 @@
-function admin:tp/tp {xyz: "168.32 -51.09 147.00"}
+# The point: registry/world.bolt (ADMIN_TP)
+from registry:world import ADMIN_TP
+_t = ADMIN_TP["nightclub"]
+function admin:tp/tp {xyz: (f"{_t[0]} {_t[1]} {_t[2]}")}

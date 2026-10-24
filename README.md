@@ -469,7 +469,8 @@ registry/             content as data (bolt modules)
  ├ shop.bolt          shop pages, products (one price), purchase limits per round
  ├ traps.bolt         trap kinds
  ├ ultimates.bolt     ultimates (number, item, duration)
- ├ maps.bolt          maps (vote button) and map events
+ ├ maps.bolt          maps: everything of every map (its functions are generated)
+ ├ world.bolt         world layout: lobby, arena, warm-up area, podium, admin teleports
  ├ econ.bolt          kill rewards
  └ loot.bolt          loot crate rarities, tasks and their settings
 src/data/
@@ -513,13 +514,16 @@ order of execution.
 * The build checks every command (selectors, NBT, macros) and stops on errors with the file and
   line. Values filled in from the registries are not checked: look at the output.
 * Never edit the output folder: every build overwrites it.
+* Absolute world coordinates are only in `registry/world.bolt` (lobby, arena, warm-up, podium) and
+  `registry/maps.bolt` (every map); the functions read them at build time.
 
 Adding content:
 
 * **a weapon**: the shop product in `registry/shop.bolt`; its kill reward in `registry/econ.bolt`;
   for a ranged weapon its ammo in `registry/items.bolt` and `ctf_inv:ammo/give/<id>`;
-* **a map**: an entry in `registry/maps.bolt` and its functions `ctf_maps:map/<map>/<event>`
-  (every event of `EVENTS`, plus `music`);
+* **a map**: an entry in `registry/maps.bolt`: title, music, template, spawns, walls (material,
+  areas, the opening particles), loot points... Its functions `ctf_maps:map/<map>/<event>` are
+  generated from it;
 * **a trap**: an entry in `registry/traps.bolt`, its functions `ctf_traps:internal/<id>/place`
   and `trigger`, and the shop product;
 * **an ultimate**: an entry in `registry/ultimates.bolt`, its function

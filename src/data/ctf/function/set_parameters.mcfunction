@@ -1,5 +1,7 @@
 #########################################
 # GAMERULES AND WORLD PARAMETERS
+# The coordinates: registry/world.bolt
+from registry:world import LOBBY
 
 # Mobs and world
 gamerule doMobSpawning false
@@ -26,7 +28,7 @@ gamerule commandModificationBlockLimit 2097152
 # Other settings
 difficulty normal
 defaultgamemode adventure
-setworldspawn 0 -41 0
+setworldspawn (LOBBY["world_spawn"][0]) (LOBBY["world_spawn"][1]) (LOBBY["world_spawn"][2])
 time set noon
 weather clear
 

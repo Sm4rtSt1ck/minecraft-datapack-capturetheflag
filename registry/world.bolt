@@ -1,0 +1,68 @@
+# WORLD LAYOUT: absolute coordinates of the world (the maps' own coordinates: registry/maps.bolt).
+# Read at build time by bolt (ctf, ctf_lobby, ctf_maps, ctf_fight, admin).
+# A point is [x, y, z]; a rotation is [yaw, pitch].
+
+LOBBY = {
+    # Players join the lobby here (ctf_lobby:api/join), spread around "spread" [x, z] under y
+    "spawn": [0, -40, 0],
+    "spawn_rotation": [90, 0],
+    "spread": [0.5, 0.5],
+    "spread_under": -40,
+    # The world spawn (ctf:set_parameters)
+    "world_spawn": [0, -41, 0],
+    # The lobby music is played from here (heard everywhere)
+    "music": [0, 1000, 0],
+    # The settings signs (ctf_lobby:internal/settings/*)
+    "sign_music": [1, -40, 28],
+    "sign_rounds": [0, -40, 28],
+}
+
+# The arena: the map of the vote is cloned here (ctf_maps:internal/prepare)
+ARENA = {
+    # The lowest north-west corner and the size of a map template
+    "corner": [-200, -52, -200],
+    "size": [128, 64, 128],
+    # Spectators are kept inside [min, max] (ctf:match/keep_spectators_in_bounds): pushed back from
+    # a layer "outside_depth" thick beyond every side, inside the cube "outside_corner" + "outside_size"
+    "spectator_min": [-201, -53, -201],
+    "spectator_max": [-72, 76, -72],
+    "outside_corner": [-250, -100, -250],
+    "outside_size": 300,
+    "outside_depth": 100,
+    # A spectator starts here (ctf:match/spectate)
+    "spectate": [-150, -30, -150],
+    # The spawnpoint of the players during the match (ctf:match/freeze/start)
+    "respawn": [-150, 0, -150],
+    # A temporary marker to teleport a dead player to his death location (ctf_fight)
+    "death_marker": [-190, 0, -190],
+    # The maps' music is played from here (heard everywhere)
+    "music": [-164.5, 999, -127.5],
+}
+
+# Players wait here (blind, levitating) while the map is prepared (ctf:match/start)
+HOLD = [0, 100000, 0]
+
+# Warm-up area (ctf:match/warmup/start): position and rotation of each side
+WARMUP = {
+    "attack": [-87, -51, 27],
+    "attack_rotation": [-90, 0],
+    "defense": [-74, -51, 26],
+    "defense_rotation": [90, 0],
+}
+
+# The end of the match (ctf:match/end/start): the top 3 of the winners stand on the podium,
+# the top 3 of the losers below it
+PODIUM = {
+    "winners": [-74, -48, -5],
+    "losers": [[-87, -48, -5], [-87, -49, -1], [-87, -50, -9]],
+}
+
+# Admin teleports (admin:tp/<id>)
+ADMIN_TP = {
+    "farm": [299, -48, 168],
+    "greenmine": [30, -30, 130],
+    "matchfield": [-170, -20, -160],
+    "nightclub": [168.32, -51.09, 147.00],
+    "test_map": [-70, -45, 70],
+    "testfield": [-140, -50, 70],
+}

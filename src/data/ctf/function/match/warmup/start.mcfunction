@@ -1,3 +1,4 @@
+from registry:world import WARMUP
 function admin:log/function {name: "match/warmup/start"}
 
 #########################################
@@ -26,8 +27,8 @@ title @a[tag=!lobby] subtitle {"text":"30 seconds", "color": "yellow"}
 #########################################
 # PLAYER
 
-tp @a[tag=attack] -87 -51 27 -90 0
-tp @a[tag=defense] -74 -51 26 90 0
+tp @a[tag=attack] (WARMUP["attack"][0]) (WARMUP["attack"][1]) (WARMUP["attack"][2]) (WARMUP["attack_rotation"][0]) (WARMUP["attack_rotation"][1])
+tp @a[tag=defense] (WARMUP["defense"][0]) (WARMUP["defense"][1]) (WARMUP["defense"][2]) (WARMUP["defense_rotation"][0]) (WARMUP["defense_rotation"][1])
 
 execute as @a[tag=attack] positioned as @s run spawnpoint @s ~ ~ ~ -90
 execute as @a[tag=defense] positioned as @s run spawnpoint @s ~ ~ ~ 90
