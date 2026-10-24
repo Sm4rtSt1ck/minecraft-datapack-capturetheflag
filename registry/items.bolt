@@ -1,0 +1,55 @@
+# ITEMS REGISTRY. Read at build time by bolt (ctf_inv:gen and the functions that import it):
+# item classification on the ground, pickup caps, the hotbar layout, carry limits, ammo.
+# The lists keep their order: it is the order of the generated checks.
+#
+# Pickup kinds: tag ctf.r.<kind> on an item on the ground, ctf.can.<kind> on a player who may pick
+# it up (ctf_inv:ground/classify, ctf_inv:layout/caps, ctf_inv:ground/claim).
+
+# Item groups (custom_data tags:["<group>"]): a player owns at most one item of a group.
+#   kind - the pickup kind
+#   slot - the hotbar slot of the group, None: offhand or a free slot
+#   has - ctf_inv:layout/has_<kind> is generated (the main weapon has its own: the golden sword
+#         doesn't count)
+GROUPS = [
+    {"group": "main weapon", "kind": "main", "slot": "hotbar.0", "has": False},
+    {"group": "secondary weapon", "kind": "sec", "slot": "hotbar.1", "has": True},
+    {"group": "he_grenade", "kind": "he", "slot": "hotbar.2", "has": True},
+    {"group": "shield or totem", "kind": "guard", "slot": None, "has": True},
+]
+
+# Ammo, one type per ranged weapon: the weapon has custom_data wpn:"<id>", its ammo
+# ammo:"<id>" + ctf_ammo:1b. Pickup kind: ammo_<id> (only with the weapon, below max).
+#   max - the most a player can carry (more is dropped, without the weapon all of it)
+#   fill - filled up to max at the start of freeze and on a purchase (ctf_inv:ammo/fill_all)
+# The ammo item is given only by ctf_inv:ammo/give/<id> (so all of it stacks).
+AMMO = [
+    {"id": "bow", "max": 30, "fill": True},
+    {"id": "fire_bow", "max": 24, "fill": True},
+    {"id": "punch_bow", "max": 24, "fill": True},
+    {"id": "rifle", "max": 90, "fill": True},
+    {"id": "sniper", "max": 20, "fill": True},
+    {"id": "crossbow", "max": 5, "fill": True},
+    # Creepenator (loot crate reward): its arrows are given by ctf_loot
+    {"id": "creep", "max": 3, "fill": False},
+]
+
+# Carry limits (more is dropped at the player's feet, ctf_inv:limits/enforce).
+# Purchase limits per round: ctf_shop:limits.
+#   pred - item predicate
+#   kind - the pickup kind, if the item has its own one: a player may pick it up only below max,
+#          into a free slot 4-6 ("free") or into the offhand ("off"), or onto a stack he already has
+LIMITS = [
+    {"id": "he", "pred": '*[custom_data~{tags:["he_grenade"]}]', "max": 1},
+    {"id": "totem", "pred": 'totem_of_undying', "max": 1},
+    {"id": "shield", "pred": 'shield', "max": 1},
+    {"id": "regen", "pred": 'potion[custom_data~{lim:"regen"}]', "max": 1, "kind": "regen", "into": "free"},
+    {"id": "speed", "pred": 'potion[custom_data~{lim:"speed"}]', "max": 1, "kind": "speed", "into": "free"},
+    {"id": "chorus", "pred": 'chorus_fruit', "max": 3, "kind": "chorus", "into": "free"},
+    {"id": "wind", "pred": 'wind_charge', "max": 10, "kind": "wind", "into": "off"},
+    {"id": "smoke", "pred": '*[custom_data~{tags:["smoke_grenade"]}]', "max": 1, "kind": "smoke", "into": "free"},
+]
+
+def limit(id):
+    for l in LIMITS:
+        if l["id"] == id:
+            return l

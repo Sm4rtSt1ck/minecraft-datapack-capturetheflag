@@ -82,9 +82,12 @@ through tags.
     "require": ["bolt"],
     "pipeline": ["mecha"],
     "output": "<world>/datapacks",
-    "meta": {"mecha": {"formatting": {"json_ensure_ascii": false}}}
+    "meta": {"mecha": {"formatting": {"json_ensure_ascii": false}}, "bolt": {"entrypoint": ["ctf_inv:gen"]}}
   }
   ```
+
+  `data_pack.load` also maps the registry: `["src", {"data/registry/modules": "registry"}]`, so
+  `registry/items.bolt` is the bolt module `registry:items`.
 
   - `data_pack.name` sets the output folder name (default would be `capturetheflag_data_pack`).
   - `json_ensure_ascii: false` keeps unicode (`⚑`, `❸`, emoji) as is instead of `\uXXXX`.
@@ -98,6 +101,19 @@ through tags.
 - **beet maps legacy folder names** (`advancements` → `advancement`), so files that 1.21.4 ignored
   would become active. The old `minecraft/advancements/*/root.json` (dead since 1.21) were deleted
   for this reason.
+- **bolt (build-time code):** every `.mcfunction` is a bolt file. Learned so far:
+  - `function f"ns:path":` + an indented block **defines** a function (no call is written);
+    modules listed in `bolt.entrypoint` (e.g. `ctf_inv:gen`) generate such functions.
+  - A `def` with commands inside writes them into the calling function (`ctf_inv:lib` `count`).
+  - Expressions go into command arguments: f-strings, `a["max"]`, `(f"..{n}")` for ranges.
+  - **Values put in by bolt are not validated by mecha** (a broken item predicate builds fine).
+    Check the output.
+  - Macro lines (`$...`) are copied as they are: no bolt expressions inside them.
+  - No list comprehensions; use loops.
+- **Checking a refactoring:** compare the new build with the previous one. Stage 4a used a
+  symbolic check: macro calls with constant arguments are substituted, calls are replaced by the
+  hash of the callee, so a generated static function must expand to the same commands as the old
+  macro call.
 - `beet build` - one build; `beet watch` - rebuild on save. Then `/reload` in the game.
 - **Never edit the output folder:** it is overwritten by every build.
 - mecha validates every command at build time (selectors, NBT, macros) and stops on errors, with
@@ -138,6 +154,18 @@ through tags.
 | end | 7 |
 
 `ctf:tick` calls `ctf:match/<phase>/tick`.
+
+**Registries (stage 4).** `registry/*.bolt` hold data only (lists of dicts). Generated code is
+static: no runtime loops over a registry, no macro calls in hot paths.
+
+- `registry/items.bolt` (4a): `GROUPS` (item groups and their slots), `AMMO` (max, fill),
+  `LIMITS` (carry limits, pickup kinds of limited items). Used by `ctf_inv:gen` (generates
+  `ammo/cap|check|max|fill/<id>`, `limits/max/<id>`, `layout/has_<kind>`) and by
+  `ground/classify`, `ground/claim`, `layout/caps`, `layout/take_misplaced`, `stash/place_one`,
+  `ammo/*_all`, `limits/enforce`. The ammo items themselves are still given by the hand-written
+  `ctf_inv:ammo/give/<id>` (bolt can't fill macro lines).
+- `ctf_inv:lib` `count(pred)` = `ctf_inv:limits/count` without a macro call. The macro
+  `limits/count` / `limits/one` stay for callers with a runtime predicate (`ctf_shop`).
 
 **Core hooks (stage 2).** The phase functions don't call modules; they run function tags in
 `ctf/tags/function/`. **The order of the values in a tag is the order of execution**: it repeats

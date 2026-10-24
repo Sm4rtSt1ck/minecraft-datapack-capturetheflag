@@ -1,0 +1,66 @@
+# Functions generated from the items registry (registry/items.bolt) at build time.
+# Static code with no macro calls: these run in the layout check.
+from registry:items import GROUPS, AMMO, LIMITS
+from ctf_inv:lib import count, group_pred, wpn_pred, ammo_pred
+
+
+# Drops everything above max at the player's feet (the same as ctf_inv:limits/one)
+def drop_above(pred, max):
+    count(pred)
+    scoreboard players remove #n inv.tmp max
+    execute if score #n inv.tmp matches ..0 run return 0
+    execute store result storage ctf_inv:tmp lim.n int 1 run scoreboard players get #n inv.tmp
+    data modify storage ctf_inv:tmp lim.pred set value pred
+    function ctf_inv:limits/drop with storage ctf_inv:tmp lim
+
+
+# Carry limits: ctf_inv:limits/enforce
+for l in LIMITS:
+    function f"ctf_inv:limits/max/{l['id']}":
+        drop_above(l["pred"], l["max"])
+
+
+# 1 if the player already owns an item of the group: ctf_inv:layout/caps
+for g in GROUPS:
+    if g["has"]:
+        function f"ctf_inv:layout/has_{g['kind']}":
+            execute if items entity @s container.* group_pred(g["group"]) run return 1
+            execute if items entity @s weapon.offhand group_pred(g["group"]) run return 1
+            execute if items entity @s player.cursor group_pred(g["group"]) run return 1
+            execute if items entity @s player.crafting.* group_pred(g["group"]) run return 1
+            return 0
+
+
+for a in AMMO:
+    t = a["id"]
+
+    # Tag ctf.can.ammo_<id>: the player has the weapon and less than max ammo (ctf_inv:ammo/caps_all)
+    function f"ctf_inv:ammo/cap/{t}":
+        tag @s remove f"ctf.can.ammo_{t}"
+        count(wpn_pred(t))
+        execute if score #n inv.tmp matches ..0 run return 0
+        count(ammo_pred(t))
+        execute if score #n inv.tmp matches (f"..{a['max'] - 1}") run tag @s add f"ctf.can.ammo_{t}"
+
+    # Ammo without its weapon is dropped (it leaves together with the dropped weapon),
+    # ammo above max is dropped too (ctf_inv:ammo/check_all)
+    function f"ctf_inv:ammo/check/{t}":
+        count(wpn_pred(t))
+        scoreboard players operation #w inv.tmp = #n inv.tmp
+        execute if score #w inv.tmp matches 1.. run function f"ctf_inv:ammo/max/{t}"
+        execute if score #w inv.tmp matches ..0 run function ctf_inv:ammo/drop_all {type: t}
+
+    function f"ctf_inv:ammo/max/{t}":
+        drop_above(ammo_pred(t), a["max"])
+
+    # Fills the ammo up to max, if the player has the weapon (ctf_inv:ammo/fill_all)
+    if a["fill"]:
+        function f"ctf_inv:ammo/fill/{t}":
+            count(wpn_pred(t))
+            execute if score #n inv.tmp matches ..0 run return 0
+            count(ammo_pred(t))
+            scoreboard players set #m inv.tmp a["max"]
+            scoreboard players operation #m inv.tmp -= #n inv.tmp
+            execute if score #m inv.tmp matches ..0 run return 0
+            execute store result storage ctf_inv:tmp ammo.count int 1 run scoreboard players get #m inv.tmp
+            function f"ctf_inv:ammo/give/{t}" with storage ctf_inv:tmp ammo

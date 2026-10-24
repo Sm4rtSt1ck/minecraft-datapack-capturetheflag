@@ -1,0 +1,21 @@
+# Build-time helpers (bolt). They write commands into the function that calls them.
+
+# #n inv.tmp = how many items matching pred the player carries (inventory + offhand + cursor +
+# 2x2 crafting grid). The same as ctf_inv:limits/count, without a macro call (hot paths).
+def count(pred):
+    execute store result score #n inv.tmp if items entity @s container.* pred
+    execute store result score #o inv.tmp if items entity @s weapon.offhand pred
+    scoreboard players operation #n inv.tmp += #o inv.tmp
+    execute store result score #o inv.tmp if items entity @s player.cursor pred
+    scoreboard players operation #n inv.tmp += #o inv.tmp
+    execute store result score #o inv.tmp if items entity @s player.crafting.* pred
+    scoreboard players operation #n inv.tmp += #o inv.tmp
+
+def group_pred(group):
+    return f'*[custom_data~{{tags:["{group}"]}}]'
+
+def wpn_pred(id):
+    return f'*[custom_data~{{wpn:"{id}"}}]'
+
+def ammo_pred(id):
+    return f'*[custom_data~{{ammo:"{id}"}}]'

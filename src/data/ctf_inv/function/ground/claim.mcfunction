@@ -1,25 +1,22 @@
 # Runs as a player next to items: he becomes the owner of the nearest item of every kind he may take
+# (an item has only one kind, so the order of the kinds doesn't matter)
+from registry:items import GROUPS, AMMO, LIMITS
+
+def claim(kind):
+    execute if entity @s[tag=f"ctf.can.{kind}"] as @e[type=item, tag=f"ctf.r.{kind}", distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
+
 tag @s add ctf.claimer
 scoreboard players operation #me inv.tmp = @s player_id
-execute if entity @s[tag=ctf.can.flag] as @e[type=item, tag=ctf.r.flag, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.main] as @e[type=item, tag=ctf.r.main, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.sec] as @e[type=item, tag=ctf.r.sec, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.he] as @e[type=item, tag=ctf.r.he, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.guard] as @e[type=item, tag=ctf.r.guard, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.ammo_bow] as @e[type=item, tag=ctf.r.ammo_bow, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.ammo_fire_bow] as @e[type=item, tag=ctf.r.ammo_fire_bow, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.ammo_punch_bow] as @e[type=item, tag=ctf.r.ammo_punch_bow, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.ammo_rifle] as @e[type=item, tag=ctf.r.ammo_rifle, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.ammo_sniper] as @e[type=item, tag=ctf.r.ammo_sniper, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.ammo_crossbow] as @e[type=item, tag=ctf.r.ammo_crossbow, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.ammo_creep] as @e[type=item, tag=ctf.r.ammo_creep, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.wind] as @e[type=item, tag=ctf.r.wind, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.off] as @e[type=item, tag=ctf.r.off, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.free] as @e[type=item, tag=ctf.r.free, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.regen] as @e[type=item, tag=ctf.r.regen, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.speed] as @e[type=item, tag=ctf.r.speed, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.chorus] as @e[type=item, tag=ctf.r.chorus, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.smoke] as @e[type=item, tag=ctf.r.smoke, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.trap_def] as @e[type=item, tag=ctf.r.trap_def, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
-execute if entity @s[tag=ctf.can.trap_att] as @e[type=item, tag=ctf.r.trap_att, distance=..3, sort=nearest, limit=1] if function ctf_inv:ground/may_take run function ctf_inv:ground/claim_item
+claim("flag")
+for g in GROUPS:
+    claim(g["kind"])
+for a in AMMO:
+    claim(f"ammo_{a['id']}")
+for l in LIMITS:
+    if "kind" in l:
+        claim(l["kind"])
+claim("off")
+claim("free")
+claim("trap_def")
+claim("trap_att")
 tag @s remove ctf.claimer

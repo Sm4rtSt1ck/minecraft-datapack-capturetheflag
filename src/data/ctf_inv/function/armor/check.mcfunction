@@ -7,6 +7,7 @@
 #   - leggings or boots put into the inventory   -> they go back on (the set stays worn)
 #   - leggings or boots dropped                  -> the whole set is dropped
 # The helmet is separate.
+from ctf_inv:lib import count
 function ctf_inv:armor/loose {pred: '*[custom_data~{ctf_set:{}}]', to: "armor.chest"}
 function ctf_inv:armor/loose {pred: '#ctf_inv:helmets[!custom_data~{tags:["ultimate"]}]', to: "armor.head"}
 
@@ -17,7 +18,7 @@ function ctf_inv:armor/check_sid with storage ctf_inv:tmp arm
 # The set is complete
 execute if score #s inv.tmp matches 1 if score #l inv.tmp matches 1 if score #f inv.tmp matches 1 run return 0
 
-function ctf_inv:limits/count {pred: '*[custom_data~{ctf_part:1b}]'}
+count('*[custom_data~{ctf_part:1b}]')
 scoreboard players operation #p inv.tmp = #n inv.tmp
 execute if items entity @s armor.legs *[custom_data~{ctf_part:1b}] run scoreboard players add #p inv.tmp 1
 execute if items entity @s armor.feet *[custom_data~{ctf_part:1b}] run scoreboard players add #p inv.tmp 1

@@ -1,9 +1,10 @@
-# 1 - primary weapon
-execute if items entity @s hotbar.0 * unless items entity @s hotbar.0 *[custom_data~{tags:["main weapon"]}] run function ctf_inv:api/stash {slot: "hotbar.0"}
-# 2 - secondary weapon
-execute if items entity @s hotbar.1 * unless items entity @s hotbar.1 *[custom_data~{tags:["secondary weapon"]}] run function ctf_inv:api/stash {slot: "hotbar.1"}
-# 3 - grenade
-execute if items entity @s hotbar.2 * unless items entity @s hotbar.2 *[custom_data~{tags:["he_grenade"]}] run function ctf_inv:api/stash {slot: "hotbar.2"}
+from registry:items import GROUPS
+from ctf_inv:lib import group_pred
+
+# 1-3 - primary weapon, secondary weapon, grenade (registry GROUPS)
+for g in GROUPS:
+    if g["slot"]:
+        execute if items entity @s g["slot"] * unless items entity @s g["slot"] group_pred(g["group"]) run function ctf_inv:api/stash {slot: g["slot"]}
 # 4-6 - anything that isn't bound to its own slot
 execute if items entity @s hotbar.3 #ctf_inv:bound run function ctf_inv:api/stash {slot: "hotbar.3"}
 execute if items entity @s hotbar.3 *[custom_data~{bind:1b}] run function ctf_inv:api/stash {slot: "hotbar.3"}

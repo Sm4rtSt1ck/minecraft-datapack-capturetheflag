@@ -4,7 +4,10 @@
   "data_pack": {
     "name": "CaptureTheFlag",
     "load": [
-      "src"
+      "src",
+      {
+        "data/registry/modules": "registry"
+      }
     ],
     "pack_format": 61,
     "description": "The datapack for CaptureTheFlag"
@@ -21,6 +24,11 @@
       "formatting": {
         "json_ensure_ascii": false
       }
+    },
+    "bolt": {
+      "entrypoint": [
+        "ctf_inv:gen"
+      ]
     }
   }
 }
