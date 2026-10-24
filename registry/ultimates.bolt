@@ -1,0 +1,23 @@
+# ULTIMATES REGISTRY. Read at build time by bolt (ctf_ult, ctf_inv, ctf_shop).
+# The number of an ultimate (score ultimate_category) is its index in ULTIMATES; 0 - none chosen.
+# Its behavior is hand-written: ctf_ult:internal/categories/<id> (start), ctf_ult:api/end.
+#   name, model - the ultimate item in slot 9 (ctf_inv:give/ultimate) and the shop product
+#   duration - ticks (score timer)
+ULTIMATES = [
+    {"id": "default", "name": "Default", "model": "blaze_rod"},
+    {"id": "ghost", "name": "Ghost", "model": "skeleton_skull", "duration": 200},
+    {"id": "scale", "name": "Microman", "model": "armadillo_scute", "duration": 400},
+    {"id": "trident", "name": "Piercing killer", "model": "trident", "duration": 300},
+    {"id": "bomber", "name": "Suicide bomber", "model": "tnt", "duration": 300},
+    {"id": "foot_eater", "name": "Foot eater", "model": "dragon_head", "duration": 40},
+]
+
+def ult(id):
+    for u in ULTIMATES:
+        if u["id"] == id:
+            return u
+
+def ult_num(id):
+    for i in range(len(ULTIMATES)):
+        if ULTIMATES[i]["id"] == id:
+            return i

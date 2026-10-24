@@ -1,4 +1,6 @@
-scoreboard players set @s timer 400
+# The duration: registry ULTIMATES
+from registry:ultimates import ult
+scoreboard players set @s timer ult("scale")["duration"]
 
 
 attribute @s minecraft:scale base set 0.45

@@ -13,6 +13,8 @@
 #         cost / the look name. Without arguments the function reads its data here by the id
 #         (ctf_shop:product/<id>: product(id)).
 from registry:items import limit
+from registry:traps import trap
+from registry:ultimates import ult, ult_num
 
 
 COST = "<cost>"
@@ -29,11 +31,18 @@ def group_buy(item, group, components, wpn):
     return ("ctf_shop:buy/group", {"item": item, "wpn": wpn, "name": NAME, "components": components, "count": 1, "cost": COST, "group": group, "bind": "1b", "offhand": 0, "free": 0})
 
 
-# Defense traps: a frog spawn egg that places an armor stand with the trap block on its head
-# (the trap items are found by their entity_data Tags, ctf_shop:on/freeze_start)
-def trap_buy(trap, model, title, count):
-    components = f'custom_data={{tags:[""]}}, item_model={model}, entity_data={{id:"minecraft:armor_stand", Marker:true, Invisible:true, Tags:["trap", "trap_display", "trap.{trap}"], ArmorItems:[{{}}, {{}}, {{}}, {{id:"minecraft:{model}"}}]}}'
-    return ("ctf_shop:buy/unique", {"key": f"{trap}_trap", "title": title, "item": "frog_spawn_egg", "name": NAME, "count": count, "cost": COST, "components": components})
+# Defense traps (registry:traps): a frog spawn egg that places an armor stand with the trap block on
+# its head (the trap items are found by their entity_data Tags, ctf_shop:on/freeze_start)
+def trap_buy(id, title, count):
+    block = trap(id)["block"]
+    components = f'custom_data={{tags:[""]}}, item_model={block}, entity_data={{id:"minecraft:armor_stand", Marker:true, Invisible:true, Tags:["trap", "trap_display", "trap.{id}"], ArmorItems:[{{}}, {{}}, {{}}, {{id:"minecraft:{block}"}}]}}'
+    return ("ctf_shop:buy/unique", {"key": f"{id}_trap", "title": title, "item": "frog_spawn_egg", "name": NAME, "count": count, "cost": COST, "components": components})
+
+
+# Ultimates (registry:ultimates): the shop item looks like the ultimate item
+def ult_look(id):
+    u = ult(id)
+    return look(u["model"], '{"text": "' + u["name"] + '"}')
 
 
 def bow_buy(wpn, enchantments):
@@ -231,51 +240,51 @@ PAGES = [
         # DEFENSE
         {
             "id": "tnt_trap",
-            "team": "defense",
+            "team": trap("tnt")["team"],
             "slot": 18,
             "cost": 150,
-            "look": look("tnt", '{"text": "TNT traps x3"}'),
-            "buy": trap_buy("tnt", "tnt", "a tnt trap", 3)
+            "look": look(trap("tnt")["block"], '{"text": "TNT traps x3"}'),
+            "buy": trap_buy("tnt", "a tnt trap", 3)
         },
         {
             "id": "anvil_trap",
-            "team": "defense",
+            "team": trap("anvil")["team"],
             "slot": 20,
             "cost": 120,
-            "look": look("anvil", '{"text": "Anvil traps x3"}'),
-            "buy": trap_buy("anvil", "anvil", "an anvil trap", 3)
+            "look": look(trap("anvil")["block"], '{"text": "Anvil traps x3"}'),
+            "buy": trap_buy("anvil", "an anvil trap", 3)
         },
         {
             "id": "web_trap",
-            "team": "defense",
+            "team": trap("web")["team"],
             "slot": 22,
             "cost": 50,
-            "look": look("cobweb", '{"text": "Web trap"}'),
-            "buy": trap_buy("web", "cobweb", "a web trap", 1)
+            "look": look(trap("web")["block"], '{"text": "Web trap"}'),
+            "buy": trap_buy("web", "a web trap", 1)
         },
         {
             "id": "levitation_trap",
-            "team": "defense",
+            "team": trap("levitation")["team"],
             "slot": 24,
             "cost": 70,
-            "look": look("feather", '{"text": "Levitation trap"}'),
-            "buy": trap_buy("levitation", "feather", "a levitation trap", 1)
+            "look": look(trap("levitation")["block"], '{"text": "Levitation trap"}'),
+            "buy": trap_buy("levitation", "a levitation trap", 1)
         },
         {
             "id": "wither_trap",
-            "team": "defense",
+            "team": trap("wither")["team"],
             "slot": 26,
             "cost": 40,
-            "look": look("wither_skeleton_skull", '{"text": "Wither trap"}'),
-            "buy": trap_buy("wither", "wither_skeleton_skull", "a wither trap", 1)
+            "look": look(trap("wither")["block"], '{"text": "Wither trap"}'),
+            "buy": trap_buy("wither", "a wither trap", 1)
         },
         # ATTACK
         {
             "id": "detector_trap",
-            "team": "attack",
+            "team": trap("detector")["team"],
             "slot": 18,
             "cost": 80,
-            "look": look("ender_eye", '{"text": "Enemies detector (within 10 blocks)"}'),
+            "look": look(trap("detector")["block"], '{"text": "Enemies detector (within 10 blocks)"}'),
             "buy": (
                 "ctf_shop:buy/unique",
                 {
@@ -285,7 +294,7 @@ PAGES = [
                     "name": NAME,
                     "count": 1,
                     "cost": COST,
-                    "components": 'custom_data={tags:["trap", "detector"]}, item_model=ender_eye'
+                    "components": 'custom_data={tags:["trap", "detector"]}, item_model=' + trap("detector")["block"]
                 }
             )
         },
@@ -297,37 +306,37 @@ PAGES = [
             "id": "ghost",
             "slot": 18,
             "cost": 0,
-            "glint_ult": 1,
-            "look": look("skeleton_skull", '{"text": "Ghost"}'),
-            "buy": ("ctf_shop:buy/ultimate", {"category": 1, "cost": COST})},
+            "glint_ult": ult_num("ghost"),
+            "look": ult_look("ghost"),
+            "buy": ("ctf_shop:buy/ultimate", {"category": ult_num("ghost"), "cost": COST})},
         {
             "id": "microman",
             "slot": 20,
             "cost": 0,
-            "glint_ult": 2,
-            "look": look("armadillo_scute", '{"text": "Microman"}'),
-            "buy": ("ctf_shop:buy/ultimate", {"category": 2, "cost": COST})},
+            "glint_ult": ult_num("scale"),
+            "look": ult_look("scale"),
+            "buy": ("ctf_shop:buy/ultimate", {"category": ult_num("scale"), "cost": COST})},
         {
             "id": "piercing_killer",
             "slot": 22,
             "cost": 0,
-            "glint_ult": 3,
-            "look": look("trident", '{"text": "Piercing killer"}'),
-            "buy": ("ctf_shop:buy/ultimate", {"category": 3, "cost": COST})},
+            "glint_ult": ult_num("trident"),
+            "look": ult_look("trident"),
+            "buy": ("ctf_shop:buy/ultimate", {"category": ult_num("trident"), "cost": COST})},
         {
             "id": "suicide_bomber",
             "slot": 24,
             "cost": 0,
-            "glint_ult": 4,
-            "look": look("tnt", '{"text": "Suicide bomber"}'),
-            "buy": ("ctf_shop:buy/ultimate", {"category": 4, "cost": COST})},
+            "glint_ult": ult_num("bomber"),
+            "look": ult_look("bomber"),
+            "buy": ("ctf_shop:buy/ultimate", {"category": ult_num("bomber"), "cost": COST})},
         {
             "id": "foot_eater",
             "slot": 26,
             "cost": 0,
-            "glint_ult": 5,
-            "look": look("dragon_head", '{"text": "Foot eater"}'),
-            "buy": ("ctf_shop:buy/ultimate", {"category": 5, "cost": COST})},
+            "glint_ult": ult_num("foot_eater"),
+            "look": ult_look("foot_eater"),
+            "buy": ("ctf_shop:buy/ultimate", {"category": ult_num("foot_eater"), "cost": COST})},
     ]},
 ]
 

@@ -1,5 +1,0 @@
-$execute if score result map_vote matches 1 run function ctf_maps:map/test_map/$(function)
-$execute if score result map_vote matches 2 run function ctf_maps:map/green_mine/$(function)
-$execute if score result map_vote matches 3 run function ctf_maps:map/night_club/$(function)
-$execute if score result map_vote matches 4 run function ctf_maps:map/farm/$(function)
-$execute if score result map_vote matches 5 run function ctf_maps:map/railway_station/$(function)

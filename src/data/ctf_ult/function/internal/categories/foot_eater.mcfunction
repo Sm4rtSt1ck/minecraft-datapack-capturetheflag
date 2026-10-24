@@ -1,4 +1,6 @@
-scoreboard players set @s timer 40
+# The duration: registry ULTIMATES
+from registry:ultimates import ult
+scoreboard players set @s timer ult("foot_eater")["duration"]
 
 effect give @s minecraft:slowness infinite 127 true
 

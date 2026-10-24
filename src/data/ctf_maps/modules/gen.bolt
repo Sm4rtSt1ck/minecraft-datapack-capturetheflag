@@ -1,0 +1,8 @@
+# Functions generated from the maps registry (registry/maps.bolt) at build time
+from registry:maps import MAPS, EVENTS
+
+# Runs ctf_maps:map/<the map of the vote>/<event> (number of the map = result map_vote)
+for e in EVENTS:
+    function f"ctf_maps:api/call/{e}":
+        for i in range(len(MAPS)):
+            execute if score result map_vote matches (i + 1) run function f"ctf_maps:map/{MAPS[i]['id']}/{e}"

@@ -1,16 +1,11 @@
 #########################################
 # MAP BUTTONS
 
-# Test map
-function ctf_lobby:internal/vote/map_button_tick {slot: 0, id: 0, name: "Test map", score: 1}
-# Green mine
-function ctf_lobby:internal/vote/map_button_tick {slot: 1, id: 1, name: "Green mine", score: 2}
-# Night club
-function ctf_lobby:internal/vote/map_button_tick {slot: 2, id: 2, name: "Night club", score: 3}
-# Farm
-function ctf_lobby:internal/vote/map_button_tick {slot: 3, id: 3, name: "Farm", score: 4}
-# Railway station
-function ctf_lobby:internal/vote/map_button_tick {slot: 4, id: 4, name: "Railway station", score: 5}
+# One button per map of the registry MAPS (score = the number of the map)
+from registry:maps import MAPS
+for i in range(len(MAPS)):
+    m = MAPS[i]
+    function ctf_lobby:internal/vote/map_button_tick {slot: (m["vote_slot"]), id: (m["map_item"]), name: (m["name"]), score: (i + 1)}
 
 #########################################
 # SPECTATING BUTTON

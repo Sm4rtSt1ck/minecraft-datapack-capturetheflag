@@ -1,0 +1,17 @@
+# MAPS REGISTRY. Read at build time by bolt (ctf_maps, ctf_lobby).
+# The number of a map (score "result map_vote", the vote) is its index in MAPS + 1.
+# The map itself is hand-written: ctf_maps:map/<id>/<event> (start, prepare, clone, freeze, round,
+# end_round, loot, music).
+#   name - the vote button in the lobby
+#   vote_slot - the hotbar slot of the button
+#   map_item - map_id of the button (a filled map)
+MAPS = [
+    {"id": "test_map", "name": "Test map", "vote_slot": 0, "map_item": 0},
+    {"id": "green_mine", "name": "Green mine", "vote_slot": 1, "map_item": 1},
+    {"id": "night_club", "name": "Night club", "vote_slot": 2, "map_item": 2},
+    {"id": "farm", "name": "Farm", "vote_slot": 3, "map_item": 3},
+    {"id": "railway_station", "name": "Railway station", "vote_slot": 4, "map_item": 4},
+]
+
+# The events of a map: ctf_maps:api/call/<event> runs ctf_maps:map/<map>/<event> of the current map
+EVENTS = ["start", "prepare", "clone", "freeze", "round", "end_round", "loot"]

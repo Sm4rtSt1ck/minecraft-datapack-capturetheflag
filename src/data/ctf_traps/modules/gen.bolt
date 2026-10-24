@@ -1,0 +1,10 @@
+# Functions generated from the traps registry (registry/traps.bolt) at build time
+from registry:traps import TRAPS
+
+for t in TRAPS:
+    if t["touch"] == "near":
+        # Runs as a player next to the trap. If he is an attacker, he gets the kill credit of the trap
+        # (kills of defenders by it: money, and the loot crate task "enemy_trap")
+        function f"ctf_traps:internal/touch/{t['id']}":
+            execute if entity @s[tag=attack] run scoreboard players operation @e[type=frog, tag=f"trap.{t['id']}", tag=trap_marker, distance=..2] kc.owner = @s player_id
+            execute as @e[type=frog, tag=f"trap.{t['id']}", tag=trap_marker, distance=..2] run function f"ctf_traps:internal/{t['id']}/trigger"

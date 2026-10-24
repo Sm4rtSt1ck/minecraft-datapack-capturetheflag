@@ -13,7 +13,7 @@ kill @e[tag=win_trigger]
 kill @e[tag=map_entity]
 kill @e[tag=flag]
 kill @e[tag=trap]
-function ctf_maps:api/call_current {function: "clone"}
+function ctf_maps:api/call/clone
 
 #########################################
 # OTHER

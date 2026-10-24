@@ -1,3 +1,3 @@
 scoreboard players reset @s just_used_chorus
 
-execute if score game state matches 3 as @s run function ctf_maps:api/call_current {function: "freeze"}
+execute if score game state matches 3 as @s run function ctf_maps:api/call/freeze

@@ -82,7 +82,7 @@ through tags.
     "require": ["bolt"],
     "pipeline": ["mecha"],
     "output": "<world>/datapacks",
-    "meta": {"mecha": {"formatting": {"json_ensure_ascii": false}}, "bolt": {"entrypoint": ["ctf_inv:gen", "ctf_shop:gen"]}}
+    "meta": {"mecha": {"formatting": {"json_ensure_ascii": false}}, "bolt": {"entrypoint": ["ctf_inv:gen", "ctf_shop:gen", "ctf_traps:gen", "ctf_maps:gen"]}}
   }
   ```
 
@@ -174,6 +174,18 @@ static: no runtime loops over a registry, no macro calls in hot paths.
   predicate and max come from `LIMITS`). `ctf_shop:gen` generates `page/<id>/render|click` and
   `limits/<id>`; the menu, the page dispatch and the products with no arguments
   (`product/<id>`: chorus, smoke, he, regen, speed, totem, shield, wind) read the registry.
+- `registry/traps.bolt` (4c): `TRAPS` (team, block, fires, touch). Generates the place / trigger
+  dispatch, `ctf_traps:internal/touch/<id>` (was a macro called every tick), the shop trap
+  products and the "bought" reset. The behavior stays hand-written (`internal/<id>/place|trigger`);
+  so does the order of `ctf_traps:tick/combat` (the hurt check sits between the touches: it decides
+  who gets the kill credit).
+- `registry/ultimates.bolt` (4c): `ULTIMATES` (number = index = `ultimate_category`, 0 none; name,
+  model, duration). Used by `ctf_inv:give/ultimate`, `ctf_ult:internal/start`, the category
+  timers and the shop ultimate page. Behavior: `ctf_ult:internal/categories/<id>`.
+- `registry/maps.bolt` (4c): `MAPS` (number = index + 1 = `result map_vote`; vote button) and
+  `EVENTS`. `ctf_maps:gen` generates `ctf_maps:api/call/<event>` (replaced the macro
+  `call_current`); the vote buttons, the vote count and the music stop loop over `MAPS`. The maps
+  themselves are hand-written `ctf_maps:map/<id>/<event>`.
 - `ctf_inv:lib` `count(pred)` = `ctf_inv:limits/count` without a macro call. The macro
   `limits/count` / `limits/one` stay for callers with a runtime predicate (`ctf_shop`).
 

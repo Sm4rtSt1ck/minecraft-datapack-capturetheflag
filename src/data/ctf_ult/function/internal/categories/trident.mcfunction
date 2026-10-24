@@ -1,4 +1,6 @@
-scoreboard players set @s timer 300
+# The duration: registry ULTIMATES
+from registry:ultimates import ult
+scoreboard players set @s timer ult("trident")["duration"]
 
 
 function ctf_ult:internal/save_inventory

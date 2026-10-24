@@ -1,0 +1,23 @@
+# TRAPS REGISTRY. Read at build time by bolt (ctf_traps, ctf_shop).
+# A trap is placed as an item (an armor stand "trap_display" with the block on its head) and gets
+# an invisible frog "trap_marker" (tag trap.<id>) that is touched / hurt to set it off.
+# Its behavior is hand-written: ctf_traps:internal/<id>/place and ctf_traps:internal/<id>/trigger.
+#   team - who buys and places it
+#   block - the block on the display (and the item model in the shop)
+#   fires - it can go off (ctf_traps:api/trigger); the detector only shows enemies
+#   touch - "near": a player within 2 blocks sets it off (ctf_traps:internal/touch/<id>);
+#           other ways are hand-written in ctf_traps:tick/combat
+TRAPS = [
+    {"id": "tnt", "team": "defense", "block": "tnt", "fires": True, "touch": "near"},
+    {"id": "anvil", "team": "defense", "block": "anvil", "fires": True, "touch": "column"},
+    {"id": "web", "team": "defense", "block": "cobweb", "fires": True, "touch": "web"},
+    {"id": "levitation", "team": "defense", "block": "feather", "fires": True, "touch": "near"},
+    {"id": "wither", "team": "defense", "block": "wither_skeleton_skull", "fires": True, "touch": "near"},
+    # Attackers: placed by a click, shows the defenders nearby (ctf_traps:tick/detector)
+    {"id": "detector", "team": "attack", "block": "ender_eye", "fires": False, "touch": None},
+]
+
+def trap(id):
+    for t in TRAPS:
+        if t["id"] == id:
+            return t

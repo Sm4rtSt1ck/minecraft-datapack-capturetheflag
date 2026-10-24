@@ -1,6 +1,7 @@
 scoreboard players operation game state = vote state
 scoreboard objectives setdisplay sidebar map_vote_player
 
+scoreboard players operation random number %= 3 number
 scoreboard players set vote timer 600
 bossbar set ctf:match max 600
 bossbar set ctf:match visible true
