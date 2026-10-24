@@ -11,6 +11,8 @@ gamemode adventure @a[tag=player]
 
 # Warmup game state
 scoreboard players operation game state = warmup state
+# Skip votes: nobody voted yet
+function ctf:match/warmup/count_votes
 
 # 30 secs warmup timer (600 ticks)
 scoreboard players set warmup timer 600
@@ -46,5 +48,5 @@ item replace entity @a[tag=player] hotbar.0 with crossbow[custom_name='{"text":"
 item replace entity @a[tag=player] hotbar.1 with minecraft:stone_sword
 
 # Menu items
-item replace entity @a[tag=player] hotbar.7 with carrot_on_a_stick[minecraft:custom_data={action:"skip"}, item_model=nether_star, custom_name='[{"text":"SKIP WARM-UP (all players need to click) [", "color": "gold", "bold": true, "italic": false}, {"keybind":"key.use"}, {"text": "]"}]']
+item replace entity @a[tag=player] hotbar.7 with carrot_on_a_stick[minecraft:custom_data={action:"skip"}, item_model=nether_star, custom_name='[{"text":"SKIP WARM-UP (2/3 of the players need to click) [", "color": "gold", "bold": true, "italic": false}, {"keybind":"key.use"}, {"text": "]"}]']
 item replace entity @a[tag=player] hotbar.8 with carrot_on_a_stick[minecraft:custom_data={action:"exit"}, item_model=red_bed, custom_name='[{"text":"EXIT TO LOBBY [", "color": "red", "bold": true, "italic": false}, {"keybind":"key.use"}, {"text": "]"}]']

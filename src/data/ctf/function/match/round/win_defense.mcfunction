@@ -14,4 +14,6 @@ execute if score round timer matches ..0 if entity @a[tag=attack, tag=!dead] run
 # Modules: round rewards
 function #ctf:on/round_win
 
+# The bossbar of end_round has the color of the winners
+bossbar set ctf:match color blue
 function ctf:match/end_round/start

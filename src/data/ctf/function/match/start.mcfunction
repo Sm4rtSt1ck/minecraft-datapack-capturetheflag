@@ -93,6 +93,8 @@ tag @a[team=team_2] remove attack
 # Bossbar
 bossbar set ctf:match value 0
 bossbar set ctf:match visible true
+# Pink in the other phases (preparing, warm-up, swap, end)
+bossbar set ctf:match color pink
 bossbar set ctf:match players @a[tag=!lobby]
 bossbar set ctf:match name {"text":"PREPARING...", "color": "yellow", "bold": true}
 execute positioned as @a[tag=!lobby] run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1

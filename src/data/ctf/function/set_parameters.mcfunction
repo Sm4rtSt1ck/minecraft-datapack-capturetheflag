@@ -97,6 +97,9 @@ scoreboard players reset * map_vote_player
 # Timer
 scoreboard objectives add timer dummy
 
+# Warm-up skip vote (ctf:match/warmup/count_votes): #all players, #votes, #need (2/3 of the players)
+scoreboard objectives add skip.tmp dummy
+
 # Entity cloning
 scoreboard objectives add originX dummy
 scoreboard objectives add originY dummy

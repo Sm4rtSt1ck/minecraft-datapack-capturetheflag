@@ -14,4 +14,6 @@ execute if score broken flag_state matches 1 run data modify storage ctf:round w
 # Modules: the flag is taken from the attackers, round rewards
 function #ctf:on/round_win
 
+# The bossbar of end_round has the color of the winners
+bossbar set ctf:match color red
 function ctf:match/end_round/start

@@ -45,6 +45,11 @@ Game phases:
 7. **Rotation (Team Swap)**
 8. **Match End**
 
+* The warm-up is skipped when **2/3 of the players** (rounded up) click the nether star; a vote
+  makes the star glint, and the chat shows the votes and how many are needed.
+* The bossbar timer is **white** in freeze, **green** in the round, and in the end of the round it
+  has the color of the winners (**red** attack, **blue** defense); pink in the other phases.
+
 
 ### Setup Phase
 

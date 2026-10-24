@@ -10,6 +10,7 @@ function #ctf:on/round_cleanup
 # 60 secs freeze before round start (1200 ticks)
 scoreboard players set freeze timer 1200
 bossbar set ctf:match max 1200
+bossbar set ctf:match color white
 
 gamerule fallDamage false
 

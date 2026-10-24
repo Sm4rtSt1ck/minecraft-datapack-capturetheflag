@@ -4,6 +4,7 @@ scoreboard players operation game state = round state
 # Round timer 180 secs (3600 ticks)
 scoreboard players set round timer 3600
 bossbar set ctf:match max 3600
+bossbar set ctf:match color green
 
 gamerule fallDamage true
 

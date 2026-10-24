@@ -2,6 +2,7 @@ from registry:world import PODIUM
 function admin:log/function {name: "match/end/start"}
 
 scoreboard players operation game state = end state
+bossbar set ctf:match color pink
 function #ctf:on/round_cleanup
 # Tiemr to lobby 30 secs (300 ticks)
 scoreboard players set end timer 300

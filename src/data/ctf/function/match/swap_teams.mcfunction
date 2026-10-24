@@ -1,6 +1,7 @@
 function admin:log/function {name: "match/swap_teams"}
 
 scoreboard players operation game state = swap state
+bossbar set ctf:match color pink
 function #ctf:on/round_cleanup
 
 team modify team_1 displayName "defense"
