@@ -122,7 +122,7 @@ through tags.
 - Don't remove code or comments the user wrote on purpose without asking. Examples: disabled shop
   products, alternative map spawns, the `elevator` map function, `admin:tp/*`.
 
-## Architecture (as of the last commit before the migration)
+## Architecture (as of the last commit before the migration, plus the stage 2 hooks)
 
 **Game state:** `game state` against constants in the `state` objective:
 
@@ -138,6 +138,21 @@ through tags.
 | end | 7 |
 
 `ctf:tick` calls `ctf:match/<phase>/tick`.
+
+**Core hooks (stage 2).** The phase functions don't call modules; they run function tags in
+`ctf/tags/function/`. **The order of the values in a tag is the order of execution**: it repeats
+the old order of the calls, so keep it when adding entries.
+
+- `#ctf:config` - module settings (`ctf:load` and match start).
+- `#ctf:tick/<phase>`: `lobby`, `global` (every tick), `freeze`, `round`, `end_round`, `end`.
+  `combat` holds the fight events and is included by `round` and `end_round`. A phase tick
+  decrements its timer, runs its tag, then checks its own end / win conditions.
+- `#ctf:on/<event>`: `match_start`, `warmup_end`, `round_cleanup` (death cameras, Creepenator: start
+  of freeze, swap, end), `freeze_start`, `round_start`, `round_win` (storage
+  `ctf:round won {winner, loser, reason}`), `end_round_start`, `end_round_end`, `swap`,
+  `player_reset` (as a player, before his inventory is cleared: swap, end, lobby join).
+- Handlers: `<module>:on/<event>`, `<module>:tick/<phase>`; for the mechanics still inside `ctf`:
+  `ctf:match/events/<mechanic>/on|tick/...`, `ctf:match/maps/on/...`.
 
 - **Freeze:** buying, placing the flag and traps.
 - **Round:** inventory slots 9-35 are locked with glass panes.

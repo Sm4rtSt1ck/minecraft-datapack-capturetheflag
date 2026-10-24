@@ -1,0 +1,6 @@
+{
+    "values": [
+        "ctf:match/events/flag/on/end_round_start",
+        "ctf:match/maps/on/end_round_start"
+    ]
+}

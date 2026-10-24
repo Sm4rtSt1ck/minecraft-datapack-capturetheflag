@@ -1,8 +1,7 @@
 function admin:log/function {name: "match/swap_teams"}
 
 scoreboard players operation game state = swap state
-function ctf:match/events/fight/deathcam/stop_all
-function ctf_loot:reward/creep/stop_all
+function #ctf:on/round_cleanup
 
 team modify team_1 displayName "defense"
 team modify team_1 color blue
@@ -22,15 +21,15 @@ tag team_2 add attack
 tag @a[team=team_2] remove defense
 tag @a[team=team_2] add attack
 
-# Money (ctf_econ:config)
-function ctf_econ:reset
+# Modules: money of the new half
+function #ctf:on/swap
 
 title @a[tag=!lobby] title {"text":"SWAP TEAMS", "color": "green"}
 
 gamemode spectator @a[tag=player]
 
-execute as @a[tag=player] run function ctf:match/events/ultimate/stop
-# ONLY AFTER ULTIMATE STOPPING
+execute as @a[tag=player] run function #ctf:on/player_reset
+# ONLY AFTER ULTIMATE STOPPING (#ctf:on/player_reset)
 clear @a[tag=player]
 
 kill @e[tag=trap]

@@ -41,35 +41,6 @@ scoreboard players reset * kills
 scoreboard players set @a[tag=player] kills 0
 scoreboard objectives setdisplay sidebar kills
 
-# Money (ctf_econ:config)
-function ctf_econ:reset
-# Gun settings
-function ctf_guns:config
-function ctf_sniper:config
-# The flag look
-function ctf:match/helpers/flag/config
-# Loot crates
-function ctf_loot:config
-scoreboard players reset * loot.best
-scoreboard players reset * loot.kills
-scoreboard players reset * loot.ktotal
-tag @a remove loot.k10
-
-# Events
-scoreboard players reset * just_used_totem
-scoreboard players reset * just_died
-scoreboard players reset * just_killed
-scoreboard players reset * flag_placed
-scoreboard players reset * flag_broken
-scoreboard players reset * wall_flag_broken
-scoreboard players reset * flag_dropped
-scoreboard players reset * flag_pickedup
-scoreboard players reset * just_placed_trap
-scoreboard players reset * just_threw_grenade
-
-# Ultimate
-scoreboard players set @a[tag=player] ultimate_category 1
-
 #########################################
 # TEAMS
 
@@ -124,17 +95,12 @@ bossbar set ctf:match players @a[tag=!lobby]
 bossbar set ctf:match name {"text":"PREPARING...", "color": "yellow", "bold": true}
 execute positioned as @a[tag=!lobby] run playsound entity.firework_rocket.launch ambient @s ~ ~ ~ 1 1
 
-# Stop map music loops
-schedule clear ctf:match/maps/test_map/music
-schedule clear ctf:match/maps/green_mine/music
-schedule clear ctf:match/maps/night_club/music
-schedule clear ctf:match/maps/farm/music
-schedule clear ctf:match/maps/railway_station/music
-
 execute as @a[tag=spectator] run function ctf:match/spectate
-execute as @a[tag=player] run function ctf:match/events/ultimate/reset_value
 
-function ctf:match/maps/call_current {function: "start"}
+# Module settings (also loaded by ctf:load)
+function #ctf:config
+# Modules: starting money, event scores, ultimates, the map start (title, music)
+function #ctf:on/match_start
 
 function ctf:match/prepare/prepare
 

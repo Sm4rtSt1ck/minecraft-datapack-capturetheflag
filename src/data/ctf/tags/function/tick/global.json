@@ -1,0 +1,7 @@
+{
+    "values": [
+        "ctf_fx:tick",
+        "ctf_loot:tick",
+        "ctf:match/events/fight/deathcam/tick"
+    ]
+}

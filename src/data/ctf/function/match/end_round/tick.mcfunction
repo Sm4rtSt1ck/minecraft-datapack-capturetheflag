@@ -1,32 +1,12 @@
 #########################################
-# RULES
-
-# Instant tnt explosion
-execute positioned as @e[type=tnt] run summon minecraft:creeper ~ ~ ~ {\
-  Fuse:0,\
-  ignited:1b,\
-  ExplosionRadius:3\
-}
-kill @e[type=tnt]
-
-
-function ctf_shop:tick
-function ctf_sniper:tick
-function ctf_guns:tick
-
-# Exit button in the crafting grid
-execute as @a[tag=player, gamemode=!spectator] run function ctf_inv:exit/tick
-function ctf_inv:tick
-
-#########################################
-# EVENTS
-
-function ctf:match/events/handle
-
-#########################################
 # TIMER
 
 scoreboard players remove end_round timer 1
 execute store result bossbar ctf:match value run scoreboard players get end_round timer
+
+#########################################
+# MODULES (rules, shop, guns, inventory, the events of #ctf:tick/combat, the ultimates end)
+
+function #ctf:tick/end_round
+
 execute if score end_round timer matches -2147483648..0 run function ctf:match/end_round/end
-execute if score end_round timer matches 10 as @a[tag=player, tag=ultimate] run function ctf:match/events/ultimate/end

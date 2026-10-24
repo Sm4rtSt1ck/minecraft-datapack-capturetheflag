@@ -1,7 +1,7 @@
 #########################################
 # LOBBY TICKS
 
-execute if entity @a[tag=lobby] run function ctf:lobby/tick
+execute if entity @a[tag=lobby] run function #ctf:tick/lobby
 
 #########################################
 # MATCH TICKS
@@ -33,11 +33,9 @@ execute as @a[scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand c
     ]
 
 #########################################
-# EFFECTS AND LOOT CRATES (also used by the tests)
+# EVERY TICK: effects, loot crates, death camera (also used by the tests)
 
-function ctf_fx:tick
-function ctf_loot:tick
-function ctf:match/events/fight/deathcam/tick
+function #ctf:tick/global
 
 #########################################
 # GLOBAL EVENTS

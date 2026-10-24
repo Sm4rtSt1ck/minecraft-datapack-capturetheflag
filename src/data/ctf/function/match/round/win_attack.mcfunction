@@ -8,13 +8,10 @@ execute as @a[tag=defense] at @s run playsound entity.bee.death ambient @s ~ ~ ~
 execute if score match rounds < swap rounds run scoreboard players add team_1 rounds 1
 execute if score match rounds >= swap rounds run scoreboard players add team_2 rounds 1
 
-clear @a[tag=attack] minecraft:magenta_banner
-
-effect clear @a[tag=attack] minecraft:glowing
-
-# 1 - the flag was delivered (it was broken before), 2 - the flag was not placed
-scoreboard players set #reason econ.tmp 2
-execute if score broken flag_state matches 1 run scoreboard players set #reason econ.tmp 1
-function ctf_econ:round_end {winner: "attack", loser: "defense"}
+# reason: 1 - the flag was delivered (it was broken before), 2 - the flag was not placed
+data modify storage ctf:round won set value {winner: "attack", loser: "defense", reason: 2}
+execute if score broken flag_state matches 1 run data modify storage ctf:round won.reason set value 1
+# Modules: the flag is taken from the attackers, round rewards
+function #ctf:on/round_win
 
 function ctf:match/end_round/start

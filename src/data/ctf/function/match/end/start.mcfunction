@@ -1,14 +1,13 @@
 function admin:log/function {name: "match/end/start"}
 
 scoreboard players operation game state = end state
-function ctf:match/events/fight/deathcam/stop_all
-function ctf_loot:reward/creep/stop_all
+function #ctf:on/round_cleanup
 # Tiemr to lobby 30 secs (300 ticks)
 scoreboard players set end timer 300
 bossbar set ctf:match max 300
 
-execute as @a[tag=player] run function ctf:match/events/ultimate/stop
-# ONLY AFTER ULTIMATE STOPPING
+execute as @a[tag=player] run function #ctf:on/player_reset
+# ONLY AFTER ULTIMATE STOPPING (#ctf:on/player_reset)
 clear @a[tag=player]
 
 effect clear @a[tag=player]

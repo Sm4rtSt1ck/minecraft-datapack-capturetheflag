@@ -1,10 +1,6 @@
-# Settings of the modules: loaded on every /reload and world load (and again at match start),
-# so changes of the config files apply right away
-function ctf_econ:config
-function ctf_guns:config
-function ctf_sniper:config
-function ctf_loot:config
-function ctf:match/helpers/flag/config
+# Settings of the modules (#ctf:config): loaded on every /reload and world load (and again at
+# match start), so changes of the config files apply right away
+function #ctf:config
 
 # Loading notification
 title @a[tag=admin] title { \

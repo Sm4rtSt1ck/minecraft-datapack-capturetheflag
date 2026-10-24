@@ -12,18 +12,8 @@ gamerule keepInventory false
 # Fight events
 scoreboard players set @a[tag=player] deaths 0
 scoreboard players set @a[tag=player] kills 0
-scoreboard players set @a[tag=player] just_died 0
-scoreboard players set @a[tag=player] just_killed 0
-scoreboard players set @a[tag=player] just_used_totem 0
-scoreboard players set @a[tag=player] just_threw_grenade 0
-# Flag events
-scoreboard players set @a[tag=player] flag_placed 0
-scoreboard players set @a[tag=player] flag_broken 0
-scoreboard players set @a[tag=player] wall_flag_broken 0
-scoreboard players set @a[tag=player] flag_dropped 0
-scoreboard players set @a[tag=player] flag_pickedup 0
-# Traps events
-scoreboard players set @a[tag=player] just_placed_trap 0
+# Modules: event scores
+function #ctf:on/warmup_end
 
 # Other
 clear @a[tag=player]

@@ -1,0 +1,11 @@
+{
+    "values": [
+        "ctf:match/rules/instant_tnt",
+        "ctf_shop:tick",
+        "ctf_sniper:tick",
+        "ctf_guns:tick",
+        "ctf_inv:tick/match",
+        "#ctf:tick/combat",
+        "ctf:match/events/ultimate/tick/end_round"
+    ]
+}

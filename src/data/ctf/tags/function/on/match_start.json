@@ -1,0 +1,12 @@
+{
+    "values": [
+        "ctf_econ:half_start",
+        "ctf_loot:on/match_start",
+        "ctf:match/events/fight/on/match_start",
+        "ctf:match/events/flag/on/match_start",
+        "ctf:match/events/traps/on/match_start",
+        "ctf:match/events/grenades/on/match_start",
+        "ctf:match/events/ultimate/on/match_start",
+        "ctf:match/maps/on/match_start"
+    ]
+}

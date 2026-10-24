@@ -1,0 +1,16 @@
+{
+    "values": [
+        "ctf:match/events/flag/tick/freeze",
+        "ctf:match/events/traps/tick/freeze",
+        "ctf:match/events/misc/chorus/tick/freeze",
+        "ctf:match/events/grenades/tick/throw",
+        "ctf:match/events/grenades/tick/fly",
+        "ctf:match/events/traps/detector/trigger",
+        "ctf:match/events/ultimate/tick/click",
+        "ctf_shop:tick",
+        "ctf_sniper:tick",
+        "ctf_guns:tick",
+        "ctf_inv:freeze_shots",
+        "ctf_inv:tick/match"
+    ]
+}

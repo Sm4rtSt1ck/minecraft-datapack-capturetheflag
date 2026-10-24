@@ -1,0 +1,9 @@
+{
+    "values": [
+        "ctf_econ:config",
+        "ctf_guns:config",
+        "ctf_sniper:config",
+        "ctf_loot:config",
+        "ctf:match/helpers/flag/config"
+    ]
+}

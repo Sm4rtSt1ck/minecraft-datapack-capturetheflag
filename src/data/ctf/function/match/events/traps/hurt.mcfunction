@@ -1,4 +1,4 @@
-# Run every tick (ctf:match/events/handle): a trap goes off from ANY damage to its marker: shots (arrows,
+# Run every tick (ctf:match/events/traps/tick/combat): a trap goes off from ANY damage to its marker: shots (arrows,
 # fireworks, wind charges, tridents), explosions (grenades, another trap), fire, effects...
 # Markers have 1024 HP (a hit never kills them), so a hurt one is below max health.
 # A hit with the hand removes it without going off (ctf:match/events/traps/hit_by_hand, earlier)

@@ -1,0 +1,13 @@
+{
+    "values": [
+        "ctf:match/events/flag/tick/combat",
+        "ctf:match/events/fight/tick/combat",
+        "ctf_loot:tick/combat",
+        "ctf:match/events/grenades/tick/throw",
+        "ctf:match/events/traps/tick/combat",
+        "ctf:match/events/credit/tick",
+        "ctf:match/events/grenades/tick/fly",
+        "ctf:match/events/ultimate/tick/click",
+        "ctf:match/events/ultimate/tick/active"
+    ]
+}

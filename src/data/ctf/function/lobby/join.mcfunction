@@ -22,10 +22,9 @@ tag @s remove just_killed
 #########################################
 # OTHER PLAYER SETTINGS
 
-function ctf:match/events/ultimate/stop
-execute if entity @s[tag=ctf.dc_on] run function ctf:match/events/fight/deathcam/stop
-execute if entity @s[tag=loot.creep] run function ctf_loot:reward/creep/leave
-# ONLY AFTER ULTIMATE STOPPING
+# The ultimate, the death camera and the Creepenator creeper stop
+function #ctf:on/player_reset
+# ONLY AFTER ULTIMATE STOPPING (#ctf:on/player_reset)
 clear @s
 team join lobby @s
 gamemode adventure @s
