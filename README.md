@@ -403,8 +403,8 @@ asks for confirmation.
 
 ## Loot Crates (attackers)
 
-An attacker who completes a task by chance during a round (break or deliver the flag, kill with
-bare hands, with a wind charge, with an enemy's own trap, 5 kills) gets a shulker box with a
+An attacker who completes a task by chance during a round (deliver the flag, survive more than
+20 damage, kill an enemy with their own trap, 10 kills in the match) gets a shulker box with a
 reward at the start of the next freeze phase. It falls from the sky onto his base, only he can
 open it, and it disappears when the round starts. Rarity depends on the task.
 
@@ -456,81 +456,76 @@ The datapack is built with [beet](https://github.com/mcbeet/beet) + bolt from `s
 6. Start the game using the provided functions.
 
 
-## Datapack Structure
+## Project Structure
+
+The datapack is built with [beet](https://github.com/mcbeet/beet) + bolt (see Installation).
+Content is described as data in **registries**; at build time bolt turns them into plain static
+functions (no runtime loops over the registries).
 
 ```
-data/
- ├ minecraft/
- │  └ tags/function/
- │     ├ load.json
- │     └ tick.json
- │
- ├ admin/
- │  └ function/
- │     ├ log/
- │     └ tp/
- │
- ├ ctf_shop/          inventory shop & inventory lock (open / lock / tick)
- │  └ function/
- │     ├ internal/    change detection, click dispatch, rendering
- │     ├ ui/          glass, menu buttons, display items, actionbar
- │     ├ page/        render + click for each category
- │     ├ buy/         purchase templates (give, group, unique, ultimate)
- │     └ product/     non-standard products (armor, bows, crossbow...)
- │
- ├ ctf_econ/          economy: config (money values; kill rewards: registry/econ.bolt), round rewards, loss bonus
- │
- ├ ctf_inv/           hotbar layout, exit button, items on the ground
- │  ├ advancement/    inventory_changed -> layout is checked only after a change
- │  ├ tags/item/      offhand / flag_slot / bound items
- │  └ function/
- │     ├ layout/      take misplaced items out, give stick & ultimate, pickup caps
- │     ├ stash/       put items back by the rules (or drop them, never destroy)
- │     ├ ground/      pickup restrictions (one item of a kind per player per tick)
- │     └ exit/        exit button + yes/no confirmation in the 2x2 crafting grid
- │
- └ ctf/
-    ├ function/
-    │  ├ load.mcfunction
-    │  ├ tick.mcfunction
-    │  ├ set_parameters.mcfunction
-    │  ├ set_default_settings.mcfunction
-    │  ├ combine_commands.mcfunction
-    │  ├ events/
-    │  ├ lobby/
-    │  └ match/
-    │     ├ start.mcfunction
-    │     ├ swap_teams.mcfunction
-    │     ├ spectate.mcfunction
-    │     ├ keep_spectators_in_bounds.mcfunction
-    │     ├ events/
-    │     ├ helpers/
-    │     ├ maps/
-    │     ├ prepare/
-    │     ├ warmup/
-    │     ├ freeze/
-    │     ├ round/
-    │     ├ end_round/
-    │     └ end/
-    │
-    ├ predicate/
-    └ advancement/
+beet.json             build settings (output: the world's datapacks folder)
+registry/             content as data (bolt modules)
+ ├ items.bolt         item groups and their slots, ammo per weapon, carry limits
+ ├ shop.bolt          shop pages, products (one price), purchase limits per round
+ ├ traps.bolt         trap kinds
+ ├ ultimates.bolt     ultimates (number, item, duration)
+ ├ maps.bolt          maps (vote button) and map events
+ ├ econ.bolt          kill rewards
+ └ loot.bolt          loot crate rarities, tasks and their settings
+src/data/
+ ├ minecraft/         load / tick tags, damage type tags
+ ├ ctf/               core: game states, phases, teams, timers, hooks, all scoreboard objectives
+ ├ ctf_lobby/         lobby, map vote, settings signs, joining
+ ├ ctf_maps/          maps (map/<map>/<event>) and map cloning
+ ├ ctf_flag/          the flag: placing, breaking, carrying, delivery
+ ├ ctf_fight/         kills, deaths, kill credit, death camera
+ ├ ctf_traps/         traps
+ ├ ctf_grenades/      HE and smoke grenades
+ ├ ctf_ult/           ultimates and the ultimate bar
+ ├ ctf_inv/           hotbar layout, item rules, items on the ground, armor sets, ammo
+ ├ ctf_shop/          the shop inside the inventory
+ ├ ctf_econ/          economy (money values: config)
+ ├ ctf_guns/          hitscan rays, assault rifle
+ ├ ctf_sniper/        sniper rifle
+ ├ ctf_loot/          loot crates and their rewards
+ ├ ctf_fx/            camera shake, explosion look
+ ├ ctf_test/          manual tests (/function ctf_test:help)
+ └ admin/             log, teleports
 ```
+
+Every module has the same layout:
+
+* `config.mcfunction` - settings (loaded on `/reload` and at match start);
+* `api/` - functions other modules may call;
+* `internal/` - private to the module;
+* `on/<event>`, `tick/<phase>`, `tick.mcfunction` - handlers of the core hooks;
+* `modules/` - build-time bolt code (generators, helpers).
+
+**Core hooks.** The core never calls a module. Phases run function tags in
+`src/data/ctf/tags/function/`: `#ctf:tick/<phase>` every tick of a phase, `#ctf:on/<event>` on
+phase events (match start, freeze start, round win...). The order of the values in a tag is the
+order of execution.
 
 
 ## Development
 
-The datapack relies heavily on:
+* `beet build` - one build; `beet watch` - rebuild on every save. Then `/reload` in the game.
+* The build checks every command (selectors, NBT, macros) and stops on errors with the file and
+  line. Values filled in from the registries are not checked: look at the output.
+* Never edit the output folder: every build overwrites it.
 
-* `scoreboard`
-* `storage`
-* `execute`
-* `functions`
-* custom items
-* bossbars
-* scheduled functions
+Adding content:
 
-The codebase is organized around **game states and phases**.
+* **a weapon**: the shop product in `registry/shop.bolt`; its kill reward in `registry/econ.bolt`;
+  for a ranged weapon its ammo in `registry/items.bolt` and `ctf_inv:ammo/give/<id>`;
+* **a map**: an entry in `registry/maps.bolt` and its functions `ctf_maps:map/<map>/<event>`
+  (every event of `EVENTS`, plus `music`);
+* **a trap**: an entry in `registry/traps.bolt`, its functions `ctf_traps:internal/<id>/place`
+  and `trigger`, and the shop product;
+* **an ultimate**: an entry in `registry/ultimates.bolt`, its function
+  `ctf_ult:internal/categories/<id>`, and the shop product;
+* **a loot crate task**: an entry in `registry/loot.bolt` and a call
+  `function ctf_loot:task {id: "<id>"}` where it is completed.
 
 
 ## Future Plans

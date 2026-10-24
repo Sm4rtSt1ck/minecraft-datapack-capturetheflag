@@ -9,10 +9,10 @@ Repository: https://github.com/Sm4rtSt1ck/minecraft-datapack-capturetheflag (bra
   and [MECHANICS.md](MECHANICS.md) (loot crates, rewards, death camera). Keep them up to date with
   every change of behavior.
 
-## Current status: migration to beet + bolt (variant "C")
+## Architecture choice: beet + bolt (variant "C") - migration done
 
-The project is being moved to a **beet + bolt** build with **data registries**. Chosen by the user
-after comparing three architectures:
+The project is built with **beet + bolt** and **data registries**. Chosen by the user after
+comparing three architectures:
 
 - one namespace per mechanic;
 - the core announces events through function tags;
@@ -26,9 +26,9 @@ TPS with 10-20 players. These hot paths are item classification, the layout chec
 limits and ammo. So no runtime registry loops. Macros are fine only in rare events (a purchase,
 placing a trap).
 
-Migration is done **stage by stage**. Each stage is one commit. The user checks it in the game
-before the next stage starts. **Behavior must stay 100% identical** at every stage unless the user
-asks for a change.
+The migration was done **stage by stage**, one commit per stage, each checked by the user in the
+game. **Behavior stayed 100% identical** (checked with the symbolic comparison of the builds). The
+same rule applies to any later refactoring: identical behavior unless the user asks for a change.
 
 1. **Move without changes.** Set up beet, copy the datapack as is, get a clean build whose output
    matches the old datapack. A test build of the old datapack already passed: all 499 functions
@@ -43,7 +43,7 @@ asks for a change.
    - 4b shop;
    - 4c traps, ultimates, maps;
    - 4d economy kill rewards, loot tasks / rewards.
-5. **Cleanup.** Update README and MECHANICS to the new structure.
+5. **Cleanup.** README and MECHANICS describe the new structure.
 
 Target layout:
 
@@ -143,7 +143,7 @@ through tags.
 - Don't remove code or comments the user wrote on purpose without asking. Examples: disabled shop
   products, alternative map spawns, the `elevator` map function, `admin:tp/*`.
 
-## Architecture (after stage 3)
+## Architecture
 
 **Game state:** `game state` against constants in the `state` objective:
 

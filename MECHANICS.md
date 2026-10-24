@@ -26,16 +26,19 @@ teams swap) gives no crate, because the player is a defender in the next round.
 
 ### Tasks
 
+The tasks marked "off" are commented out in `TASKS` of `registry/loot.bolt` (they don't count);
+their detection is still in the code, so they can be turned on there.
+
 | Task | Rarity | Reward | How it is detected |
 | --- | --- | --- | --- |
 | Deliver the flag to the base | Common | Stun trap | the flag delivery (`ctf_flag:internal/bring`) |
-| Break the flag | Rare | test item | the flag breaking (`ctf_flag:internal/break`), the player who broke it |
+| Break the flag (off) | Rare | test item | the flag breaking (`ctf_flag:internal/break`), the player who broke it |
 | Take more than 20 damage in one round and stay alive ("unkillable") | Rare | 3 walls | stat `damage_taken` of the round (totems and regeneration make it possible); checked for alive players only |
 | Kill an enemy with their own trap | Epic | Creepenator | a defender is killed by a trap set off by the attacker: by walking into it, shooting it (bow, crossbow, sniper rifle, assault rifle, fireworks, wind charges) or setting it off otherwise. Any defender counts, not only the one who placed the trap |
 | Kill 10 enemies in this match | Epic | Inferno blade | kills of the whole match (both sides), once per match, counted at the start of freeze |
-| Kill an enemy with bare hands | Legendary | test item | a kill with an empty main hand |
-| Kill 5 enemies in one round | Mythic | test item | kills of the round (any weapon, grenades, traps); only if the enemy team has at least 5 players in the match |
-| Kill an enemy with a flying wind charge | Mythic | test item | advancement `player_killed_entity` with the killing blow by a `wind_charge` (a direct hit) |
+| Kill an enemy with bare hands (off) | Legendary | test item | a kill with an empty main hand |
+| Kill 5 enemies in one round (off) | Mythic | test item | kills of the round (any weapon, grenades, traps); only if the enemy team has at least 5 players in the match |
+| Kill an enemy with a flying wind charge (off) | Mythic | test item | advancement `player_killed_entity` with the killing blow by a `wind_charge` (a direct hit) |
 
 Teamkills never count. Kills, money and the kill credit of traps / grenades are described in the
 [README](README.md#kill-rewards).
@@ -50,12 +53,12 @@ Teamkills never count. Kills, money and the kill credit of traps / grenades are 
 | Legendary | yellow | dark gold → gold | yellow wool |
 | Mythic | red | dark → crimson | red wool |
 
-The rewards are test items for now; every rarity has one `reward` in the config (an item for `give`,
+The rewards are test items for now; every rarity has one `reward` in `RARITIES` (an item for `give`,
 components allowed).
 
 ### Rewards
 
-A task with its own reward gives it (`reward` in the config: function `ctf_loot:reward/<reward>`),
+A task with its own reward gives it (`reward` in `TASKS`: function `ctf_loot:reward/<reward>`),
 otherwise the crate gives the test item of the rarity.
 
 **Inferno blade** (`ctf_loot:reward/inferno`). A netherite sword (Fire Aspect I). A hit also deals
@@ -117,8 +120,8 @@ armor stand is placed exactly where the player looks, like in survival. Adventur
 * `RARITIES` - for every rarity, from common to mythic (its rank): sign text, box, trail colors,
   text color, reward;
 * `TASKS` - for every task: its rarity, chat text and the reward;
-* `unkillable` - damage needed (tenths of HP), `kills_total` - kills needed in the match;
-* `kills` - the "kills" task: kills needed and the minimum number of enemies.
+* `UNKILLABLE` - damage needed (tenths of HP), `KILLS_TOTAL` - kills needed in the match;
+* `KILLS` - the "kills" task: kills needed and the minimum number of enemies.
 
 **Landing points:** `ctf_maps:map/<map>/loot.mcfunction`, one line per point (the block where the
 box lands). Every crate needs its own point, so a map needs as many points as attackers can be:
@@ -128,7 +131,7 @@ function ctf_loot:point {x: -170, y: -49, z: -115}
 ```
 
 **New task:** call `function ctf_loot:task {id: "<id>"}` as the player where it happens and add the
-id to `tasks` in the config.
+id to `TASKS` in `registry/loot.bolt`.
 
 ### Tests
 
@@ -141,7 +144,8 @@ id to `tasks` in the config.
 * `ctf_test:loot/clear` - remove all crates with the explosion;
 * `ctf_test:loot/reward {id}` - get a reward: inferno / walls / stun / creep;
 * `ctf_test:loot/creep` - turn yourself into a Creepenator creeper;
-* `ctf_test:loot/reload_config` - apply changes of the config.
+* `ctf_test:loot/reload_config` - load the settings into the storage again (after `beet build` and
+  `/reload` they are loaded anyway).
 
 
 ## Death Camera
