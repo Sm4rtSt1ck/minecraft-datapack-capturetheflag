@@ -180,6 +180,8 @@ scoreboard objectives add kc.time dummy
 scoreboard objectives add kc.src dummy
 scoreboard objectives add kc.died minecraft.killed_by:minecraft.player
 scoreboard objectives add kc.tmp dummy
+# kc.hit - on a player: player_id of the last player who hurt him (ctf:match/events/credit/hit)
+scoreboard objectives add kc.hit dummy
 
 # Ultimate bar (ctf:match/events/ultimate/render)
 scoreboard objectives add ult.dur dummy

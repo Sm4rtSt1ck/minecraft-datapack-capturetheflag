@@ -31,8 +31,6 @@ effect clear @a[tag=defense] minecraft:mining_fatigue
 kill @e[type=arrow]
 
 # If flag is not set (inventory or dropped) -> attack wins
-# execute if entity @a[tag=defense, nbt={Inventory:[{id:"minecraft:magenta_banner"}]}] run function ctf:match/round/win_attack
-# execute if entity @e[type=item, nbt={Item:{id:"minecraft:magenta_banner"}}] run function ctf:match/round/win_attack
 execute unless entity @e[type=armor_stand, tag=flag] run function ctf:match/round/win_attack
 
 # Loot crates disappear

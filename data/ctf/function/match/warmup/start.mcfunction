@@ -34,8 +34,6 @@ execute as @a[tag=defense] positioned as @s run spawnpoint @s ~ ~ ~ 90
 
 effect clear @a[tag=player] minecraft:blindness
 effect clear @a[tag=player] minecraft:levitation
-# effect clear @a[tag=player] minecraft:resistance
-# effect give @a[tag=player] minecraft:resistance 1 127 true
 
 #########################################
 # GIVE ITEMS

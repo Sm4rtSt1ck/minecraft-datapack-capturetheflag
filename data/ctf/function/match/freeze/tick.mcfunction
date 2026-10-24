@@ -10,20 +10,11 @@ execute if score freeze timer matches 40 as @a[tag=!lobby] at @s run playsound m
 execute if score freeze timer matches 20 run title @a[tag=!lobby] title {"text": "❶", "color": "green"}
 execute if score freeze timer matches 20 as @a[tag=!lobby] at @s run playsound minecraft:entity.experience_orb.pickup ambient @s ~ ~ ~ 1 1
 
-# execute if score freeze timer matches 60 as @a[tag=attack] run function ctf:match/freeze/spread_attackers
-# execute if score freeze timer matches ..60 as @a[tag=attack] run function ctf:match/freeze/attackers_appearance
-
-# execute at @e[type=tnt] run summon armor_stand ~ ~ ~ {Tags:["tnt_marker"], Marker:true}
-# kill @e[type=tnt]
-# execute at @e[type=armor_stand,tag=tnt_marker] run setblock ~ ~ ~ tnt
-# kill @e[type=armor_stand, tag=tnt_marker]
-
-# execute as @a[scores={just_died=1..}] run function ctf:match/events/fight/die
 execute as @a[scores={flag_placed=1..}] run function ctf:match/events/flag/place
 execute as @a[scores={just_placed_trap=1..}] run function ctf:match/events/traps/place
 execute as @a[scores={just_used_chorus=1..}] run function ctf:match/events/misc/chorus/chorus
 execute as @a[scores={carrot_on_stick=1..}] if items entity @s weapon.mainhand carrot_on_a_stick[minecraft:custom_data={tags:["trap", "detector"]}] run function ctf:match/events/traps/detector/place
-execute as @e[tag=trap_display] positioned as @s unless entity @n[tag=trap_marker, distance=1.2..1.5] run kill @s
+execute as @e[type=armor_stand, tag=trap_display] positioned as @s unless entity @n[type=frog, tag=trap_marker, distance=1.2..1.5] run kill @s
 
 # Grenades
 execute as @a[scores={just_threw_grenade=1..}] run function ctf:match/events/grenades/throw

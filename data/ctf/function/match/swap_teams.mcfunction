@@ -38,5 +38,3 @@ kill @e[tag=trap]
 
 function ctf:match/prepare/prepare
 
-# schedule function ctf:match/freeze/start 200t
-# schedule function ctf:match/helpers/update_score_display 200t

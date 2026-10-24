@@ -1,6 +1,6 @@
 # PARENT: lobby/vote/tick
 
-$clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:$(slot)b}]}] carrot_on_a_stick[map_id=$(id)]
+$execute as @a[tag=lobby] unless items entity @s hotbar.$(slot) carrot_on_a_stick run clear @s carrot_on_a_stick[map_id=$(id)]
 
 # Give items
 $execute as @a[tag=lobby] unless score @s map_vote_player matches $(score) run item replace entity @s hotbar.$(slot) with carrot_on_a_stick[\

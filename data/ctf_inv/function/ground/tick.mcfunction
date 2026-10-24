@@ -14,8 +14,9 @@ execute if score game state matches 4..5 as @e[type=item, tag=ctf.r.banner] at @
     data modify entity @s Owner set from entity @n[tag=attack, tag=!ultimate] UUID
 
 # Everything else: only a player who has a place for the item can pick it up.
-# Items next to players: nobody may pick them up...
-execute as @e[type=item, tag=ctf.seen, tag=!ctf.r.banner, tag=!ctf.r.wear, tag=!ctf.buf] at @s if entity @a[tag=player, gamemode=!spectator, distance=..3] run data modify entity @s Owner set value [I;0,0,0,1]
+# Items next to players: nobody may pick them up... (tag ctf.own0: Owner is already [I;0,0,0,1], so the
+# entity NBT is written only when it changes; ctf_inv:ground/claim_item removes the tag)
+execute as @e[type=item, tag=ctf.seen, tag=!ctf.own0, tag=!ctf.r.banner, tag=!ctf.r.wear, tag=!ctf.buf] at @s if entity @a[tag=player, gamemode=!spectator, distance=..3] run function ctf_inv:ground/lock
 # ...except the player who claims it: every player claims the NEAREST item of every kind he may
 # take (one per kind per tick, so two swords lying together are never picked up at once)
 execute as @a[tag=player, gamemode=!spectator] at @s if entity @e[type=item, tag=ctf.seen, tag=!ctf.r.banner, tag=!ctf.r.wear, tag=!ctf.buf, distance=..3] run function ctf_inv:ground/claim

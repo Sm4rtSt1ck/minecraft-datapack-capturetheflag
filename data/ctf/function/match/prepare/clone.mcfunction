@@ -9,7 +9,6 @@ execute positioned as @n[tag=clone_marker] run clone ~ ~ ~ ~127 ~63 ~127 -200 -5
 #########################################
 # CLONING FOR CURRENT MAP
 
-# kill @e[tag=spawn_spot]
 kill @e[tag=win_trigger]
 kill @e[tag=map_entity]
 kill @e[tag=flag]

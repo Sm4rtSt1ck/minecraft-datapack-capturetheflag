@@ -17,8 +17,6 @@ spawnpoint @a[tag=player] -150 0 -150
 gamemode adventure @a[tag=attack]
 gamemode survival @a[tag=defense]
 
-# kill @e[type=item, nbt={Item:{id:"minecraft:magenta_banner"}}]
-# kill @e[type=item, nbt={Item:{id:"minecraft:stick"}}]
 kill @e[type=item]
 kill @e[type=arrow]
 kill @e[type=trident]
@@ -81,10 +79,6 @@ execute as @a[tag=player] run function ctf_inv:api/refresh
 clear @a[tag=player] minecraft:magenta_banner
 clear @a[tag=player] minecraft:armor_stand[item_model="minecraft:magenta_banner"]
 
-# give @r[tag=defense] minecraft:magenta_banner ONLY AFTER CALL MAP FREEZE FUNCTION
-# execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, PickupDelay:30, Tags:["flag"],Item:{id:"minecraft:magenta_banner",count:1}}
-# give @p minecraft:armor_stand[item_model=magenta_banner, entity_data={id:"minecraft:armor_stand", Tags: ["flag"], Marker: true}]
-# summon item ~ ~ ~ {Item: {components:{item_model:"minecraft:magenta_banner", entity_data: {id: "minecraft:armor_stand", Marker: true}}}}
 execute positioned as @r[tag=defense] run summon item ~ ~ ~ {Glowing:true, Invulnerable: true, PickupDelay:20, Tags:["flag", "ctf.flag_new"], Item:{id:"minecraft:armor_stand", count:1, components: {\
   custom_name: '{"text": "FLAG", "color":"red", "italic": false}',\
   entity_data: {id: "minecraft:armor_stand", Marker: true, Invisible: true, Tags: ["flag"]},\

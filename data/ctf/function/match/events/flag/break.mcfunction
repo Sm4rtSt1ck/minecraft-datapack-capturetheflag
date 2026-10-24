@@ -1,6 +1,6 @@
 title @a[tag=!lobby] title ""
 title @a[tag=!lobby] subtitle {"text": "THE FLAG HAS BEEN BROKEN", "color": "red"}
-execute as @e[type=item,nbt={Item:{id:"minecraft:magenta_banner"}}] run data merge entity @s {Glowing:true}
+execute as @e[type=item] if items entity @s contents magenta_banner run data merge entity @s {Glowing:true}
 function ctf:match/helpers/summon_flag {target: '@n[type=armor_stand, tag=flag]'}
 
 

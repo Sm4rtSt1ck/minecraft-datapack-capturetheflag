@@ -46,4 +46,4 @@ execute unless entity @a[tag=!dead, tag=attack] run function ctf:match/round/win
 execute if score round timer matches -2147483648..0 run function ctf:match/round/win_defense
 
 # If flag is stolen -> attack wins
-execute positioned as @e[tag=win_trigger] as @a[tag=attack, nbt={Inventory:[{id:"minecraft:magenta_banner"}]}, distance=..2.5] run function ctf:match/events/flag/bring
+execute positioned as @e[type=armor_stand, tag=win_trigger] as @a[tag=attack, distance=..2.5] if function ctf:match/helpers/has_banner run function ctf:match/events/flag/bring

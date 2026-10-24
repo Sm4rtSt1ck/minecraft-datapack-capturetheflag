@@ -15,8 +15,8 @@ function ctf:lobby/vote/map_button_tick {slot: 4, id: 4, name: "Railway station"
 #########################################
 # SPECTATING BUTTON
 
-clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:7b}]}] carrot_on_a_stick[item_model=ender_eye]
-clear @a[tag=lobby, nbt=!{Inventory:[{id: "minecraft:carrot_on_a_stick", Slot:7b}]}] carrot_on_a_stick[item_model=ender_pearl]
+execute as @a[tag=lobby] unless items entity @s hotbar.7 carrot_on_a_stick run clear @s carrot_on_a_stick[item_model=ender_eye]
+execute as @a[tag=lobby] unless items entity @s hotbar.7 carrot_on_a_stick run clear @s carrot_on_a_stick[item_model=ender_pearl]
 
 # Give an item
 item replace entity @a[tag=lobby, tag=!spectator] hotbar.7 with carrot_on_a_stick[\

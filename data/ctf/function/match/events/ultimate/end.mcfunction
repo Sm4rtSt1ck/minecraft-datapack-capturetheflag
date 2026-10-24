@@ -2,7 +2,6 @@
 # Not for the bomber: he dies, his inventory must be dropped, not given back
 execute if entity @s[tag=ultimate, tag=player, tag=!bomber] at @s run function ctf_inv:api/stash_hotbar
 function ctf:match/helpers/load_inventory
-# clear @s
 
 effect clear @s minecraft:invisibility
 effect clear @s minecraft:speed

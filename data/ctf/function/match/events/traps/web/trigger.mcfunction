@@ -8,5 +8,4 @@ tag @s add triggered
 
 data merge entity @s {Invulnerable: true}
 
-# kill @n[tag=trap]
 schedule function ctf:match/events/traps/web/remove 200t

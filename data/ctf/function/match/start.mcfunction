@@ -138,4 +138,3 @@ function ctf:match/maps/call_current {function: "start"}
 
 function ctf:match/prepare/prepare
 
-# schedule function ctf:match/warmup/start 60t

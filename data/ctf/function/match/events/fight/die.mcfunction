@@ -11,7 +11,6 @@ execute if score @s kc.died matches 1.. if score @s kc.time matches 1.. if score
 scoreboard players set @s kc.died 0
 scoreboard players reset @s kc.time
 
-# execute positioned as @s run spawnpoint @s ~ ~ ~ ~
 tag @s add just_died
 gamemode spectator @s
 

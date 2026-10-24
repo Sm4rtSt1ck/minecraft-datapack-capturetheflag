@@ -7,7 +7,7 @@ execute as @a[tag=lobby, scores={just_died=1..}] run function ctf:lobby/events/d
 # OTHER
 
 # Kill menu items if player drops them
-kill @e[type=item, nbt={Item:{components:{"minecraft:custom_data":{tags:["menu"]}}}}]
+execute as @e[type=item] if items entity @s contents *[custom_data~{tags:["menu"]}] run kill @s
 
 #########################################
 # TICKS
