@@ -2,6 +2,7 @@ function admin:log/function {name: "match/swap_teams"}
 
 scoreboard players operation game state = swap state
 function ctf:match/events/fight/deathcam/stop_all
+function ctf_loot:reward/creep/stop_all
 
 team modify team_1 displayName "defense"
 team modify team_1 color blue

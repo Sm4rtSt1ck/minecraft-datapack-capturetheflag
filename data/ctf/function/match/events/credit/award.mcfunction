@@ -12,6 +12,8 @@ execute if score #src kc.tmp matches 1 run function ctf_econ:give {key: "kill.gr
 execute if score #src kc.tmp matches 2 run function ctf_econ:give {key: "kill.trap", reason: "kill (trap)"}
 execute if score #src kc.tmp matches 3 run function ctf_econ:give {key: "kill.ultimate", reason: "kill (ultimate)"}
 execute if score #src kc.tmp matches 4 run function ctf_econ:give {key: "kill.inferno", reason: "kill (inferno)"}
+execute if score #src kc.tmp matches 5 run function ctf_econ:give {key: "kill.creepenator", reason: "kill (Creepenator)"}
+execute if score #src kc.tmp matches 6 run function ctf_econ:give {key: "kill.creeper", reason: "kill (creeper)"}
 scoreboard players add @s loot.ktotal 1
 # Loot crate tasks: kills of the round; an enemy killed by a trap (their own: attackers have no traps)
 execute if entity @s[tag=attack] run function ctf_loot:count_kill

@@ -5,5 +5,7 @@ function ctf_inv:owned/check_me with storage ctf_inv:tmp own
 
 # A reward main weapon next to another main weapon (not the golden sword) goes back
 execute if function ctf_inv:layout/has_main_besides_reward run function ctf_inv:owned/take_main
+# The same for a reward secondary weapon
+execute if function ctf_inv:layout/has_sec_besides_reward run function ctf_inv:owned/take_sec
 
 execute if entity @e[type=item, tag=ctf.buf, limit=1] at @s run function ctf_inv:owned/return_all

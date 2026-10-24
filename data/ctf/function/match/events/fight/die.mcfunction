@@ -5,6 +5,9 @@ scoreboard players set @s just_died 0
 # Kill credit for grenades, traps and ultimates: the game credits nobody for them
 # (creeper explosions, falling anvils, effects). A vanilla player kill has priority.
 execute unless score @s kc.died matches 1.. if score @s kc.time matches 1.. run function ctf:match/events/credit/victim
+# A trap kill that the game credited to a player anyway (he also hit the victim, e.g. a piercing arrow
+# through the trap into him): the loot crate task "enemy_trap" still counts for who set the trap off
+execute if score @s kc.died matches 1.. if score @s kc.time matches 1.. if score @s kc.src matches 2 run function ctf:match/events/credit/trap_task
 scoreboard players set @s kc.died 0
 scoreboard players reset @s kc.time
 

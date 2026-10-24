@@ -5,6 +5,7 @@ function ctf_inv:ammo/cap {type: "punch_bow", below: 23}
 function ctf_inv:ammo/cap {type: "rifle", below: 89}
 function ctf_inv:ammo/cap {type: "sniper", below: 19}
 function ctf_inv:ammo/cap {type: "crossbow", below: 4}
+function ctf_inv:ammo/cap {type: "creep", below: 2}
 
 # Wind charges: at most 10 in the inventory
 tag @s remove ctf.can.wind

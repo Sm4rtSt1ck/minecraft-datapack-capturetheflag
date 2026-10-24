@@ -6,3 +6,4 @@ function ctf_inv:ammo/check {type: "punch_bow", max: 24}
 function ctf_inv:ammo/check {type: "rifle", max: 90}
 function ctf_inv:ammo/check {type: "sniper", max: 20}
 function ctf_inv:ammo/check {type: "crossbow", max: 5}
+function ctf_inv:ammo/check {type: "creep", max: 3}

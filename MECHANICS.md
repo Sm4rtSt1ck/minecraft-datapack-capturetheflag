@@ -30,7 +30,7 @@ teams swap) gives no crate, because the player is a defender in the next round.
 | Deliver the flag to the base | Common | Stun trap | the flag delivery (`ctf:match/events/flag/bring`) |
 | Break the flag | Rare | test item | the flag breaking (`ctf:match/events/flag/break`), the player who broke it |
 | Take more than 20 damage in one round and stay alive ("unkillable") | Rare | 3 walls | stat `damage_taken` of the round (totems and regeneration make it possible); checked for alive players only |
-| Kill an enemy with their own trap | Epic | test item | a defender is killed by a trap set off by the attacker: by walking into it, shooting it (bow, crossbow, sniper rifle, assault rifle, fireworks, wind charges) or setting it off otherwise. Any defender counts, not only the one who placed the trap |
+| Kill an enemy with their own trap | Epic | Creepenator | a defender is killed by a trap set off by the attacker: by walking into it, shooting it (bow, crossbow, sniper rifle, assault rifle, fireworks, wind charges) or setting it off otherwise. Any defender counts, not only the one who placed the trap |
 | Kill 10 enemies in this match | Epic | Inferno blade | kills of the whole match (both sides), once per match, counted at the start of freeze |
 | Kill an enemy with bare hands | Legendary | test item | a kill with an empty main hand |
 | Kill 5 enemies in one round | Mythic | test item | kills of the round (any weapon, grenades, traps); only if the enemy team has at least 5 players in the match |
@@ -68,10 +68,31 @@ taken (it goes back into the box) - drop your weapon first.
 arrows bounce off them (vanilla behavior), bullets of the sniper rifle / assault rifle stop at them. Brown particles show where they are. They are removed when
 the end of round phase ends.
 
-**Stun trap** (`ctf_loot:reward/stun`). An invisible marker with faint pale particles. The first enemy
-of the player who placed it that comes within 1.5 blocks sets it off: every enemy within 2.5 blocks
-is stunned for 3 seconds (almost no movement, no jumping, no hitting, nausea). Removed at the end of
+**Stun trap** (`ctf_loot:reward/stun`). An invisible marker with faint pale particles. It works only
+against the defense (crates are only for attackers): the first defender that comes within 1.5 blocks
+sets it off, every defender within 2.5 blocks is stunned for 3 seconds (almost no movement, no jumping, no hitting, nausea). Removed at the end of
 the round like the walls.
+
+**Creepenator** (`ctf_loot:reward/creep`). A bow, a secondary weapon (like the Inferno blade: with
+another secondary weapon it can't be taken). Its 3 green arrows are given when the bow is taken for
+the first time; they are its ammo (slot 7, like every ammo: dropped together with the bow, never
+refilled). A hit player
+(any team) becomes a creeper:
+
+* a creeper with his name above it (seen only by his team: a tiny invisible bat (no AI) of his team, moved above the creeper every tick) is spawned in his place and his camera is put into it (spectator, forced `spectate`:
+  sneaking out puts him back). The creeper lives its own life: it walks to the nearest player of
+  either team and blows up;
+* the shooter loses the bow and the arrows left right after the hit;
+* any hit player counts, teammates too (friendly fire is on). The arrow deals no damage: players next
+  to a flying Creepenator arrow get resistance 255 for that tick (the arrow hits hard, so the damage
+  cooldown never cancels the hit), so it works at any health. A hit blocked with a shield doesn't count;
+* the creeper blows up -> the player dies there; the kill (and the kills of its explosion) go to
+  the shooter (`kc.src` 5, money `kill.creepenator`; no reward for teammates);
+* the creeper is killed (hits, bows, sniper rifle, assault rifle...) -> the player dies with it, no
+  explosion; the kill goes to the player who killed the creeper (`kc.src` 6, money `kill.creeper`);
+* the round ends and the creeper didn't blow up -> the player doesn't die; at the start of freeze the
+  creeper is removed and he is back as usual. The creeper keeps living during the end of round phase;
+* a player in a creeper still counts as alive for his team; if he carried the flag, it is dropped.
 
 **Placing in adventure mode.** Walls and stun traps are spawn eggs of an armor stand with
 `can_place_on` for any block: in adventure mode an item can be used on the blocks listed there, so the
@@ -82,6 +103,7 @@ armor stand is placed exactly where the player looks, like in survival. Adventur
 * The crate falls from **30 blocks** above its landing point, accelerating: 30 blocks in 30 ticks.
 * It is an invisible marker moved with `tp`, so it flies through any blocks (invisible ceilings too).
 * Trail: `dust_color_transition` from a darker shade to the rarity color.
+* Sound: a falling bomb whistle (a flute note sliding down, `ctf_loot:fall/whistle`).
 * Landing: the shulker box (rarity color), a white (pale oak) sign above it with the rarity and
   the owner's name, a TNT-like explosion (particles + sound, no damage) and a camera shake for
   attackers within 25 blocks.
@@ -115,7 +137,8 @@ id to `tasks` in the config.
 * `ctf_test:loot/task {id}` - count a task as done (any phase), `ctf_test:loot/best` - your best task;
 * `ctf_test:loot/freeze` - drop the crates like at the start of freeze;
 * `ctf_test:loot/clear` - remove all crates with the explosion;
-* `ctf_test:loot/reward {id}` - get a reward: inferno / walls / stun;
+* `ctf_test:loot/reward {id}` - get a reward: inferno / walls / stun / creep;
+* `ctf_test:loot/creep` - turn yourself into a Creepenator creeper;
 * `ctf_test:loot/reload_config` - apply changes of the config.
 
 

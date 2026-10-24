@@ -1,0 +1,2 @@
+# Creepenator arrows (ammo, slot 7; given only by ctf_inv:ammo/give/creep). count, owner
+$give @s tipped_arrow[custom_name='{"text": "Creepenator arrows", "color": "green", "italic": false}', potion_contents={custom_color:3978097}, lore=['{"text": "Ammo for: Creepenator (max 3)", "color": "gray", "italic": false}'], custom_data={ctf_ammo: 1b, bind: 1b, ammo: "creep", ctf_bound: 1b, ctf_owner: $(owner)}] $(count)

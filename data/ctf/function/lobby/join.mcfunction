@@ -24,6 +24,7 @@ tag @s remove just_killed
 
 function ctf:match/events/ultimate/stop
 execute if entity @s[tag=ctf.dc_on] run function ctf:match/events/fight/deathcam/stop
+execute if entity @s[tag=loot.creep] run function ctf_loot:reward/creep/leave
 # ONLY AFTER ULTIMATE STOPPING
 clear @s
 team join lobby @s

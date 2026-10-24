@@ -1,9 +1,11 @@
 # Kill credit: everyone in the blast radius
 function ctf:match/events/credit/owner
 execute positioned as @s as @a[tag=player, distance=..6] run function ctf:match/events/credit/mark {time: 60, src: 2}
+execute positioned as @s run function ctf:match/events/credit/mark_traps {r: 6}
 
 execute positioned as @s run summon minecraft:creeper ~ ~ ~ {\
   Fuse:0,\
+  CustomName:'"TNT trap"',\
   ExplosionRadius:3,\
   Invulnerable:true,\
   attributes: [{id:"movement_speed", base: 0}],\

@@ -4,6 +4,7 @@ scoreboard players operation game state = freeze state
 
 # A death camera of the last round ends right away
 function ctf:match/events/fight/deathcam/stop_all
+function ctf_loot:reward/creep/stop_all
 
 # 60 secs freeze before round start (1200 ticks)
 scoreboard players set freeze timer 1200

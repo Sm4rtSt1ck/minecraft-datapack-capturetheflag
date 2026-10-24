@@ -20,9 +20,9 @@ data modify storage ctf_loot:config tasks set value {\
     flag_bring:  {rank: 1, text: "Deliver the flag", reward: "stun"},\
     unkillable:  {rank: 2, text: "Take more than 20 damage in one round and stay alive", reward: "walls"},\
     kills_total: {rank: 3, text: "Kill 10 enemies in this match", reward: "inferno"},\
+    enemy_trap:  {rank: 3, text: "Kill an enemy with their own trap", reward: "creep"}\
 }
     # flag_break:  {rank: 2, text: "Break the flag"},\
-    # enemy_trap:  {rank: 3, text: "Kill an enemy with their own trap"},\
     # fist:        {rank: 4, text: "Kill an enemy with bare hands"},\
     # kills:       {rank: 5, text: "Kill 5 enemies in one round"},\
     # wind:        {rank: 5, text: "Kill an enemy with a flying wind charge"}\

@@ -2,6 +2,7 @@
 # (invisible ceilings too). Accelerating fall: exactly 30 blocks in 30 ticks.
 scoreboard players add @s loot.t 1
 function ctf_loot:fall/particles with entity @s data.r
+function ctf_loot:fall/whistle
 execute if score @s loot.t matches 1 run tp @s ~ ~-0.0333 ~
 execute if score @s loot.t matches 2 run tp @s ~ ~-0.1000 ~
 execute if score @s loot.t matches 3 run tp @s ~ ~-0.1667 ~

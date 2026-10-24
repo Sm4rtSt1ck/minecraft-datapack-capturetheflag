@@ -23,9 +23,8 @@ function ctf:match/events/grenades/smoke/tick
 # Traps
 # An attacker who sets a trap off (by walking or shooting) gets the kill credit (ctf:match/events/traps/touch)
 execute as @a[tag=player, tag=!dead, tag=!invisible] at @s if entity @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/touch {trap: "tnt"}
-execute as @e[type=arrow] at @s if entity @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/by_projectile {trap: "tnt"}
-execute as @e[type=firework_rocket] at @s if entity @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/by_projectile {trap: "tnt"}
-execute as @e[type=wind_charge] at @s if entity @e[tag=trap.tnt, tag=trap_marker, distance=..2] run function ctf:match/events/traps/by_projectile {trap: "tnt"}
+# Any damage to a trap marker (shots, explosions, fire...) sets it off; a hit with the hand removes it
+function ctf:match/events/traps/hurt
 
 execute as @a[tag=player, tag=!dead, tag=!invisible] at @s positioned ~-0.125 ~1 ~-0.125 if entity @e[tag=trap.anvil, tag=trap_marker, dx=0.25, dy=256, dz=0.25] run function ctf:match/events/traps/touch_anvil
 

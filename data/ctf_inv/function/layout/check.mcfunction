@@ -23,6 +23,9 @@ function ctf_inv:armor/check
 function ctf_inv:layout/take_misplaced
 execute if entity @e[type=item, tag=ctf.buf, limit=1] run function ctf_inv:api/place
 
+# Creepenator (loot crate reward): its arrows
+function ctf_loot:reward/creep/inv
+
 # Carry limits: extra grenades, potions, chorus... are dropped
 function ctf_inv:limits/enforce
 

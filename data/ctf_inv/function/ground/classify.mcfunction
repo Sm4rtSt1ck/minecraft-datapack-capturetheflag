@@ -30,6 +30,7 @@ execute if items entity @s contents *[custom_data~{ammo:"punch_bow"}] run return
 execute if items entity @s contents *[custom_data~{ammo:"rifle"}] run return run tag @s add ctf.r.ammo_rifle
 execute if items entity @s contents *[custom_data~{ammo:"sniper"}] run return run tag @s add ctf.r.ammo_sniper
 execute if items entity @s contents *[custom_data~{ammo:"crossbow"}] run return run tag @s add ctf.r.ammo_crossbow
+execute if items entity @s contents *[custom_data~{ammo:"creep"}] run return run tag @s add ctf.r.ammo_creep
 execute if items entity @s contents wind_charge run return run tag @s add ctf.r.wind
 execute if items entity @s contents potion[custom_data~{lim:"regen"}] run return run tag @s add ctf.r.regen
 execute if items entity @s contents potion[custom_data~{lim:"speed"}] run return run tag @s add ctf.r.speed

@@ -52,4 +52,7 @@ scoreboard players set #kill.ultimate econ 20
 # Kills credited by ctf:match/events/credit (the game credits nobody for them)
 scoreboard players set #kill.grenade econ 30
 scoreboard players set #kill.trap econ 30
+# Creepenator: a creeper explosion (to the player who made the creeper) / killing a creeper (the player in it dies)
+scoreboard players set #kill.creepenator econ 30
+scoreboard players set #kill.creeper econ 30
 scoreboard players set #kill.other econ 30

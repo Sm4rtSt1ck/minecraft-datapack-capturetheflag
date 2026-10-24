@@ -171,7 +171,8 @@ scoreboard objectives add tk.blue teamkill.blue
 
 # Kill credit for grenades / traps / ultimates (ctf:match/events/credit)
 #   kc.owner - player_id of the owner (on trap markers, grenades, effect clouds)
-#   kc.by / kc.time / kc.src - on a player: who hit him, ticks left, source (1 grenade, 2 trap, 3 ultimate)
+#   kc.by / kc.time / kc.src - on a player: who hit him, ticks left, source (1 grenade, 2 trap, 3 ultimate,
+#   4 inferno, 5 Creepenator creeper explosion, 6 a killed Creepenator creeper)
 #   kc.died - the player was killed by a player (vanilla kill credit)
 scoreboard objectives add kc.owner dummy
 scoreboard objectives add kc.by dummy
@@ -223,6 +224,9 @@ scoreboard objectives add loot.dmg minecraft.custom:minecraft.damage_taken
 scoreboard objectives add loot.cd dummy
 scoreboard objectives add loot.stun dummy
 scoreboard objectives add loot.tmp dummy
+# Creepenator: on a player in a creeper - player_id of who made him a creeper; on the creeper - player_id of the player in it
+scoreboard objectives add loot.cby dummy
+scoreboard objectives add loot.cown dummy
 
 # Shop (ctf_shop)
 # 0 = locked inventory, 1..5 = shop category

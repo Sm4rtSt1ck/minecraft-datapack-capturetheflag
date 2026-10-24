@@ -1,4 +1,4 @@
-# Runs as the trap marker
+# Runs as a trap marker that is set off by a shot or damage (bullets: ctf_guns:ray/hit_trap, the rest: traps/hurt)
 execute if entity @s[tag=trap.tnt] run return run function ctf:match/events/traps/tnt/trigger
 execute if entity @s[tag=trap.anvil] run return run function ctf:match/events/traps/anvil/trigger
 execute if entity @s[tag=trap.web] run return run function ctf:match/events/traps/web/trigger

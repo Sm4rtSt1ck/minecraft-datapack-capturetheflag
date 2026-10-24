@@ -21,6 +21,8 @@ execute if entity @e[type=frog, tag=gun.trap, limit=1] run return run function c
 
 execute positioned ~-0.75 ~-0.75 ~-0.75 as @a[tag=player, tag=!gun.shooter, gamemode=!spectator, dx=0, dy=0, dz=0] positioned ~0.5 ~0.5 ~0.5 if entity @s[dx=0, dy=0, dz=0] run tag @s add gun.hit
 execute if entity @a[tag=gun.hit, limit=1] run return run function ctf_guns:ray/hit_player
+execute positioned ~-0.75 ~-0.75 ~-0.75 as @e[type=creeper, dx=0, dy=0, dz=0] positioned ~0.5 ~0.5 ~0.5 if entity @s[dx=0, dy=0, dz=0] run tag @s add gun.hit_c
+execute if entity @e[type=creeper, tag=gun.hit_c, limit=1] run return run function ctf_guns:ray/hit_creeper
 
 scoreboard players operation #t gun.tmp = #dist gun.tmp
 scoreboard players set #k gun.tmp 2

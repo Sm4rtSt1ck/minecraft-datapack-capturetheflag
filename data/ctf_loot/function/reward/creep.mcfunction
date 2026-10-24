@@ -1,0 +1,3 @@
+# Creepenator: a bow (a secondary weapon) with 3 green arrows. A hit player becomes a creeper
+# (ctf_loot:reward/creep/*). The arrows (ammo, slot 7) are given when the bow is taken (creep_new). cmd, owner
+$$(cmd) bow[custom_name='{"text": "Creepenator", "color": "green", "italic": false}', enchantment_glint_override=true, lore=['{"text": "A hit player becomes a creeper", "color": "gray", "italic": false}', '{"text": "3 arrows, the bow is gone after a hit", "color": "dark_gray", "italic": false}'], custom_data={wpn: "creep", tags: ["secondary weapon"], bind: 1b, ctf_reward: 1b, ctf_bound: 1b, ctf_owner: $(owner), creep_new: 1b}]

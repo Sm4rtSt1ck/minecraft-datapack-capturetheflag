@@ -312,6 +312,15 @@ Only one kit of each trap can exist per round on the whole server.
 
 Traps activate when attackers enter a small radius around them.
 
+* Any damage to a trap sets it off (`ctf:match/events/traps/hurt`): a bullet, an arrow, crossbow
+  fireworks, a wind charge, a trident, a grenade or another trap going off nearby (chain reactions),
+  fire, the wither cloud... The player who shoots it (any team) gets the kill credit; a trap set off by an
+  explosion (a grenade, another trap, the bomber) credits its kills to the owner of that explosion,
+  so a chain reaction keeps the first owner (`ctf:match/events/credit/mark_traps`). The trap markers have
+  1024 HP, so damage never kills them before they go off.
+* A hit with the hand (any melee hit) removes a trap without setting it off
+  (`ctf:match/events/traps/hit_by_hand`).
+
 ### Ultimates
 
 Free. The selected ultimate is shown in hotbar slot 9.
