@@ -152,7 +152,8 @@ After a death (when the player is moved to his death location) his camera is put
 into a tiny invisible enderman (no AI, silent, invulnerable, no gravity). The game shows the world
 in negative from the eyes of an enderman. The enderman keeps turning to the **killer**.
 
-* No killer (fall, void, own explosion) - no death camera.
+* No killer (fall, void, own explosion) - no camera, only the darkness with the same timing
+  (blindness for 3.5 seconds, fading in again before the end) and the death sound.
 * The killer is highlighted **only for the victim**: particles around him are shown to this player
   only (a real glowing outline is seen by everyone). They are cyan, so in the negative view they look red.
 * The camera is forced: if the player leaves it (sneak), he is put back the next tick.

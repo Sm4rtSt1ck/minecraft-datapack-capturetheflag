@@ -2,6 +2,10 @@
 scoreboard players add @s dc.t 1
 execute if score @s dc.t matches 70.. run return run function ctf_fight:internal/deathcam/stop
 
+# No killer: no camera, only the darkness fading in before the end
+execute if entity @s[tag=ctf.dc_blind] if score @s dc.t matches 60 run effect give @s minecraft:blindness 2 0 true
+execute if entity @s[tag=ctf.dc_blind] run return 0
+
 scoreboard players operation #me dc.tmp = @s player_id
 execute as @e[type=enderman, tag=ctf.dc] if score @s dc.owner = #me dc.tmp run tag @s add ctf.dc_mine
 # No camera entity any more: end

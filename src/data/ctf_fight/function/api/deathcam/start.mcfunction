@@ -1,8 +1,8 @@
 # DEATH CAMERA (3.5 seconds). Runs as a dead player at his death location (tp_death_location).
 # The camera is put into an invisible enderman (the game shows the world in negative from its eyes)
 # that keeps turning to the killer. The player is forced to stay in it (ctf_fight:internal/deathcam/player).
-# No killer (fall, void, own explosion...) -> no death camera
-execute unless score @s dc.killer matches 1.. run return 0
+# No killer (fall, void, own explosion...) -> no camera, only the darkness and its timing
+execute unless score @s dc.killer matches 1.. run return run function ctf_fight:internal/deathcam/start_blind
 
 scoreboard players set @s dc.t 0
 tag @s add ctf.dc_on

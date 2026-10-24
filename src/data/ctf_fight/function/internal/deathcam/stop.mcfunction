@@ -1,5 +1,6 @@
 # Runs as the player: the camera goes back to him (he stays a spectator at his death location)
 tag @s remove ctf.dc_on
+tag @s remove ctf.dc_blind
 scoreboard players reset @s dc.killer
 scoreboard players reset @s dc.t
 scoreboard players operation #me dc.tmp = @s player_id
