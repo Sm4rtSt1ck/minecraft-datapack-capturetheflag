@@ -82,7 +82,7 @@ through tags.
     "require": ["bolt"],
     "pipeline": ["mecha"],
     "output": "<world>/datapacks",
-    "meta": {"mecha": {"formatting": {"json_ensure_ascii": false}}, "bolt": {"entrypoint": ["ctf_inv:gen"]}}
+    "meta": {"mecha": {"formatting": {"json_ensure_ascii": false}}, "bolt": {"entrypoint": ["ctf_inv:gen", "ctf_shop:gen"]}}
   }
   ```
 
@@ -109,7 +109,12 @@ through tags.
   - **Values put in by bolt are not validated by mecha** (a broken item predicate builds fine).
     Check the output.
   - Macro lines (`$...`) are copied as they are: no bolt expressions inside them.
-  - No list comprehensions; use loops.
+  - No list comprehensions, no `**kwargs`, no tuples without parentheses (`return (a, b)`), no
+    tuple unpacking (`for i in range(len(x))`, `b = f(); a = b[0]`).
+  - **A bolt variable replaces the same bare word in a command**: `wind = ...` breaks the NBT path
+    `wind.count`. Name build-time variables so that they can't match a command word (`_wind`).
+    In NBT and selectors put expressions in parentheses or f-strings: `{cost: (x)}`,
+    `@s[tag=f"{team}"]`, `function f"{fn}" (args)` (a dict becomes the SNBT compound).
 - **Checking a refactoring:** compare the new build with the previous one. Stage 4a used a
   symbolic check: macro calls with constant arguments are substituted, calls are replaced by the
   hash of the callee, so a generated static function must expand to the same commands as the old
@@ -164,6 +169,11 @@ static: no runtime loops over a registry, no macro calls in hot paths.
   `ground/classify`, `ground/claim`, `layout/caps`, `layout/take_misplaced`, `stash/place_one`,
   `ammo/*_all`, `limits/enforce`. The ammo items themselves are still given by the hand-written
   `ctf_inv:ammo/give/<id>` (bolt can't fill macro lines).
+- `registry/shop.bolt` (4b): `PAGES` (category buttons, products: slot, cost, look / looks per
+  team, team, glint_ult, buy = (function, arguments with `COST` / `NAME`)), `ROUND_LIMITS` (the
+  predicate and max come from `LIMITS`). `ctf_shop:gen` generates `page/<id>/render|click` and
+  `limits/<id>`; the menu, the page dispatch and the products with no arguments
+  (`product/<id>`: chorus, smoke, he, regen, speed, totem, shield, wind) read the registry.
 - `ctf_inv:lib` `count(pred)` = `ctf_inv:limits/count` without a macro call. The macro
   `limits/count` / `limits/one` stay for callers with a runtime predicate (`ctf_shop`).
 

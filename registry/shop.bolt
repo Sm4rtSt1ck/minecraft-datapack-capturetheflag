@@ -1,0 +1,353 @@
+# SHOP REGISTRY. Read at build time by bolt (ctf_shop:gen and the product functions):
+# the pages, their products, the purchase limits per round.
+#
+# A page is a category of the shop: shop_category = its number in PAGES (1, 2, ...).
+#   button - the category button in the menu row (slots 9-17)
+# A product is a shop slot (18-35) of the page:
+#   cost - the price shown in the shop and passed to the purchase
+#   look - the display item (ctf_shop:ui/product): model, name (JSON text), extra components
+#   looks - instead of look: one look per team, the same slot (the purchase checks the team itself)
+#   team - only this team sees and buys it
+#   glint_ult - the ultimate of this number glints while it is selected
+#   buy - (function, arguments) run on a click; COST / NAME in the arguments are replaced by the
+#         cost / the look name. Without arguments the function reads its data here by the id
+#         (ctf_shop:product/<id>: product(id)).
+from registry:items import limit
+
+
+COST = "<cost>"
+NAME = "<name>"
+GLINT = "enchantment_glint_override=true"
+WIND = limit("wind")["max"]
+
+
+def look(model, name, extra=""):
+    return {"model": model, "name": name, "extra": extra}
+
+
+def group_buy(item, group, components, wpn):
+    return ("ctf_shop:buy/group", {"item": item, "wpn": wpn, "name": NAME, "components": components, "count": 1, "cost": COST, "group": group, "bind": "1b", "offhand": 0, "free": 0})
+
+
+# Defense traps: a frog spawn egg that places an armor stand with the trap block on its head
+# (the trap items are found by their entity_data Tags, ctf_shop:on/freeze_start)
+def trap_buy(trap, model, title, count):
+    components = f'custom_data={{tags:[""]}}, item_model={model}, entity_data={{id:"minecraft:armor_stand", Marker:true, Invisible:true, Tags:["trap", "trap_display", "trap.{trap}"], ArmorItems:[{{}}, {{}}, {{}}, {{id:"minecraft:{model}"}}]}}'
+    return ("ctf_shop:buy/unique", {"key": f"{trap}_trap", "title": title, "item": "frog_spawn_egg", "name": NAME, "count": count, "cost": COST, "components": components})
+
+
+def bow_buy(wpn, enchantments):
+    return ("ctf_shop:product/bow", {"wpn": wpn, "cost": COST, "name": NAME, "enchantments": enchantments})
+
+
+def cost_buy(fn, more=None):
+    args = {"cost": COST}
+    if more:
+        for k in more:
+            args[k] = more[k]
+    return (fn, args)
+
+
+PAGES = [
+    {"id": "weapons", "button": {"slot": 9, "model": "netherite_sword", "name": "WEAPONS", "color": "red"}, "products": [
+        # Main weapon
+        {
+            "id": "iron_sword",
+            "slot": 18,
+            "cost": 130,
+            "look": look("iron_sword", '{"text": "Iron sword", "color": "white", "italic": false}', GLINT),
+            "buy": group_buy("iron_sword", "main weapon", "enchantments={fire_aspect:1b}", "iron_sword")
+        },
+        {
+            "id": "diamond_sword",
+            "slot": 20,
+            "cost": 200,
+            "look": look("diamond_sword", '{"text": "Diamond sword", "color": "aqua", "italic": false}'),
+            "buy": group_buy("diamond_sword", "main weapon", "", "diamond_sword")
+        },
+        {
+            "id": "netherite_sword",
+            "slot": 22,
+            "cost": 270,
+            "look": look("netherite_sword", '{"text": "Netherite sword", "color": "light_purple", "italic": false}'),
+            "buy": group_buy("netherite_sword", "main weapon", "", "netherite_sword")
+        },
+        {
+            "id": "mace",
+            "slot": 24,
+            "cost": 340,
+            "look": look("mace", f'{{"text": "Mace + {WIND} wind charges", "color": "gold", "italic": false}}', GLINT),
+            "buy": cost_buy("ctf_shop:product/mace")
+        },
+        # Secondary weapon
+        {
+            "id": "crossbow",
+            "slot": 26,
+            "cost": 420,
+            "look": look("crossbow", '{"text": "Crossbow & fireworks"}', GLINT),
+            "buy": cost_buy("ctf_shop:product/crossbow")
+        },
+        {
+            "id": "bow",
+            "slot": 27,
+            "cost": 180,
+            "look": look("bow", '{"text": "Bow", "color": "white", "italic": false}', GLINT),
+            "buy": bow_buy("bow", "piercing: 4, power: 1")
+        },
+        {
+            "id": "fire_bow",
+            "slot": 29,
+            "cost": 230,
+            "look": look("bow", '{"text": "Fire bow", "color": "aqua", "italic": false}', GLINT),
+            "buy": bow_buy("fire_bow", "piercing: 4, power: 1, flame: 1")
+        },
+        {
+            "id": "punch_bow",
+            "slot": 31,
+            "cost": 220,
+            "look": look("bow", '{"text": "Punch bow", "color": "light_purple", "italic": false}', GLINT),
+            "buy": bow_buy("punch_bow", "piercing: 4, power: 1, punch: 2")
+        },
+        {
+            "id": "sniper",
+            "slot": 35,
+            "cost": 450,
+            "look": look("spyglass", '{"text": "Sniper rifle", "color": "dark_red", "italic": false}', GLINT),
+            "buy": cost_buy("ctf_shop:product/sniper")
+        },
+        {
+            "id": "rifle",
+            "slot": 33,
+            "cost": 470,
+            "look": look("iron_horse_armor", '{"text": "Assault rifle", "color": "yellow", "italic": false}', GLINT),
+            "buy": cost_buy("ctf_shop:product/rifle")
+        },
+    ]},
+
+    {"id": "defense", "button": {"slot": 11, "model": "netherite_chestplate", "name": "DEFENSE", "color": "blue"}, "products": [
+        {
+            "id": "gold_armor",
+            "slot": 18,
+            "cost": 150,
+            "look": look("golden_chestplate", '{"text": "Gold armor"}'),
+            "buy": cost_buy("ctf_shop:product/armor", {"material": "golden", "max": 112})
+        },
+        {
+            "id": "iron_armor",
+            "slot": 20,
+            "cost": 250,
+            "look": look("iron_chestplate", '{"text": "Iron armor"}'),
+            "buy": cost_buy("ctf_shop:product/armor", {"material": "iron", "max": 240})
+        },
+        # {"id": "netherite_armor", "slot": 22, "cost": 1500, "look": look("netherite_chestplate", '{"text": "Netherite armor"}'),
+        #     "buy": cost_buy("ctf_shop:product/armor", {"material": "netherite"})},
+        {
+            "id": "feather_falling_boots",
+            "slot": 22,
+            "cost": 50,
+            "look": look("leather_boots", '{"text": "Less fall damage"}', GLINT),
+            "buy": cost_buy("ctf_shop:product/feather_falling_boots")
+        },
+        {
+            "id": "shield",
+            "slot": 24,
+            "cost": 90,
+            "looks": {
+                "attack": look("shield", '{"text": "Shield"}', 'base_color="orange", banner_patterns=[{"pattern":"gradient","color":"black"},{"pattern":"skull","color":"black"},{"pattern":"gradient_up","color":"red"},{"pattern":"triangles_bottom","color":"orange"},{"pattern":"triangles_bottom","color":"red"}]'),
+                "defense": look("shield", '{"text": "Shield"}', 'base_color="blue", banner_patterns=[{"pattern":"gradient_up","color":"light_blue"},{"pattern":"flower","color":"light_blue"}]')
+            },
+            "buy": ("ctf_shop:product/shield", None)
+        },
+        {
+            "id": "totem",
+            "slot": 26,
+            "cost": 350,
+            "look": look("totem_of_undying", '{"text": "Totem of undying (regen. 3.5-4 hearts)"}'),
+            "buy": ("ctf_shop:product/totem", None)
+        },
+        # Team leather helmet (under the armor sets)
+        {
+            "id": "helmet",
+            "slot": 27,
+            "cost": 40,
+            "looks": {
+                "attack": look("leather_helmet", '{"text": "Leather helmet"}', 'dyed_color={rgb:16711799}'),
+                "defense": look("leather_helmet", '{"text": "Leather helmet"}', 'dyed_color={rgb:47103}')
+            },
+            "buy": cost_buy("ctf_shop:product/helmet")
+        },
+    ]},
+
+    # Limited items (per round): ROUND_LIMITS
+    {"id": "stuff", "button": {"slot": 13, "model": "firework_rocket", "name": "STUFF", "color": "green"}, "products": [
+        # Wind charges: up to "batch" per purchase, "each" per charge
+        {
+            "id": "wind",
+            "slot": 18,
+            "cost": 5 * 24,
+            "each": 24, "batch": 5,
+            "look": look("wind_charge", f'{{"text": "Wind charges +5 (max {WIND})"}}'),
+            "buy": ("ctf_shop:product/wind", None)
+        },
+        {
+            "id": "regen",
+            "slot": 20,
+            "cost": 120,
+            "look": look("potion", '{"text": "Potion on regeneration"}', 'potion_contents={custom_color:16711680}'),
+            "buy": ("ctf_shop:product/regen", None)
+        },
+        {
+            "id": "speed",
+            "slot": 22,
+            "cost": 90,
+            "look": look("potion", '{"text": "Potion on speed"}', 'potion_contents={custom_color:26711680}'),
+            "buy": ("ctf_shop:product/speed", None)
+        },
+        {
+            "id": "chorus",
+            "slot": 24,
+            "cost": 40,
+            "look": look("chorus_fruit", '{"text": "Chorus fruit (eat during the round)"}'),
+            "buy": ("ctf_shop:product/chorus", None)
+        },
+        {
+            "id": "he",
+            "slot": 26,
+            "cost": 60,
+            "look": look("lingering_potion", '{"text": "Grenade"}'),
+            "buy": ("ctf_shop:product/he", None)
+        },
+        {
+            "id": "smoke",
+            "slot": 27,
+            "cost": 50,
+            "look": look("splash_potion", '{"text": "Smoke grenade"}', 'potion_contents={custom_color:8421504}, hide_additional_tooltip={}'),
+            "buy": ("ctf_shop:product/smoke", None)
+        },
+    ]},
+
+    # Traps: one of each per round for the whole server (ctf_shop:buy/unique)
+    {"id": "traps", "button": {"slot": 15, "model": "tnt", "name": "TRAPS", "color": "gold"}, "products": [
+        # DEFENSE
+        {
+            "id": "tnt_trap",
+            "team": "defense",
+            "slot": 18,
+            "cost": 150,
+            "look": look("tnt", '{"text": "TNT traps x3"}'),
+            "buy": trap_buy("tnt", "tnt", "a tnt trap", 3)
+        },
+        {
+            "id": "anvil_trap",
+            "team": "defense",
+            "slot": 20,
+            "cost": 120,
+            "look": look("anvil", '{"text": "Anvil traps x3"}'),
+            "buy": trap_buy("anvil", "anvil", "an anvil trap", 3)
+        },
+        {
+            "id": "web_trap",
+            "team": "defense",
+            "slot": 22,
+            "cost": 50,
+            "look": look("cobweb", '{"text": "Web trap"}'),
+            "buy": trap_buy("web", "cobweb", "a web trap", 1)
+        },
+        {
+            "id": "levitation_trap",
+            "team": "defense",
+            "slot": 24,
+            "cost": 70,
+            "look": look("feather", '{"text": "Levitation trap"}'),
+            "buy": trap_buy("levitation", "feather", "a levitation trap", 1)
+        },
+        {
+            "id": "wither_trap",
+            "team": "defense",
+            "slot": 26,
+            "cost": 40,
+            "look": look("wither_skeleton_skull", '{"text": "Wither trap"}'),
+            "buy": trap_buy("wither", "wither_skeleton_skull", "a wither trap", 1)
+        },
+        # ATTACK
+        {
+            "id": "detector_trap",
+            "team": "attack",
+            "slot": 18,
+            "cost": 80,
+            "look": look("ender_eye", '{"text": "Enemies detector (within 10 blocks)"}'),
+            "buy": (
+                "ctf_shop:buy/unique",
+                {
+                    "key": "detector_trap",
+                    "title": "an enemies detector",
+                    "item": "carrot_on_a_stick",
+                    "name": NAME,
+                    "count": 1,
+                    "cost": COST,
+                    "components": 'custom_data={tags:["trap", "detector"]}, item_model=ender_eye'
+                }
+            )
+        },
+    ]},
+
+    # The selected ultimate glints
+    {"id": "ultimate", "button": {"slot": 17, "model": "blaze_rod", "name": "ULTIMATE", "color": "light_purple"}, "products": [
+        {
+            "id": "ghost",
+            "slot": 18,
+            "cost": 0,
+            "glint_ult": 1,
+            "look": look("skeleton_skull", '{"text": "Ghost"}'),
+            "buy": ("ctf_shop:buy/ultimate", {"category": 1, "cost": COST})},
+        {
+            "id": "microman",
+            "slot": 20,
+            "cost": 0,
+            "glint_ult": 2,
+            "look": look("armadillo_scute", '{"text": "Microman"}'),
+            "buy": ("ctf_shop:buy/ultimate", {"category": 2, "cost": COST})},
+        {
+            "id": "piercing_killer",
+            "slot": 22,
+            "cost": 0,
+            "glint_ult": 3,
+            "look": look("trident", '{"text": "Piercing killer"}'),
+            "buy": ("ctf_shop:buy/ultimate", {"category": 3, "cost": COST})},
+        {
+            "id": "suicide_bomber",
+            "slot": 24,
+            "cost": 0,
+            "glint_ult": 4,
+            "look": look("tnt", '{"text": "Suicide bomber"}'),
+            "buy": ("ctf_shop:buy/ultimate", {"category": 4, "cost": COST})},
+        {
+            "id": "foot_eater",
+            "slot": 26,
+            "cost": 0,
+            "glint_ult": 5,
+            "look": look("dragon_head", '{"text": "Foot eater"}'),
+            "buy": ("ctf_shop:buy/ultimate", {"category": 5, "cost": COST})},
+    ]},
+]
+
+
+# Purchase limits per round (ctf_shop:limits/<id>): id of a carry limit (registry:items LIMITS,
+# its predicate and max), the name in the message. The count starts with what the player carries
+# at the start of freeze (ctf_shop:limits/reset).
+ROUND_LIMITS = [
+    {"id": "he", "name": "grenade"},
+    {"id": "totem", "name": "totem of undying"},
+    {"id": "shield", "name": "shield"},
+    {"id": "regen", "name": "regeneration potion"},
+    {"id": "speed", "name": "speed potion"},
+    {"id": "chorus", "name": "chorus fruits"},
+    {"id": "smoke", "name": "smoke grenade"},
+]
+
+
+def product(id):
+    for page in PAGES:
+        for p in page["products"]:
+            if p["id"] == id:
+                return p

@@ -27,7 +27,8 @@
     },
     "bolt": {
       "entrypoint": [
-        "ctf_inv:gen"
+        "ctf_inv:gen",
+        "ctf_shop:gen"
       ]
     }
   }

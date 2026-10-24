@@ -220,9 +220,10 @@ during the freeze phase. Prices are balanced by damage, attack speed,
 melee or ranged, how hard the weapon is to use and how much it changes the
 fight.
 
-The price is written twice: in `page/<category>/render.mcfunction` (the price
-shown) and in `page/<category>/click.mcfunction` (the price charged). Keep
-them in sync.
+Every product is one entry of [`registry/shop.bolt`](registry/shop.bolt): its slot, price,
+look and purchase. The shop pages are generated from it at build time, so the price shown
+and the price charged are always the same. The purchase limits per round are there too
+(`ROUND_LIMITS`); the carry limits are in [`registry/items.bolt`](registry/items.bolt).
 
 ### Weapons
 

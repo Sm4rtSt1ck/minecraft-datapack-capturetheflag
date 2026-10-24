@@ -1,0 +1,68 @@
+# Functions generated from the shop registry (registry/shop.bolt) at build time:
+# the pages (render + click), the purchase limits per round.
+from registry:shop import PAGES, ROUND_LIMITS, COST, NAME
+from registry:items import limit
+from ctf_inv:lib import count
+
+
+def display(p, look, extra):
+    return {"slot": p["slot"], "model": look["model"], "cost": p["cost"], "name": look["name"], "extra": extra}
+
+def buy_args(p):
+    fn = p["buy"][0]
+    args = p["buy"][1]
+    if args is None:
+        return (fn, None)
+    out = {}
+    for k in args:
+        v = args[k]
+        if v == COST:
+            v = p["cost"]
+        elif v == NAME:
+            v = p["look"]["name"]
+        out[k] = v
+    return (fn, out)
+
+
+for page in PAGES:
+    # Draws the products of the page (slots 18-35) over the glass panes
+    function f"ctf_shop:page/{page['id']}/render":
+        for p in page["products"]:
+            if "looks" in p:
+                for team in p["looks"]:
+                    look = p["looks"][team]
+                    execute if entity @s[tag=f"{team}"] run function ctf_shop:ui/product (display(p, look, look["extra"]))
+            elif "glint_ult" in p:
+                execute if score @s ultimate_category matches (p["glint_ult"]) run function ctf_shop:ui/product (display(p, p["look"], "enchantment_glint_override=true"))
+                execute unless score @s ultimate_category matches (p["glint_ult"]) run function ctf_shop:ui/product (display(p, p["look"], p["look"]["extra"]))
+            elif "team" in p:
+                execute if entity @s[tag=p["team"]] run function ctf_shop:ui/product (display(p, p["look"], p["look"]["extra"]))
+            else:
+                function ctf_shop:ui/product (display(p, p["look"], p["look"]["extra"]))
+
+    # The clicked slot (#slot shop.tmp) buys its product
+    function f"ctf_shop:page/{page['id']}/click":
+        for p in page["products"]:
+            b = buy_args(p)
+            fn = b[0]
+            args = b[1]
+            if "team" in p:
+                if args is None:
+                    execute if entity @s[tag=p["team"]] if score #slot shop.tmp matches (p["slot"]) run return run function f"{fn}"
+                else:
+                    execute if entity @s[tag=p["team"]] if score #slot shop.tmp matches (p["slot"]) run return run function f"{fn}" (args)
+            else:
+                if args is None:
+                    execute if score #slot shop.tmp matches (p["slot"]) run return run function f"{fn}"
+                else:
+                    execute if score #slot shop.tmp matches (p["slot"]) run return run function f"{fn}" (args)
+
+
+# 1 if one more item can be bought: (carried at freeze start + bought) < max and carried now < max
+for r in ROUND_LIMITS:
+    l = limit(r["id"])
+    function f"ctf_shop:limits/{r['id']}":
+        execute if score @s f"shop.lim.{r['id']}" matches (f"{l['max']}..") run return run function ctf_shop:feedback/round_limit {max: (l["max"]), name: (r["name"])}
+        count(l["pred"])
+        execute if score #n inv.tmp matches (f"{l['max']}..") run return run function ctf_shop:feedback/round_limit {max: (l["max"]), name: (r["name"])}
+        return 1
