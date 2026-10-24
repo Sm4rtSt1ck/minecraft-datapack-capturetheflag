@@ -280,9 +280,9 @@ It is an item with an endless `consumable` use time; while it is "used", the
 
 | Item | Price | Notes |
 | --- | --- | --- |
-| Gold armor (full set) | $150 | 11 armor points (default leather: 7) |
-| Iron armor (full set) | $250 | 15 armor points, ~60% less damage |
-| Leather helmet | $40 | team color, +1 armor point (also comes with every armor set) |
+| Gold armor (chestplate, leggings, boots) | $110 | 9 armor points (default leather: 6) |
+| Iron armor (chestplate, leggings, boots) | $210 | 13 armor points |
+| Leather helmet | $40 | team color, +1 armor point; sold only separately |
 | Shield | $90 | low durability; can't be owned together with a totem |
 
 ### Stuff
@@ -345,6 +345,9 @@ the helmet is separate.
 * Every set gets a random id (`sid`) when it is assembled, so parts of another set are never
   mixed with it (e.g. when another chestplate is put on over the worn one).
 * Without body armor a player gets the team leather set at the start of freeze.
+* Buying a set: the worn set is dropped at the player's feet and the new one is put on (the
+  default leather set is just replaced, like the golden sword). The same set can be bought again
+  only when the worn one is damaged.
 
 ### Ammo
 

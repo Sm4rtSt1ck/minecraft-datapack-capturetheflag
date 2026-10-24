@@ -137,18 +137,18 @@ PAGES = [
         {
             "id": "gold_armor",
             "slot": 18,
-            "cost": 150,
+            "cost": 110,
             "look": look("golden_chestplate", '{"text": "Gold armor"}'),
             "buy": cost_buy("ctf_shop:product/armor", {"material": "golden", "max": 112})
         },
         {
             "id": "iron_armor",
             "slot": 20,
-            "cost": 250,
+            "cost": 210,
             "look": look("iron_chestplate", '{"text": "Iron armor"}'),
             "buy": cost_buy("ctf_shop:product/armor", {"material": "iron", "max": 240})
         },
-        # {"id": "netherite_armor", "slot": 22, "cost": 1500, "look": look("netherite_chestplate", '{"text": "Netherite armor"}'),
+        # {"id": "netherite_armor", "slot": 22, "cost": 1460, "look": look("netherite_chestplate", '{"text": "Netherite armor"}'),
         #     "buy": cost_buy("ctf_shop:product/armor", {"material": "netherite"})},
         {
             "id": "feather_falling_boots",
