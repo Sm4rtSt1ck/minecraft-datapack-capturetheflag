@@ -431,20 +431,25 @@ Reusable effects: [`ctf_fx`](data/ctf_fx/function/) (`ctf_fx:shake`, `ctf_fx:exp
 
 ## Installation
 
+The datapack is built with [beet](https://github.com/mcbeet/beet) + bolt from `src/`.
+
 1. Download or clone the repository.
-2. Place the datapack folder into:
+2. Install the build tools (Python 3): `pip install beet mecha bolt`.
+3. Set `output` in `beet.json` to the datapacks folder of your world:
 
 ```
 .minecraft/saves/<world>/datapacks/
 ```
 
-3. Run:
+4. Run `beet build` (or `beet watch` to rebuild on every save). The build creates the
+   `CaptureTheFlag` datapack there.
+5. Run:
 
 ```
 /reload
 ```
 
-4. Start the game using the provided functions.
+6. Start the game using the provided functions.
 
 
 ## Datapack Structure

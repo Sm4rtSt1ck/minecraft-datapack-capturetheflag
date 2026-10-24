@@ -1,0 +1,26 @@
+{
+  "name": "CaptureTheFlag",
+  "minecraft": "1.21.4",
+  "data_pack": {
+    "name": "CaptureTheFlag",
+    "load": [
+      "src"
+    ],
+    "pack_format": 61,
+    "description": "The datapack for CaptureTheFlag"
+  },
+  "require": [
+    "bolt"
+  ],
+  "pipeline": [
+    "mecha"
+  ],
+  "output": "C:/Users/Leonid/AppData/Roaming/PrismLauncher/instances/1.21.4/minecraft/saves/CaptureTheFlag/datapacks",
+  "meta": {
+    "mecha": {
+      "formatting": {
+        "json_ensure_ascii": false
+      }
+    }
+  }
+}

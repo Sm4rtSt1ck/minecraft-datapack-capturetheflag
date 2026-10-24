@@ -1,8 +1,0 @@
-{
-    "parent": "impossible",
-    "criteria": {
-        "impossible": {
-            "trigger": "minecraft:impossible"
-        }
-    }
-}
