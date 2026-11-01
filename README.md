@@ -520,7 +520,8 @@ order of execution.
   line. Values filled in from the registries are not checked: look at the output.
 * Never edit the output folder: every build overwrites it.
 * Absolute world coordinates are only in `registry/world.bolt` (lobby, arena, warm-up, podium) and
-  `registry/maps.bolt` (every map); the functions read them at build time.
+  `registry/maps.bolt` (every map); the functions read them at build time. The coordinates of a map
+  are given on its template (where the map is built); the build moves them into the arena.
 
 Adding content:
 

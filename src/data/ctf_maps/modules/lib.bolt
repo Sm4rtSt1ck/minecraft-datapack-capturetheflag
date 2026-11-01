@@ -1,5 +1,48 @@
 # Build-time helpers for the map functions (bolt): the coordinates come from registry/maps.bolt.
 # They write commands into the calling function.
+from registry:world import ARENA
+
+# floor() of a coordinate (the block of a position)
+def _floor(v):
+    _f = int(v)
+    if _f > v:
+        _f = _f - 1
+    return _f
+
+# A point moved by d
+def _move(point, d):
+    return [point[0] + d[0], point[1] + d[1], point[2] + d[2]]
+
+# A map entry with its coordinates moved from the template into the arena: the registry gives them
+# in the world coordinates of the template, the block of the template corner goes to ARENA corner
+# (ctf_maps:internal/prepare/clone). Used by ctf_maps:gen for every map.
+def in_arena(map):
+    _t = map["template"]
+    _d = []
+    for _i in range(3):
+        _d.append(ARENA["corner"][_i] - _floor(_t[_i]))
+    _out = {}
+    for _k in map:
+        _out[_k] = map[_k]
+    _out["areas"] = {}
+    for _k in map["areas"]:
+        _ar = map["areas"][_k]
+        _moved = []
+        for _i in range(6):
+            _moved.append(_ar[_i] + _d[_i % 3])
+        _out["areas"][_k] = _moved
+    _out["points"] = {}
+    for _k in map["points"]:
+        _out["points"][_k] = _move(map["points"][_k], _d)
+    _out["win_trigger"] = _move(map["win_trigger"], _d)
+    _out["spawns"] = {}
+    for _side in map["spawns"]:
+        _s = map["spawns"][_side]
+        _out["spawns"][_side] = {"center": [_s["center"][0] + _d[0], _s["center"][1] + _d[2]], "under": _s["under"] + _d[1], "spread": _s["spread"], "range": _s["range"]}
+    _out["loot"] = []
+    for _pt in map["loot"]:
+        _out["loot"].append(_move(_pt, _d))
+    return _out
 
 # fill <area> <block>
 def fill_area(area, block):

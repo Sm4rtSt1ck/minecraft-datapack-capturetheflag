@@ -10,9 +10,11 @@ for e in EVENTS:
 
 # The functions of every map (registry MAPS): all maps work the same way
 from registry:world import ARENA
-from ctf_maps:lib import fill_area, fill_replace, spawn, template_marker, win_trigger, loot_points
+from ctf_maps:lib import in_arena, fill_area, fill_replace, spawn, template_marker, win_trigger, loot_points
 
-for _m in MAPS:
+for _src in MAPS:
+    # The coordinates of the registry are in the template: moved into the arena here
+    _m = in_arena(_src)
     _id = _m["id"]
     _a = _m["areas"]
     _p = _m["points"]

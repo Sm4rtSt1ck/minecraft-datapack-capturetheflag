@@ -95,6 +95,9 @@ through tags.
     `C:\Users\Leonid\AppData\Roaming\PrismLauncher\instances\1.21.4\minecraft\saves\CaptureTheFlag\datapacks\CaptureTheFlag`.
   - A one-off build elsewhere: `beet -s output=<dir> build`.
 - The venv with beet is `%TEMP%\ctfbeet\env` (`Scripts\beet`).
+- **WSL:** the venv is `~/.ctfbeet` (`bin/beet`). The `output` of `beet.json` is a Windows path
+  (a plain `beet build` would create a `C:` folder in the repo), so build with
+  `beet -s output=/mnt/c/Users/Leonid/AppData/Roaming/PrismLauncher/instances/1.21.4/minecraft/saves/CaptureTheFlag/datapacks build`.
 - **mecha re-serializes every command** (bolt parses all functions). The output is equivalent, not
   byte-identical: `20t` → `20`, `1024f` → `1024.0f`, `'x'` → `"x"`, NBT spacing. `\` line
   continuations are joined without a space, exactly as Minecraft does.
@@ -202,7 +205,9 @@ static: no runtime loops over a registry, no macro calls in hot paths.
   teleports). `registry/maps.bolt` also holds every coordinate of every map (template,
   win_trigger, spawns, walls, named areas / points, loot points); helpers in `ctf_maps:lib`
   (`fill_area`, `fill_replace`, `spawn`, `template_marker`, `win_trigger`, `loot_points`).
-  **No absolute coordinates in functions**: put them into these registries.
+  **No absolute coordinates in functions**: put them into these registries. The map coordinates
+  (all but `template`) are world coordinates of the template; `ctf_maps:lib` `in_arena` moves them
+  into the arena at build time (shift = `ARENA["corner"]` - floor(`template`)).
 - `ctf_inv:lib` `count(pred)` = `ctf_inv:limits/count` without a macro call. The macro
   `limits/count` / `limits/one` stay for callers with a runtime predicate (`ctf_shop`).
 

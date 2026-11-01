@@ -3,12 +3,18 @@
 # Every map works the same way; its functions ctf_maps:map/<id>/<event> are generated from its
 # entry here (ctf_maps:gen). The world layout: registry/world.bolt.
 # A point is [x, y, z], an area (fill) is [x1, y1, z1, x2, y2, z2].
+# Every coordinate of a map (except "template") is a world coordinate of its template, where the
+# map is built: read it on the template itself. ctf_maps:gen moves it into the arena at build time
+# (ctf_maps:lib in_arena): the block of the template corner goes to ARENA["corner"]
+# (registry/world.bolt). Example: template [80, 1, 80], arena corner [-100, 0, -100]: a point
+# [100, 2, 100] of the template is [-80, 1, -80] in the arena.
 #
 #   name, vote_slot, map_item - the vote button in the lobby: name, hotbar slot, map_id of the map
 #   title - JSON text shown at the match start
 #   time - the map has its own daylight: the daylight cycle is on, the time is set at the start
 #   music - disc, pitch, period (ticks: when it is played again); None - no music
-#   template - the corner of the map template: it is cloned into the arena (ctf_maps:internal/prepare)
+#   template - the lowest north-west corner of the map template (its block: the coordinates rounded
+#              down); the template is cloned into the arena (ctf_maps:internal/prepare)
 #   prepare_fills - fills of the arena right after the template marker (bug fixes)
 #   entities - summoned at the clone: entity, point, NBT
 #   win_trigger - the flag is delivered here
@@ -38,10 +44,10 @@ MAPS = [
         "title": {"text": "Test map 1", "color": "blue"},
         "music": {"disc": "minecraft:music_disc.creator", "pitch": 2, "period": "1760"},
         "template": [-97.5, -53, 43.5],
-        "win_trigger": [-194, -50, -168],
+        "win_trigger": [-92, -51, 75],
         "spawns": {
-            "attack": {"center": [-194, -162], "under": -50, "spread": 1, "range": 3},
-            "defense": {"center": [-167, -169], "under": -50, "spread": 1, "range": 3},
+            "attack": {"center": [-92, 81], "under": -51, "spread": 1, "range": 3},
+            "defense": {"center": [-65, 74], "under": -51, "spread": 1, "range": 3},
         },
         "wall_block": "minecraft:light_blue_stained_glass_pane",
         "walls": [
@@ -63,24 +69,24 @@ MAPS = [
                 "area": "way4_2"},
         ],
         "areas": {
-            "way1": [-190, -51, -146, -193, -36, -146],
-            "way2": [-193, -51, -182, -193, -36, -188],
-            "way3": [-193, -51, -189, -199, -36, -189],
-            "way4": [-193, -35, -181, -190, -51, -181],
-            "way4_2": [-189, -36, -146, -189, -51, -149],
+            "way1": [-88, -52, 97, -91, -37, 97],
+            "way2": [-91, -52, 61, -91, -37, 55],
+            "way3": [-91, -52, 54, -97, -37, 54],
+            "way4": [-91, -36, 62, -88, -52, 62],
+            "way4_2": [-87, -37, 97, -87, -52, 94],
         },
         "points": {
-            "way1": [-190, -42.5, -145.5],
-            "way2": [-192.5, -43.5, -184.5],
-            "way3": [-196.5, -43.5, -188.5],
+            "way1": [-88, -43.5, 97.5],
+            "way2": [-90.5, -44.5, 58.5],
+            "way3": [-94.5, -44.5, 54.5],
         },
         "loot": [
-            [-197, -50, -168],
-            [-194, -50, -168],
-            [-191, -50, -168],
-            [-197, -50, -154],
-            [-194, -50, -154],
-            [-191, -50, -154]
+            [-95, -51, 75],
+            [-92, -51, 75],
+            [-89, -51, 75],
+            [-95, -51, 89],
+            [-92, -51, 89],
+            [-89, -51, 89]
         ],
     },
     {
@@ -96,10 +102,10 @@ MAPS = [
             ["minecraft:area_effect_cloud", "chest_minecart", {"Duration": -1, "Age": -2147483648, "WaitTime": -2147483648, "Passengers": [{"id": "minecraft:chest_minecart", "Invulnerable": False, "Tags": ["map_entity"]}], "Tags": ["map_entity"]}],
             ["minecraft:area_effect_cloud", "furnace_minecart", {"Duration": -1, "Age": -2147483648, "WaitTime": -2147483648, "Passengers": [{"id": "minecraft:furnace_minecart", "Invulnerable": False, "Tags": ["map_entity"]}], "Tags": ["map_entity"]}],
         ],
-        "win_trigger": [-171, -35, -170],
+        "win_trigger": [29, -35, 130],
         "spawns": {
-            "attack": {"center": [-170, -172], "under": -36, "spread": 1, "range": 2},
-            "defense": {"center": [-136, -132], "under": -41, "spread": 1, "range": 2},
+            "attack": {"center": [30, 128], "under": -36, "spread": 1, "range": 2},
+            "defense": {"center": [64, 168], "under": -41, "spread": 1, "range": 2},
         },
         "wall_block": "minecraft:lime_stained_glass_pane",
         "walls": [
@@ -107,23 +113,23 @@ MAPS = [
             {"area": "way2", "open": "all", "fx": fx("way2", [["minecraft:explosion_emitter", [0, 0, 0], 0, 1], ["minecraft:cloud", [1, 1, 1], 0, 10]])},
         ],
         "areas": {
-            "way1": [-152, -49, -171, -152, -50, -173],
-            "way2": [-166, -36, -169, -168, -34, -169],
+            "way1": [48, -49, 129, 48, -50, 127],
+            "way2": [34, -36, 131, 32, -34, 131],
         },
         "points": {
-            "way1": [-151.5, -49, -171.5],
-            "way2": [-166.5, -34.5, -168.5],
-            "minecart": [-163.5, -34, -149.5],
-            "chest_minecart": [-135.5, -44, -126.5],
-            "furnace_minecart": [-137.5, -44, -126.5],
+            "way1": [48.5, -49, 128.5],
+            "way2": [33.5, -34.5, 131.5],
+            "minecart": [36.5, -34, 150.5],
+            "chest_minecart": [64.5, -44, 173.5],
+            "furnace_minecart": [62.5, -44, 173.5],
         },
         "loot": [
-            [-167, -36, -174],
-            [-167, -36, -172],
-            [-169, -36, -173],
-            [-171, -36, -173],
-            [-172, -35, -173],
-            [-166, -36, -170]
+            [33, -36, 126],
+            [33, -36, 128],
+            [31, -36, 127],
+            [29, -36, 127],
+            [28, -35, 127],
+            [34, -36, 130]
         ],
     },
     {
@@ -134,10 +140,10 @@ MAPS = [
         "title": [{"text": "Night", "color": "dark_purple"}, {"text": "Club", "color": "light_purple"}],
         "music": {"disc": "minecraft:music_disc.pigstep", "pitch": 1, "period": "2960t"},
         "template": [150.5, -54, 100.5],
-        "win_trigger": [-181, -50, -153],
+        "win_trigger": [169, -52, 147],
         "spawns": {
-            "attack": {"center": [-181, -152.5], "under": -49, "spread": 1, "range": 2},
-            "defense": {"center": [-138.5, -115.5], "under": -42, "spread": 1, "range": 2},
+            "attack": {"center": [169, 147.5], "under": -51, "spread": 1, "range": 2},
+            "defense": {"center": [211.5, 184.5], "under": -44, "spread": 1, "range": 2},
         },
         "wall_block": "minecraft:light_blue_stained_glass_pane",
         "walls": [
@@ -151,26 +157,26 @@ MAPS = [
             {"area": "cage_roof", "block": "minecraft:light_blue_stained_glass"},
         ],
         "areas": {
-            "way1": [-182, -50, -157, -180, -48, -157],
-            "way2": [-180, -50, -149, -183, -48, -149],
-            "cage_lava": [-177, -48, -157, -184, -52, -149],
-            "cage_north": [-188, -52, -158, -177, -48, -158],
-            "cage_east": [-177, -48, -157, -177, -52, -149],
-            "cage_south": [-178, -52, -148, -188, -48, -148],
-            "cage_roof": [-177, -47, -158, -187, -47, -148],
+            "way1": [168, -52, 143, 170, -50, 143],
+            "way2": [170, -52, 151, 167, -50, 151],
+            "cage_lava": [173, -50, 143, 166, -54, 151],
+            "cage_north": [162, -54, 142, 173, -50, 142],
+            "cage_east": [173, -50, 143, 173, -54, 151],
+            "cage_south": [172, -54, 152, 162, -50, 152],
+            "cage_roof": [173, -49, 142, 163, -49, 152],
         },
         "points": {
-            "way1": [-180.5, -48.5, -156.5],
-            "way1_sound": [-176.5, -48.5, -196.5],
-            "way2": [-181, -48.5, -148.5],
+            "way1": [169.5, -50.5, 143.5],
+            "way1_sound": [173.5, -50.5, 103.5],
+            "way2": [169, -50.5, 151.5],
         },
         "loot": [
-            [-183, -50, -156],
-            [-179, -50, -156],
-            [-179, -50, -150],
-            [-183, -50, -150],
-            [-179, -50, -153],
-            [-183, -50, -153]
+            [167, -52, 144],
+            [171, -52, 144],
+            [171, -52, 150],
+            [167, -52, 150],
+            [171, -52, 147],
+            [167, -52, 147]
         ],
     },
     {
@@ -184,10 +190,10 @@ MAPS = [
         "template": [250, -52, 100],
         # Fix of the dirt path bug
         "prepare_fills": [{"area": "dirt_path", "block": "air", "replaces": "dirt_path"}],
-        "win_trigger": [-173, -49, -111],
+        "win_trigger": [277, -49, 189],
         "spawns": {
-            "attack": {"center": [-171, -116], "under": -49, "spread": 1, "range": 3},
-            "defense": {"center": [-148, -168], "under": -40, "spread": 1, "range": 3},
+            "attack": {"center": [279, 184], "under": -49, "spread": 1, "range": 3},
+            "defense": {"center": [302, 132], "under": -40, "spread": 1, "range": 3},
         },
         "wall_block": "minecraft:prismarine_wall",
         "walls": [
@@ -197,25 +203,25 @@ MAPS = [
             {"area": "way4", "block": "minecraft:prismarine_slab"},
         ],
         "areas": {
-            "dirt_path": [-146, -50, -156, -182, -50, -123],
-            "way1": [-181, -42, -122, -181, -52, -108],
-            "way2": [-166, -42, -122, -181, -52, -122],
-            "way3": [-165, -42, -108, -165, -52, -122],
-            "way3_open": [-165, -42, -108, -165, -52, -123],
-            "way4": [-165, -41, -122, -181, -41, -108],
+            "dirt_path": [304, -50, 144, 268, -50, 177],
+            "way1": [269, -42, 178, 269, -52, 192],
+            "way2": [284, -42, 178, 269, -52, 178],
+            "way3": [285, -42, 192, 285, -52, 178],
+            "way3_open": [285, -42, 192, 285, -52, 177],
+            "way4": [285, -41, 178, 269, -41, 192],
         },
         "points": {
-            "way1": [-180, -46, -116],
-            "way2": [-172, -45.5, -121],
-            "way3": [-165, -46, -116],
+            "way1": [270, -46, 184],
+            "way2": [278, -45.5, 179],
+            "way3": [285, -46, 184],
         },
         "loot": [
-            [-167, -49, -115],
-            [-167, -49, -118],
-            [-179, -49, -112],
-            [-179, -49, -114],
-            [-178, -49, -118],
-            [-167, -49, -112]
+            [283, -49, 185],
+            [283, -49, 182],
+            [271, -49, 188],
+            [271, -49, 186],
+            [272, -49, 182],
+            [283, -49, 188]
         ],
     },
     {
@@ -226,23 +232,133 @@ MAPS = [
         "title": {"text": "Railway station", "color": "dark_green"},
         "music": None,
         "template": [0, -53, 250],
-        "win_trigger": [-137, -50, -109],
+        "win_trigger": [63, -51, 341],
         "spawns": {
-            "attack": {"center": [-139, -110], "under": -49, "spread": 1, "range": 1},
-            "defense": {"center": [-186, -150], "under": -47, "spread": 1, "range": 3},
+            "attack": {"center": [61, 340], "under": -50, "spread": 1, "range": 1},
+            "defense": {"center": [14, 300], "under": -48, "spread": 1, "range": 3},
         },
         "wall_block": "minecraft:light_blue_stained_glass_pane",
         "walls": [
             {"area": "way1", "fx": fx("way1", [["minecraft:explosion", [0.2, 0.3, 0.3], 1, 3], ["minecraft:cloud", [0.2, 0.3, 0.3], 0, 10]])},
         ],
         "areas": {
-            "way1": [-141, -51, -109, -141, -49, -111],
+            "way1": [59, -52, 341, 59, -50, 339],
         },
         "points": {
-            "way1": [-140.5, -49.5, -109.5],
+            "way1": [59.5, -50.5, 340.5],
         },
         # function ctf_loot:point {x: 0, y: 0, z: 0}
         "loot": [],
+    },
+    {
+        "id": "ammmmmmmmmm",
+        "name": "Ammmmmmmmmm",
+        "vote_slot": 5,
+        "map_item": 5,
+        "title": {"text": "Ammmmmmmmmm", "color": "blue"},
+        "music": {"disc": "minecraft:music_disc.creator", "pitch": 2, "period": "1760"},
+        "template": [150, -52, 400],
+        "win_trigger": [225, -41, 434],
+        "spawns": {
+            "attack": {"center": [227, 437], "under": -37, "spread": 1, "range": 3},
+            "defense": {"center": [181, 482], "under": -35, "spread": 1, "range": 3},
+        },
+        "wall_block": "minecraft:lime_stained_glass_pane",
+        "walls": [
+            {
+                "area": "way1",
+                "fx": fx("way1", [["minecraft:explosion_emitter", [0, 5, 0], 1, 3], ["minecraft:cloud", [2, 5, 1], 0, 30]])
+            },
+            {
+                "area": "way2",
+                "fx": fx("way2", [["minecraft:explosion_emitter", [0, 5, 1], 1, 6], ["minecraft:cloud", [1, 5, 3], 0, 40]])
+            },
+            {
+                "area": "way3",
+                "fx": fx("way3", [["minecraft:explosion_emitter", [0, 5, 0], 1, 3], ["minecraft:cloud", [2, 5, 1], 0, 30]])
+            },
+        ],
+        "areas": {
+            "way1": [221, -36, 432, 221, -34, 432],
+            "way2": [224, -44, 468, 229, -41, 468],
+            "way3": [224, -39, 442, 224, -35, 440],
+        },
+        "points": {
+            "way1": [221, -35, 432],
+            "way2": [226.5, -42.5, 468],
+            "way3": [224, -37, 441],
+        },
+        "loot": [
+            [228, -41, 440],
+            [229, -40, 435],
+            [231, -42, 438],
+            [230, -36, 439],
+            [232, -43, 436],
+            [225, -38, 437]
+        ],
+    },
+    {
+        "id": "facility",
+        "name": "Facility",
+        "vote_slot": 6,
+        "map_item": 6,
+        "title": {"text": "Facility", "color": "blue"},
+        "music": {"disc": "minecraft:music_disc.creator", "pitch": 2, "period": "1760"},
+        "template": [0, -52, 400],
+        "win_trigger": [63, -35, 489],
+        "spawns": {
+            "attack": {"center": [63, 489], "under": -33, "spread": 1, "range": 3},
+            "defense": {"center": [63, 437], "under": -33, "spread": 1, "range": 3},
+        },
+        "wall_block": "minecraft:blue_glazed_terracotta",
+        "walls": [
+            {
+                "area": "way1",
+                "fx": fx("way1", [["minecraft:explosion_emitter", [0, 5, 0], 1, 3], ["minecraft:cloud", [2, 5, 1], 0, 30]])
+            },
+            {
+                "area": "way2",
+                "fx": fx("way2", [["minecraft:explosion_emitter", [0, 5, 1], 1, 6], ["minecraft:cloud", [1, 5, 3], 0, 40]])
+            },
+            {
+                "area": "way3",
+                "fx": fx("way3", [["minecraft:explosion_emitter", [0, 5, 0], 1, 3], ["minecraft:cloud", [2, 5, 1], 0, 30]])
+            },
+            {
+                "area": "way4",
+                "fx": fx("way4", [["minecraft:explosion_emitter", [0, 5, 0], 1, 3], ["minecraft:cloud", [2, 5, 1], 0, 30]])
+            },
+            {
+                "area": "way5",
+                "fx": fx("way5", [["minecraft:explosion_emitter", [0, 5, 0], 1, 3], ["minecraft:cloud", [2, 5, 1], 0, 30]])
+            },
+        ],
+        "areas": {
+            "way1": [59, -35, 482, 67, -32, 482],
+            "way2": [50, -33, 485, 50, -35, 486],
+            "way3": [77, -35, 486, 77, -33, 485],
+            "way4": [45, -40, 463, 43, -42, 463],
+            "way5": [69, -42, 455, 69, -40, 453],
+        },
+        "points": {
+            "way1": [63, -33.5, 482],
+            "way2": [50, -34, 485.5],
+            "way3": [77, -34, 485.5],
+            "way4": [44, -41, 463],
+            "way5": [69, -41, 454],
+        },
+        "loot": [
+            [74, -35, 493],
+            [63, -35, 493],
+            [53, -35, 493],
+            [74, -35, 488],
+            [53, -35, 488],
+            [53, -35, 490],
+            [74, -35, 490],
+            [57, -42, 490],
+            [71, -42, 490],
+            [63, -35, 485],
+        ],
     },
 ]
 
