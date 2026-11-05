@@ -1,0 +1,11 @@
+# ctf:match/start: the players are split between the teams (10 players)
+team join team_2 @r[tag=player]
+team join team_1 @r[tag=player, team=!team_2]
+team join team_2 @r[tag=player, team=!team_1]
+team join team_1 @r[tag=player, team=!team_2]
+team join team_2 @r[tag=player, team=!team_1]
+team join team_1 @r[tag=player, team=!team_2]
+team join team_2 @r[tag=player, team=!team_1]
+team join team_1 @r[tag=player, team=!team_2]
+team join team_2 @r[tag=player, team=!team_1]
+team join team_1 @r[tag=player, team=!team_2]

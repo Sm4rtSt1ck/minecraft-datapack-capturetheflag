@@ -67,6 +67,11 @@ Every module has the same layout:
 Dependencies go one way: content → systems → core. The core never calls modules directly, only
 through tags.
 
+## Bots (in development)
+
+The bots feature is developed on the branch `bots`; its plan, decisions and progress are in
+[BOTS.md](BOTS.md). Read it before working on bots and update it at every stage.
+
 ## Build
 
 - Tools: beet 0.121.x, mecha 0.107.x, bolt 0.53.x (Python 3.14 works).

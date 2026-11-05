@@ -62,6 +62,9 @@ team modify team_2 seeFriendlyInvisibles true
 
 # Settings
 scoreboard objectives add settings dummy {"text": "⚙ SETTINGS ⚙", "color": "aqua", "bold": true}
+# Bots (BOTS.md): "team bots" = the team number of the bots in the match (1 / 2), 0 = no bots
+scoreboard objectives add bots dummy
+scoreboard players set team bots 0
 
 # Numbers
 scoreboard objectives add number dummy

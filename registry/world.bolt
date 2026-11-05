@@ -15,6 +15,8 @@ LOBBY = {
     # The settings signs (ctf_lobby:internal/settings/*)
     "sign_music": [1, -40, 28],
     "sign_rounds": [0, -40, 28],
+    # Bot count (1 block west of the rounds sign)
+    "sign_bots": [-1, -40, 28],
 }
 
 # The arena: the map of the vote is cloned here (ctf_maps:internal/prepare)

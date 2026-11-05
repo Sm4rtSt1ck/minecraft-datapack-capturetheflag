@@ -8,6 +8,11 @@ for i in range(len(MAPS)):
     function ctf_lobby:internal/vote/map_button_tick {slot: (m["vote_slot"]), id: (m["map_item"]), name: (m["name"]), score: (i + 1)}
 
 #########################################
+# BOTS BUTTON (slot 9)
+
+execute as @a[tag=lobby] run function ctf_lobby:internal/vote/bots_button
+
+#########################################
 # SPECTATING BUTTON
 
 execute as @a[tag=lobby] unless items entity @s hotbar.7 carrot_on_a_stick run clear @s carrot_on_a_stick[item_model=ender_eye]

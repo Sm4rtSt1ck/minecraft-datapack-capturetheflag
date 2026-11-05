@@ -47,6 +47,10 @@ Game phases:
 
 * The warm-up is skipped when **2/3 of the players** (rounded up) click the nether star; a vote
   makes the star glint, and the chat shows the votes and how many are needed.
+* **Play against bots** (in development, see [BOTS.md](BOTS.md)): the villager head in slot 9 during
+  the vote turns the bots on / off (it glints when on); the **BOTS** sign next to the rounds sign
+  sets their number (1-10). All players then play in one team, on a random side; the bots are the
+  other team.
 * The bossbar timer is **white** in freeze, **green** in the round, and in the end of the round it
   has the color of the winners (**red** attack, **blue** defense); pink in the other phases.
 

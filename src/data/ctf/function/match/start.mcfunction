@@ -66,17 +66,10 @@ clear @a[tag=!lobby]
 stopsound @a[tag=!lobby]
 tp @a[tag=!lobby] (HOLD[0]) (HOLD[1]) (HOLD[2])
 
-# Join teams 10 players
-team join team_2 @r[tag=player]
-team join team_1 @r[tag=player, team=!team_2]
-team join team_2 @r[tag=player, team=!team_1]
-team join team_1 @r[tag=player, team=!team_2]
-team join team_2 @r[tag=player, team=!team_1]
-team join team_1 @r[tag=player, team=!team_2]
-team join team_2 @r[tag=player, team=!team_1]
-team join team_1 @r[tag=player, team=!team_2]
-team join team_2 @r[tag=player, team=!team_1]
-team join team_1 @r[tag=player, team=!team_2]
+# Join teams: split between the two teams, or all players in one random team against the bots
+scoreboard players set team bots 0
+execute if score Bots settings matches 0 run function ctf:match/teams/split
+execute if score Bots settings matches 1 run function ctf:match/teams/vs_bots
 
 tag team_1 add attack
 tag @a[team=team_1] add attack
