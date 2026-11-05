@@ -218,7 +218,7 @@ static: no runtime loops over a registry, no macro calls in hot paths.
   (`#ctf:tick/global`, only in the game state lobby; objective `build.place` = bat spawn eggs used) keeps
   one A and one B. Solid items (`admin:build/solid/get`): barriers with `custom_data.ctf_solid` (the
   block state); `build.solid` (barriers used) -> the first barrier without a display on the line of
-  sight gets one.
+  sight gets one. A display without its barrier near a creative player is killed (breaking by hand).
 - `ctf_inv:lib` `count(pred)` = `ctf_inv:limits/count` without a macro call. The macro
   `limits/count` / `limits/one` stay for callers with a runtime predicate (`ctf_shop`).
 

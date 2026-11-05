@@ -543,6 +543,7 @@ Adding content:
     in creative removes one, `/function admin:build/clear_markers` removes all);
   * as an item: `/function admin:build/solid/get {b:"stone"}` gives a barrier that looks like the
     block ("SOLID" in its name); placed in creative, it gets the display of the block;
+  * breaking the barrier of such a block by hand (creative) removes its display too;
   * with block states: the `_state` versions (`fill_state`, `set_state`, `set_pointwise_state`,
     `fill_markers_state`, `get_state`) with `s:{facing:"east"}`;
   * at most 5000 blocks per call; blocks with a block entity (chests, signs, banners...) are not
