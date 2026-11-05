@@ -1,0 +1,19 @@
+# BOTS REGISTRY (BOTS.md). Read at build time by bolt (ctf_bots:gen).
+
+# Names of the bots, in the order they are summoned (settings Bots_count: the first N). ASCII only:
+# they go into the entity NBT (CustomName)
+NAMES = ["Alex", "Steve", "Kate", "Max", "Lily", "Sam", "Nina", "Tom", "Zoe", "Bob"]
+
+# The body (a husk, see BOTS.md): attributes. attack_damage 1 + the weapon = the damage of a player
+# with the same weapon (a player's base is 1, a husk's 3). The natural armor of a husk (2) and its
+# reinforcements (more zombies when hurt) are set to 0 in ctf_bots:gen
+BODY = {
+    "attack_damage": 1.0,
+    "follow_range": 64.0,
+    # A mob moves by speed^2 per tick of input (a player by 0.98 x speed): 0.35 ~ a sprinting player
+    # (0.1 x 1.3 sprint); a husk has 0.23 (~ half the walking speed of a player)
+    "movement_speed": 0.35,
+}
+
+# The team leather armor (the same colors as the players' default set, ctf_inv:armor/freeze_default)
+ARMOR_COLOR = {"attack": 16711799, "defense": 47103}

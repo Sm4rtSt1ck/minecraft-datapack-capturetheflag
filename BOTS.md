@@ -17,7 +17,9 @@ defense), the other team is made of bots (1-10, set on a lobby sign). Bots do wh
 - fight with swords, bows, guns, grenades, the mace;
 - drink potions, use totems and wind charges;
 - choose an ultimate at the start of the round, charge it by the same rules, use it;
-- play as a team, with simple tactics.
+- play as a team, with simple tactics;
+- fear a player in the suicide bomber ultimate (keep away from him);
+- break traps or avoid them, when they can see them.
 
 No mods: datapack only.
 
@@ -26,7 +28,9 @@ No mods: datapack only.
 | Question | Decision |
 | --- | --- |
 | Side of the players | Random at the match start (attack or defense); the swap works as usual |
-| Bot respawn | Like players: a dead bot is out until the end of the round |
+| Bot respawn | Like players: a dead bot is out until the end of the round; at the next freeze the
+  alive ones go back to the base (healed, freeze effects, missing leather armor / sword), the dead
+  ones come back |
 | Bot body | The cheapest mob that fits (see "Bot body"); the look is decided later |
 | Button | Vote phase, hotbar slot 9 (`hotbar.8`), a villager head; glints when on |
 | Bot count sign | 1 block west of the rounds sign: `LOBBY["sign_bots"]` = [-1, -40, 28] |
@@ -108,6 +112,8 @@ Expected 1-3 ms per tick (budget 50 ms). Measured at every stage with `/tick que
 | Wind charge | medium | under the feet (jump back) or at the target |
 | Ultimates | partly | the charge is the same; `bomber`, `trident`, `scale` feasible; `ghost`, `foot_eater` are player-specific: adapt or forbid for bots |
 | Traps | medium | in freeze into `bot.trap_spots` through `ctf_traps`, owner = the bot |
+| Avoid / break traps | medium | a trap display in sight (vanilla line of sight: `execute on target` style check or a short ray) and close: hit it by hand (removes it, like `ctf_traps:trap_hit`) or walk around it (the lure moves aside) |
+| Fear the bomber | medium | a player with the bomber ultimate near: the bot runs away from him (the lure is put behind the bot, away from the bomber), until the ultimate ends |
 | Teamwork, tactics | "decent bot" | roles (rush, flank, support, flag guard, choke guard), regroup, retreat at low HP, react to "flag taken" |
 
 ## Stages
@@ -122,8 +128,8 @@ Each stage is one commit, checked by the user in the game before the next one.
 | 4 | Movement and the flag: routes, hiding the flag, attacking it, delivery (playable mode) | |
 | 5 | Economy and shop: buy profiles from the registry | |
 | 6 | Weapons: guns, bow, grenades, mace, potions, totem, wind charge | |
-| 7 | Traps | |
-| 8 | Ultimates: charge, choice, use (adapt / forbid the player-only ones) | |
+| 7 | Traps: bots place them; see / avoid / break the enemy traps; kills of bots by a player's trap credited to him | |
+| 8 | Ultimates: charge, choice, use (adapt / forbid the player-only ones); fear a player in the bomber ultimate | |
 | 9 | Tactics: roles, groups, retreat, events; difficulty | |
 
 ## Progress log
@@ -142,3 +148,40 @@ Each stage is one commit, checked by the user in the game before the next one.
 - Teams: `ctf:match/start` -> `ctf:match/teams/split` (as before) or `ctf:match/teams/vs_bots`:
   all players join a random team; score `team bots` = the team number of the bots (1 / 2, 0 = no
   bots). Until stage 2 the bot team is empty.
+
+### Stage 2 - bot body, melee
+
+- `registry/bots.bolt`: `NAMES` (10, ASCII), `BODY` (attributes), `ARMOR_COLOR`. `ctf_bots:gen`
+  (entrypoint in `beet.json`) generates `internal/spawn/all` (one static summon per name, the first
+  `Bots_count`) and `internal/spawn/armor_<side>`.
+- A bot: a husk, tags `ctf_bot` + `attack` / `defense`, name `[Bot] <name>`, a golden sword like the
+  players' default one (`custom_data.wpn`, so `ctf_econ:kill` pays its kill by the weapon), the team
+  leather armor, no drops, NoAI in freeze, `attack_damage` 1 (+ the weapon = a player's damage),
+  natural armor 0, no reinforcements, `follow_range` 64. A `player_id` like a player's.
+- `ctf_bots:on/freeze_start` (`#ctf:on/freeze_start`, after `ctf_maps`): the missing bots are
+  summoned (`internal/spawn/missing`: tag `ctf_bot_<i>` = the name; all at the first freeze, the
+  dead ones later), the new ones get the side from `team bots` and `match rounds < swap rounds`
+  (team_1 attacks first). Every bot (`internal/freeze_reset`, like a player in freeze): NoAI, full
+  health (`Health`: regeneration doesn't heal undead), no fire, effects cleared, resistance; the
+  missing leather pieces / golden sword (`internal/equip_<side>`, generated). Then
+  `ctf_maps:api/call/spawn_bots` (new map event `spawn_bots`: `spreadplayers` of each side's bots
+  with the side's spawn). Round start: AI on, resistance cleared.
+- Speed: `movement_speed` 0.35 (a mob moves by speed^2 per tick, a player by 0.98 x speed: 0.35 ~ a
+  sprinting player; a husk has 0.23).
+- Traps: bots set them off like players (`ctf_traps:tick/combat`: touch near / under the anvil /
+  web, the touching attack bot gets the trap's kill credit owner). Not yet: a bot killed by a trap
+  isn't credited to the defender (stage 7).
+- Flag (temporary, until stage 4): a random defense bot's position, `ctf_flag:api/place_here` (the
+  same placing as a player's flag).
+- Round win: `attack bots` = attack bots alive (`ctf_bots:internal/count`, every round tick and at
+  freeze); `ctf:match/round/tick` wins for the defense only when no attack player and no attack
+  bot is alive; the time-out reason counts bots too.
+- Kills: a player kills a bot -> advancement `ctf_bots:killed` (`player_killed_entity`, husk with
+  the tag) -> `kills` +1 and `just_killed` +1 (`ctf_fight:internal/kill`: money by weapon, ultimate
+  points, loot tasks). A bot kills a player -> `ctf_fight:internal/killer` -> `ctf_bots:api/
+  killed_player` (the victim's `dc.killer` = the bot: death subtitle with the bot's health, death
+  camera turned to the bot; the bot's money by `ctf_econ:kill`).
+- Removed on `#ctf:on/swap`, `match_end`, `reset` (`ctf_bots:on/remove`); woken on `round_start`.
+- Not yet: bots don't break / carry the flag (stage 4), no shop (stage 5: they keep the golden
+  sword), no grenade / trap kill credit for bots, bot kills are not in the kills sidebar.
+- Known risk: a husk in water turns into a zombie (then a drowned) after ~30 s in water.

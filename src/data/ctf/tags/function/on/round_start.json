@@ -6,6 +6,7 @@
         "ctf_ult:on/render_all",
         "ctf_inv:on/round_start",
         "ctf_loot:round_start",
-        "ctf_maps:on/round_start"
+        "ctf_maps:on/round_start",
+        "ctf_bots:on/round_start"
     ]
 }

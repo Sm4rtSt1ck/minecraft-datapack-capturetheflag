@@ -22,6 +22,9 @@ scoreboard players operation #k dc.tmp = @s dc.killer
 execute as @a if score @s player_id = #k dc.tmp run tag @s add ctf.dc_target
 execute at @a[tag=ctf.dc_target, limit=1] run particle minecraft:dust{color:[0.0, 0.9, 0.9], scale: 1.0} ~ ~1 ~ 0.25 0.55 0.25 0 8 force @s
 tag @a remove ctf.dc_target
+execute as @e[type=husk, tag=ctf_bot] if score @s player_id = #k dc.tmp run tag @s add ctf.dc_target
+execute at @e[type=husk, tag=ctf.dc_target, limit=1] run particle minecraft:dust{color:[0.0, 0.9, 0.9], scale: 1.0} ~ ~1 ~ 0.25 0.55 0.25 0 8 force @s
+tag @e[type=husk, tag=ctf.dc_target] remove ctf.dc_target
 
 # Leaving through the darkness: the blindness fades in before the end
 execute if score @s dc.t matches 60 run effect give @s minecraft:blindness 2 0 true

@@ -6,6 +6,7 @@
         "ctf_sniper:tick",
         "ctf_guns:tick",
         "ctf_inv:tick/match",
-        "#ctf:tick/combat"
+        "#ctf:tick/combat",
+        "ctf_bots:tick/round"
     ]
 }

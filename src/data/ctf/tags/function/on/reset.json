@@ -1,5 +1,6 @@
 {
     "values": [
-        "ctf_lobby:on/reset"
+        "ctf_lobby:on/reset",
+        "ctf_bots:on/remove"
     ]
 }

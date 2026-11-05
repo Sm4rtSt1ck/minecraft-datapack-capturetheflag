@@ -65,6 +65,8 @@ scoreboard objectives add settings dummy {"text": "⚙ SETTINGS ⚙", "color": "
 # Bots (BOTS.md): "team bots" = the team number of the bots in the match (1 / 2), 0 = no bots
 scoreboard objectives add bots dummy
 scoreboard players set team bots 0
+# "attack bots" = the attack bots alive (ctf_bots:internal/count)
+scoreboard players set attack bots 0
 
 # Numbers
 scoreboard objectives add number dummy

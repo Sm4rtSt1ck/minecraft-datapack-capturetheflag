@@ -1,0 +1,16 @@
+{
+    "criteria": {
+        "kill": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:husk",
+                    "nbt": "{Tags:[\"ctf_bot\"]}"
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "ctf_bots:internal/killed"
+    }
+}

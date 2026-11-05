@@ -1,0 +1,20 @@
+# Functions generated from the bots registry (registry/bots.bolt) at build time
+from registry:bots import NAMES, BODY, ARMOR_COLOR
+from registry:world import ARENA
+
+# The bots of the match (settings Bots_count: the first N names) that are missing (all at the first
+# freeze, the dead ones later; tag ctf_bot_<i> = the name), in the arena; the map spreads them over
+# the spawn of their side (ctf_bots:on/freeze_start). NoAI until the round starts
+function ctf_bots:internal/spawn/missing:
+    for i in range(len(NAMES)):
+        execute if score Bots_count settings matches (f"{i + 1}..") unless entity @e[type=husk, tag=f"ctf_bot_{i}"] run summon husk (ARENA["respawn"][0]) (ARENA["respawn"][1]) (ARENA["respawn"][2]) {Tags: ["ctf_bot", "ctf_bot_new", (f"ctf_bot_{i}")], CustomName: (f'"[Bot] {NAMES[i]}"'), CustomNameVisible: 1b, PersistenceRequired: 1b, NoAI: 1b, CanPickUpLoot: 0b, CanBreakDoors: 0b, IsBaby: 0b, DeathLootTable: "minecraft:empty", HandItems: [{id: "minecraft:golden_sword", count: 1, components: {"minecraft:enchantments": {levels: {"minecraft:knockback": 2, "minecraft:sweeping_edge": 3}}, "minecraft:custom_data": {tags: ["main weapon"], wpn: "golden_sword"}}}, {}], HandDropChances: [0.0f, 0.0f], ArmorDropChances: [0.0f, 0.0f, 0.0f, 0.0f], attributes: [{id: "minecraft:attack_damage", base: (BODY["attack_damage"])}, {id: "minecraft:follow_range", base: (BODY["follow_range"])}, {id: "minecraft:movement_speed", base: (BODY["movement_speed"])}, {id: "minecraft:spawn_reinforcements", base: 0.0}, {id: "minecraft:armor", base: 0.0}]}
+
+# As a bot at the start of freeze: like a player without armor / weapon (ctf_inv:on/freeze_start),
+# the missing pieces of the team leather set and the golden sword
+for _side in ["attack", "defense"]:
+    function f"ctf_bots:internal/equip_{_side}":
+        _c = ARMOR_COLOR[_side]
+        execute unless items entity @s armor.chest * run item replace entity @s armor.chest with leather_chestplate[dyed_color={rgb: (_c)}]
+        execute unless items entity @s armor.legs * run item replace entity @s armor.legs with leather_leggings[dyed_color={rgb: (_c)}]
+        execute unless items entity @s armor.feet * run item replace entity @s armor.feet with leather_boots[dyed_color={rgb: (_c)}]
+        execute unless items entity @s weapon.mainhand * run item replace entity @s weapon.mainhand with golden_sword[enchantments={knockback: 2, sweeping_edge: 3}, custom_data={tags: ["main weapon"], wpn: "golden_sword"}]

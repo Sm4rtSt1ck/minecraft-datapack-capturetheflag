@@ -368,7 +368,7 @@ MAPS = [
 ]
 
 # The events of a map: ctf_maps:api/call/<event> runs ctf_maps:map/<map>/<event> of the current map
-EVENTS = ["start", "prepare", "clone", "freeze", "round", "end_round", "loot"]
+EVENTS = ["start", "prepare", "clone", "freeze", "round", "end_round", "loot", "spawn_bots"]
 
 def map_data(id):
     for m in MAPS:

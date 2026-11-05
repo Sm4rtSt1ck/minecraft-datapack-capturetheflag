@@ -10,7 +10,7 @@ for e in EVENTS:
 
 # The functions of every map (registry MAPS): all maps work the same way
 from registry:world import ARENA
-from ctf_maps:lib import in_arena, copy_solid, template_block, fill_area, fill_replace, spawn, template_marker, win_trigger, loot_points
+from ctf_maps:lib import in_arena, copy_solid, template_block, fill_area, fill_replace, spawn, spawn_bots, template_marker, win_trigger, loot_points
 
 for _src in MAPS:
     # The coordinates of the registry are in the template: moved into the arena here
@@ -94,6 +94,11 @@ for _src in MAPS:
 
     function f"ctf_maps:map/{_id}/end_round":
         pass
+
+    # The bots of both sides go to their spawns (ctf_bots:on/freeze_start)
+    function f"ctf_maps:map/{_id}/spawn_bots":
+        spawn_bots(_m, "attack")
+        spawn_bots(_m, "defense")
 
     # Loot crate landing points (ctf_loot:freeze_start)
     function f"ctf_maps:map/{_id}/loot":

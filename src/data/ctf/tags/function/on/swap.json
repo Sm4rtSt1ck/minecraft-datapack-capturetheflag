@@ -1,5 +1,6 @@
 {
     "values": [
-        "ctf_econ:reset"
+        "ctf_econ:reset",
+        "ctf_bots:on/remove"
     ]
 }

@@ -69,6 +69,11 @@ def spawn(map, side):
     _s = map["spawns"][side]
     spreadplayers (_s["center"][0]) (_s["center"][1]) (_s["spread"]) (_s["range"]) under (_s["under"]) false @s[tag=f"{side}"]
 
+# The bots of the side are spread around the side's spawn of the map (ctf_bots, BOTS.md)
+def spawn_bots(map, side):
+    _s = map["spawns"][side]
+    spreadplayers (_s["center"][0]) (_s["center"][1]) (_s["spread"]) (_s["range"]) under (_s["under"]) false @e[type=husk, tag=ctf_bot, tag=f"{side}"]
+
 # The map template marker (its chunk is force loaded): ctf_maps:map/<id>/prepare
 def template_marker(map):
     _t = map["template"]

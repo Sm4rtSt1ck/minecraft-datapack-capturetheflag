@@ -11,6 +11,7 @@ execute if score match rounds >= swap rounds run scoreboard players add team_1 r
 # reason: 3 - all attackers are dead, 4 - the time is over
 data modify storage ctf:round won set value {winner: "defense", loser: "attack", reason: 3}
 execute if score round timer matches ..0 if entity @a[tag=attack, tag=!dead] run data modify storage ctf:round won.reason set value 4
+execute if score round timer matches ..0 if score attack bots matches 1.. run data modify storage ctf:round won.reason set value 4
 # Modules: round rewards
 function #ctf:on/round_win
 
