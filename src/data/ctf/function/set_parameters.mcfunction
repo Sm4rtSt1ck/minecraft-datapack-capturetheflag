@@ -103,6 +103,10 @@ scoreboard players reset * map_vote_player
 # Map building (admin:build): area corners and sizes, block counters, mode; bat spawn eggs used
 # (a build marker of admin:build/get_tools may be new)
 scoreboard objectives add solid.tmp dummy
+# The number of a bot route point in its route (admin:build/bots)
+scoreboard objectives add build.idx dummy
+# The number of a route point in its route, on its copy in the arena (ctf_maps:internal/bots/copy)
+scoreboard objectives add bot.idx dummy
 scoreboard objectives add build.place minecraft.used:minecraft.bat_spawn_egg
 # Barriers placed (a solid item of admin:build/solid/get may be new)
 scoreboard objectives add build.solid minecraft.used:minecraft.barrier

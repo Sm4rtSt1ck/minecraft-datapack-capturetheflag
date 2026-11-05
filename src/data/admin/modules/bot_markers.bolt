@@ -1,0 +1,29 @@
+# The bot annotation markers of the map builder (admin:build/bots, BOTS.md stage 3): what they mark,
+# their look. The markers in the template are the bots' knowledge of the map: every clone copies them
+# into the arena (ctf_maps:internal/bots/copy). Used by admin:build/bots/get_tools, the glow, the dump
+# and admin:build/bots/show/<map> (ctf_maps:gen)
+
+# Every kind: the key in the backup ("bot" of registry/maps.bolt), the marker tag (template), the tag
+# of the copy in the arena, the label, the color (concrete on the head, dye = the egg's model), the
+# text color. Routes: the points in the order they were placed (build.idx)
+SPOTS = [
+    {"key": "flag_spots", "tag": "build_bot_flag", "arena": "bot_flag", "label": "F", "color": "magenta", "text": "light_purple", "name": "Bot flag spot", "lore": "a defense bot may hide the flag here"},
+    {"key": "trap_spots", "tag": "build_bot_trap", "arena": "bot_trap", "label": "T", "color": "orange", "text": "gold", "name": "Bot trap spot", "lore": "a defense bot may place a trap here"},
+    {"key": "anvil_spots", "tag": "build_bot_anvil", "arena": "bot_anvil", "label": "AN", "color": "brown", "text": "dark_red", "name": "Bot anvil trap spot", "lore": "an anvil trap here (on a ceiling): it falls on who passes below"},
+    {"key": "defend_spots", "tag": "build_bot_defend", "arena": "bot_defend", "label": "D", "color": "cyan", "text": "dark_aqua", "name": "Bot defend spot", "lore": "a defense bot may hold this position"},
+]
+ROUTE_COLORS = ["lime", "yellow", "light_blue", "pink"]
+ROUTE_TEXT = ["green", "yellow", "aqua", "light_purple"]
+
+# Every kind with its marker tag and egg model (the glow: only the markers of the held kind glow)
+def kinds():
+    _k = []
+    for _s in SPOTS:
+        _k.append({"id": _s["key"], "tag": _s["tag"], "color": _s["color"]})
+    for _r in range(4):
+        _k.append({"id": f"route_{_r + 1}", "tag": f"build_route_{_r + 1}", "color": ROUTE_COLORS[_r]})
+    return _k
+
+# Summons a marker at the block [x, y, z] (like a marker placed from its egg: bottom center)
+def summon_marker(tag, label, color, text, point):
+    summon armor_stand (point[0] + 0.5) (point[1]) (point[2] + 0.5) {Tags: ["build_marker", "build_bot", (tag), "build_seen", "build_new"], ArmorItems: [{}, {}, {}, {id: (f"minecraft:{color}_concrete"), count: 1}], Small: 1b, NoGravity: 1b, CustomNameVisible: 1b, CustomName: (f'{{"text": "{label}", "color": "{text}"}}')}

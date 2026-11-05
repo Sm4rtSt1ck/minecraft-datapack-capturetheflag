@@ -10,5 +10,7 @@ execute as @e[type=husk, tag=ctf_bot] run function ctf_bots:internal/freeze_rese
 function ctf_maps:api/call/spawn_bots
 function ctf_bots:internal/count
 
-# Defense bots: the flag is placed where one of them stands (stage 2; stage 4: annotated flag spots)
+# Defense bots: the flag goes to a random flag spot of the map (bot markers, BOTS.md); a map without
+# flag spots: where a defense bot stands
+execute if entity @e[type=husk, tag=ctf_bot, tag=defense] if entity @e[type=marker, tag=bot_flag] at @e[type=marker, tag=bot_flag, sort=random, limit=1] run return run function ctf_flag:api/place_here
 execute at @e[type=husk, tag=ctf_bot, tag=defense, sort=random, limit=1] run function ctf_flag:api/place_here

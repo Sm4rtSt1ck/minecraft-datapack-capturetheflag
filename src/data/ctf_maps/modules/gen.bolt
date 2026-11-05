@@ -1,5 +1,17 @@
 # Functions generated from the maps registry (registry/maps.bolt) at build time
 from registry:maps import MAPS, EVENTS
+from admin:bot_markers import SPOTS, ROUTE_COLORS, ROUTE_TEXT, summon_marker
+
+# The map clone, as a bot marker of the template positioned at its place in the arena: its copy is
+# a marker (a map entity: killed at the next clone) with the arena tag of its kind (BOTS.md);
+# a route point keeps its number (bot.idx)
+function ctf_maps:internal/bots/copy:
+    for _sp in SPOTS:
+        execute if entity @s[tag=f"{_sp['tag']}"] run summon marker ~ ~ ~ {Tags: ["map_entity", "bot_spot", (_sp["arena"])]}
+    for _r in range(1, 5):
+        execute if entity @s[tag=f"build_route_{_r}"] run summon marker ~ ~ ~ {Tags: ["map_entity", "bot_route", (f"bot_route_{_r}"), "bot_new"]}
+    execute if entity @s[tag=build_route] run scoreboard players operation @n[type=marker, tag=bot_new] bot.idx = @s build.idx
+    tag @e[type=marker, tag=bot_new] remove bot_new
 
 # Runs ctf_maps:map/<the map of the vote>/<event> (number of the map = result map_vote)
 for e in EVENTS:
@@ -10,7 +22,7 @@ for e in EVENTS:
 
 # The functions of every map (registry MAPS): all maps work the same way
 from registry:world import ARENA
-from ctf_maps:lib import in_arena, copy_solid, template_block, fill_area, fill_replace, spawn, spawn_bots, template_marker, win_trigger, loot_points
+from ctf_maps:lib import in_arena, copy_solid, copy_bot_markers, template_block, fill_area, fill_replace, spawn, spawn_bots, template_marker, win_trigger, loot_points
 
 for _src in MAPS:
     # The coordinates of the registry are in the template: moved into the arena here
@@ -51,6 +63,7 @@ for _src in MAPS:
                 summon (_e[0]) (_p[_e[1]][0]) (_p[_e[1]][1]) (_p[_e[1]][2]) (_e[2])
         win_trigger(_m)
         copy_solid(_src)
+        copy_bot_markers(_src)
 
     # Start of freeze (as every player): the borders are closed, the player goes to his spawn
     function f"ctf_maps:map/{_id}/freeze":
@@ -103,6 +116,26 @@ for _src in MAPS:
     # Loot crate landing points (ctf_loot:freeze_start)
     function f"ctf_maps:map/{_id}/loot":
         loot_points(_m)
+
+    # The bot annotation of the registry as markers on the template, to edit it (admin:build/bots)
+    function f"admin:build/bots/show/{_id}":
+        execute unless score game state = lobby state run return run function admin:build/internal/wrong_phase
+        if "bot" in _src:
+            _bs = _src["bot"]
+            for _sp in SPOTS:
+                if _sp["key"] in _bs:
+                    for _pt in _bs[_sp["key"]]:
+                        summon_marker(_sp["tag"], _sp["label"], _sp["color"], _sp["text"], _pt)
+            if "routes" in _bs:
+                for _ri in range(len(_bs["routes"])):
+                    for _pt in _bs["routes"][_ri]:
+                        summon_marker(f"build_route_{_ri + 1}", f"R{_ri + 1}", ROUTE_COLORS[_ri], ROUTE_TEXT[_ri], _pt)
+                        execute as @e[type=armor_stand, tag=build_new] run tag @s add build_route
+                        execute as @e[type=armor_stand, tag=build_new] run function admin:build/bots/internal/route_index
+                        tag @e[type=armor_stand, tag=build_new] remove build_new
+        tag @e[type=armor_stand, tag=build_new] remove build_new
+        function admin:build/bots/internal/glow_reset
+        tellraw @s {"text": "The bot markers of the registry are shown (admin:build/bots/dump to save them)", "color": "green"}
 
     # Admin teleport to the template of the map (admin:tp/tp: creative, out of the lobby)
     function f"admin:tp/{_id}":

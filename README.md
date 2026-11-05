@@ -548,6 +548,13 @@ Adding content:
   * as an item: `/function admin:build/solid/get {b:"stone"}` gives a barrier that looks like the
     block ("SOLID" in its name); placed in creative, it gets the display of the block;
   * breaking the barrier of such a block by hand (creative) removes its display too;
+* **the bots' knowledge of a map** (see [BOTS.md](BOTS.md)): `/function admin:build/bots/get_tools`
+  gives markers for flag spots (F), trap spots (T), anvil trap spots (AN, on a ceiling), defend spots
+  (D) and 4 attack routes (R1..R4, the points in the order they are placed, named `R<route>.<n>`).
+  The markers on the template are what the bots use: every clone of the map copies them into the
+  arena. Only the markers of the kind held in the hand glow. `/function admin:build/bots/dump`
+  prints a backup (click to copy) for the `bot` entry of the map in `registry/maps.bolt`;
+  `/function admin:build/bots/show/<map>` restores it;
   * with block states: the `_state` versions (`fill_state`, `set_state`, `set_pointwise_state`,
     `fill_markers_state`, `get_state`) with `s:{facing:"east"}`;
   * at most 5000 blocks per call; blocks with a block entity (chests, signs, banners...) are not

@@ -34,6 +34,12 @@ No mods: datapack only.
 | Bot body | The cheapest mob that fits (see "Bot body"); the look is decided later |
 | Button | Vote phase, hotbar slot 9 (`hotbar.8`), a villager head; glints when on |
 | Bot count sign | 1 block west of the rounds sign: `LOBBY["sign_bots"]` = [-1, -40, 28] |
+| Map knowledge | The bot markers in the template, copied at every clone (not the registry: it is a backup) |
+| Anvil traps | Their own marker kind (AN): an anvil hangs from a ceiling, unlike the other traps |
+| Own traps | Defense bots never set off their own traps (only attack bots touch traps), so a D spot may be on a T spot |
+| Defense near the flag | Traps and defenders go to the spots near the flag more often, not always (weighted random) |
+| High defense base | If the defense spawn is high above the lowest point of the map, defense bots buy mostly bows / guns (the height computed at build time from the map) |
+| Marker glow | Only the bot markers of the kind held in the main hand glow (the solid markers unchanged) |
 
 ## Architecture
 
@@ -45,11 +51,13 @@ No mods: datapack only.
      the bot gets 0+ damage `by` the lure and chases it (retaliation target).
    - Vanilla limits: no doors (maps need openings), no gap jumps / parkour, path length limited by
      `follow_range` (long routes need waypoints), no chorus fruit / map teleports.
-2. **Map knowledge is annotated, not computed.** Every map gets in `registry/maps.bolt` (template
-   coordinates, moved by `in_arena`): `bot.flag_spots`, `bot.trap_spots`, `bot.defend_spots`,
-   `bot.routes` (attack routes, lists of points). Placed with `admin:build` markers. In freeze the
-   bots don't walk there: a spot is chosen and the flag / trap appears in it. Only annotated (so
-   reachable) spots are used.
+2. **Map knowledge is annotated, not computed.** Markers placed on the template with
+   `admin:build/bots/get_tools` (flag, trap, anvil trap, defend spots, 4 attack routes) ARE the
+   bots' knowledge: every clone of the map copies them into the arena as `marker` entities (tags
+   `bot_flag`, `bot_trap`, `bot_anvil`, `bot_defend`, `bot_route_<r>` + `bot.idx`), so runtime picks
+   are plain selectors (`sort=random`). `registry/maps.bolt` "bot" is only a backup (dump / show).
+   In freeze the bots don't walk there: a spot is chosen and the flag / trap appears in it. Only
+   annotated (so reachable) spots are used.
 3. **"Fighters" instead of "players".** ~150 selectors in 78 files use `@a[tag=player/attack/
    defense]`; bots are not in `@a`. Every place is reviewed: round win (alive count), "no players
    -> match end", economy, kill credit. Inventory, shop UI and the death camera don't concern bots.
@@ -99,7 +107,7 @@ Expected 1-3 ms per tick (budget 50 ms). Measured at every stage with `/tick que
 | Item | Feasible | How |
 | --- | --- | --- |
 | Lobby button, sign, one team vs bots | easy | stage 1 |
-| Hide the flag (defense) | easy | one of `bot.flag_spots` in freeze |
+| Hide the flag (defense) | easy | a random flag spot marker in freeze (done in stage 3) |
 | Break, carry, deliver the flag | medium | lure to the flag spot; carrier tag, flag on the head, Glowing; then to `win_trigger`; `ctf_flag` api for a non-player carrier |
 | Economy | easy | the same objectives and `registry/econ.bolt` rewards; money is a score on the bot |
 | Shop, same rules | medium | no UI: a buy function generated from `registry/shop.bolt` (costs, round limits) and buy profiles; a virtual inventory (hands, armor, storage) |
@@ -111,7 +119,7 @@ Expected 1-3 ms per tick (budget 50 ms). Measured at every stage with `/tick que
 | Totem | free | a vanilla mob with a totem in hand revives |
 | Wind charge | medium | under the feet (jump back) or at the target |
 | Ultimates | partly | the charge is the same; `bomber`, `trident`, `scale` feasible; `ghost`, `foot_eater` are player-specific: adapt or forbid for bots |
-| Traps | medium | in freeze into `bot.trap_spots` through `ctf_traps`, owner = the bot |
+| Traps | medium | in freeze into trap / anvil spots through `ctf_traps`, owner = the bot; spots near the flag weighted higher |
 | Avoid / break traps | medium | a trap display in sight (vanilla line of sight: `execute on target` style check or a short ray) and close: hit it by hand (removes it, like `ctf_traps:trap_hit`) or walk around it (the lure moves aside) |
 | Fear the bomber | medium | a player with the bomber ultimate near: the bot runs away from him (the lure is put behind the bot, away from the bomber), until the ultimate ends |
 | Teamwork, tactics | "decent bot" | roles (rush, flank, support, flag guard, choke guard), regroup, retreat at low HP, react to "flag taken" |
@@ -123,10 +131,10 @@ Each stage is one commit, checked by the user in the game before the next one.
 | # | Stage | Status |
 | --- | --- | --- |
 | 1 | Lobby and teams: button, count sign (1-10), all players in one random side; no bots yet | done |
-| 2 | Bot body, melee: spawn, death (out until the round end), round win counts bots, kill credit, kill money; first TPS measurement | in progress |
-| 3 | Map annotation: `admin:build` bot markers, `bot.*` in `maps.bolt`; the user annotates the first map | |
-| 4 | Movement and the flag: routes, hiding the flag, attacking it, delivery (playable mode) | |
-| 5 | Economy and shop: buy profiles from the registry | |
+| 2 | Bot body, melee: spawn, death (out until the round end), round win counts bots, kill credit, kill money; first TPS measurement | done |
+| 3 | Map annotation: `admin:build` bot markers, `bot.*` in `maps.bolt`; the user annotates the first map | done |
+| 4 | Movement and the flag: routes, attacking the flag, delivery (playable mode); defenders to defend spots (near the flag more often) | |
+| 5 | Economy and shop: buy profiles from the registry; defense on a high base prefers bows / guns | |
 | 6 | Weapons: guns, bow, grenades, mace, potions, totem, wind charge | |
 | 7 | Traps: bots place them; see / avoid / break the enemy traps; kills of bots by a player's trap credited to him | |
 | 8 | Ultimates: charge, choice, use (adapt / forbid the player-only ones); fear a player in the bomber ultimate | |
@@ -185,3 +193,22 @@ Each stage is one commit, checked by the user in the game before the next one.
 - Not yet: bots don't break / carry the flag (stage 4), no shop (stage 5: they keep the golden
   sword), no grenade / trap kill credit for bots, bot kills are not in the kills sidebar.
 - Known risk: a husk in water turns into a zombie (then a drowned) after ~30 s in water.
+
+### Stage 3 - map annotation
+
+- Markers (`admin:build/bots`, lobby only; build markers: `clear_markers` removes them, the entity
+  clone skips them). Kinds in `admin:modules/bot_markers.bolt`:
+  F flag spot (magenta), T trap spot (orange), AN anvil trap spot (brown, on a ceiling), D defend
+  spot (cyan), R1..R4 attack routes (lime, yellow, light blue, pink). A new route point gets its
+  number in the route (`build.idx`, `internal/route_index`, named `R<r>.<n>`; the first marker of a
+  route restarts at 1).
+- Glow: `admin:build/bots/internal/glow` (admin:tick, lobby): only the markers of the kind whose egg
+  (by its dye model, so the old eggs work too) is held in a main hand glow; written on change only
+  (`#glow_<kind>` / `#held_<kind>` in `solid.tmp`; new markers reset it).
+- The bots' knowledge: `ctf_maps:map/<map>/clone` copies the template markers into the arena
+  (`ctf_maps:lib` `copy_bot_markers` -> `ctf_maps:internal/bots/copy`): `marker` entities, tags
+  `map_entity bot_spot bot_<kind>` or `bot_route bot_route_<r>` with `bot.idx`.
+- Backup: `dump` prints the "bot" entry (click to copy; also plain in the chat log), `show/<map>`
+  (generated) restores the markers of the registry entry. test_map has one.
+- The flag of defense bots: a random `bot_flag` marker (else where a defense bot stands).
+- New objectives `build.idx`, `bot.idx` (`ctf:set_parameters`).

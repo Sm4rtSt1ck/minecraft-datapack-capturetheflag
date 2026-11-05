@@ -1,0 +1,3 @@
+# The "bot" entry of the map, from storage admin:build dump: a click copies it (also in the log)
+$tellraw @s [{"text": "[Copy the bot entry of the map]", "color": "aqua", "underlined": true, "clickEvent": {"action": "copy_to_clipboard", "value": "\"bot\": {\"flag_spots\": $(flag_spots), \"trap_spots\": $(trap_spots), \"anvil_spots\": $(anvil_spots), \"defend_spots\": $(defend_spots), \"routes\": $(routes)},"}, "hoverEvent": {"action": "show_text", "contents": "Paste it into the map entry of registry/maps.bolt"}}]
+$tellraw @s {"text": "\"bot\": {\"flag_spots\": $(flag_spots), \"trap_spots\": $(trap_spots), \"anvil_spots\": $(anvil_spots), \"defend_spots\": $(defend_spots), \"routes\": $(routes)},", "color": "gray"}
