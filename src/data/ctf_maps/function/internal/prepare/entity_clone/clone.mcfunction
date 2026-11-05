@@ -18,6 +18,8 @@ scoreboard players operation offset posX -= origin posX
 scoreboard players operation offset posY -= origin posY
 scoreboard players operation offset posZ -= origin posZ
 
-execute positioned as @n[tag=clone_marker] as @e[dx=128, dy=128, dz=128, tag=!clone_marker, tag=!clone_target_marker, tag=!map_entity, type=!player] run function ctf_maps:internal/prepare/entity_clone/clone_one
+# The unbreakable blocks (tag ctf_solid) are copied by ctf_maps:map/<map>/clone; the build markers
+# (admin:build/get_tools) stay in the template
+execute positioned as @n[tag=clone_marker] as @e[dx=128, dy=128, dz=128, tag=!clone_marker, tag=!clone_target_marker, tag=!map_entity, tag=!ctf_solid, tag=!build_marker, type=!player] run function ctf_maps:internal/prepare/entity_clone/clone_one
 
 kill @e[tag=clone_target_marker]

@@ -9,6 +9,21 @@ def _floor(v):
         _f = _f - 1
     return _f
 
+# The block of the template corner and the shift template -> arena (ctf_maps:internal/prepare/clone
+# copies the template from this block to ARENA["corner"])
+def template_block(map):
+    _b = []
+    for _i in range(3):
+        _b.append(_floor(map["template"][_i]))
+    return _b
+
+def arena_shift(map):
+    _b = template_block(map)
+    _d = []
+    for _i in range(3):
+        _d.append(ARENA["corner"][_i] - _b[_i])
+    return _d
+
 # A point moved by d
 def _move(point, d):
     return [point[0] + d[0], point[1] + d[1], point[2] + d[2]]
@@ -17,10 +32,7 @@ def _move(point, d):
 # in the world coordinates of the template, the block of the template corner goes to ARENA corner
 # (ctf_maps:internal/prepare/clone). Used by ctf_maps:gen for every map.
 def in_arena(map):
-    _t = map["template"]
-    _d = []
-    for _i in range(3):
-        _d.append(ARENA["corner"][_i] - _floor(_t[_i]))
+    _d = arena_shift(map)
     _out = {}
     for _k in map:
         _out[_k] = map[_k]
@@ -62,6 +74,14 @@ def template_marker(map):
     _t = map["template"]
     forceload add (int(_t[0])) (int(_t[2]))
     summon armor_stand (_t[0]) (_t[1]) (_t[2]) {Marker:true, Tags:["clone_marker"]}
+
+# The unbreakable blocks of the template (admin:build/solid) are copied into the arena: their
+# displays stand on block corners; a selector box from the corner - 0.5 catches the displays of
+# x..x+127 (a display has no size: one on the box border would not be selected)
+def copy_solid(map):
+    _b = template_block(map)
+    _d = arena_shift(map)
+    execute positioned (_b[0] - 0.5) (_b[1] - 0.5) (_b[2] - 0.5) as @e[type=block_display, tag=ctf_solid, dx=(ARENA["size"][0] - 1), dy=(ARENA["size"][1] - 1), dz=(ARENA["size"][2] - 1)] at @s positioned f"~{_d[0]}" f"~{_d[1]}" f"~{_d[2]}" run function ctf_maps:internal/solid/copy
 
 # The flag is delivered here: ctf_maps:map/<id>/clone
 def win_trigger(map):

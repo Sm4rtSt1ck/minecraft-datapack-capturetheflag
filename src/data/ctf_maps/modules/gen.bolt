@@ -10,7 +10,7 @@ for e in EVENTS:
 
 # The functions of every map (registry MAPS): all maps work the same way
 from registry:world import ARENA
-from ctf_maps:lib import in_arena, fill_area, fill_replace, spawn, template_marker, win_trigger, loot_points
+from ctf_maps:lib import in_arena, copy_solid, template_block, fill_area, fill_replace, spawn, template_marker, win_trigger, loot_points
 
 for _src in MAPS:
     # The coordinates of the registry are in the template: moved into the arena here
@@ -50,6 +50,7 @@ for _src in MAPS:
             for _e in _m["entities"]:
                 summon (_e[0]) (_p[_e[1]][0]) (_p[_e[1]][1]) (_p[_e[1]][2]) (_e[2])
         win_trigger(_m)
+        copy_solid(_src)
 
     # Start of freeze (as every player): the borders are closed, the player goes to his spawn
     function f"ctf_maps:map/{_id}/freeze":
@@ -97,3 +98,12 @@ for _src in MAPS:
     # Loot crate landing points (ctf_loot:freeze_start)
     function f"ctf_maps:map/{_id}/loot":
         loot_points(_m)
+
+    # Admin teleport to the template of the map (admin:tp/tp: creative, out of the lobby)
+    function f"admin:tp/{_id}":
+        if "admin_tp" in _src:
+            _at = _src["admin_tp"]
+        else:
+            _tb = template_block(_src)
+            _at = [_tb[0] + ARENA["size"][0] // 2, _tb[1] + ARENA["size"][1], _tb[2] + ARENA["size"][2] // 2]
+        function admin:tp/tp {xyz: (f"{_at[0]} {_at[1]} {_at[2]}")}

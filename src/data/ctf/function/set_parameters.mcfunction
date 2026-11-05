@@ -25,6 +25,7 @@ gamerule commandBlockOutput false
 gamerule sendCommandFeedback false
 gamerule reducedDebugInfo true
 gamerule commandModificationBlockLimit 2097152
+gamerule maxCommandChainLength 1048576
 # Other settings
 difficulty normal
 defaultgamemode adventure
@@ -93,6 +94,13 @@ scoreboard objectives add map_vote_player dummy [\
     {"text": "🎴", "color": "light_purple", "bold": false}\
 ]
 scoreboard players reset * map_vote_player
+
+# Map building (admin:build): area corners and sizes, block counters, mode; bat spawn eggs used
+# (a build marker of admin:build/get_tools may be new)
+scoreboard objectives add solid.tmp dummy
+scoreboard objectives add build.place minecraft.used:minecraft.bat_spawn_egg
+# Barriers placed (a solid item of admin:build/solid/get may be new)
+scoreboard objectives add build.solid minecraft.used:minecraft.barrier
 
 # Timer
 scoreboard objectives add timer dummy

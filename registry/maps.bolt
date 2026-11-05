@@ -15,6 +15,7 @@
 #   music - disc, pitch, period (ticks: when it is played again); None - no music
 #   template - the lowest north-west corner of the map template (its block: the coordinates rounded
 #              down); the template is cloned into the arena (ctf_maps:internal/prepare)
+#   admin_tp - admin:tp/<id> teleports here (by default: above the middle of the template)
 #   prepare_fills - fills of the arena right after the template marker (bug fixes)
 #   entities - summoned at the clone: entity, point, NBT
 #   win_trigger - the flag is delivered here
@@ -44,6 +45,7 @@ MAPS = [
         "title": {"text": "Test map 1", "color": "blue"},
         "music": {"disc": "minecraft:music_disc.creator", "pitch": 2, "period": "1760"},
         "template": [-97.5, -53, 43.5],
+        "admin_tp": [-70, -45, 70],
         "win_trigger": [-92, -51, 75],
         "spawns": {
             "attack": {"center": [-92, 81], "under": -51, "spread": 1, "range": 3},
@@ -97,6 +99,7 @@ MAPS = [
         "title": [{"text": "Green", "color": "green"}, {"text": "Mine", "color": "gray"}],
         "music": {"disc": "minecraft:music_disc.chirp", "pitch": 1, "period": "3700t"},
         "template": [0.5, -52, 100.5],
+        "admin_tp": [30, -30, 130],
         "entities": [
             ["minecraft:minecart", "minecart", {"Invulnerable": True, "Tags": ["map_entity"]}],
             ["minecraft:area_effect_cloud", "chest_minecart", {"Duration": -1, "Age": -2147483648, "WaitTime": -2147483648, "Passengers": [{"id": "minecraft:chest_minecart", "Invulnerable": False, "Tags": ["map_entity"]}], "Tags": ["map_entity"]}],
@@ -140,6 +143,7 @@ MAPS = [
         "title": [{"text": "Night", "color": "dark_purple"}, {"text": "Club", "color": "light_purple"}],
         "music": {"disc": "minecraft:music_disc.pigstep", "pitch": 1, "period": "2960t"},
         "template": [150.5, -54, 100.5],
+        "admin_tp": [168.32, -51.09, 147.00],
         "win_trigger": [169, -52, 147],
         "spawns": {
             "attack": {"center": [169, 147.5], "under": -51, "spread": 1, "range": 2},
@@ -188,6 +192,7 @@ MAPS = [
         "time": 11000,
         "music": {"disc": "minecraft:music_disc.strad", "pitch": 1, "period": "3760t"},
         "template": [250, -52, 100],
+        "admin_tp": [299, -48, 168],
         # Fix of the dirt path bug
         "prepare_fills": [{"area": "dirt_path", "block": "air", "replaces": "dirt_path"}],
         "win_trigger": [277, -49, 189],

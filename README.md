@@ -529,7 +529,24 @@ Adding content:
   for a ranged weapon its ammo in `registry/items.bolt` and `ctf_inv:ammo/give/<id>`;
 * **a map**: an entry in `registry/maps.bolt`: title, music, template, spawns, walls (material,
   areas, the opening particles), loot points... Its functions `ctf_maps:map/<map>/<event>` are
-  generated from it;
+  generated from it. Unbreakable blocks that look like normal ones (a barrier with a block display
+  in it), built on the template by hand, are copied into the arena with the map (the tools work
+  only in the lobby, when no match is running):
+  * `/function admin:build/solid/fill {p:[x1, y1, z1, x2, y2, z2], b:"stone"}`;
+  * `/function admin:build/solid/set {p:[x, y, z], b:"stone"}`;
+  * `/function admin:build/solid/remove {p:[...]}` (only these blocks are removed);
+  * with markers: `/function admin:build/get_tools` gives a point marker and the markers A and B
+    (only one A and one B: a new one removes the old one). Then
+    `/function admin:build/solid/set_pointwise {b:"stone"}` puts a block at every point marker,
+    `/function admin:build/solid/fill_markers {b:"stone"}` fills the area between A and B;
+    `remove_pointwise` / `remove_markers` remove them by the same markers; the markers stay (a hit
+    in creative removes one, `/function admin:build/clear_markers` removes all);
+  * as an item: `/function admin:build/solid/get {b:"stone"}` gives a barrier that looks like the
+    block ("SOLID" in its name); placed in creative, it gets the display of the block;
+  * with block states: the `_state` versions (`fill_state`, `set_state`, `set_pointwise_state`,
+    `fill_markers_state`, `get_state`) with `s:{facing:"east"}`;
+  * at most 5000 blocks per call; blocks with a block entity (chests, signs, banners...) are not
+    drawn by a display;
 * **a trap**: an entry in `registry/traps.bolt`, its functions `ctf_traps:internal/<id>/place`
   and `trigger`, and the shop product;
 * **an ultimate**: an entry in `registry/ultimates.bolt`, its function

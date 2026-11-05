@@ -3,6 +3,7 @@
         "ctf_lobby:tick/global",
         "ctf_fx:tick",
         "ctf_loot:tick",
-        "ctf_fight:tick"
+        "ctf_fight:tick",
+        "admin:tick"
     ]
 }
