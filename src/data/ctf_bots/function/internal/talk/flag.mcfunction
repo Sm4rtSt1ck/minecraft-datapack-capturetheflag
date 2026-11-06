@@ -1,0 +1,3 @@
+# As an attack bot that found the flag (always said): "Found the flag at x y z!"
+scoreboard players set #talk bots 10
+tellraw @a [{"text": "[", "color": "dark_gray"}, {"selector": "@s"}, {"text": "] ", "color": "dark_gray"}, {"text": "Found the flag at ", "color": "gold"}, {"score": {"name": "@n[type=armor_stand, tag=flag]", "objective": "bk.x"}, "color": "aqua"}, {"text": " ", "color": "aqua"}, {"score": {"name": "@n[type=armor_stand, tag=flag]", "objective": "bk.y"}, "color": "aqua"}, {"text": " ", "color": "aqua"}, {"score": {"name": "@n[type=armor_stand, tag=flag]", "objective": "bk.z"}, "color": "aqua"}, {"text": "!", "color": "gold"}]

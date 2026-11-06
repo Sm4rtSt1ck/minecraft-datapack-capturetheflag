@@ -1,0 +1,219 @@
+# The team brain (registry/bots.bolt TEAM, ROLES; BOTS.md stage 10b), the generated part: distances,
+# whether a bot fights an enemy (by its role), the role messages
+from registry:bots import TEAM, ROLES, SENSE, SEARCH, PASS, TRICKS
+
+_R = ROLES
+_TH = list(range(1, 17)) + list(range(18, 41, 2)) + list(range(44, 65, 4)) + list(range(72, 129, 8)) + [160]
+
+# As an entity, positioned at a point: #dist bots = about its distance (blocks, rounded up; 200: far)
+function ctf_bots:internal/team/dist:
+    for _t in _TH:
+        execute if entity @s[distance=(f"..{_t}")] run return run scoreboard players set #dist bots (_t)
+    scoreboard players set #dist bots 200
+
+# As a bot, the enemy player tagged bot_cand (#slack bots: blocks of slack for a fight going on):
+# does it fight him? (1) Always: within TEAM "close" or he hit it. Break: no. Distract, hold, rotate:
+# yes. Cover: within "cover" of it or of the breaker. Anchor / intercept: within "anchor" of the
+# flag / the delivery point. Hunt: within "engage", or no flag standing, or he is near the flag, or the
+# flag isn't safe (#safe bots)
+function ctf_bots:internal/team/fight:
+    execute at @p[tag=bot_cand] run function ctf_bots:internal/team/dist
+    scoreboard players operation #dist bots -= #slack bots
+    execute if score #dist bots matches (f"..{TEAM['close']}") run return 1
+    execute on attacker if entity @s[tag=bot_cand] run return 1
+    execute if score @s bot.role matches (_R["break"]) run return 0
+    execute if score @s bot.role matches (_R["fetch"]) run return 0
+    execute if entity @p[tag=bot_cand, tag=bk_seen] if function ctf_bots:internal/duel/in_range run return 1
+    execute if score @s bot.role matches (_R["distract"]) run return 1
+    execute if score @s bot.role matches (_R["fake"]) run return 1
+    execute if score @s bot.role matches (_R["search"]) if function ctf_bots:internal/trick/engage run return 1
+    execute if score @s bot.role matches (_R["search"]) run return 0
+    execute if score @s bot.role matches (_R["cover"]) if score #dist bots matches (f"..{TEAM['cover']}") run return 1
+    execute if score @s bot.role matches (_R["cover"]) at @e[type=zombified_piglin, tag=bot_brk] if entity @p[tag=bot_cand, distance=(f"..{TEAM['cover']}")] run return 1
+    execute if score @s bot.role matches (_R["cover"]) run return 0
+    execute if score @s bot.role matches (_R["anchor"]) at @n[type=armor_stand, tag=flag] if entity @p[tag=bot_cand, distance=(f"..{TEAM['anchor']}")] run return 1
+    execute if score @s bot.role matches (_R["anchor"]) run return 0
+    execute if score @s bot.role matches (_R["intercept"]) at @n[type=armor_stand, tag=win_trigger] if entity @p[tag=bot_cand, distance=(f"..{TEAM['anchor']}")] run return 1
+    execute if score @s bot.role matches (_R["intercept"]) run return 0
+    execute if entity @s[tag=defense] if score @s bot.role matches (_R["hold"]) if score @s bot.trait matches 3 run return run function ctf_bots:internal/trick/ambush_ok
+    execute if entity @s[tag=defense] run return 1
+    execute if function ctf_bots:internal/trick/engage run return 1
+    execute unless entity @e[type=armor_stand, tag=flag] run return 1
+    execute at @n[type=armor_stand, tag=flag] if entity @p[tag=bot_cand, distance=(f"..{TEAM['safe']}")] run return 1
+    execute unless score #safe bots matches 1 run return 1
+    return 0
+function ctf_bots:internal/team/consider:
+    scoreboard players set #slack bots 0
+    return run function ctf_bots:internal/team/fight
+function ctf_bots:internal/team/keep:
+    scoreboard players set #slack bots (TEAM["slack"])
+    return run function ctf_bots:internal/team/fight
+
+# The team brain, every TEAM "think" ticks (ctf_bots:tick/combat)
+function ctf_bots:internal/team/tick:
+    execute as @e[type=marker, tag=bot_intel] run function ctf_bots:internal/team/intel_alive
+    execute store result score #known bots if entity @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{TEAM['known']}")}]
+    execute if entity @e[type=zombified_piglin, tag=ctf_bot, tag=attack] run function ctf_bots:internal/team/attack
+    execute if entity @e[type=zombified_piglin, tag=ctf_bot, tag=defense] run function ctf_bots:internal/team/defense
+    execute as @e[type=zombified_piglin, tag=ctf_bot] unless score @s bot.role = @s bot.prole run function ctf_bots:internal/talk/role
+function ctf_bots:internal/team/intel_alive:
+    scoreboard players operation #who bots = @s bk.id
+    scoreboard players set #alive bots 0
+    execute as @a[tag=player, tag=!dead, gamemode=!spectator] if score @s player_id = #who bots run scoreboard players set #alive bots 1
+    execute if score #alive bots matches 0 run scoreboard players set @s bk.age (SENSE["forget"])
+
+# Attack roles. The flag not found yet: searching (ctf_bots:internal/team/searching). Else hunters by default (a distractor whose enemy is still known keeps its role); a bot
+# carrying the flag: the others cover it; the flag standing: the breaker (kept while it lives),
+# hurry or not, safe or not
+function ctf_bots:internal/team/attack:
+    execute store result score #nb bots if entity @e[type=zombified_piglin, tag=ctf_bot, tag=attack]
+    scoreboard players set #safe bots 1
+    execute at @n[type=armor_stand, tag=flag] if entity @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{TEAM['known']}")}, distance=(f"..{TEAM['safe']}")] run scoreboard players set #safe bots 0
+    execute unless score #fknown bots matches 1 run return run function ctf_bots:internal/team/searching
+    execute as @e[type=zombified_piglin, tag=ctf_bot, tag=attack] unless function ctf_bots:internal/team/keep_role run scoreboard players set @s bot.role (_R["hunt"])
+    execute if entity @e[type=zombified_piglin, tag=bot_carrier] run return run function ctf_bots:internal/team/escort
+    execute if entity @e[type=item, tag=bot_flag_item] run return run function ctf_bots:internal/team/fetch
+    execute unless entity @e[type=armor_stand, tag=flag] run return run tag @e[type=zombified_piglin, tag=bot_brk] remove bot_brk
+    execute unless entity @e[type=zombified_piglin, tag=bot_brk, tag=attack] run function ctf_bots:internal/team/pick_breaker
+    function ctf_bots:internal/team/hurry
+    execute if score #hurry bots matches 1 run return run function ctf_bots:internal/team/hurry_roles
+    execute if score #safe bots matches 0 run return 0
+    scoreboard players set @e[type=zombified_piglin, tag=bot_brk] bot.role (_R["break"])
+    execute if score #nb bots matches 3.. at @n[type=zombified_piglin, tag=bot_brk] as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_brk, scores={bot.role=(_R["hunt"])}, sort=nearest, limit=1] run scoreboard players set @s bot.role (_R["cover"])
+    execute if score #nb bots matches (f"{TRICKS['fake_from']}..") run function ctf_bots:internal/trick/fake_pick
+# The flag not found: everyone searches (ctf_bots:internal/team/search); with SEARCH "distract" or more
+# bots one goes to the freshest known enemy (the defenders guard the flag) and keeps him busy
+function ctf_bots:internal/team/searching:
+    scoreboard players set #hurry bots 0
+    execute as @e[type=zombified_piglin, tag=ctf_bot, tag=attack] unless function ctf_bots:internal/team/keep_role run scoreboard players set @s bot.role (_R["search"])
+    execute store result score #c bots if entity @e[type=zombified_piglin, tag=ctf_bot, tag=attack, scores={bot.role=(_R["distract"])}]
+    scoreboard players set #free bots 0
+    execute if score #nb bots matches (f"{SEARCH['distract']}..") if score #c bots matches 0 run scoreboard players set #free bots 1
+    execute if score #free bots matches 1 as @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{TEAM['known']}")}, sort=random, limit=1] at @s run function ctf_bots:internal/team/distract_from
+function ctf_bots:internal/team/distract_from:
+    scoreboard players operation #who bots = @s bk.id
+    execute as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, scores={bot.role=(_R["search"]), bot.trait=1}, sort=nearest, limit=1] run function ctf_bots:internal/team/set_foe {role: (_R["distract"])}
+    execute unless entity @e[type=zombified_piglin, tag=bk_asg] as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, scores={bot.role=(_R["search"])}, sort=nearest, limit=1] run function ctf_bots:internal/team/set_foe {role: (_R["distract"])}
+    tag @e[type=zombified_piglin, tag=bk_asg] remove bk_asg
+function ctf_bots:internal/team/keep_role:
+    execute if score @s bot.role matches (_R["fake"]) if entity @e[type=armor_stand, tag=flag] unless score #hurry bots matches 1 run return 1
+    execute if score @s bot.role matches (_R["distract"]) unless score #fknown bots matches 1 if function ctf_bots:internal/team/foe_known run return 1
+    execute if score @s bot.role matches (_R["distract"]) if score #hurry bots matches 1 if function ctf_bots:internal/team/foe_known run return 1
+    execute if score @s bot.role matches (_R["rotate"]) if function ctf_bots:internal/team/foe_known run return 1
+    return 0
+# A bot carries the flag: the others cover it; it passes the flag on when it is better
+# (ctf_bots:internal/team/pass_check)
+function ctf_bots:internal/team/escort:
+    tag @e[type=zombified_piglin, tag=bot_brk] remove bot_brk
+    tag @e[type=zombified_piglin, tag=bot_carrier] add bot_brk
+    scoreboard players set @e[type=zombified_piglin, tag=bot_carrier] bot.role (_R["break"])
+    scoreboard players set @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_carrier] bot.role (_R["cover"])
+    execute as @e[type=zombified_piglin, tag=bot_carrier, limit=1] at @s run function ctf_bots:internal/team/pass_check
+# The flag on the ground (dropped, thrown; it glows: everyone knows): the nearest bot fetches it (not
+# the one that just threw it), the bot nearest to it covers it, the others hunt
+function ctf_bots:internal/team/fetch:
+    tag @e[type=zombified_piglin, tag=bot_brk] remove bot_brk
+    execute at @n[type=item, tag=bot_flag_item] as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_thrower, sort=nearest, limit=1] run tag @s add bot_brk
+    scoreboard players set @e[type=zombified_piglin, tag=bot_brk] bot.role (_R["fetch"])
+    execute at @n[type=zombified_piglin, tag=bot_brk] as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_brk, scores={bot.role=(_R["hunt"])}, sort=nearest, limit=1] run scoreboard players set @s bot.role (_R["cover"])
+
+# As the bot carrying the flag, at it: a teammate within PASS "near" stronger by PASS "better" (hp + 4 x
+# armor tier) -> handed over (ctf_bots:internal/flag/pass); else a teammate PASS "drop"+ blocks below
+# within PASS "throw" it sees, whose way to the delivery point is shorter by PASS "gain"+ blocks ->
+# thrown down to him (ctf_bots:internal/flag/throw)
+function ctf_bots:internal/team/pass_check:
+    function ctf_bots:internal/team/strength
+    scoreboard players operation #best bots = #st bots
+    scoreboard players add #best bots (PASS["better"] - 1)
+    execute as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_carrier, distance=(f"..{PASS['near']}")] run function ctf_bots:internal/team/pass_better
+    execute if entity @e[type=zombified_piglin, tag=bot_rcv] run function ctf_bots:internal/flag/pass
+    execute if entity @e[type=zombified_piglin, tag=bot_rcv] run return run tag @e[type=zombified_piglin, tag=bot_rcv] remove bot_rcv
+    execute unless entity @e[type=armor_stand, tag=win_trigger] run return 0
+    execute at @n[type=armor_stand, tag=win_trigger] run function ctf_bots:internal/team/path
+    scoreboard players operation #cp bots = #path bots
+    scoreboard players remove #cp bots (PASS["gain"])
+    execute positioned (f"~-{PASS['throw']}") ~-30 (f"~-{PASS['throw']}") as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_carrier, dx=(PASS["throw"] * 2), dy=(30 - PASS["drop"]), dz=(PASS["throw"] * 2)] unless entity @e[type=zombified_piglin, tag=bot_rcv] run function ctf_bots:internal/team/pass_below
+    execute if entity @e[type=zombified_piglin, tag=bot_rcv] run function ctf_bots:internal/flag/throw
+    tag @e[type=zombified_piglin, tag=bot_rcv] remove bot_rcv
+function ctf_bots:internal/team/pass_better:
+    function ctf_bots:internal/team/strength
+    execute unless score #st bots > #best bots run return 0
+    scoreboard players operation #best bots = #st bots
+    tag @e[type=zombified_piglin, tag=bot_rcv] remove bot_rcv
+    tag @s add bot_rcv
+function ctf_bots:internal/team/hurry_roles:
+    scoreboard players set @e[type=zombified_piglin, tag=bot_brk] bot.role (_R["break"])
+    scoreboard players operation #free bots = #nb bots
+    scoreboard players remove #free bots 2
+    execute if score #nb bots matches 2 run scoreboard players set #free bots 1
+    execute store result score #c bots if entity @e[type=zombified_piglin, tag=ctf_bot, tag=attack, scores={bot.role=(_R["distract"])}]
+    scoreboard players operation #free bots -= #c bots
+    execute as @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{TEAM['known']}")}, sort=random] if score #free bots matches 1.. at @s run function ctf_bots:internal/team/distract_one
+    scoreboard players set @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_brk, scores={bot.role=(_R["hunt"])}] bot.role (_R["cover"])
+function ctf_bots:internal/team/distract_one:
+    scoreboard players operation #who bots = @s bk.id
+    execute as @e[type=zombified_piglin, tag=ctf_bot, scores={bot.role=(_R["distract"])}] if score @s bot.foe = #who bots run return 0
+    execute as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_brk, scores={bot.role=(_R["hunt"]), bot.trait=1}, distance=..48, sort=nearest, limit=1] run function ctf_bots:internal/team/set_foe {role: (_R["distract"])}
+    execute unless entity @e[type=zombified_piglin, tag=bk_asg] as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_brk, scores={bot.role=(_R["hunt"])}, sort=nearest, limit=1] run function ctf_bots:internal/team/set_foe {role: (_R["distract"])}
+    tag @e[type=zombified_piglin, tag=bk_asg] remove bk_asg
+    scoreboard players remove #free bots 1
+
+# Defense roles: holders by default (a rotating bot keeps its role while its enemy is known and it
+# hasn't got there); the anchor: the holder nearest to the flag (2+ bots); a player carries the flag:
+# the bots nearest to the delivery point intercept; fresh intel of an enemy: the nearest holder
+# within TEAM "rotate" checks it (not in the last 30 s: then they hold)
+function ctf_bots:internal/team/defense:
+    execute store result score #nd bots if entity @e[type=zombified_piglin, tag=ctf_bot, tag=defense]
+    execute as @e[type=zombified_piglin, tag=ctf_bot, tag=defense] unless function ctf_bots:internal/team/keep_role run scoreboard players set @s bot.role (_R["hold"])
+    execute if score #nd bots matches 2.. at @n[type=armor_stand, tag=flag] as @e[type=zombified_piglin, tag=ctf_bot, tag=defense, scores={bot.role=(_R["hold"])}, sort=nearest, limit=1] run scoreboard players set @s bot.role (_R["anchor"])
+    execute if entity @a[tag=bot_flag_player] at @n[type=armor_stand, tag=win_trigger] as @e[type=zombified_piglin, tag=ctf_bot, tag=defense, sort=nearest, limit=(TEAM["intercept"])] run scoreboard players set @s bot.role (_R["intercept"])
+    execute if score round timer matches 600.. as @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{SENSE['fresh']}")}] at @s run function ctf_bots:internal/team/rotate_one
+function ctf_bots:internal/team/rotate_one:
+    scoreboard players operation #who bots = @s bk.id
+    execute as @e[type=zombified_piglin, tag=ctf_bot, scores={bot.role=(_R["rotate"])}] if score @s bot.foe = #who bots run return 0
+    execute if entity @e[type=zombified_piglin, tag=ctf_bot, tag=defense, distance=..6] run return 0
+    execute as @e[type=zombified_piglin, tag=ctf_bot, tag=defense, scores={bot.role=(_R["hold"]), bot.trait=1}, distance=(f"..{TEAM['rotate']}"), sort=nearest, limit=1] run function ctf_bots:internal/team/set_foe {role: (_R["rotate"])}
+    execute unless entity @e[type=zombified_piglin, tag=bk_asg] as @e[type=zombified_piglin, tag=ctf_bot, tag=defense, scores={bot.role=(_R["hold"])}, distance=(f"..{TEAM['rotate']}"), sort=nearest, limit=1] run function ctf_bots:internal/team/set_foe {role: (_R["rotate"])}
+    tag @e[type=zombified_piglin, tag=bk_asg] remove bk_asg
+
+# As a bot: its role's way (distract / rotate: to its enemy's last known place; cover: with the
+# breaker), 1 when it goes there
+function ctf_bots:internal/team/move:
+    execute if score @s bot.role matches (_R["distract"]) run return run function ctf_bots:internal/team/go_foe
+    execute if score @s bot.role matches (_R["rotate"]) run return run function ctf_bots:internal/team/go_foe
+    execute if score @s bot.role matches (_R["cover"]) if entity @e[type=zombified_piglin, tag=bot_brk] at @n[type=zombified_piglin, tag=bot_brk] run return run function ctf_bots:internal/brain/lure_here
+    return 0
+function ctf_bots:internal/team/go_foe:
+    execute unless function ctf_bots:internal/team/foe_known run return run function ctf_bots:internal/team/role_off
+    execute if score @s bot.role matches (_R["rotate"]) if entity @e[type=marker, tag=bk_foe, distance=..3] run return run function ctf_bots:internal/team/checked
+    execute at @n[type=marker, tag=bk_foe] run function ctf_bots:internal/brain/lure_here
+    tag @e[type=marker, tag=bk_foe] remove bk_foe
+    return 1
+function ctf_bots:internal/team/role_off:
+    tag @e[type=marker, tag=bk_foe] remove bk_foe
+    execute if entity @s[tag=attack] run scoreboard players set @s bot.role (_R["hunt"])
+    execute if entity @s[tag=defense] run scoreboard players set @s bot.role (_R["hold"])
+    scoreboard players operation @s bot.prole = @s bot.role
+    return 0
+# As a bot rotating, at the place of its enemy's intel, nobody seen: back to its spot
+function ctf_bots:internal/team/checked:
+    function ctf_bots:internal/talk/clear
+    return run function ctf_bots:internal/team/role_off
+
+# The role messages (as a bot whose role changed; hunt / hold: nothing to say). Said only when the chat
+# is free (else again at the next team think)
+function ctf_bots:internal/talk/role:
+    execute if score @s bot.role matches (_R["hunt"]) run return run scoreboard players operation @s bot.prole = @s bot.role
+    execute if score @s bot.role matches (_R["hold"]) run return run scoreboard players operation @s bot.prole = @s bot.role
+    execute unless function ctf_bots:internal/talk/free run return 0
+    scoreboard players operation @s bot.prole = @s bot.role
+    scoreboard players operation #who bots = @s bot.foe
+    execute as @a[tag=player] if score @s player_id = #who bots run tag @s add bk_who
+    execute if score @s bot.role matches (_R["break"]) if score #hurry bots matches 1 run tellraw @a [{"text": "[", "color": "dark_gray"}, {"selector": "@s"}, {"text": "] ", "color": "dark_gray"}, {"text": "No time left! Breaking the flag, cover me", "color": "gold"}]
+    execute if score @s bot.role matches (_R["break"]) unless score #hurry bots matches 1 run tellraw @a [{"text": "[", "color": "dark_gray"}, {"selector": "@s"}, {"text": "] ", "color": "dark_gray"}, {"text": "Going for the flag", "color": "white"}]
+    execute if score @s bot.role matches (_R["cover"]) run tellraw @a [{"text": "[", "color": "dark_gray"}, {"selector": "@s"}, {"text": "] ", "color": "dark_gray"}, {"text": "Covering ", "color": "white"}, {"selector": "@n[type=zombified_piglin, tag=bot_brk]"}]
+    execute if score @s bot.role matches (_R["distract"]) run tellraw @a [{"text": "[", "color": "dark_gray"}, {"selector": "@s"}, {"text": "] ", "color": "dark_gray"}, {"text": "I'll keep ", "color": "white"}, {"selector": "@p[tag=bk_who]"}, {"text": " busy", "color": "white"}]
+    execute if score @s bot.role matches (_R["anchor"]) run tellraw @a [{"text": "[", "color": "dark_gray"}, {"selector": "@s"}, {"text": "] ", "color": "dark_gray"}, {"text": "Staying at the flag", "color": "white"}]
+    execute if score @s bot.role matches (_R["rotate"]) run tellraw @a [{"text": "[", "color": "dark_gray"}, {"selector": "@s"}, {"text": "] ", "color": "dark_gray"}, {"text": "Checking where ", "color": "white"}, {"selector": "@p[tag=bk_who]"}, {"text": " was", "color": "white"}]
+    execute if score @s bot.role matches (_R["intercept"]) run tellraw @a [{"text": "[", "color": "dark_gray"}, {"selector": "@s"}, {"text": "] ", "color": "dark_gray"}, {"selector": "@p[tag=bot_flag_player]"}, {"text": " has the flag! Waiting at the exit", "color": "gold"}]
+    tag @a remove bk_who

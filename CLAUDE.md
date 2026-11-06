@@ -240,7 +240,8 @@ the old order of the calls, so keep it when adding entries.
   of freeze, swap, end), `freeze_start`, `round_start`, `round_win` (storage
   `ctf:round won {winner, loser, reason}`), `end_round_start`, `end_round_end`, `swap`,
   `player_reset` (as a player, before his inventory is cleared: swap, end, lobby join), `prepare`
-  (the map is cloned, then warm-up or freeze starts), `match_end`, `reset` (`ctf:set_parameters`),
+  (the map is cloned, then warm-up or freeze starts), `map_cloned` (right after the clone: the bot
+  navigation graph), `match_end`, `reset` (`ctf:set_parameters`),
   `player_join` (as the player).
 - Handlers: `<module>:on/<event>`, `<module>:tick/<phase>`, `<module>:tick` (every tick).
 - The core (`ctf`) never calls a module function, not even in a `clickEvent` string. Modules call

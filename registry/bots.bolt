@@ -11,15 +11,13 @@ BODY = {
     "attack_damage": 1.0,
     # How far a bot finds its path to its target (the path search visits up to 16 x this): the whole
     # arena (128), else a far target (the win trigger for the flag carrier, the carrier for a
-    # defender) has no path and the mob doesn't move at all. The bots spot enemies themselves (SIGHT)
+    # defender) has no path and the mob doesn't move at all. The bots spot enemies themselves (SENSE)
     "follow_range": 128.0,
     # A mob moves by speed^2 per tick of input (a player by 0.98 x speed): 0.35 ~ a sprinting player
     # (0.1 x 1.3 sprint); the mob has 0.23 (~ half the walking speed of a player)
     "movement_speed": 0.35,
 }
 
-# A bot spots an enemy within this (in its line of sight, ctf_bots:internal/brain/spot)
-SIGHT = 16
 # A defense bot doesn't follow an enemy farther than this from its defend spot (or the flag)
 LEASH = 24
 
@@ -57,8 +55,8 @@ ARMOR = {"gold_armor": {"tier": 1}, "iron_armor": {"tier": 2}}
 LIMITED = ["he", "regen", "speed"]
 
 # FIGHTING (stage 6). A bot with a ranged weapon uses it against a target farther than its
-# "min" blocks (closer: the main weapon), up to "max", only while it sees the target (a line of sight
-# at its think). The guns use the players' damage and their spread (ctf_guns:config) plus "spread"
+# "min" blocks (closer: the main weapon), up to "max", only while it sees the target (SENSE, at its
+# think). The guns use the players' damage and their spread (ctf_guns:config) plus "spread"
 # tenths of a degree (the bot's aim); bows / crossbows shoot arrows ("aim" ticks to draw, "elevation"
 # degrees up against the drop). "miss": the chance of a missed shot (a gun: the spread "wide" tenths
 # of a degree; an arrow: "dev" degrees to a side). The rifle: "rate" shots a second (players: 6)
@@ -67,11 +65,9 @@ RANGED_USE = {
     "fire_bow": {"min": 6, "max": 40, "aim": 20, "elevation": 3, "miss": 0.3, "dev": 6},
     "punch_bow": {"min": 6, "max": 40, "aim": 20, "elevation": 3, "miss": 0.3, "dev": 6},
     "crossbow": {"min": 6, "max": 40, "aim": 25, "elevation": 2, "miss": 0.3, "dev": 6},
-    "sniper": {"min": 8, "max": 90, "aim": 30, "spread": 15, "miss": 0.3, "wide": 60},
+    "sniper": {"min": 8, "max": 90, "aim": 30, "spread": 3, "miss": 0.4, "wide": 60},
     "rifle": {"min": 5, "max": 48, "spread": 25, "rate": 3, "miss": 0.35, "wide": 120},
 }
-# The line of sight to the target is checked up to this many blocks (farther: not seen)
-SIGHT_FIGHT = 64
 # Reactions, in ticks: a bot doesn't hit or shoot for "switch" ticks after it takes another weapon,
 # and for "react" ticks after its target first comes within "near" blocks (a swing then misses:
 # no damage; the next swing of the mob comes 1 s later). Its target goes "near" + 3 away: a new react
@@ -97,6 +93,68 @@ LEAP = {"forward": 0.5, "up": 0.45}
 # thinks. ctf_bots:internal/climb
 CLIMB = {"stuck": 4, "search": 6, "go": 20, "speed": 0.12, "wait": 40}
 
+# NAVIGATION GRAPH (stage 8, BOTS.md): the bot markers of the map (N nav points, F, T, AN, D, routes)
+# are the nodes; after every clone the links between them are found in the arena (ctf_bots:
+# internal/nav/bake, "bake_per_tick" nodes a tick): a node is linked to the nodes within "link_range"
+# that it can reach by walking (a step up of 1, down of 1; "narrow": an edge with a drop on a side for
+# 3+ half-block steps), by a jump over one hole (up to "gap" blocks wide, the far edge at the same
+# level or 1 higher), by a drop (2-3 blocks, one way) or by a ladder (up / down, within 3 blocks of
+# the node). The cost of a link: its length (tenths of a block) x "cost" / 10 of its kind (+ the
+# ladder's height x "ladder_block").
+# A bot goes straight to where it must go when it is within "direct" blocks (1.5 up / down) and in
+# sight; else along the graph: the distances to its goal node (the node nearest to the goal) come
+# from a field (one of "slots" fields, the least used one is computed again), node by node, each link
+# its own way. "arrive": a node is reached within this. On a narrow link its speed x (1 + "narrow").
+NAV = {
+    "link_range": 16,
+    "gap": 4,
+    "bake_per_tick": 2,
+    "cost": {"walk": 10, "narrow": 14, "jump": 20, "drop": 12, "ladder": 10, "fall": 12, "wind": 10},
+    "ladder_block": 25,
+    "direct": 8,
+    "slots": 8,
+    "arrive": 1.5,
+    "narrow": -0.4,
+    "entry": 12,
+    # A player is chased straight within this (in sight, "chase_up" blocks up / down), else along the
+    # graph (until within "chase_near" of him)
+    "chase": 24,
+    "chase_up": 3,
+    "chase_near": 4,
+    # A field is seeded from its goal node and from the nodes within "seed" blocks of it (the
+    # distance x 10 + 50): a goal node no link reaches still leads to the nearest place reachable
+    "seed": 12,
+    # A link not passed in time (its length in blocks + "hop_extra" thinks; stuck 2 s) costs
+    # "penalty" more until the next clone: the fields are computed again, another way is tried
+    "hop_extra": 20,
+    "penalty": 400,
+    # Falls: a drop (walking off an edge, or a jump over a hole) down to "max_fall" blocks is a link
+    # (fall, kind 7; more than 3 blocks hurts a mob: 1 hp a block). Its cost for a bot with a wind
+    # charge (it lands softly: ctf_bots:internal/nav/fall_tick) + "fall_soft" a hp, without one +
+    # "fall_hard" a hp (dear, but taken when there is no other way)
+    "max_fall": 24,
+    "fall_soft": 2,
+    "fall_hard": 40,
+    # Wind charge up (kind 8): a node 2.."wind_up" blocks above, a free column above the first node,
+    # then over at most NAV "gap" blocks onto it; only for a bot with a wind charge; cost + "wind_cost"
+    "wind_up": 6,
+    "wind_cost": 60,
+}
+
+# Every bot gets this many wind charges free at every freeze (bot.wind, up to the shop limit)
+FREE_WIND = 1
+# Falling (ctf_bots:internal/nav/fall_tick): a bot falling from FallDistance "soft" blocks or more
+# with a wind charge uses it right above the ground (no fall damage). A bot with the mace falling
+# from "smash" blocks or more hits an enemy within "reach" at once (the vanilla smash damage); it
+# jumps down at an enemy 3+ blocks below within "dive" blocks (a hole ahead)
+FALL = {"soft": 4, "smash": 2, "reach": 2.5, "dive": 6}
+# Passing the flag (the team brain): to a teammate within "near" stronger (hp + 4 x armor tier) by
+# "better"; thrown down to a teammate "drop" or more blocks lower within "throw" blocks whose way
+# to the delivery point is shorter by "gain"+ blocks (the thrower doesn't pick it up for 2 s)
+PASS = {"near": 3, "better": 8, "throw": 8, "drop": 3, "gain": 4}
+# A bot standing still for "idle" thinks with nothing to wait for picks another way / spot
+IDLE = 12
+
 # At freeze each defense bot goes straight to its defend spot (a teleport) with this chance; the
 # others walk there at the start of the round
 POST_TP = 0.5
@@ -115,3 +173,113 @@ TRAPS = [
 # An attack bot that sees an enemy trap within this breaks it (like a player's hit with the hand);
 # the trap goes off within 2 blocks, the bots think 4 times a second (~1.5 blocks)
 TRAP_BREAK = 4
+
+# PERCEPTION AND TEAM MEMORY (stage 10a, BOTS.md). A bot sees an enemy within "sight" in its
+# horizontal field of view (+-"fov" degrees from where its body looks) or within "near" around it;
+# a sneaking player only within "sneak", an invisible one within "invisible"; and a ray from its eyes
+# to his eyes passes (#ctf_bots:see: what bullets pass, glass, panes, bars, leaves...). It hears a
+# sprinting enemy within "sprint" (not seen). An enemy's hp at or below "low" is news. What the bots know
+# about an enemy is "fresh" for "fresh" ticks, forgotten after "forget" ticks. A bot that sees an
+# enemy within "warn" of a teammate who doesn't face him warns it
+SENSE = {"sight": 64, "fov": 70, "near": 3, "sneak": 10, "invisible": 2, "sprint": 12, "low": 6, "fresh": 60, "forget": 160, "warn": 10}
+# Shots heard within these blocks (the kinds of #ctf:on/noise and the arrows)
+NOISE = {"rifle": 48, "sniper": 96, "bow": 20}
+# The weapons the bots recognise in an enemy's hand (custom_data wpn), their names in the chat, the
+# damage a player deals with them ("dps": hp a second x 10, about: the hit x the hits a second) and
+# whether they hit from afar ("ranged"). Index + 1 = the class (bk.wpn; 0: nothing known)
+WEAPONS = [
+    {"wpn": "golden_sword", "name": "golden sword", "dps": 64, "ranged": False},
+    {"wpn": "iron_sword", "name": "iron sword", "dps": 100, "ranged": False},
+    {"wpn": "diamond_sword", "name": "diamond sword", "dps": 112, "ranged": False},
+    {"wpn": "netherite_sword", "name": "netherite sword", "dps": 128, "ranged": False},
+    {"wpn": "mace", "name": "mace", "dps": 70, "ranged": False},
+    {"wpn": "inferno", "name": "Inferno blade", "dps": 120, "ranged": False},
+    {"wpn": "bow", "name": "bow", "dps": 60, "ranged": True},
+    {"wpn": "fire_bow", "name": "fire bow", "dps": 70, "ranged": True},
+    {"wpn": "punch_bow", "name": "punch bow", "dps": 60, "ranged": True},
+    {"wpn": "crossbow", "name": "crossbow", "dps": 70, "ranged": True},
+    {"wpn": "creep", "name": "Creepenator", "dps": 100, "ranged": True},
+    {"wpn": "sniper", "name": "sniper rifle", "dps": 90, "ranged": True},
+    {"wpn": "rifle", "name": "assault rifle", "dps": 120, "ranged": True},
+]
+# A player with nothing known in his hand: this damage
+UNKNOWN_DPS = 64
+# The bots' chat: at least "gap" ticks between two messages (warnings always), the same news about a
+# player not again within "again" ticks
+TALK = {"gap": 10, "again": 200}
+
+# TEAM BRAIN (stage 10b, BOTS.md): every "think" ticks each side gets roles (ctf_bots:internal/team).
+# Attack: hunt (routes, then the flag; fights what it meets), break (straight to the flag, fights
+# only an enemy within "close" or one hitting it), cover (stays within "follow" of the breaker,
+# fights within "cover" of itself or of the breaker), distract (goes to a known enemy and keeps him
+# busy). Defense: hold (its defend spot), anchor (at the flag, fights within "anchor" of it), rotate
+# (checks fresh intel within "rotate" of it), intercept (waits at the delivery point, up to
+# "intercept" bots, fights within "anchor" of it).
+# A known enemy: intel younger than "known" ticks. The flag is safe: no known enemy within "safe"
+# of it. A hunter fights a seen enemy within "engage" (farther: the flag first while it is safe).
+# Hurry: the time left < the breaker's way to the flag and to the delivery point ("speed" ticks a
+# block) + "break" + "margin" ticks: 1 bot breaks; 2: break + distract; 3+: break + a distractor
+# per known enemy (up to the bots - 2) + cover. "slack": a fight already going on is kept up to this
+# much farther
+TEAM = {"think": 20, "known": 200, "safe": 12, "close": 5, "engage": 16, "cover": 16, "follow": 4, "anchor": 12, "rotate": 32, "intercept": 2, "speed": 4, "break": 60, "margin": 200, "slack": 6}
+# The role numbers (bot.role)
+ROLES = {"hunt": 1, "break": 2, "cover": 3, "distract": 4, "search": 5, "fetch": 6, "fake": 7, "hold": 11, "anchor": 12, "rotate": 13, "intercept": 14}
+# Searching the flag (stage 10c): the attack bots don't know where the defenders hid the flag until
+# one of them sees it (nothing in the way within "flag_sight": across the map; ctf_bots:internal/sense/flag). Until then they
+# search (role search): each goes to an unchecked flag spot (F) not taken by another bot, then to
+# any unchecked node; a node within "checked" blocks of an attack bot is checked; with "distract" or
+# more bots one goes to the freshest known enemy (the defenders guard the flag). A searcher fights an
+# enemy within "engage" (or hitting it)
+SEARCH = {"checked": 5, "distract": 3, "engage": 24, "flag_sight": 180}
+# The attack bots always know where the flag is (the search above is not used); False: they search
+FLAG_KNOWN = True
+
+# FIGHTING TACTICS (stage 10c, BOTS.md). The damage of a bot a second x 10: by its main weapon tier
+# (bot.mw; a mob hits once a second) or its ranged weapon (bot.sec, RANGED order) when it holds it
+BOT_DPS = {"melee": {0: 40, 1: 60, 2: 70, 3: 80, 9: 60}, "ranged": [60, 70, 60, 70, 60, 46]}
+# A duel (a bot about to fight an enemy): the times to kill both ways (hp / dps). Retreat to a teammate
+# (within 32, farther than 6) for "retreat" thinks when its hp <= "retreat_hp" and it dies much faster
+# (its time x 2 < his), not again within "retreat_again" thinks; not the breaker at the flag or the
+# carrier (a bot doesn't heal by waiting: it retreats only to fight beside a teammate). Push (fight whatever its role) when he
+# is low (SENSE "low") or dies within "push" tenths of a second. A ranged bot doesn't run at him: it
+# stays (on guard) and shoots; closer than its "min" + "kite" blocks to a melee enemy: it backs off
+# (or steps aside). A melee bot running at a ranged enemy farther than "dodge" blocks steps aside at
+# random (1 think in 2). A bot whose role doesn't want a fight still shoots a seen enemy in the range of
+# its ranged weapon while it goes on (ctf_bots:internal/duel/fire_move). "say": thinks between its duel
+# messages
+DUEL = {"retreat_hp": 6, "retreat": 8, "retreat_again": 40, "push": 30, "kite": 5, "dodge": 6, "say": 20}
+# A known enemy sniper (his weapon seen or a sniper shot heard, intel younger than "known" ticks)
+# farther than "near" who can see a bot (a ray from his place): the bot (not a sniper itself) takes
+# cover for "cover" thinks: the nearest node within "radius" he can't see (ctf_bots:internal/duel/
+# sniper). Within "reload" ticks of his shot (he reloads: ctf_sniper:config reload) it doesn't hide
+SNIPER = {"near": 12, "known": 100, "cover": 12, "radius": 16, "reload": 60}
+# A grenade at an enemy not in sight: his intel younger than "intel" ticks, within GRENADE range
+GRENADE_INTEL = 60
+# Breaching: a bot that can't reach the enemy it chases (stuck) throws a grenade at the wall between
+# them when the wall is 1 block thick (no #ctf_bots:unbreakable block), "min".."max" blocks away
+# and he is within "near" (the explosion breaks it; the hole stays until the sides swap)
+BREACH = {"min": 4, "max": 10, "near": 16}
+
+# TRICKS AND TRAITS (stage 10d, BOTS.md). Every bot gets a trait for the match (at random; kept by its
+# number while the match lasts): 1 aggressive, 2 careful, 3 sly. "engage": a hunter / searcher fights a
+# seen enemy within this; "retreat_hp": it falls back at this hp; "cover": it hides from snipers.
+# The team brain asks an aggressive bot first to distract / rotate, a sly one to fake, a careful one
+# to anchor
+TRAITS = {
+    1: {"name": "aggressive", "engage": 24, "retreat_hp": 3, "cover": False},
+    2: {"name": "careful", "engage": 12, "retreat_hp": 9, "cover": True},
+    3: {"name": "sly", "engage": 16, "retreat_hp": 6, "cover": True},
+}
+# The fake (attack, the flag found, no hurry, "fake_from" or more bots): a bot (sly first) goes to the
+# node within "fake_near".."fake_far" of the flag farthest from the breaker and makes noise there
+# every "noise" ticks (shots heard by the players); the breaker waits (on guard, within "stage" of
+# the flag) until the fake is there or "wait_fake" thinks passed, and for its cover (farther than
+# "cover_gap") up to "wait_cover" thinks
+TRICKS = {"fake_from": 3, "fake_near": 8, "fake_far": 24, "noise": 40, "stage": 20, "wait_fake": 24, "wait_cover": 16, "cover_gap": 8, "ambush": 8, "ambush_call": 16}
+# Memory of the match (per half: the nodes of the arena): a player seen near a node (within "near")
+# heats it (bot.heat, once a second a player); the node nearest to the flag the players hid gets
+# bot.hide. The search goes to the old hiding places first; 1 defense bot in "hot_spot" takes the
+# defend spot with the most heat around it ("hot_radius"); a bot on guard faces the hottest node
+# within "look"
+MEMORY = {"near": 8, "hot_spot": 3, "hot_radius": 12, "look": 32}
+

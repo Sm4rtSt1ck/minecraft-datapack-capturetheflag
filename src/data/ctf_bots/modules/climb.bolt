@@ -17,11 +17,18 @@ function ctf_bots:internal/climb/search:
     for _o in _offs:
         execute positioned (f"~{_o[1]}") (f"~{_o[2]}") (f"~{_o[3]}") if block ~ ~ ~ minecraft:ladder if block ~ ~1 ~ minecraft:ladder run return run function ctf_bots:internal/climb/found
 
-# Every tick, as a climbing bot (NoAI, moved by tp), at its feet: up CLIMB "speed" while a ladder is at
+# Every tick, as a climbing bot (NoAI, moved by tp), at its feet: down a ladder (bot_down:
+# ctf_bots:internal/climb/down); up CLIMB "speed" while a ladder is at
 # its feet or above them (and its head has room); above the ladder: off it (ctf_bots:internal/climb/top)
 function ctf_bots:internal/climb/tick:
     scoreboard players remove @s bot.clt 1
     execute if score @s bot.clt matches ..0 run return run function ctf_bots:internal/climb/stop
+    execute if entity @s[tag=bot_down] run return run function ctf_bots:internal/climb/down
     execute unless block ~ ~ ~ minecraft:ladder unless block ~ ~1 ~ minecraft:ladder run return run function ctf_bots:internal/climb/top
     execute unless block ~ ~2.1 ~ #ctf_bots:gap run return run function ctf_bots:internal/climb/stop
     tp @s ~ (f"~{CLIMB['speed']}") ~
+
+# Every tick, as a bot going down a ladder, at its feet: down CLIMB "speed" while nothing is under it
+function ctf_bots:internal/climb/down:
+    execute unless block ~ ~-0.2 ~ #ctf_bots:gap run return run function ctf_bots:internal/climb/stop
+    tp @s ~ (f"~-{CLIMB['speed']}") ~

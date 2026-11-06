@@ -142,8 +142,9 @@ Each stage is one commit, checked by the user in the game before the next one.
 | 5 | Economy and shop: buy profiles from the registry; defense on a high base prefers bows / guns | done |
 | 6 | Weapons: guns, bow, grenades, mace, potions, totem, wind charge | in progress |
 | 7 | Traps: bots place them; see / avoid / break the enemy traps; kills of bots by a player's trap credited to him | in progress |
-| 8 | Ultimates: charge, choice, use (adapt / forbid the player-only ones); fear a player in the bomber ultimate | |
-| 9 | Tactics: roles, groups, retreat, events; difficulty | |
+| 8 | Navigation graph: nav points (N) + all bot markers as nodes, links found after each clone (walk, narrow, jump, drop, ladder up / down), distance fields, bots move node by node | done, not tested (kept on; tactics use its distances) |
+| 9 | Ultimates: charge, choice, use (adapt / forbid the player-only ones); fear a player in the bomber ultimate | later |
+| 10 | Tactics (10a-10e below): perception and team memory, team brain and roles, fighting tactics, tricks and traits, difficulty | in progress |
 
 ## Progress log
 
@@ -423,3 +424,280 @@ Each stage is one commit, checked by the user in the game before the next one.
   - Defense bots: at freeze each one goes straight to its defend spot with the chance POST_TP (1/2,
     `internal/brain/post`: a teleport; it keeps that spot at the round start, tag `bot_posted`). The
     spots are freed at freeze now (before: at the round start).
+
+### Stage 8 - navigation graph
+
+Why: a vanilla mob only finds local paths (no ladders, no jumps, a drop of 1-3 blocks is a normal
+move, a fast mob cuts corners and falls off narrow stairs). The bots stood under a player on a
+platform, fell into holes, jumped at random (the patches: the ladder search near a stuck bot, the
+jump towards the target). Agreed with the user: a navmesh-like graph with links of kinds, the nodes
+placed by hand (a small graph: fields cheap enough to compute often).
+
+- Nodes: every bot marker copied into the arena (`bot_nav`: the new N "nav point", F, T, D, the
+  route points; not AN, on a ceiling); a marker standing on another node (a D on a T) is not a node of its own. N: put
+  them at both ends of a ladder, both edges of a gap, on platforms, at stairs and crossings. Two
+  nodes are linked only along a straight line: a curved corridor needs a node at the turn.
+- Links (`ctf_bots:internal/nav/bake*`, after every clone: the new core event `#ctf:on/map_cloned`,
+  NAV "bake_per_tick" nodes a tick; `#ready nav` 0 until done: the bots go straight): a marker
+  `nav_link` at the first node (nav.to, nav.t, nav.c). A walk test along the line to every node
+  within NAV "link_range" (half-block steps, a step up 1 / down 1, fences and walls stop it, room for
+  the head): 1 walk; 2 narrow (a drop of 2+ beside the way for 3+ steps); 3 jump (one hole without a
+  floor 2 blocks down, up to NAV "gap" wide, the far edge level or 1 higher); 4 drop (2-3 blocks, one
+  way: a second test where deep floors are drops); else 5 / 6 a ladder up / down within 3 blocks of
+  the first node (its top: off it towards its wall; its bottom: the floor) and a walk to the node.
+  Cost: length x the kind's cost (+ the ladder height x NAV "ladder_block").
+- Fields: NAV "slots" (8) objectives `nav.d<k>`; a slot per goal node (`#g<k>`), the least used one
+  computed again (`#t<k>`): a wave from the goal node over the links to it (no macros: the links of
+  a node F are the `nav_link` markers within the range with nav.to = F).
+- A bot (`ctf_bots:internal/brain/lure_here` -> `ctf_bots:internal/nav/*`): straight to where it must
+  go (`lure_direct`, the old lure_here) when it is within NAV "direct" blocks (1.5 up / down) and in
+  sight, else along the graph (`bot_navm`): the goal node = the node nearest to the goal; no node yet:
+  the entry (the node in sight within NAV "entry" with the least distance, else the nearest one); a
+  node reached (within NAV "arrive"): the link with the least cost + distance; at the goal node:
+  straight to the goal. Each link its way (`internal/nav/move`): narrow -> slower (attribute modifier
+  `ctf_bots:narrow`); jump -> the gap jump armed only there (`bot_jl`; the jump scan is off along
+  the graph otherwise); ladder up / down -> the nearest ladder climbed (`internal/climb/*`, now also
+  down: NoAI, tp down; `bot_climbed`: done, then to the node). Stuck for 2 s along the graph: a new
+  entry. A player is chased straight; stuck under him: to him along the graph for 10 s (`detour`,
+  `bot.dp` = his player_id; the old detour by the nearest marker is gone). The old ladder search is
+  kept for the bots going straight.
+- Debug: `/function ctf_test:bots/nav` shows the graph (nodes as flames, links as dust by kind),
+  `/function ctf_test:bots/bake` finds the links again.
+
+### Stage 10 - tactics (plan, agreed with the user)
+
+The goal: human-like team play on any map. Done in parts, one commit each, checked in the game.
+Decisions: the bots' chat is shown to everyone; any breakable wall may be breached by a grenade;
+usually 3-5 players; sight like a player's (a teammate may tell a bot that someone is behind it,
+a bot turns to where an enemy was reported); a difficulty sign in the lobby; a different character
+for every bot; tricks: fake and bait, ambushes, intercepting at the delivery point, predicting from
+the earlier rounds of the match.
+
+What players may do (the bots must answer it). Players attacking: one rush by one route; a split
+(one makes noise, one sneaks to the flag); holding a choke from far / high with a sniper or bow;
+sneaking (no steps heard, the name hidden); the detector, breaking traps; breaking the flag and
+running to the delivery point (glowing); ultimates, invisibility, chorus, grenades into positions;
+waiting in ambush. Players defending: camping the flag; holding a choke with ranged weapons; hunting
+bots alone; traps on the routes; rotating to noise; stalling at the end of the round; weak but out
+of the bots' reach.
+
+- 10a Perception and team memory:
+  - Sight (every think, as a bot): enemies within SENSE "sight", in the horizontal field of view
+    (+-SENSE "fov" degrees: two half-spaces, a huge sphere each) or within SENSE "near"; a sneaking
+    player only within SENSE "sneak", an invisible one within SENSE "invisible"; then a ray from
+    the eyes to his eyes through `#ctf_bots:see` (what bullets pass + glass, panes, bars, leaves).
+    The seen players are tagged `bk_seen` for this think (target choice, shooting).
+  - Hearing: shots (`#ctf:on/noise` from ctf_guns / ctf_sniper, storage `ctf:noise kind`; arrows
+    found by their origin), sprinting / walking steps near (not sneaking); radii in NOISE / SENSE.
+  - Team memory: one intel marker per enemy player (`bot_intel`, `bk.id` = his player_id) at his
+    last known position, `bk.age` (ticks since), `bk.src` (1 seen, 2 heard), `bk.hp` (the `health`
+    score: no NBT), `bk.wpn` (the weapon class of WEAPONS: `if items` checks), `bk.by` (the bot).
+  - Warnings: a bot that sees an enemy near a teammate who doesn't face him tells it ("Max, Steve
+    behind you!"); the warned bot turns to him and fights. A bot on its post turns to fresh intel.
+  - Chat (TALK): templates with parameters (name, coordinates, hp, weapon), a gap between bot
+    messages and a minimum time before the same news about a player again.
+- 10b Team brain (once a second): the state (time left, bots / players alive, known positions,
+  total hp and damage, ranged threats, flag state, path lengths from the graph) -> roles. Attack:
+  breaker, cover, distractor, flanker, hunter, carrier; the flag first when the enemies are far /
+  not near the flag; little time left: roles by the number of bots (1: flag only; 2: distract +
+  break; 3+: distractors for the known players, a breaker, cover). Defense: anchor, holders,
+  rotation to noise, hunters on fresh intel, intercept at the delivery point, retake.
+- 10c Fighting: target choice (low hp, near, hitting me / a teammate, the carrier, ranged threat),
+  hits to kill both ways (WEAPONS damage), retreat to teammates / drink when losing, push a weak
+  enemy, keep the distance with a ranged weapon, zigzag when closing in, check the last known
+  position, grenades only on fresh intel, breaching a thin breakable wall when the way around is
+  much longer.
+- 10d Tricks and traits: per bot aggressive / careful / sly; fake (noise on one side, the others on
+  the other), ambushes (hold behind corners, attack together), intercept at the delivery point,
+  memory of the earlier rounds (where the players went / waited).
+- 10e Difficulty: a BOTS LEVEL sign (easy / normal / hard): reaction, aim, sight, hearing,
+  aggression, team brain.
+- Performance: the team brain once a second; sight checks only for players in range, the cheap
+  field-of-view test before the ray, rays capped; memory as scores on a few markers; no player NBT.
+
+#### 10a - done (not tested)
+
+- `ctf_bots:sense` (generated) + `internal/sense/*`, `internal/talk/*`. Every think starts with
+  `sense/look` (as the bot tagged `bk_me`): candidates, near / field of view (huge spheres), sneaking
+  / invisible ranges, the ray through `#ctf_bots:see`; seen -> `sense/seen` (memory: `sense/mark`,
+  news -> chat, teammates within SENSE "warn" that don't face him -> `sense/warn`); running heard ->
+  `sense/steps`. A guard (NoAI) turns to the nearest fresh intel (tp facing).
+- The old sight (`brain/spot` with its own ray, `brain/los`, SIGHT, SIGHT_FIGHT) is replaced: `spot`
+  takes the nearest `bk_seen` player; the combat `bot_los` = the target is `bk_seen`.
+- Hearing: the new core event `#ctf:on/noise` (as the source, storage `ctf:noise kind`), run by
+  `ctf_guns:rifle/shoot` and `ctf_sniper:shoot`; arrows of players found by `on origin` (tag
+  `bk_arrow`); the nearest bot of the other side within the NOISE radius -> `sense/heard`.
+- Memory: intel markers (`bot_intel`, created on the first news of a player, killed at the round
+  start); `bk.age` / `bk.said` count up in `ctf_bots:tick/combat`.
+- Warned bots: `bot.alert` / `bot.alt` -> `sense/alerted` in attack / defense (the player becomes
+  `bot_want`: it turns and fights).
+- Chat: `talk/ready` (the gap `#talk bots`, coordinates, weapon name from storage
+  `ctf_bots:talk wpn`), messages seen / low / heard / steps / warn / killed (a player killed a bot:
+  a random alive bot tells who and his hp; the killer becomes known).
+
+#### 10b - done (not tested)
+
+- `ctf_bots:team` (generated) + `internal/team/*`: `team/tick` every TEAM "think" ticks
+  (`ctf_bots:tick/combat`, `#tb bots`): intel of dead players forgotten (`intel_alive`), `#known`,
+  then `team/attack` and `team/defense` set `bot.role` (ROLES); a changed role is told
+  (`talk/role`, only when the chat is free; hunt / hold silent).
+- Attack: everyone hunts unless a distractor's enemy is still known in a hurry (`keep_role`); a bot
+  carrying the flag: the others cover it (`escort`, the carrier gets `bot_brk`); the flag standing:
+  the breaker (`bot_brk`, kept while alive; else `pick_breaker`: the shortest way, `team/path`:
+  along the graph when ready, else straight; `bot.pf`); `team/hurry` (time left < the breaker's way
+  to the flag + flag -> delivery point, x TEAM "speed", + "break" + "margin"); hurry: break + a
+  distractor per known enemy (`distract_one`: the nearest free hunter to his intel; 2 bots: 1;
+  else up to bots - 2) + cover; not hurry and safe (no known enemy within TEAM "safe" of the flag):
+  break (+ 1 cover with 3+ bots), the others hunt; not safe: all hunt.
+- Defense: hold; anchor (the holder nearest to the flag, 2+ bots; leash around the flag, no
+  defend spot); a player carries the flag: the TEAM "intercept" bots nearest to the delivery point
+  wait there (`team/intercept`, guard; leash around it) and don't chase; fresh intel (not in the
+  last 30 s): the nearest holder within TEAM "rotate" goes to check it (`rotate_one`, `go_foe`;
+  there and nobody: "Nobody here", back to hold).
+- The fight decision (`team/fight`, `consider` for a seen enemy, `keep` with TEAM "slack" for the
+  current target): always within "close" or when he hit it; break: no; distract / hold / rotate:
+  yes; cover: near it or the breaker; anchor / intercept: near the flag / delivery point; hunt:
+  within "engage", or no flag standing, or he is near the flag, or the flag isn't safe (the flag
+  first otherwise). `brain/spot` now tags `bot_cand` (the nearest seen enemy).
+- `team/dist`: a distance by selector thresholds (no NBT); `team/path`: the graph distance of the
+  node nearest to the bot in the goal's field (`nav/node_d`) + the bot's distance to that node.
+
+#### 10c - done (not tested)
+
+- `ctf_bots:duel` (generated) + `internal/duel/*`. The target among the seen enemies:
+  `duel/choose` (via `brain/spot`): distance + hp, -40 the flag carrier, -10 a ranged weapon, -20
+  hitting the bot. A fight going on (`team/keep`) goes through the same decision as a new one.
+- `duel/engage` (instead of `brain/target_want` in both brains): the times to kill both ways
+  (WEAPONS "dps" of his weapon, BOT_DPS of the bot's, the bot's Health, his `health`): push when he
+  is low or dies within DUEL "push" ("Steve is weak, pushing!"); retreat when it is low and dies
+  clearly faster (`duel/losing`; not the carrier, not the breaker at the flag): `bot.ret` thinks to
+  the nearest teammate, else away from the nearest fresh intel (`duel/retreat_go`, run first in the
+  brains; an enemy within 3: it fights), "Falling back, 5 hp"; a ranged weapon he is in range of:
+  `duel/stance` -> `stance_go`: it shoots from where it stands (tag `bot_stance`, `bot.shot` = his
+  player_id: `combat/target` gives the shooting target to `combat/think` and `shoot_tick`), on
+  guard and turned to him, or backs off / steps aside from a melee enemy within its min + DUEL
+  "kite" (`duel/kite`); else it runs at him, stepping aside at random when he is ranged and
+  farther than DUEL "dodge" (`duel/dodge`).
+- Grenades: at a target in sight (`combat/grenade_at_target`) or, with no target, at the nearest
+  intel younger than GRENADE_INTEL (`duel/nade_intel`: he hides behind cover); the throw targets
+  the entity tagged `bot_nt`.
+- Breaching (`duel/breach`, from `brain/stuck` when it can't reach the player it chases, before the
+  detour): a half-block ray to him; the first block BREACH "min".."max" away, at most 3 steps of
+  wall, no `#ctf_bots:unbreakable`, him reached behind it -> a grenade straight at the wall
+  ("Breaching the wall to Steve!").
+
+#### 10c, after the user's notes
+
+- The flag is hidden from the attack bots (as from attacking players): `#fknown bots` 0 at the
+  round start until an attack bot sees the placed flag (`sense/flag`, a ray through see-through
+  blocks within SENSE "sight"; the flag item / a carrier: known at once) -> "Found the flag at x y
+  z!" (`sense/flag_found`). Until then the team brain gives the role search (`team/searching`; the
+  bots start with it, `brain/start`): `team/search` -> the nearest unchecked F spot nobody took
+  (`bot.sc` = the bot, -1 free), else the nearest unchecked node, none: all again
+  (`team/search_reset`); a bot marker within SEARCH "checked" of an attack bot is checked
+  (`bot_chk`); with SEARCH "distract" or more bots one goes to the freshest known enemy. A
+  searcher fights within SEARCH "engage" (or when hit).
+- Chasing a player: straight when he is within NAV "chase" (1.5 up / down) and in sight
+  (`nav/direct_chase`), else the shortest way along the graph (`duel/chase` -> the detour, which
+  now ends when he can be chased straight).
+- Graph: a node in the air goes down to the floor within 3 blocks, else it is no node (`nav_air`,
+  red when shown: `nav/node_try`, `node_drop`); a jump over a deep hole may land 1-2 blocks lower
+  (`#deep nav`; the gap jump on a jump link also tries those landings); the fields are seeded from
+  the nodes within NAV "seed" of the goal node too (a goal node no link reaches still leads to the
+  nearest reachable place; a node no link leads nearer from = the end: `nav/arrived`, `bot_final`);
+  a link not passed in time (its length + NAV "hop_extra" thinks: `bot.ht` / `bot.hl`) or stuck on
+  it for 2 s costs NAV "penalty" more (`nav/fail`, `nav/penalize`, every field computed again,
+  "Can't get through here, trying another way").
+
+#### Falls, wind charges, the mace, the flag on the ground, passing it (after the user's notes)
+
+- Mobs take fall damage (the gamerule `fallDamage false` is only for players). New links: fall (7:
+  walking off an edge down to NAV "max_fall", `nav/fall_start` / `fall_down` in `#mode 1`; or
+  jumping down over a gap, `#mode 2`, `nav/gap_fall`), nav.f = its damage (height - 3); wind charge
+  up (8: 2..NAV "wind_up" blocks, a free column above the node, then over onto the node:
+  `nav/wind_try`, `wind_col`).
+- The cost of a link per bot: the fields have a class (`#cls nav`: 0 with a wind charge, 1 without:
+  `nav/class`; the slot key = goal x 2 + class); `nav/link_x`: a fall + nav.f x NAV "fall_soft" /
+  "fall_hard", a wind charge jump impossible without a charge.
+- Moving: a fall link pushes the bot off the edge (`nav/fall_push`: the gap jump when it lands
+  within 4, else a push); a wind charge link launches it (`nav/wind_up`, the speed for the height
+  found at build time: `nav/wind_speed`), then over onto the roof (`nav/wup_tick`).
+- Falling bots (`bot_fall`: set by these moves or at a think when FallDistance >= 3) every tick
+  (`nav/fall_tick`): a soft landing with a wind charge right above the ground (FALL "soft"+:
+  `nav/soften`, FallDistance 0); the mace falling FALL "smash"+ blocks next to an enemy: the smash
+  at once, the vanilla damage (`duel/smash`, `damage ... minecraft:mace_smash by` the bot), a bounce.
+  A bot with the mace jumps down at an enemy 3+ blocks below within FALL "dive" (`duel/dive`, from
+  `duel/engage`); a defense bot with the mace takes the highest free defend spot near the flag
+  (`brain/pick_high`).
+- Every bot gets FREE_WIND wind charges at every freeze (`internal/free_wind`, up to the limit).
+- The flag on the ground (it glows: known): role fetch for the nearest attack bot
+  (`team/fetch`), a cover near it.
+- Passing the flag (`team/pass_check`, every team think, as the carrier): to a teammate within PASS
+  "near" stronger by PASS "better" (`team/strength`: hp + 4 x armor tier) -> `flag/pass` ("Kate,
+  take the flag!"); else to a teammate PASS "drop"+ below within PASS "throw" it sees whose way to
+  the delivery point is shorter by PASS "gain" -> `flag/throw` (the flag item flies at it; the
+  thrower doesn't pick it up for 2 s: `bot_thrower`, `bot.nopick`).
+- The bots push each other again; instead a bot standing still IDLE thinks with nothing to wait for
+  (not breaking the flag, not shooting from its place, not on guard) gives up its way and search
+  spot and steps aside (`brain/unstick`; `bot.idle`, `brain/moved`).
+
+#### Fix: bots hardly fought, bows unused
+
+- Retreat only when hp <= DUEL "retreat_hp" (6), it dies much faster (its time x 2 < his), a teammate
+  within 32 (farther than 6) to fight beside, not again within DUEL "retreat_again" thinks
+  (`bot.retcd`): before, any bot at 10 hp against a better weapon fell back again and again (a bot
+  doesn't heal by waiting).
+- The detour to a player ends within NAV "chase_near" of him (lost in the rewrite: the bot stood next
+  to him with its lure as the target); straight chase within NAV "chase_up" up / down (was 1.5).
+- Fire on the move (`duel/fire_move`, `fire_go`): a seen enemy the role doesn't fight but in the
+  range of its ranged weapon is shot while the bot goes on (`bot_stance` without the guard).
+- TEAM "engage" 16 (was 10), SEARCH "engage" 24 (was 20).
+
+#### Fix: bots ran away from a player they saw / stood in front of him
+
+- The ranged stance (on guard, shooting) only at a player in sight (`bk_seen`); before, a player
+  reported by a teammate / just hidden made the bot stand facing him without shooting.
+- A seen player within NAV "chase" (and "chase_up") is chased straight (`nav/chase_box`, then
+  `nav/direct_chase` takes the bot's own sight): before, a separate line from his chest to the bot's
+  eyes was blocked by a fence / slab / glass and the bot went around along the graph.
+- A seen enemy in the range of the bot's ranged weapon is fought whatever the role (`duel/in_range`
+  in `team/fight`; not the breaker / fetcher: they shoot on the move).
+- Snipers (SNIPER, `duel/sniper`): a known enemy sniper (his weapon seen, or a sniper shot heard)
+  farther than SNIPER "near" who sees the bot (a ray from his place) -> the bot (not a sniper) hides
+  for SNIPER "cover" thinks at the nearest node within SNIPER "radius" he can't see (`cover_try`,
+  `hide_ray`, `cover_go`; `bot.cov`, `bot.cvn`), "Sniper! Taking cover"; within SNIPER "reload" ticks
+  of his shot (`bk.rl`, set when a shot is heard) it doesn't hide (it rushes).
+- The bots' sniper: spread 0.3 degrees, misses 40% (~60% hits; was 1.5 degrees, 30%).
+- The flag is seen across the map (SEARCH "flag_sight" 180; was SENSE "sight" 64), the ray goes from
+  the middle of the flag to the bot's eyes (aimed at the flag's foot it touched the floor in front of
+  it at a flat angle).
+- Bots hung in the air: a NoAI mob doesn't fall, and the guard (a spot, the ranged stance, cover) was
+  set while it jumped / fell. `brain/guard` only on the ground; a think wakes a guard in the air or
+  with nothing under it.
+
+#### 10d - done (not tested)
+
+- `ctf_bots:trick` (generated) + `internal/trick/*`. Traits (TRAITS): `trick/traits` at freeze (a
+  random trait per bot number for the match, on the holders `bot_<i>`; `trick/forget` at the match
+  end), `trick/my_trait` in `freeze_reset`. They change the engage range of hunters / searchers
+  (`trick/engage` in `team/fight`), the retreat hp (`trick/retreat_hp`), hiding from snipers
+  (`trick/hides`: aggressive bots don't); the team brain asks an aggressive bot first to distract /
+  rotate (`bk_asg` from `team/set_foe`), a sly one to fake.
+- Fake (TRICKS, role 7): `trick/fake_pick` (team/attack, the flag found, not in a hurry, 3+ bots): the
+  node near the flag farthest from the breaker (`bot.fkn`); `trick/fake_go` -> `trick/noise` there
+  (on guard, shots for the players every TRICKS "noise" ticks, "Making noise over here, go!",
+  `bot_faked`); kept while the flag stands and no hurry (`team/keep_role`).
+- Staging: the breaker near the flag waits on guard for the fake (up to TRICKS "wait_fake" thinks)
+  and for its cover (up to "wait_cover"): `trick/stage` (`bot.wt`).
+- Ambush: a sly defender holding its spot fights only within TRICKS "ambush", near the flag or when
+  hit (`trick/ambush_ok` in `team/fight`), doesn't shoot on the move, and calls its teammates within
+  TRICKS "ambush_call" when it does (`trick/ambush_call` from `duel/engage`: bot.alert).
+- Memory of the match (MEMORY, on the arena nodes: one half of the match): a seen player heats the
+  node nearest to him (`trick/heat` from `sense/seen`, once a second a player: `bk.hc`); the flag the
+  players hid marks its nearest node (`trick/hide_rec`: when found, else at the round win;
+  `#hidrec`). The search goes to the hiding places first (`trick/hide_pick`), a defense bot (1 in
+  MEMORY "hot_spot") takes the defend spot with the most heat around (`trick/pick_hot`), a bot
+  going on guard faces the hottest node (`trick/face_hot`).
+- The user's call: the attack bots always know where the flag is (FLAG_KNOWN, `#flag_known bots`:
+  `#fknown` 1 at the round start); the search stays for FLAG_KNOWN = False.
+

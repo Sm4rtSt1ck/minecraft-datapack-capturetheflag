@@ -35,7 +35,12 @@
         "ctf_bots:buy",
         "ctf_bots:combat",
         "ctf_bots:traps",
-        "ctf_bots:climb"
+        "ctf_bots:climb",
+        "ctf_bots:nav",
+        "ctf_bots:sense",
+        "ctf_bots:team",
+        "ctf_bots:duel",
+        "ctf_bots:trick"
       ]
     }
   }

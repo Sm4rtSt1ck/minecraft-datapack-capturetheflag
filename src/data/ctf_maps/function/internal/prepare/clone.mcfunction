@@ -16,6 +16,7 @@ kill @e[tag=map_entity]
 kill @e[tag=flag]
 kill @e[tag=trap]
 function ctf_maps:api/call/clone
+function #ctf:on/map_cloned
 
 #########################################
 # OTHER

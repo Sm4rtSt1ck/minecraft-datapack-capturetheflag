@@ -50,7 +50,25 @@ Game phases:
 * **Play against bots** (in development, see [BOTS.md](BOTS.md)): the villager head in slot 9 during
   the vote turns the bots on / off (it glints when on); the **BOTS** sign next to the rounds sign
   sets their number (1-10). All players then play in one team, on a random side; the bots are the
-  other team.
+  other team. The bots see like players (in front of them, not through walls; glass, bars, fences,
+  leaves are see-through; a sneaking player only near, an invisible one only next to them), hear
+  shots and running, share what they know and talk about it in the chat (where they saw whom, his
+  hp and weapon, shots heard, "behind you!"). They play as a team: attackers don't know where the flag is
+  hidden and split up to search the likely spots (flag spots first) until one of them sees it; then
+  they send a breaker to the flag when no enemy is known near it and don't chase players far from their way; with little time
+  left they split into distractors (one per known player), a breaker and its cover. Defenders keep
+  an anchor at the flag, check where an enemy was seen or heard, and wait at the delivery point
+  when a player carries the flag. In a fight a bot picks the weakest / nearest / most dangerous enemy,
+  pushes a weak one, falls back to its team when it is losing, shoots from where it stands with a
+  bow or a gun (backing off from a sword), throws grenades where an enemy hides, and blows a hole
+  in a thin wall to reach a player it can't get to. Bots jump down from heights (a wind charge right
+  above the ground saves them from the fall damage; every bot gets one wind charge free each round),
+  fly up onto roofs with a wind charge, smash enemies below with the mace, pick up a dropped flag
+  and pass the flag to a stronger teammate next to them or throw it down to one with a shorter way.
+  Every bot has a character for the match (aggressive, careful or sly). Attackers fake: one makes
+  noise on the other side of the flag while the breaker waits for it and for its cover; sly defenders
+  wait in ambush and call their teammates. During a match the bots remember where they met the players
+  and where the flag was hidden, and search / watch there first.
 * The bossbar timer is **white** in freeze, **green** in the round, and in the end of the round it
   has the color of the winners (**red** attack, **blue** defense); pink in the other phases.
 
@@ -556,10 +574,17 @@ Adding content:
     block ("SOLID" in its name); placed in creative, it gets the display of the block;
   * breaking the barrier of such a block by hand (creative) removes its display too;
 * **the bots' knowledge of a map** (see [BOTS.md](BOTS.md)): `/function admin:build/bots/get_tools`
-  gives markers for flag spots (F), trap spots (T), anvil trap spots (AN, on a ceiling), defend spots
-  (D) and 4 attack routes (R1..R4, the points in the order they are placed, named `R<route>.<n>`).
-  The markers on the template are what the bots use: every clone of the map copies them into the
-  arena. Only the markers of the kind held in the hand glow. `/function admin:build/bots/dump`
+  gives markers for nav points (N), flag spots (F), trap spots (T), anvil trap spots (AN, on a
+  ceiling), defend spots (D) and 4 attack routes (R1..R4, the points in the order they are placed,
+  named `R<route>.<n>`; optional: the bots find their way without them, a route only sends them
+  along another way). The markers on the template are what the bots use: every clone of the map
+  copies them into the arena. Only the markers of the kind held in the hand glow. Every marker but AN is
+  a node of the bots' paths: after each clone the bots find which nodes they can reach from which
+  (walking along a straight line, jumping over a gap up to 4 blocks, dropping or jumping down up to
+  24 blocks, flying up 2-6 blocks with a wind charge, climbing a ladder within 3 blocks of a node). Put N at both ends of a ladder, at both edges of a gap, on
+  platforms, at stairs, turns and crossings. `/function ctf_test:bots/nav` shows the links in a
+  match. A marker in the air drops to the floor below it (within 3 blocks), else it is not a node
+  (shown red); a way the bots fail to pass gets dearer and they try another one. `/function admin:build/bots/dump`
   prints a backup (click to copy) for the `bot` entry of the map in `registry/maps.bolt`;
   `/function admin:build/bots/show/<map>` restores it;
   * with block states: the `_state` versions (`fill_state`, `set_state`, `set_pointwise_state`,

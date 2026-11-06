@@ -38,7 +38,10 @@ function ctf_bots:internal/money/wallets:
 
 # As a defense bot: its target (tag bot_tgt) farther than LEASH from its post (bot_post: its defend
 # spot, else the flag) is dropped: back to the post
+from registry:bots import TEAM
 function ctf_bots:internal/brain/leash:
+    execute if score @s bot.role matches 12 at @n[type=armor_stand, tag=flag] unless entity @a[tag=bot_tgt, distance=(f"..{TEAM['anchor'] + TEAM['slack']}")] at @n[type=armor_stand, tag=flag] run return run function ctf_bots:internal/brain/lure_back
+    execute if score @s bot.role matches 14 at @n[type=armor_stand, tag=win_trigger] unless entity @a[tag=bot_tgt, distance=(f"..{TEAM['anchor'] + TEAM['slack']}")] at @n[type=armor_stand, tag=win_trigger] run return run function ctf_bots:internal/brain/lure_back
     execute at @n[type=marker, tag=bot_post] unless entity @a[tag=bot_tgt, distance=(f"..{LEASH}")] run return run function ctf_bots:internal/brain/leash_back
     execute unless entity @e[type=marker, tag=bot_post] at @n[type=armor_stand, tag=flag] unless entity @a[tag=bot_tgt, distance=(f"..{LEASH}")] run return run function ctf_bots:internal/brain/leash_back
     return fail
@@ -59,18 +62,10 @@ function ctf_bots:internal/score/remove:
         scoreboard players reset f"bot_{i}" kills
         team leave f"bot_{i}"
 
-# As a bot, at it: the nearest enemy player within SIGHT gets the tag bot_want if the bot can see him
-# (ctf_bots:internal/brain/los). The side of the enemies: #enemy bots (1 attack, 2 defense)
-from registry:bots import SIGHT
+# As a bot, at it: the enemy player it sees (tag bk_seen: ctf_bots:internal/sense/look, at the start of
+# its think) it would fight first (ctf_bots:internal/duel/choose) gets the tag bot_cand (fought if its role wants it: ctf_bots:internal/team/consider)
 function ctf_bots:internal/brain/spot:
-    execute if score #enemy bots matches 1 run tag @p[tag=attack, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{SIGHT}")] add bot_see
-    execute if score #enemy bots matches 2 run tag @p[tag=defense, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{SIGHT}")] add bot_see
-    scoreboard players set #los bots 0
-    scoreboard players set #step bots 0
-    scoreboard players set #lmax bots (SIGHT + 4)
-    execute if entity @a[tag=bot_see] anchored eyes facing entity @p[tag=bot_see] eyes positioned ^ ^ ^1 run function ctf_bots:internal/brain/los
-    execute if score #los bots matches 1 run tag @a[tag=bot_see] add bot_want
-    tag @a remove bot_see
+    function ctf_bots:internal/duel/choose
 
 # As a bot at the start of freeze: the body attributes of the registry (a bot that survives keeps its
 # entity: a change of BODY reaches it here too)

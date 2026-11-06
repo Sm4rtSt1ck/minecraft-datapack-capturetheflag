@@ -5,12 +5,13 @@
 
 # Every kind: the key in the backup ("bot" of registry/maps.bolt), the marker tag (template), the tag
 # of the copy in the arena, the label, the color (concrete on the head, dye = the egg's model), the
-# text color. Routes: the points in the order they were placed (build.idx)
+# text color. N: a navigation node only (all the markers are nodes, BOTS.md stage 8). Routes: the points in the order they were placed (build.idx)
 SPOTS = [
     {"key": "flag_spots", "tag": "build_bot_flag", "arena": "bot_flag", "label": "F", "color": "magenta", "text": "light_purple", "name": "Bot flag spot", "lore": "a defense bot may hide the flag here"},
     {"key": "trap_spots", "tag": "build_bot_trap", "arena": "bot_trap", "label": "T", "color": "orange", "text": "gold", "name": "Bot trap spot", "lore": "a defense bot may place a trap here"},
     {"key": "anvil_spots", "tag": "build_bot_anvil", "arena": "bot_anvil", "label": "AN", "color": "brown", "text": "dark_red", "name": "Bot anvil trap spot", "lore": "an anvil trap here (on a ceiling): it falls on who passes below"},
     {"key": "defend_spots", "tag": "build_bot_defend", "arena": "bot_defend", "label": "D", "color": "cyan", "text": "dark_aqua", "name": "Bot defend spot", "lore": "a defense bot may hold this position"},
+    {"key": "nav_points", "tag": "build_bot_nav", "arena": "bot_navp", "label": "N", "color": "white", "text": "white", "name": "Bot nav point", "lore": "a node of the bots' paths: both ends of a ladder, both edges of a gap, platforms, stairs, crossings"},
 ]
 ROUTE_COLORS = ["lime", "yellow", "light_blue", "pink"]
 ROUTE_TEXT = ["green", "yellow", "aqua", "light_purple"]

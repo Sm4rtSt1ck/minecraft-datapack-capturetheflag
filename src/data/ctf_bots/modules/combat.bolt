@@ -1,6 +1,6 @@
 # The weapons of the bots, generated from registry/bots.bolt (RANGED, RANGED_USE, MAIN). BOTS.md
 # stage 6. Item stacks are written as they are (bolt can't build an item argument)
-from registry:bots import RANGED, RANGED_USE, REGEN_BELOW, SPEED_FROM, GRENADE, MACE_JUMP, DELAY, SIGHT_FIGHT
+from registry:bots import RANGED, RANGED_USE, REGEN_BELOW, SPEED_FROM, GRENADE, MACE_JUMP, DELAY
 import math
 
 # As a bot: the main weapon in the hand (bot.mw tier) / the ranged one (bot.sec); bot.hold 0 / 1
@@ -52,7 +52,8 @@ function ctf_bots:internal/combat/shoot:
                 _fire = 1
             execute if score @s bot.sec matches (_i + 1) run return run function ctf_bots:internal/combat/bow {aim: (_u["aim"]), elevation: (_u["elevation"]), fire: (_fire), miss: (str(_u["miss"])), dev: (_u["dev"])}
 
-# The grenade (a target in sight within GRENADE min..max): thrown GRENADE "pitch" degrees up with the
+# The grenade (at the entity tagged bot_nt: a target in sight, or the intel of an enemy behind cover
+# (ctf_bots:internal/duel/nade_intel), within GRENADE min..max): thrown GRENADE "pitch" degrees up with the
 # speed that lands it at the target's feet (bands of 2 blocks; a thrown potion: drag 0.99, gravity
 # 0.05 a tick, thrown from the eyes ~1.6 blocks above the feet), the speed found at build time
 _gcos = math.cos(math.radians(GRENADE["pitch"]))
@@ -82,30 +83,26 @@ def _gspeed(d):
     return _lo
 function ctf_bots:internal/combat/grenade:
     for _d in range(GRENADE["min"], GRENADE["max"], 2):
-        execute if entity @a[tag=bot_tc, distance=(f"..{_d + 2}")] run return run function ctf_bots:internal/combat/grenade_throw {speed: (str(round(_gspeed(_d + 1) / 1000, 7))), pitch: (GRENADE["pitch"])}
+        execute if entity @e[tag=bot_nt, distance=(f"..{_d + 2}")] run return run function ctf_bots:internal/combat/grenade_throw {speed: (str(round(_gspeed(_d + 1) / 1000, 7))), pitch: (GRENADE["pitch"])}
 
 # As a bot, every think, after deciding where to go: potions, weapon, grenade, mace jump. Its target
-# in sight (a line of sight up to SIGHT_FIGHT): tag bot_los (shooting, grenades); its target coming
+# in sight (seen at this think: bk_seen, ctf_bots:internal/sense/look): tag bot_los (shooting,
+# grenades); its target coming
 # near: no hit for DELAY "react" ticks (ctf_bots:internal/combat/react)
 function ctf_bots:internal/combat/think:
     execute if score @s bot.cd2 matches 1.. run scoreboard players remove @s bot.cd2 1
     execute if score @s bot.regen matches 1.. store result score #hp bots run data get entity @s Health
     execute if score @s bot.regen matches 1.. if score #hp bots matches (f"..{REGEN_BELOW - 1}") run function ctf_bots:internal/combat/regen
-    execute on target if entity @s[type=player, tag=player, tag=!dead] run tag @s add bot_tc
+    function ctf_bots:internal/combat/target
     tag @s remove bot_los
     execute unless entity @a[tag=bot_tc] run tag @s remove bot_close
+    execute unless entity @a[tag=bot_tc] if score @s bot.he matches 1.. run function ctf_bots:internal/duel/nade_intel
     execute unless entity @a[tag=bot_tc] run return run function ctf_bots:internal/combat/melee
-    tag @a[tag=bot_tc] add bot_see
-    scoreboard players set #los bots 0
-    scoreboard players set #step bots 0
-    scoreboard players set #lmax bots (SIGHT_FIGHT)
-    execute anchored eyes facing entity @p[tag=bot_see] eyes positioned ^ ^ ^1 run function ctf_bots:internal/brain/los
-    tag @a remove bot_see
-    execute if score #los bots matches 1 run tag @s add bot_los
+    execute if entity @a[tag=bot_tc, tag=bk_seen] run tag @s add bot_los
     execute if entity @s[tag=!bot_close] if entity @a[tag=bot_tc, distance=(f"..{DELAY['near']}")] run function ctf_bots:internal/combat/react
     execute if entity @s[tag=bot_close] unless entity @a[tag=bot_tc, distance=(f"..{DELAY['near'] + 3}")] run tag @s remove bot_close
     execute if score @s bot.speed matches 1.. unless entity @a[tag=bot_tc, distance=(f"..{SPEED_FROM}")] run function ctf_bots:internal/combat/speed
-    execute if score @s bot.he matches 1.. if entity @s[tag=bot_los] if entity @a[tag=bot_tc, distance=(f"{GRENADE['min']}..{GRENADE['max']}")] if predicate {condition: "minecraft:random_chance", chance: (1.0 / GRENADE["chance"])} run function ctf_bots:internal/combat/grenade
+    execute if score @s bot.he matches 1.. if entity @s[tag=bot_los] if entity @a[tag=bot_tc, distance=(f"{GRENADE['min']}..{GRENADE['max']}")] if predicate {condition: "minecraft:random_chance", chance: (1.0 / GRENADE["chance"])} run function ctf_bots:internal/combat/grenade_at_target
     execute if score @s bot.mw matches 9 if score @s bot.wind matches 1.. unless score @s bot.cd2 matches 1.. if entity @a[tag=bot_tc, distance=(f"..{MACE_JUMP}")] if predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {flags: {is_on_ground: true}}} run function ctf_bots:internal/combat/mace_jump
     execute if score @s bot.sec matches 1.. run function ctf_bots:internal/combat/choose
     tag @a remove bot_tc
@@ -118,7 +115,8 @@ function ctf_bots:internal/combat/react:
 
 # Jumping over a gap (vanilla paths don't jump): as a bot on the ground, positioned at its feet,
 # rotated horizontally to its target: a hole 2 blocks deep right ahead and the ground again k blocks
-# ahead (2..4; the same level or 1 higher; room for the bot above it)
+# ahead (2..4; the same level or 1 higher; on a jump link of the graph (bot_jl) also 1-2 lower;
+# room for the bot above it)
 # -> a leap: LEAP up, forward fast enough for k (a mob in the air keeps 0.91 of its speed a tick:
 # about 7 x the speed in a 0.45 jump). Its target stays, so the path goes on after the landing
 from registry:bots import LEAP
@@ -128,3 +126,5 @@ function ctf_bots:internal/brain/leap:
     for _k in [2, 3, 4]:
         for _dy in [0, 1]:
             execute unless block ^ f"^{_dy - 1}" f"^{_k}" #ctf_bots:gap if block ^ f"^{_dy}" f"^{_k}" #ctf_bots:gap if block ^ f"^{_dy + 1}" f"^{_k}" #ctf_bots:gap run return run function ctf_bots:internal/brain/leap_go {speed: (str(round((LEAP["forward"] * _k / 3 + 0.1) / 1000, 7))), up: (str(LEAP["up"]))}
+        for _dy in [-1, -2]:
+            execute if entity @s[tag=bot_jl] unless block ^ f"^{_dy - 1}" f"^{_k}" #ctf_bots:gap if block ^ f"^{_dy}" f"^{_k}" #ctf_bots:gap if block ^ f"^{_dy + 1}" f"^{_k}" #ctf_bots:gap run return run function ctf_bots:internal/brain/leap_go {speed: (str(round((LEAP["forward"] * _k / 3 + 0.1) / 1000, 7))), up: (str(LEAP["up"]))}

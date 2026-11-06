@@ -13,3 +13,8 @@ scoreboard players set @s bot.aim 0
 effect give @s minecraft:resistance infinite 127 true
 execute if entity @s[tag=attack] run function ctf_bots:internal/equip_attack
 execute if entity @s[tag=defense] run function ctf_bots:internal/equip_defense
+# A free wind charge every round (soft landings, wind charge jumps: ctf_bots:internal/nav), up to the
+# shop limit
+function ctf_bots:internal/free_wind
+# Its trait for the match (ctf_bots:internal/trick)
+function ctf_bots:internal/trick/my_trait

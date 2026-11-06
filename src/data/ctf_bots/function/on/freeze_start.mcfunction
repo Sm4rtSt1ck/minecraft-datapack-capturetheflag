@@ -10,6 +10,7 @@ function ctf_bots:internal/spawn/side
 execute as @e[type=zombified_piglin, tag=ctf_bot_new] run function ctf_bots:internal/spawn/id
 function ctf_bots:internal/spawn/numbers
 tag @e[type=zombified_piglin, tag=ctf_bot_new] remove ctf_bot_new
+function ctf_bots:internal/trick/traits
 execute as @e[type=zombified_piglin, tag=ctf_bot] run function ctf_bots:internal/freeze_reset
 function ctf_maps:api/call/spawn_bots
 function ctf_bots:internal/count

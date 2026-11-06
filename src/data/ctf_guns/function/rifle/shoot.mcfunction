@@ -18,6 +18,9 @@ execute unless score @s rf.spray matches 20.. run scoreboard players add @s rf.s
 
 playsound minecraft:entity.firework_rocket.blast player @a[tag=!lobby] ~ ~ ~ 3 1.6
 playsound minecraft:item.crossbow.shoot player @a[tag=!lobby] ~ ~ ~ 2 1.8
+# A noise for the hearing of others (#ctf:on/noise: the bots)
+data modify storage ctf:noise kind set value "rifle"
+function #ctf:on/noise
 
 scoreboard players set #gun gun.tmp 2
 tag @s add gun.shooter

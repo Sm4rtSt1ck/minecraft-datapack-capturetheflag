@@ -5,3 +5,11 @@ scoreboard players add @s kills 1
 scoreboard players add @s just_killed 1
 # A player's kill: no grenade / trap credit for this death (ctf_bots:internal/credit/watch)
 scoreboard players set #vkill bots 2
+# The team knows the killer now (the bot saw him): its memory, a teammate tells it (BOTS.md stage 10a)
+tag @s add bk_who
+scoreboard players set #me bots -1
+function ctf_bots:internal/sense/intel_of
+function ctf_bots:internal/sense/mark
+function ctf_bots:internal/talk/about
+execute as @e[type=zombified_piglin, tag=ctf_bot, sort=random, limit=1] run function ctf_bots:internal/talk/killed
+function ctf_bots:internal/sense/done

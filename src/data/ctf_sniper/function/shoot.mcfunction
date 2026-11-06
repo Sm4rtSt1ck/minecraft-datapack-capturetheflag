@@ -15,6 +15,9 @@ function ctf_guns:spread
 playsound minecraft:entity.warden.sonic_boom player @a[tag=!lobby] ~ ~ ~ 6 1.6
 playsound minecraft:entity.generic.explode player @a[tag=!lobby] ~ ~ ~ 6 1.9
 playsound minecraft:entity.firework_rocket.large_blast player @a[tag=!lobby] ~ ~ ~ 6 0.5
+# A noise for the hearing of others (#ctf:on/noise: the bots)
+data modify storage ctf:noise kind set value "sniper"
+function #ctf:on/noise
 
 scoreboard players set #gun gun.tmp 1
 tag @s add gun.shooter

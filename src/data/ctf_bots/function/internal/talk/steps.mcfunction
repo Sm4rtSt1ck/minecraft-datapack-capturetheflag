@@ -1,0 +1,3 @@
+# As a bot that hears the player tagged bk_who running near it: "I hear Steve running near x y z"
+execute unless function ctf_bots:internal/talk/ready run return 0
+tellraw @a [{"text": "[", "color": "dark_gray"}, {"selector": "@s"}, {"text": "] ", "color": "dark_gray"}, {"text": "I hear ", "color": "white"}, {"selector": "@p[tag=bk_who]"}, {"text": " running near ", "color": "white"}, {"score": {"name": "@n[type=marker, tag=bk_about]", "objective": "bk.x"}, "color": "aqua"}, {"text": " ", "color": "aqua"}, {"score": {"name": "@n[type=marker, tag=bk_about]", "objective": "bk.y"}, "color": "aqua"}, {"text": " ", "color": "aqua"}, {"score": {"name": "@n[type=marker, tag=bk_about]", "objective": "bk.z"}, "color": "aqua"}]

@@ -1,11 +1,8 @@
-# As a bot, positioned at where it must go: its lure stands here and the bot chases it (its target,
-# set only when it isn't already: ctf_bots:internal/brain/aim)
-execute if entity @s[tag=bot_guard] run function ctf_bots:internal/brain/unguard
-execute unless entity @e[type=rabbit, tag=bot_mylure] run function ctf_bots:internal/brain/new_lure
-tp @e[type=rabbit, tag=bot_mylure] ~ ~ ~
-scoreboard players set #ok bots 0
-execute on target if entity @s[type=rabbit, tag=bot_mylure] run scoreboard players set #ok bots 1
-execute if score #ok bots matches 1 run return 1
-tag @e[type=rabbit, tag=bot_mylure] add bot_aim
-function ctf_bots:internal/brain/aim
-tag @e[type=rabbit, tag=bot_aim] remove bot_aim
+# As a bot, positioned at where it must go: straight there (ctf_bots:internal/brain/lure_direct) when
+# it is near and in sight (ctf_bots:internal/nav/direct) or the map has no graph yet; else along the
+# navigation graph (ctf_bots:internal/nav/go, BOTS.md stage 8)
+scoreboard players set #dir nav 1
+execute if score #ready nav matches 1 store result score #dir nav run function ctf_bots:internal/nav/direct
+execute if score #dir nav matches 1 run function ctf_bots:internal/nav/off
+execute if score #dir nav matches 1 run return run function ctf_bots:internal/brain/lure_direct
+function ctf_bots:internal/nav/go

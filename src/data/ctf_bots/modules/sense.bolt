@@ -1,0 +1,79 @@
+# Perception and team memory (registry/bots.bolt SENSE, NOISE, WEAPONS, TALK; BOTS.md stage 10a),
+# the generated part: sight, warnings, the weapon in a hand, the weapon names of the chat
+from registry:bots import SENSE, NOISE, WEAPONS, TALK
+
+_F = 90 - SENSE["fov"]
+
+# As a bot (tagged bk_me), at it, every think: the enemies it sees get the tag bk_seen (and the team
+# memory: ctf_bots:internal/sense/seen); the enemies it hears running (ctf_bots:internal/sense/steps).
+# Candidates within "sight"; seen: within "near", or in the field of view (two half-spaces: huge
+# spheres +-(90 - "fov") degrees from its body's yaw); a sneaking one only within "sneak", an
+# invisible one within "invisible"; then the ray (ctf_bots:internal/sense/ray). A bot on its post
+# with nobody in sight turns to the nearest fresh intel
+function ctf_bots:internal/sense/look:
+    execute if entity @s[tag=attack] run tag @a[tag=defense, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{SENSE['sight']}")] add bk_c
+    execute if entity @s[tag=defense] run tag @a[tag=attack, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{SENSE['sight']}")] add bk_c
+    execute if entity @a[tag=bk_c] run function ctf_bots:internal/sense/candidates
+    execute if entity @s[tag=attack] unless score #fknown bots matches 1 run function ctf_bots:internal/sense/flag
+    execute if entity @s[tag=bot_guard] unless entity @a[tag=bk_seen] if entity @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{SENSE['fresh']}")}, distance=1..32] run tp @s ~ ~ ~ facing entity @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{SENSE['fresh']}")}, distance=1..32, sort=nearest, limit=1] feet
+function ctf_bots:internal/sense/candidates:
+    tag @a[tag=bk_c, distance=(f"..{SENSE['near']}")] add bk_f
+    execute rotated as @s rotated (f"~{_F}") 0 positioned ^ ^ ^1000 run tag @a[tag=bk_c, tag=!bk_f, distance=..1000] add bk_h
+    execute rotated as @s rotated (f"~-{_F}") 0 positioned ^ ^ ^1000 run tag @a[tag=bk_h, distance=..1000] add bk_f
+    tag @a remove bk_h
+    execute as @a[tag=bk_f] if predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {flags: {is_sneaking: true}}} unless entity @s[distance=(f"..{SENSE['sneak']}")] run tag @s remove bk_f
+    execute as @a[tag=bk_f] if predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {effects: {"minecraft:invisibility": {}}}} unless entity @s[distance=(f"..{SENSE['invisible']}")] run tag @s remove bk_f
+    execute as @a[tag=bk_f] run function ctf_bots:internal/sense/ray
+    execute as @a[tag=bk_c, tag=!bk_seen, distance=(f"..{SENSE['sprint']}")] if predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {flags: {is_sprinting: true}}} run function ctf_bots:internal/sense/steps
+    tag @a remove bk_f
+    tag @a remove bk_c
+
+# A step of 1 block of the ray from the bot's eyes to the player (@s): at his eyes (within 1 of his
+# feet + 1.5): seen (ctf_bots:internal/sense/seen); a block that hides him (not #ctf_bots:see): not
+function ctf_bots:internal/sense/los:
+    execute positioned ~ ~-1.5 ~ if entity @s[distance=..1] run return run function ctf_bots:internal/sense/seen
+    execute unless block ~ ~ ~ #ctf_bots:see run return 0
+    scoreboard players add #step bots 1
+    execute if score #step bots matches (f"{SENSE['sight'] + 2}..") run return 0
+    execute positioned ^ ^ ^1 run function ctf_bots:internal/sense/los
+
+# As a teammate of the bot that sees the player tagged bk_who (near him): it faces him (the field of
+# view, from its own body)? Else it is warned: it turns to him and fights (bot.alert = his
+# player_id for 2 s: ctf_bots:internal/sense/alerted), the seeing bot tells it in the chat
+function ctf_bots:internal/sense/warn:
+    execute if score @s bot.alt matches 1.. if score @s bot.alert = #who bots run return 0
+    execute at @s rotated as @s rotated (f"~{_F}") 0 positioned ^ ^ ^1000 if entity @p[tag=bk_who, distance=..1000] at @s rotated as @s rotated (f"~-{_F}") 0 positioned ^ ^ ^1000 if entity @p[tag=bk_who, distance=..1000] run return 0
+    scoreboard players operation @s bot.alert = #who bots
+    scoreboard players set @s bot.alt 8
+    tag @s add bk_warned
+    execute as @e[type=zombified_piglin, tag=bk_me] run function ctf_bots:internal/talk/warn
+    tag @s remove bk_warned
+
+# As a player: #wpn bots = the class of the weapon in his main hand (WEAPONS index + 1; 0 none)
+function ctf_bots:internal/sense/wpn:
+    scoreboard players set #wpn bots 0
+    for _i in range(len(WEAPONS)):
+        execute if items entity @s weapon.mainhand f'*[custom_data~{{wpn:"{WEAPONS[_i]["wpn"]}"}}]' run return run scoreboard players set #wpn bots (_i + 1)
+
+# The chat: storage ctf_bots:talk wpn = the name of the weapon class #wpn bots
+function ctf_bots:internal/talk/wpn_name:
+    data modify storage ctf_bots:talk wpn set value "a weapon"
+    for _i in range(len(WEAPONS)):
+        execute if score #wpn bots matches (_i + 1) run data modify storage ctf_bots:talk wpn set value (WEAPONS[_i]["name"])
+
+# #ctf:on/noise, as the source (a player shooting), at it: the bots of the other side within the
+# radius of the kind (NOISE) hear it (ctf_bots:internal/sense/heard; #wpn bots = the weapon class)
+_KIND_WPN = {"rifle": "rifle", "sniper": "sniper", "bow": "bow"}
+function ctf_bots:on/noise:
+    execute unless score team bots matches 1.. run return 0
+    execute unless entity @s[type=player, tag=player, tag=!dead] run return 0
+    for _k in NOISE:
+        _w = 0
+        for _i in range(len(WEAPONS)):
+            if WEAPONS[_i]["wpn"] == _KIND_WPN[_k]:
+                _w = _i + 1
+        execute if data storage ctf:noise {kind: (_k)} run scoreboard players set #wpn bots (_w)
+        execute if data storage ctf:noise {kind: (_k)} if entity @s[tag=attack] as @e[type=zombified_piglin, tag=ctf_bot, tag=defense, distance=(f"..{NOISE[_k]}"), sort=nearest, limit=1] run tag @s add bk_me
+        execute if data storage ctf:noise {kind: (_k)} if entity @s[tag=defense] as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, distance=(f"..{NOISE[_k]}"), sort=nearest, limit=1] run tag @s add bk_me
+    execute if entity @e[type=zombified_piglin, tag=bk_me] run function ctf_bots:internal/sense/heard
+    tag @e[type=zombified_piglin, tag=bk_me] remove bk_me

@@ -3,6 +3,8 @@
 # The markers standing in the template ARE the bots' knowledge of the map: every clone of the map
 # copies them into the arena. Only the markers of the kind held in the main hand glow.
 #   F - flag spot, T - trap spot, AN - anvil trap spot (on a ceiling), D - defend spot (a D may be on a T)
+#   N - nav point: every marker is a node of the bots' paths, links found after each clone; put N at
+#       both ends of a ladder, both edges of a gap, on platforms, at stairs and crossings
 #   R1..R4 - attack routes: the points of a route in the order they are placed (named R<route>.<n>);
 #            to change the order, remove the route's markers and place them again
 # admin:build/bots/dump prints a backup for registry/maps.bolt, admin:build/bots/show/<map> restores it
@@ -33,6 +35,12 @@ give @s bat_spawn_egg[\
     item_name='{"text": "Bot defend spot", "color": "dark_aqua"}',\
     lore=['{"text": "a defense bot may hold this position", "color": "gray", "italic": false}'],\
     entity_data={id: "minecraft:armor_stand", Tags: ["build_marker", "build_bot", "build_bot_defend"], ArmorItems: [{}, {}, {}, {id: "minecraft:cyan_concrete", count: 1}], Small: 1b, NoGravity: 1b, CustomNameVisible: 1b, CustomName: '{"text": "D", "color": "dark_aqua"}'}\
+] 64
+give @s bat_spawn_egg[\
+    item_model="minecraft:white_dye",\
+    item_name='{"text": "Bot nav point", "color": "white"}',\
+    lore=['{"text": "a node of the bot paths: both ends of a ladder,", "color": "gray", "italic": false}', '{"text": "both edges of a gap, platforms, stairs, crossings", "color": "gray", "italic": false}'],\
+    entity_data={id: "minecraft:armor_stand", Tags: ["build_marker", "build_bot", "build_bot_nav"], ArmorItems: [{}, {}, {}, {id: "minecraft:white_concrete", count: 1}], Small: 1b, NoGravity: 1b, CustomNameVisible: 1b, CustomName: '{"text": "N", "color": "white"}'}\
 ] 64
 give @s bat_spawn_egg[\
     item_model="minecraft:lime_dye",\

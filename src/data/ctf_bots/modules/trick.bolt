@@ -1,0 +1,112 @@
+# Tricks and traits (registry/bots.bolt TRAITS, TRICKS, MEMORY; BOTS.md stage 10d), the generated part
+from registry:bots import NAMES, TRAITS, TRICKS, MEMORY, TEAM, SEARCH, ROLES
+
+_R = ROLES
+
+# Freeze: every bot number without a trait for this match gets one at random (kept on its score
+# holder bot_<i>); as a bot: its trait (bot.trait) from its number
+function ctf_bots:internal/trick/traits:
+    for _i in range(len(NAMES)):
+        execute unless score f"bot_{_i}" bot.trait matches 1.. store result score f"bot_{_i}" bot.trait run random value (f"1..{len(TRAITS)}")
+function ctf_bots:internal/trick/my_trait:
+    for _i in range(len(NAMES)):
+        execute if entity @s[tag=f"ctf_bot_{_i}"] run scoreboard players operation @s bot.trait = f"bot_{_i}" bot.trait
+function ctf_bots:internal/trick/forget:
+    for _i in range(len(NAMES)):
+        scoreboard players reset f"bot_{_i}" bot.trait
+
+# As a hunter / searcher (#dist bots: a seen enemy's distance): within the engage range of its trait?
+# (a searcher: + 8) (1)
+function ctf_bots:internal/trick/engage:
+    scoreboard players set #er bots (TEAM["engage"])
+    for _t in TRAITS:
+        execute if score @s bot.trait matches (_t) run scoreboard players set #er bots (TRAITS[_t]["engage"])
+    execute if score @s bot.role matches (_R["search"]) run scoreboard players add #er bots 8
+    execute if score #dist bots <= #er bots run return 1
+    return 0
+
+# As a bot: #rhp bots = the hp it falls back at (its trait)
+function ctf_bots:internal/trick/retreat_hp:
+    scoreboard players set #rhp bots 6
+    for _t in TRAITS:
+        execute if score @s bot.trait matches (_t) run scoreboard players set #rhp bots (TRAITS[_t]["retreat_hp"])
+
+# As a bot: does it hide from snipers? (its trait) (1)
+function ctf_bots:internal/trick/hides:
+    for _t in TRAITS:
+        if not TRAITS[_t]["cover"]:
+            execute if score @s bot.trait matches (_t) run return 0
+    return 1
+
+# The fake (team/attack, the flag found, no hurry): a sly hunter (else any) gets the role fake and the
+# node within TRICKS "fake_near".."fake_far" of the flag farthest from the breaker (bot.fkn)
+function ctf_bots:internal/trick/fake_pick:
+    execute if entity @e[type=zombified_piglin, tag=ctf_bot, tag=attack, scores={bot.role=(_R["fake"])}] run return 0
+    execute as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_brk, scores={bot.role=(_R["hunt"]), bot.trait=3}, sort=random, limit=1] run tag @s add bk_fk
+    execute unless entity @e[type=zombified_piglin, tag=bk_fk] as @e[type=zombified_piglin, tag=ctf_bot, tag=attack, tag=!bot_brk, scores={bot.role=(_R["hunt"])}, sort=random, limit=1] run tag @s add bk_fk
+    execute at @n[type=armor_stand, tag=flag] run tag @e[type=marker, tag=nav_node, distance=(f"{TRICKS['fake_near']}..{TRICKS['fake_far']}")] add bk_fc
+    execute at @n[type=zombified_piglin, tag=bot_brk] as @e[type=marker, tag=bk_fc, sort=furthest, limit=1] run scoreboard players operation @e[type=zombified_piglin, tag=bk_fk] bot.fkn = @s nav.id
+    execute if entity @e[type=marker, tag=bk_fc] run scoreboard players set @e[type=zombified_piglin, tag=bk_fk] bot.role (_R["fake"])
+    tag @e[type=marker, tag=bk_fc] remove bk_fc
+    tag @e[type=zombified_piglin, tag=bk_fk] remove bk_fk
+
+# As the breaker (TRICKS): near the flag (within "stage", not at it yet), no hurry: it waits on guard for
+# the fake to be at its place (up to "wait_fake" thinks) and for its cover farther than "cover_gap" (up
+# to "wait_cover" thinks); 1 when it waits
+function ctf_bots:internal/trick/stage:
+    execute if score #hurry bots matches 1 run return 0
+    execute unless entity @e[type=armor_stand, tag=flag, distance=(f"..{TRICKS['stage']}")] run return 0
+    execute if entity @e[type=armor_stand, tag=flag, distance=..6] run return 0
+    scoreboard players add @s bot.wt 1
+    execute if entity @e[type=zombified_piglin, tag=ctf_bot, scores={bot.role=(_R["fake"])}, tag=!bot_faked] if score @s bot.wt matches (f"..{TRICKS['wait_fake']}") run return run function ctf_bots:internal/trick/hold
+    execute if entity @e[type=zombified_piglin, tag=ctf_bot, scores={bot.role=(_R["cover"])}] unless entity @e[type=zombified_piglin, tag=ctf_bot, scores={bot.role=(_R["cover"])}, distance=(f"..{TRICKS['cover_gap']}")] if score @s bot.wt matches (f"..{TRICKS['wait_cover']}") run return run function ctf_bots:internal/trick/hold
+    return 0
+
+# As a sly defender holding its spot, fighting the enemy tagged bot_want: its teammates within TRICKS
+# "ambush_call" turn to him and fight too (warned: bot.alert)
+function ctf_bots:internal/trick/ambush_call:
+    scoreboard players operation #who bots = @p[tag=bot_want] player_id
+    execute as @e[type=zombified_piglin, tag=ctf_bot, tag=defense, distance=(f"1..{TRICKS['ambush_call']}")] run function ctf_bots:internal/trick/called
+
+# The memory of the match: as a player seen (his intel bk_about not heated within a second): the node
+# within MEMORY "near" nearest to him heats up
+function ctf_bots:internal/trick/heat:
+    execute if score @n[type=marker, tag=bk_about] bk.hc matches ..19 run return 0
+    scoreboard players set @n[type=marker, tag=bk_about] bk.hc 0
+    execute as @n[type=marker, tag=nav_node, distance=(f"..{MEMORY['near']}")] run scoreboard players add @s bot.heat 1
+
+# As a defense bot picking its spot: the free defend spot with the most heat within MEMORY "hot_radius"
+# (none heated: nothing) gets the tag bot_pick
+function ctf_bots:internal/trick/pick_hot:
+    scoreboard players set #hb bots 0
+    execute as @e[type=marker, tag=bot_defend, tag=!bot_taken] at @s run function ctf_bots:internal/trick/hot_one
+function ctf_bots:internal/trick/hot_one:
+    scoreboard players set #hs bots 0
+    execute as @e[type=marker, tag=nav_node, distance=(f"..{MEMORY['hot_radius']}")] run scoreboard players operation #hs bots += @s bot.heat
+    execute unless score #hs bots > #hb bots run return 0
+    scoreboard players operation #hb bots = #hs bots
+    tag @e[type=marker, tag=bot_pick] remove bot_pick
+    tag @s add bot_pick
+
+# As a bot on guard: it faces the hottest node within MEMORY "look" (where enemies came from before)
+function ctf_bots:internal/trick/face_hot:
+    scoreboard players set #hb bots 0
+    execute as @e[type=marker, tag=nav_node, distance=(f"2..{MEMORY['look']}")] run function ctf_bots:internal/trick/face_one
+    execute if entity @e[type=marker, tag=bk_hot] run tp @s ~ ~ ~ facing entity @n[type=marker, tag=bk_hot] feet
+    tag @e[type=marker, tag=bk_hot] remove bk_hot
+function ctf_bots:internal/trick/face_one:
+    execute unless score @s bot.heat > #hb bots run return 0
+    scoreboard players operation #hb bots = @s bot.heat
+    tag @e[type=marker, tag=bk_hot] remove bk_hot
+    tag @s add bk_hot
+
+# As a searching bot without a spot: the unchecked node nobody took where the players hid the flag
+# most often (bot.hide) gets the tag bot_sdest (none: nothing)
+function ctf_bots:internal/trick/hide_pick:
+    scoreboard players set #hb bots 0
+    execute as @e[type=marker, tag=nav_node, tag=!bot_chk, scores={bot.sc=-1, bot.hide=1..}] run function ctf_bots:internal/trick/hide_one
+function ctf_bots:internal/trick/hide_one:
+    execute unless score @s bot.hide > #hb bots run return 0
+    scoreboard players operation #hb bots = @s bot.hide
+    tag @e[type=marker, tag=bot_sdest] remove bot_sdest
+    tag @s add bot_sdest

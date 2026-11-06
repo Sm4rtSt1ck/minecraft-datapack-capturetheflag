@@ -6,7 +6,7 @@ from admin:bot_markers import SPOTS
 # Only in the lobby
 execute unless score game state = lobby state run return run function admin:build/internal/wrong_phase
 
-data modify storage admin:build dump set value {flag_spots: [], trap_spots: [], anvil_spots: [], defend_spots: [], routes: [[], [], [], []]}
+data modify storage admin:build dump set value {flag_spots: [], trap_spots: [], anvil_spots: [], defend_spots: [], nav_points: [], routes: [[], [], [], []]}
 for _s in SPOTS:
     execute as @e[type=armor_stand, tag=f"{_s['tag']}"] run function admin:build/bots/internal/append {list: (f"dump.{_s['key']}")}
 # The routes: the points by their number (build.idx), from 1 to the highest one

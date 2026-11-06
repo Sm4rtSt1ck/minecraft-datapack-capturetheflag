@@ -1,0 +1,277 @@
+# The navigation graph (registry/bots.bolt NAV, BOTS.md stage 8), the generated part: the distance
+# fields (one objective nav.d<k> per field slot), a bot's next link, its entry node, the ladder searches
+from registry:bots import NAV
+
+_LR = NAV["link_range"]
+_K = NAV["slots"]
+_INF = 1000000
+_COST = NAV["cost"]
+_KINDS = [["walk", 1], ["narrow", 2], ["jump", 3], ["drop", 4], ["ladder", 5], ["ladder", 6], ["fall", 7], ["wind", 8]]
+
+# As a node B at the node A (ctf_bots:internal/nav/bake_pair, #ok nav = the kind): the link A -> B, a
+# marker at A (nav.to = B, nav.t = the kind, nav.c = the cost: the walked length in tenths x the cost
+# of the kind / 10, + the ladder's height x NAV "ladder_block", + NAV "wind_cost" for a wind charge jump;
+# nav.f = the fall damage of a fall: its height - 3)
+function ctf_bots:internal/nav/link_add:
+    scoreboard players operation #c nav = #steps nav
+    scoreboard players set #k nav 5
+    scoreboard players operation #c nav *= #k nav
+    for _kd in _KINDS:
+        execute if score #ok nav matches (_kd[1]) run scoreboard players set #k nav (_COST[_kd[0]])
+    scoreboard players operation #c nav *= #k nav
+    scoreboard players set #k nav 10
+    scoreboard players operation #c nav /= #k nav
+    scoreboard players set #k nav (NAV["ladder_block"])
+    scoreboard players operation #lh nav *= #k nav
+    execute if score #ok nav matches 5..6 run scoreboard players operation #c nav += #lh nav
+    execute if score #ok nav matches 8 run scoreboard players add #c nav (NAV["wind_cost"])
+    execute if score #c nav matches ..0 run scoreboard players set #c nav 1
+    scoreboard players operation #f nav = #fall nav
+    scoreboard players remove #f nav 3
+    execute unless score #ok nav matches 7 run scoreboard players set #f nav 0
+    summon marker ~ ~ ~ {Tags: ["nav_link", "map_entity", "nav_new"]}
+    scoreboard players operation @e[type=marker, tag=nav_new] nav.to = #b nav
+    scoreboard players operation @e[type=marker, tag=nav_new] nav.t = #ok nav
+    scoreboard players operation @e[type=marker, tag=nav_new] nav.c = #c nav
+    scoreboard players operation @e[type=marker, tag=nav_new] nav.f = #f nav
+    tag @e[type=marker, tag=nav_new] remove nav_new
+
+# The field slot of the goal node #want nav for the bots of the class #cls nav (0: with a wind
+# charge, 1: without; ctf_bots:internal/nav/link_x) -> #slot nav: the slot of this goal and class
+# (key #wk = goal x 2 + class), else the least used one, computed for it
+# (ctf_bots:internal/nav/field_<k>); its last use = now (#t bots)
+function ctf_bots:internal/nav/slot:
+    scoreboard players operation #wk nav = #want nav
+    scoreboard players operation #wk nav += #want nav
+    scoreboard players operation #wk nav += #cls nav
+    scoreboard players set #slot nav -1
+    for _k in range(_K):
+        execute if score f"#g{_k}" nav = #wk nav run scoreboard players set #slot nav (_k)
+    execute if score #slot nav matches 0.. run return run function ctf_bots:internal/nav/slot_touch
+    scoreboard players set #old nav 2147483647
+    for _k in range(_K):
+        execute if score f"#t{_k}" nav < #old nav run scoreboard players set #slot nav (_k)
+        execute if score #slot nav matches (_k) run scoreboard players operation #old nav = f"#t{_k}" nav
+    for _k in range(_K):
+        execute if score #slot nav matches (_k) run scoreboard players operation f"#g{_k}" nav = #wk nav
+        execute if score #slot nav matches (_k) as @e[type=marker, tag=nav_node] if score @s nav.id = #want nav at @s run function f"ctf_bots:internal/nav/field_{_k}"
+    function ctf_bots:internal/nav/slot_touch
+function ctf_bots:internal/nav/slot_touch:
+    for _k in range(_K):
+        execute if score #slot nav matches (_k) run scoreboard players operation f"#t{_k}" nav = #t bots
+
+# As a node: #d nav = its distance in the field slot #slot nav (ctf_bots:internal/team/path)
+function ctf_bots:internal/nav/node_d:
+    for _k in range(_K):
+        execute if score #slot nav matches (_k) run return run scoreboard players operation #d nav = @s f"nav.d{_k}"
+
+# As a link: #x nav = its extra cost for the class #cls nav: a fall (7) nav.f x NAV "fall_soft" (with
+# a wind charge: a soft landing) / "fall_hard" a hp (without); a wind charge jump (8): impossible
+# without one
+function ctf_bots:internal/nav/link_x:
+    scoreboard players set #x nav 0
+    execute if score @s nav.t matches 7 run scoreboard players operation #x nav = @s nav.f
+    execute if score @s nav.t matches 7 if score #cls nav matches 0 run scoreboard players set #k nav (NAV["fall_soft"])
+    execute if score @s nav.t matches 7 if score #cls nav matches 1 run scoreboard players set #k nav (NAV["fall_hard"])
+    execute if score @s nav.t matches 7 run scoreboard players operation #x nav *= #k nav
+    execute if score @s nav.t matches 8 if score #cls nav matches 1 run scoreboard players set #x nav (_INF)
+
+# Every field computed again (a link got dearer: ctf_bots:internal/nav/penalize)
+function ctf_bots:internal/nav/invalidate:
+    for _k in range(_K):
+        scoreboard players set f"#g{_k}" nav 0
+
+# A bot's step on the graph, by its field slot (ctf_bots:internal/nav/go)
+function ctf_bots:internal/nav/step:
+    for _k in range(_K):
+        execute if score #slot nav matches (_k) run return run function f"ctf_bots:internal/nav/step_{_k}"
+
+for _k in range(_K):
+    _d = f"nav.d{_k}"
+    # As the goal node, at it: the distances of every node to it along the links (a wave: the nodes
+    # tagged nav_q pass their distance on to the nodes with a link to them, until nothing changes).
+    # Seeds: the goal node (0) and the nodes within NAV "seed" of it (distance x 10 + 50)
+    function f"ctf_bots:internal/nav/field_{_k}":
+        scoreboard players set @e[type=marker, tag=nav_node] (_d) (_INF)
+        scoreboard players set @s (_d) 0
+        tag @s add nav_q
+        execute as @e[type=marker, tag=nav_node, distance=(f"0.1..{NAV['seed']}")] run function f"ctf_bots:internal/nav/seed_{_k}"
+        function f"ctf_bots:internal/nav/wave_{_k}"
+    function f"ctf_bots:internal/nav/seed_{_k}":
+        function ctf_bots:internal/team/dist
+        scoreboard players set #k nav 10
+        scoreboard players operation #dist bots *= #k nav
+        scoreboard players add #dist bots 50
+        execute if score #dist bots < @s (_d) run tag @s add nav_q
+        execute if score #dist bots < @s (_d) run scoreboard players operation @s (_d) = #dist bots
+    function f"ctf_bots:internal/nav/wave_{_k}":
+        execute as @e[type=marker, tag=nav_q] at @s run function f"ctf_bots:internal/nav/relax_{_k}"
+        execute if entity @e[type=marker, tag=nav_q] run function f"ctf_bots:internal/nav/wave_{_k}"
+    # As a node F, at it: every link to it (the links stand at their first node, within the range)
+    function f"ctf_bots:internal/nav/relax_{_k}":
+        tag @s remove nav_q
+        scoreboard players operation #df nav = @s (_d)
+        scoreboard players operation #f nav = @s nav.id
+        execute as @e[type=marker, tag=nav_link, distance=(f"..{_LR + 0.5}")] if score @s nav.to = #f nav at @s run function f"ctf_bots:internal/nav/relax_link_{_k}"
+    # As a link X -> F, at X: X gets nearer through F?
+    function f"ctf_bots:internal/nav/relax_link_{_k}":
+        function ctf_bots:internal/nav/link_x
+        scoreboard players operation #nd nav = #df nav
+        scoreboard players operation #nd nav += @s nav.c
+        scoreboard players operation #nd nav += #x nav
+        execute as @e[type=marker, tag=nav_node, distance=..0.1, limit=1] if score #nd nav < @s (_d) run function f"ctf_bots:internal/nav/better_{_k}"
+    function f"ctf_bots:internal/nav/better_{_k}":
+        scoreboard players operation @s (_d) = #nd nav
+        tag @s add nav_q
+
+    # As a bot, at it, its goal node #want: its next node (bot.nn) and the link to it (bot.lk). Arrived
+    # (bot_final): straight to the goal (#final nav 1). No next node: the entry (entry_<k>); the next
+    # node reached (within NAV "arrive"): the goal or a node no link leads nearer from (a seed near the
+    # goal) -> #final 1, else the next link (hop_<k>); no way: #final 2. Too long on a link
+    # (bot.ht > bot.hl thinks): it failed (ctf_bots:internal/nav/fail)
+    function f"ctf_bots:internal/nav/step_{_k}":
+        scoreboard players set #final nav 0
+        execute if entity @s[tag=bot_final] run return run scoreboard players set #final nav 1
+        scoreboard players add @s bot.ht 1
+        execute if score @s bot.nn matches 1.. if score @s bot.ht > @s bot.hl run function ctf_bots:internal/nav/fail
+        execute unless score @s bot.nn matches 1.. run function f"ctf_bots:internal/nav/entry_{_k}"
+        scoreboard players operation #nn nav = @s bot.nn
+        execute unless score #nn nav matches 1.. run return run scoreboard players set #final nav 2
+        execute as @e[type=marker, tag=nav_node, distance=(f"..{NAV['arrive']}")] if score @s nav.id = #nn nav run tag @s add nav_here
+        execute if entity @e[type=marker, tag=nav_here] run function f"ctf_bots:internal/nav/arrive_{_k}"
+        tag @e[type=marker, tag=nav_here] remove nav_here
+        execute if score #final nav matches 1.. run return 0
+        scoreboard players operation #nn nav = @s bot.nn
+        execute as @e[type=marker, tag=nav_node, distance=(f"..{_LR + 4}")] if score @s nav.id = #nn nav run tag @s add nav_next
+        execute unless entity @e[type=marker, tag=nav_next] run scoreboard players set @s bot.nn 0
+        execute unless entity @e[type=marker, tag=nav_next] run return run scoreboard players set #final nav 2
+        function ctf_bots:internal/nav/move
+        tag @e[type=marker, tag=nav_next] remove nav_next
+    function f"ctf_bots:internal/nav/arrive_{_k}":
+        scoreboard players operation @s bot.cn = #nn nav
+        tag @s remove bot_climbed
+        scoreboard players set @s bot.ht 0
+        execute if score #nn nav = #want nav run return run function ctf_bots:internal/nav/arrived
+        scoreboard players operation #dcur nav = @n[type=marker, tag=nav_here] (_d)
+        execute at @n[type=marker, tag=nav_here] run function f"ctf_bots:internal/nav/hop_{_k}"
+        execute unless score @s bot.nn matches 1.. run return run function ctf_bots:internal/nav/arrived
+        execute if score #best nav > #dcur nav run return run function ctf_bots:internal/nav/arrived
+    # As a bot, at the node it reached: the link with the least (cost + distance of its node)
+    function f"ctf_bots:internal/nav/hop_{_k}":
+        scoreboard players set #best nav 2147483647
+        scoreboard players set #bn nav 0
+        scoreboard players set #bt nav 1
+        execute as @e[type=marker, tag=nav_link, distance=..0.1] run function f"ctf_bots:internal/nav/hop_link_{_k}"
+        execute if score #best nav matches (f"{_INF}..") run scoreboard players set #bn nav 0
+        scoreboard players operation @s bot.nn = #bn nav
+        scoreboard players operation @s bot.lk = #bt nav
+        scoreboard players operation @s bot.hl = #bc nav
+        scoreboard players set #k nav 10
+        scoreboard players operation @s bot.hl /= #k nav
+        scoreboard players add @s bot.hl (NAV["hop_extra"])
+    function f"ctf_bots:internal/nav/hop_link_{_k}":
+        scoreboard players operation #to nav = @s nav.to
+        scoreboard players set #dt nav (_INF)
+        execute as @e[type=marker, tag=nav_node, distance=(f"..{_LR + 1}")] if score @s nav.id = #to nav run scoreboard players operation #dt nav = @s (_d)
+        scoreboard players operation #dt nav += @s nav.c
+        function ctf_bots:internal/nav/link_x
+        scoreboard players operation #dt nav += #x nav
+        execute if score #dt nav < #best nav run function ctf_bots:internal/nav/hop_take
+    # As a bot (no next node), at it: the node in sight within NAV "entry" nearest to the goal; none in
+    # sight: the nearest node
+    function f"ctf_bots:internal/nav/entry_{_k}":
+        scoreboard players set #best nav (_INF)
+        scoreboard players set #bn nav 0
+        execute as @e[type=marker, tag=nav_node, distance=(f"..{NAV['entry']}")] run function f"ctf_bots:internal/nav/entry_node_{_k}"
+        execute if score #bn nav matches 0 as @e[type=marker, tag=nav_node, sort=nearest, limit=1] run scoreboard players operation #bn nav = @s nav.id
+        scoreboard players operation @s bot.nn = #bn nav
+        scoreboard players set @s bot.lk 1
+        scoreboard players set @s bot.cn 0
+        scoreboard players set @s bot.ht 0
+        scoreboard players set @s bot.hl (NAV["hop_extra"] * 2)
+        tag @s remove bot_climbed
+    function f"ctf_bots:internal/nav/entry_node_{_k}":
+        execute unless score @s (_d) < #best nav run return 0
+        scoreboard players set #los nav 0
+        scoreboard players set #step nav 0
+        tag @s add nav_see
+        execute positioned ~ ~1.6 ~ facing entity @s feet run function ctf_bots:internal/nav/los_node
+        tag @s remove nav_see
+        execute if score #los nav matches 1 run scoreboard players operation #best nav = @s (_d)
+        execute if score #los nav matches 1 run scoreboard players operation #bn nav = @s nav.id
+
+# The ladder searches, positioned at the center of the feet block, the offsets nearest first (within
+# 3 blocks): a ladder up (2+ blocks high from this level or 1 above) / a ladder down (its top block 1
+# below this level, room above it)
+_offs = []
+for _dx in range(-3, 4):
+    for _dz in range(-3, 4):
+        if _dx * _dx + _dz * _dz <= 9:
+            _offs.append([_dx * _dx + _dz * _dz, _dx, _dz])
+_offs.sort()
+_SEARCH = [["ctf_bots:internal/nav/search_up", "ctf_bots:internal/nav/bake_up"], ["ctf_bots:internal/climb/search_up_near", "ctf_bots:internal/climb/found"]]
+for _s in _SEARCH:
+    function f"{_s[0]}":
+        for _o in _offs:
+            for _dy in [0, 1]:
+                execute positioned (f"~{_o[1]}") (f"~{_dy}") (f"~{_o[2]}") if block ~ ~ ~ minecraft:ladder if block ~ ~1 ~ minecraft:ladder run return run function f"{_s[1]}"
+_SEARCH = [["ctf_bots:internal/nav/search_down", "ctf_bots:internal/nav/bake_down"], ["ctf_bots:internal/climb/search_down_near", "ctf_bots:internal/climb/found_down"]]
+for _s in _SEARCH:
+    function f"{_s[0]}":
+        for _o in _offs:
+            execute positioned (f"~{_o[1]}") ~ (f"~{_o[2]}") if block ~ ~-1 ~ minecraft:ladder unless block ~ ~ ~ minecraft:ladder if block ~ ~ ~ #ctf_bots:gap if block ~ ~1 ~ #ctf_bots:gap run return run function f"{_s[1]}"
+
+# Showing the graph (ctf_bots:api/nav/show): a link as a line of dust from its node, the color of its
+# kind (walk white, narrow yellow, jump light blue, drop orange, ladder green / dark green, fall dark red,
+# wind charge up purple)
+_COLORS = {1: [1.0, 1.0, 1.0], 2: [1.0, 0.9, 0.1], 3: [0.3, 0.7, 1.0], 4: [1.0, 0.5, 0.0], 5: [0.1, 0.9, 0.1], 6: [0.0, 0.5, 0.0], 7: [0.8, 0.0, 0.0], 8: [0.8, 0.4, 1.0]}
+for _t in range(1, 9):
+    function f"ctf_bots:internal/nav/show_{_t}":
+        particle dust{color: (_COLORS[_t]), scale: 0.7} ~ ~ ~ 0 0 0 0 1 force @a[tag=nav_viewer]
+        scoreboard players add #step nav 1
+        execute if score #step nav matches 80.. run return 0
+        execute if entity @e[type=marker, tag=nav_see, distance=..0.5] run return 0
+        execute positioned ^ ^ ^0.4 run function f"ctf_bots:internal/nav/show_{_t}"
+
+# Wind charge up: #y2 bots = the height to rise (tenths) -> its vertical speed for that + 1.5 blocks (a
+# mob: gravity 0.08, drag 0.98 a tick; the speed found at build time)
+from registry:bots import FALL
+def _apex(v):
+    _y = 0.0
+    for _t in range(100):
+        _y = _y + v
+        v = (v - 0.08) * 0.98
+        if v <= 0:
+            return _y
+    return _y
+def _rise(h):
+    _lo = 0.1
+    _hi = 3.0
+    for _n in range(40):
+        _m = (_lo + _hi) / 2
+        if _apex(_m) < h:
+            _lo = _m
+        else:
+            _hi = _m
+    return _hi
+function ctf_bots:internal/nav/wind_speed:
+    for _h in range(1, NAV["wind_up"] + 2):
+        execute if score #y2 bots matches (f"..{_h * 10}") run return run data modify entity @s Motion[1] set value (round(_rise(_h + 1.5), 3))
+    data modify entity @s Motion[1] set value (round(_rise(NAV["wind_up"] + 2.5), 3))
+
+# Every tick, as a bot falling (bot_fall: a fall link, a gap jump, a dive, a wind charge jump; or a fall
+# of 3+ blocks seen at its think), at it: on the ground: done; thrown up by its wind charge: over onto
+# the roof; the mace, falling FALL "smash"+ blocks, an enemy within FALL "reach": the smash
+# (ctf_bots:internal/duel/smash); falling FALL "soft"+ blocks, the ground within 3 blocks below, a wind
+# charge left: a soft landing (ctf_bots:internal/nav/soften)
+function ctf_bots:internal/nav/fall_tick:
+    execute if predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {flags: {is_on_ground: true}}} run return run function ctf_bots:internal/nav/landed
+    execute if entity @s[tag=bot_wup] run function ctf_bots:internal/nav/wup_tick
+    execute store result score #fd bots run data get entity @s FallDistance
+    execute if score @s bot.mw matches 9 if score #fd bots matches (f"{FALL['smash']}..") if entity @s[tag=attack] if entity @a[tag=defense, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{FALL['reach']}")] run return run function ctf_bots:internal/duel/smash
+    execute if score @s bot.mw matches 9 if score #fd bots matches (f"{FALL['smash']}..") if entity @s[tag=defense] if entity @a[tag=attack, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{FALL['reach']}")] run return run function ctf_bots:internal/duel/smash
+    execute unless score #fd bots matches (f"{FALL['soft']}..") run return 0
+    execute unless score @s bot.wind matches 1.. run return 0
+    execute unless block ~ ~-1 ~ #ctf_bots:gap run return run function ctf_bots:internal/nav/soften
+    execute unless block ~ ~-2 ~ #ctf_bots:gap run return run function ctf_bots:internal/nav/soften
+    execute unless block ~ ~-3 ~ #ctf_bots:gap run return run function ctf_bots:internal/nav/soften

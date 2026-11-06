@@ -104,10 +104,10 @@ scoreboard objectives add bot.blind dummy
 scoreboard objectives add bot.px dummy
 scoreboard objectives add bot.pz dummy
 scoreboard objectives add bot.stk dummy
-# bot.det - thinks of a detour left (a bot under a player it can't reach goes to the bot marker nearest
-# to him); bot.dt - on that marker: the number of its bot + 1
+# bot.det - thinks of a detour left (a bot under a player it can't reach goes to him along the
+# navigation graph); bot.dp - the player_id of that player
 scoreboard objectives add bot.det dummy
-scoreboard objectives add bot.dt dummy
+scoreboard objectives add bot.dp dummy
 # bot.lt - ticks the gap jump stays armed (ctf_bots:internal/brain/leap_scan)
 scoreboard objectives add bot.lt dummy
 # bot.rdy - ticks a bot doesn't hit / shoot (another weapon taken, a target come near:
@@ -119,6 +119,90 @@ scoreboard objectives add bot.clm dummy
 scoreboard objectives add bot.clw dummy
 scoreboard objectives add bot.clt dummy
 scoreboard objectives add bot.cdir dummy
+# The navigation graph (ctf_bots:internal/nav, BOTS.md stage 8): nav.id - a node's number; on a link
+# (a marker at its first node): nav.to - the node it goes to, nav.t - its kind, nav.c - its cost;
+# nav.d<k> - on a node: its distance to the goal of the field slot k; nav - temporary values
+# (#ready: the graph is ready, #g<k> / #t<k>: the goal / last use of the slot k)
+# bot.gn / bot.cn / bot.nn - a bot's goal node, the node it reached last, its next node; bot.lk - the
+# kind of the link to its next node
+from registry:bots import NAV
+scoreboard objectives add nav dummy
+scoreboard objectives add nav.id dummy
+scoreboard objectives add nav.to dummy
+scoreboard objectives add nav.t dummy
+scoreboard objectives add nav.c dummy
+# nav.f - on a fall link: its fall damage (height - 3)
+scoreboard objectives add nav.f dummy
+for _k in range(NAV["slots"]):
+    scoreboard objectives add f"nav.d{_k}" dummy
+scoreboard objectives add bot.gn dummy
+scoreboard objectives add bot.cn dummy
+scoreboard objectives add bot.nn dummy
+scoreboard objectives add bot.lk dummy
+# bot.ht / bot.hl - thinks on its current link / allowed (then the link failed: ctf_bots:internal/nav/fail)
+scoreboard objectives add bot.ht dummy
+scoreboard objectives add bot.hl dummy
+# bot.sc - on a bot marker: the bot (bot.n) checking it for the flag, -1 none (ctf_bots:internal/team/search)
+scoreboard objectives add bot.sc dummy
+scoreboard players set #fknown bots 0
+# The attack bots always know where the flag is (registry/bots.bolt FLAG_KNOWN)
+from registry:bots import FLAG_KNOWN
+scoreboard players set #flag_known bots 0
+if FLAG_KNOWN:
+    scoreboard players set #flag_known bots 1
+# The team memory of the bots (ctf_bots:internal/sense, BOTS.md stage 10a), on an intel marker per
+# enemy player: bk.id - his player_id, bk.age - ticks since the last news, bk.src - 1 seen / 2 heard,
+# bk.hp - his health then, bk.wpn - his weapon class, bk.by - the bot (bot.n), bk.said - ticks since
+# the bots told news of him, bk.x / bk.y / bk.z - its block (for the chat)
+scoreboard objectives add bk.id dummy
+scoreboard objectives add bk.age dummy
+scoreboard objectives add bk.src dummy
+scoreboard objectives add bk.hp dummy
+scoreboard objectives add bk.wpn dummy
+scoreboard objectives add bk.by dummy
+scoreboard objectives add bk.said dummy
+scoreboard objectives add bk.x dummy
+scoreboard objectives add bk.y dummy
+scoreboard objectives add bk.z dummy
+# bk.rl - ticks since his last shot (a sniper reloading: ctf_bots:internal/duel/sniper)
+scoreboard objectives add bk.rl dummy
+# bot.alert / bot.alt - a warned bot: the player_id of the enemy behind it, thinks left
+scoreboard objectives add bot.alert dummy
+scoreboard objectives add bot.alt dummy
+# The team brain (ctf_bots:internal/team, BOTS.md stage 10b): bot.role - the role (registry ROLES),
+# bot.prole - the role it last told, bot.foe - the player_id of its enemy (distract / rotate),
+# bot.pf - its way to the flag (blocks)
+scoreboard objectives add bot.role dummy
+scoreboard objectives add bot.prole dummy
+scoreboard objectives add bot.foe dummy
+scoreboard objectives add bot.pf dummy
+# Fighting tactics (ctf_bots:internal/duel, BOTS.md stage 10c): bot.ret - thinks of falling back left,
+# bot.say - thinks before its next duel message, bot.shot - the player_id it shoots from where it stands
+scoreboard objectives add bot.ret dummy
+# bot.retcd - thinks before it may retreat again
+scoreboard objectives add bot.retcd dummy
+# bot.cov / bot.cvn - thinks in cover from a sniper left, the node of its cover
+scoreboard objectives add bot.cov dummy
+scoreboard objectives add bot.cvn dummy
+# Tricks and traits (ctf_bots:internal/trick, BOTS.md stage 10d): bot.trait - 1 aggressive, 2 careful,
+# 3 sly (also on the holders bot_<i> for the match); bot.fkn - the fake's node; bot.wt - thinks the
+# breaker waited; bot.nz - the fake's noise timer; on a node: bot.heat - players seen near it,
+# bot.hide - the flag hidden near it (this half of the match); bk.hc - ticks since a player heated a node
+scoreboard objectives add bot.trait dummy
+scoreboard objectives add bot.fkn dummy
+scoreboard objectives add bot.wt dummy
+scoreboard objectives add bot.nz dummy
+scoreboard objectives add bot.heat dummy
+scoreboard objectives add bot.hide dummy
+scoreboard objectives add bk.hc dummy
+scoreboard players set #hidrec bots 0
+scoreboard objectives add bot.say dummy
+scoreboard objectives add bot.shot dummy
+# bot.idle - thinks standing still (ctf_bots:internal/brain/unstick); bot.nopick - thinks it doesn't
+# pick up the flag it threw (ctf_bots:internal/flag/throw)
+scoreboard objectives add bot.idle dummy
+scoreboard objectives add bot.nopick dummy
+scoreboard players set #ready nav 0
 scoreboard players set #one bots 1
 scoreboard players set #vkill bots 0
 scoreboard players set #4 bots 4

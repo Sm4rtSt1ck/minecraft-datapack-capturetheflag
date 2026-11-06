@@ -1,3 +1,4 @@
+from registry:bots import TEAM
 # #ctf:tick/combat (round, end_round)
 # The flag broken: the players carrying it (the defense bots chase them: they glow, seen from
 # anywhere) and the flag items on the ground (also the ones dropped at a death)
@@ -14,13 +15,29 @@ execute if entity @e[type=marker, tag=bot_flag_pos] unless entity @e[type=zombif
 # tick and jumps over it
 execute as @e[type=zombified_piglin, tag=bot_leap] at @s run function ctf_bots:internal/brain/leap_tick
 
+# The team memory ages (bk.age, bk.said: ctf_bots:internal/sense); the chat gap; new arrows of players
+# are heard (ctf_bots:internal/sense/arrow)
+scoreboard players add @e[type=marker, tag=bot_intel] bk.age 1
+scoreboard players add @e[type=marker, tag=bot_intel] bk.said 1
+scoreboard players add @e[type=marker, tag=bot_intel] bk.rl 1
+scoreboard players add @e[type=marker, tag=bot_intel] bk.hc 1
+execute if score #talk bots matches 1.. run scoreboard players remove #talk bots 1
+execute as @e[type=arrow, tag=!bk_arrow] run function ctf_bots:internal/sense/arrow
+
 # Climbing bots (ctf_bots:internal/climb), waiting bots (another weapon taken, a target come near:
 # ctf_bots:internal/combat/wait)
 execute as @e[type=zombified_piglin, tag=bot_climb] at @s run function ctf_bots:internal/climb/tick
 execute as @e[type=zombified_piglin, tag=bot_wait] run function ctf_bots:internal/combat/wait_tick
+# Falling bots: soft landings, the mace smash, wind charge jumps (ctf_bots:internal/nav/fall_tick)
+execute as @e[type=zombified_piglin, tag=bot_fall] at @s run function ctf_bots:internal/nav/fall_tick
 
 # The bots holding a ranged weapon at their target shoot (every tick)
 execute as @e[type=zombified_piglin, tag=bot_shoot] at @s run function ctf_bots:internal/combat/shoot_tick
+
+# The team brain: roles every TEAM "think" ticks (ctf_bots:internal/team)
+scoreboard players add #tb bots 1
+execute if score #tb bots matches (TEAM["think"]).. run function ctf_bots:internal/team/tick
+execute if score #tb bots matches (TEAM["think"]).. run scoreboard players set #tb bots 0
 
 # The brain: each bot thinks 4 times a second, the bots spread over the ticks (bot.slot)
 scoreboard players add #t bots 1

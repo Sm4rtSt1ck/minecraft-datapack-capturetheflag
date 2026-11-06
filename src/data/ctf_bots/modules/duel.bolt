@@ -1,0 +1,180 @@
+# Fighting tactics (registry/bots.bolt DUEL, WEAPONS, BOT_DPS, BREACH, GRENADE_INTEL; BOTS.md stage
+# 10c), the generated part: the damage tables, the ranged stance by weapon, the retreat, the target
+# choice, a grenade at intel
+from registry:bots import DUEL, WEAPONS, UNKNOWN_DPS, BOT_DPS, RANGED, RANGED_USE, SENSE, GRENADE, GRENADE_INTEL, BREACH
+
+# #wpn bots (a weapon class) -> #edps bots (its damage a second x 10), #eranged bots (1: from afar)
+function ctf_bots:internal/duel/class:
+    scoreboard players set #edps bots (UNKNOWN_DPS)
+    scoreboard players set #eranged bots 0
+    for _i in range(len(WEAPONS)):
+        execute if score #wpn bots matches (_i + 1) run scoreboard players set #edps bots (WEAPONS[_i]["dps"])
+        if WEAPONS[_i]["ranged"]:
+            execute if score #wpn bots matches (_i + 1) run scoreboard players set #eranged bots 1
+
+# As a bot: #mdps bots = its damage a second x 10 (the ranged weapon when it holds it)
+function ctf_bots:internal/duel/my_dps:
+    for _t in BOT_DPS["melee"]:
+        execute if score @s bot.mw matches (_t) run scoreboard players set #mdps bots (BOT_DPS["melee"][_t])
+    execute unless score @s bot.mw matches 1.. run scoreboard players set #mdps bots (BOT_DPS["melee"][0])
+    for _i in range(len(RANGED)):
+        execute if score @s bot.hold matches 1 if score @s bot.sec matches (_i + 1) run scoreboard players set #mdps bots (BOT_DPS["ranged"][_i])
+
+# As a bot about to fight the player tagged bot_want (#dist bots: his distance), he is in sight: a
+# ranged weapon whose range he is in -> it shoots from where it stands (ctf_bots:internal/duel/stance_go; #kd bots: closer
+# than this to a melee enemy it backs off); 1 when so
+function ctf_bots:internal/duel/stance:
+    execute unless score @s bot.sec matches 1.. run return 0
+    execute unless entity @p[tag=bot_want, tag=bk_seen] run return 0
+    for _i in range(len(RANGED)):
+        _u = RANGED_USE[RANGED[_i]]
+        execute if score @s bot.sec matches (_i + 1) if score #dist bots matches (f"{_u['min']}..{_u['max']}") run scoreboard players set #kd bots (_u["min"] + DUEL["kite"])
+        execute if score @s bot.sec matches (_i + 1) if score #dist bots matches (f"{_u['min']}..{_u['max']}") run return run function ctf_bots:internal/duel/stance_go
+    return 0
+
+# As a bot retreating (bot.ret thinks): an enemy within 3: it fights (0); else to the nearest teammate
+# farther than 4 (within 40), else away from the nearest enemy it knows; 1 when it goes
+function ctf_bots:internal/duel/retreat_go:
+    execute if entity @a[tag=bk_seen, distance=..3] run return 0
+    execute if entity @s[tag=attack] at @e[type=zombified_piglin, tag=ctf_bot, tag=attack, distance=5..40, sort=nearest, limit=1] run return run function ctf_bots:internal/brain/lure_back
+    execute if entity @s[tag=defense] at @e[type=zombified_piglin, tag=ctf_bot, tag=defense, distance=5..40, sort=nearest, limit=1] run return run function ctf_bots:internal/brain/lure_back
+    execute facing entity @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{SENSE['fresh']}")}, sort=nearest, limit=1] feet rotated ~180 0 positioned ^ ^ ^6 if block ~ ~ ~ #ctf_bots:gap if block ~ ~1 ~ #ctf_bots:gap run return run function ctf_bots:internal/brain/lure_back
+    return 0
+
+# As a bot without a target in sight, a grenade left: the nearest intel younger than GRENADE_INTEL
+# within the grenade range, at random (1 in GRENADE "chance" a think): a grenade there (he hides
+# behind cover; the bot knows where he is)
+function ctf_bots:internal/duel/nade_intel:
+    execute unless predicate {condition: "minecraft:random_chance", chance: (1.0 / GRENADE["chance"])} run return 0
+    tag @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{GRENADE_INTEL}")}, distance=(f"{GRENADE['min']}..{GRENADE['max']}"), sort=nearest, limit=1] add bot_nt
+    execute if entity @e[type=marker, tag=bot_nt] run function ctf_bots:internal/combat/grenade
+    tag @e[type=marker, tag=bot_nt] remove bot_nt
+
+# Breaching (as a bot stuck chasing the player tagged bot_jt, a grenade left): he is within BREACH
+# "near"; a ray from its eyes to his eyes (half-block steps): the first block in the way BREACH
+# "min".."max" blocks away, the wall at most 1.5 blocks thick (3 steps), no #ctf_bots:unbreakable
+# block, he is reached behind it -> a grenade at the wall (ctf_bots:internal/duel/breach_throw); 1 when so
+function ctf_bots:internal/duel/breach:
+    execute unless entity @a[tag=bot_jt, distance=(f"..{BREACH['near']}")] run return 0
+    scoreboard players set #step bots 0
+    scoreboard players set #wall bots 0
+    scoreboard players set #wd bots -1
+    scoreboard players set #bad bots 0
+    scoreboard players set #reach bots 0
+    kill @e[type=marker, tag=bot_wall]
+    execute anchored eyes facing entity @p[tag=bot_jt] eyes positioned ^ ^ ^0.5 run function ctf_bots:internal/duel/breach_ray
+    execute unless score #reach bots matches 1 run return run kill @e[type=marker, tag=bot_wall]
+    execute unless score #wall bots matches 1..3 run return run kill @e[type=marker, tag=bot_wall]
+    execute unless score #bad bots matches 0 run return run kill @e[type=marker, tag=bot_wall]
+    execute unless score #wd bots matches (f"{BREACH['min'] * 2}..{BREACH['max'] * 2}") run return run kill @e[type=marker, tag=bot_wall]
+    function ctf_bots:internal/duel/breach_throw
+    return 1
+function ctf_bots:internal/duel/breach_ray:
+    execute positioned ~ ~-1.5 ~ if entity @p[tag=bot_jt, distance=..1] run return run scoreboard players set #reach bots 1
+    execute unless block ~ ~ ~ #ctf_bots:see run function ctf_bots:internal/duel/breach_solid
+    scoreboard players add #step bots 1
+    execute if score #step bots matches (f"{BREACH['near'] * 2 + 4}..") run return 0
+    execute positioned ^ ^ ^0.5 run function ctf_bots:internal/duel/breach_ray
+
+# The mace smash (as a bot with the mace falling #fd bots blocks, an enemy within FALL "reach"): the
+# vanilla damage (6 + 4 a block for the first 3, 2 a block for the next 5, 1 a block then) to the
+# nearest one at once (no waiting), by the bot (its kill); the wind burst throws it up again, no fall
+# damage
+from registry:bots import FALL
+def _smash(h):
+    if h <= 3:
+        return 6 + 4 * h
+    if h <= 8:
+        return 18 + 2 * (h - 3)
+    return 28 + (h - 8)
+function ctf_bots:internal/duel/smash:
+    execute if entity @s[tag=attack] run tag @p[tag=defense, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{FALL['reach']}")] add bot_sm
+    execute if entity @s[tag=defense] run tag @p[tag=attack, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{FALL['reach']}")] add bot_sm
+    for _h in range(FALL["smash"], 31):
+        execute if score #fd bots matches (_h) run damage @p[tag=bot_sm] (_smash(_h)) minecraft:mace_smash by @s
+    execute if score #fd bots matches 31.. run damage @p[tag=bot_sm] (_smash(31)) minecraft:mace_smash by @s
+    tag @a remove bot_sm
+    data modify entity @s FallDistance set value 0.0f
+    data modify entity @s Motion[1] set value 0.6d
+    playsound minecraft:item.mace.smash_ground_heavy player @a[tag=!lobby] ~ ~ ~ 1 1
+    particle minecraft:gust_emitter_small ~ ~ ~ 0 0 0 0 1 force @a[tag=!lobby]
+    tag @s remove bot_dive
+
+# As a bot with the mace about to fight the player tagged bot_want: he is 3+ blocks below within FALL
+# "dive" blocks, a hole ahead towards him: it jumps down at him (the smash comes when it is near:
+# ctf_bots:internal/nav/fall_tick); 1 when so
+function ctf_bots:internal/duel/dive:
+    execute unless predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {flags: {is_on_ground: true}}} run return 0
+    execute positioned (f"~-{FALL['dive']}") ~-30 (f"~-{FALL['dive']}") unless entity @p[tag=bot_want, dx=(FALL["dive"] * 2), dy=27, dz=(FALL["dive"] * 2)] run return 0
+    execute facing entity @p[tag=bot_want] feet rotated ~ 0 unless block ^ ^-1 ^1 #ctf_bots:gap run return 0
+    tag @s add bot_jumper
+    execute facing entity @p[tag=bot_want] feet rotated ~ 0 run summon marker ^ ^ ^1 {Tags: ["bot_vec"]}
+    execute if score #dist bots matches ..3 run function ctf_bots:internal/combat/motion {speed: "0.0002", entity: "zombified_piglin", tag: "bot_jumper"}
+    execute if score #dist bots matches 4..6 run function ctf_bots:internal/combat/motion {speed: "0.00035", entity: "zombified_piglin", tag: "bot_jumper"}
+    execute if score #dist bots matches 7.. run function ctf_bots:internal/combat/motion {speed: "0.0005", entity: "zombified_piglin", tag: "bot_jumper"}
+    kill @e[type=marker, tag=bot_vec]
+    data modify entity @s Motion[1] set value 0.3d
+    tag @s remove bot_jumper
+    tag @s add bot_fall
+    tag @s add bot_dive
+    return 1
+
+# As a bot whose role doesn't want to fight the seen enemy tagged bot_cand: in the range of its ranged
+# weapon -> it shoots him while it goes on (bot_stance without the guard: ctf_bots:internal/combat/target)
+function ctf_bots:internal/duel/fire_move:
+    execute unless score @s bot.sec matches 1.. run return 0
+    execute if entity @s[tag=defense] if score @s bot.role matches 11 if score @s bot.trait matches 3 run return 0
+    execute at @p[tag=bot_cand] run function ctf_bots:internal/team/dist
+    for _i in range(len(RANGED)):
+        _u = RANGED_USE[RANGED[_i]]
+        execute if score @s bot.sec matches (_i + 1) if score #dist bots matches (f"{_u['min']}..{_u['max']}") run return run function ctf_bots:internal/duel/fire_go
+    return 0
+
+# As a bot (#dist bots: the distance of an enemy in sight): is he in the range of its ranged weapon? (1)
+function ctf_bots:internal/duel/in_range:
+    execute unless score @s bot.sec matches 1.. run return 0
+    for _i in range(len(RANGED)):
+        _u = RANGED_USE[RANGED[_i]]
+        execute if score @s bot.sec matches (_i + 1) if score #dist bots matches (f"{_u['min']}..{_u['max']}") run return 1
+    return 0
+
+# Snipers (SNIPER): as a bot (not a sniper itself; bk_me), in cover (bot.cov thinks): it stays there
+# (ctf_bots:internal/duel/cover_go). Else the nearest known enemy sniper (intel with his weapon class,
+# younger than SNIPER "known") farther than SNIPER "near", not reloading (no shot within SNIPER
+# "reload" ticks: bk.rl), who sees it (a ray from his place to its eyes): it takes cover (the nearest
+# node within SNIPER "radius" he can't see: ctf_bots:internal/duel/cover_try); 1 when it hides
+from registry:bots import SNIPER
+_SN = 0
+for _i in range(len(WEAPONS)):
+    if WEAPONS[_i]["wpn"] == "sniper":
+        _SN = _i + 1
+_BSN = 0
+for _i in range(len(RANGED)):
+    if RANGED[_i] == "sniper":
+        _BSN = _i + 1
+function ctf_bots:internal/duel/sniper:
+    execute if score @s bot.sec matches (_BSN) run return 0
+    execute unless score @s bot.cov matches 1.. unless function ctf_bots:internal/trick/hides run return 0
+    execute if score @s bot.cov matches 1.. run return run function ctf_bots:internal/duel/cover_go
+    tag @e[type=marker, tag=bot_intel, scores={bk.wpn=(_SN), bk.age=(f"..{SNIPER['known']}")}, distance=(f"{SNIPER['near']}..80"), sort=nearest, limit=1] add bk_snp
+    execute unless entity @e[type=marker, tag=bk_snp] run return 0
+    execute if score @n[type=marker, tag=bk_snp] bk.rl matches (f"..{SNIPER['reload']}") run return run tag @e[type=marker, tag=bk_snp] remove bk_snp
+    scoreboard players set #los bots 0
+    scoreboard players set #step bots 0
+    execute at @n[type=marker, tag=bk_snp] positioned ~ ~1.6 ~ facing entity @s eyes run function ctf_bots:internal/duel/snp_ray
+    execute unless score #los bots matches 1 run return run tag @e[type=marker, tag=bk_snp] remove bk_snp
+    scoreboard players set #found bots 0
+    execute as @e[type=marker, tag=nav_node, distance=(f"2..{SNIPER['radius']}"), sort=nearest] if score #found bots matches 0 run function ctf_bots:internal/duel/cover_try
+    tag @e[type=marker, tag=bk_snp] remove bk_snp
+    execute unless score #found bots matches 1 run return 0
+    scoreboard players set @s bot.cov (SNIPER["cover"])
+    function ctf_bots:internal/talk/sniper
+    return run function ctf_bots:internal/duel/cover_go
+# A step of 1 block of the ray from the sniper's place to the bot's eyes (see-through blocks pass):
+# reached (within 1 of its eyes) -> #los bots 1
+function ctf_bots:internal/duel/snp_ray:
+    execute positioned ~ ~-1.7 ~ if entity @s[distance=..1] run return run scoreboard players set #los bots 1
+    execute unless block ~ ~ ~ #ctf_bots:see run return 0
+    scoreboard players add #step bots 1
+    execute if score #step bots matches 82.. run return 0
+    execute positioned ^ ^ ^1 run function ctf_bots:internal/duel/snp_ray

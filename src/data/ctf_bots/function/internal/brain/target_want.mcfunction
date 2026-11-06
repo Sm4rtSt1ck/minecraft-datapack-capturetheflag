@@ -1,5 +1,6 @@
 # As a bot: its target is the player tagged bot_want (chased even out of sight), only when it isn't
-# already (ctf_bots:internal/brain/aim_player)
+# already (ctf_bots:internal/brain/aim_player). A player is chased straight, not along the graph
+function ctf_bots:internal/nav/off
 execute if entity @s[tag=bot_guard] run function ctf_bots:internal/brain/unguard
 scoreboard players set #ok bots 0
 execute on target if entity @s[tag=bot_want] run scoreboard players set #ok bots 1
