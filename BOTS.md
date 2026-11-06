@@ -141,7 +141,7 @@ Each stage is one commit, checked by the user in the game before the next one.
 | 4 | Movement and the flag: routes, attacking the flag, delivery (playable mode); defenders to defend spots (near the flag more often); the flag carrier chased from anywhere | done |
 | 5 | Economy and shop: buy profiles from the registry; defense on a high base prefers bows / guns | done |
 | 6 | Weapons: guns, bow, grenades, mace, potions, totem, wind charge | in progress |
-| 7 | Traps: bots place them; see / avoid / break the enemy traps; kills of bots by a player's trap credited to him | |
+| 7 | Traps: bots place them; see / avoid / break the enemy traps; kills of bots by a player's trap credited to him | in progress |
 | 8 | Ultimates: charge, choice, use (adapt / forbid the player-only ones); fear a player in the bomber ultimate | |
 | 9 | Tactics: roles, groups, retreat, events; difficulty | |
 
@@ -369,3 +369,57 @@ Each stage is one commit, checked by the user in the game before the next one.
   (48): no path, and a mob without a path doesn't move at all. `follow_range` 128 (the whole arena)
   for every bot (the 96 of the carrier chase is gone: `far_on` / `far_off`, CHASE_RANGE removed);
   `internal/spawn/body` (generated) puts the BODY attributes on every bot at each freeze.
+
+### Stage 7 - traps
+
+- Kill credit of a trap: `kc.placer` (new objective) on a trap marker = who placed it
+  (`ctf_traps:internal/place`: owner and placer of every unowned new marker, no distance check, so a
+  bot can place one far from itself); `ctf_fight:api/credit/owner` gives `#placer`; `mark` (players
+  and bots) marks an attacker with the placer, a defender with the owner (the attacker who set it
+  off). So a defender gets the kill of an attacker who walked into his trap (a change for the players
+  too: before, that kill was credited to the attacker himself, so to nobody).
+- The loot task "enemy_trap" (already "any defender by any defense trap", credited to the attacker
+  who set it off) works with bot defenders: a bot killed by a trap is credited by `award`, which
+  gives the task.
+- Bots as victims: the trap / grenade / bomber / cloud marks include the bots; `kc.time` runs down on
+  them; `ctf_bots:internal/credit/mirror` copies the mark to the bot's wallet every tick, `watch`
+  sees the bot gone while marked -> `ctf_fight:api/credit/bot_victim` (as the wallet: its side
+  `#vside kc.tmp`, the owner gets the kill: `award`), unless a player killed it (`#vkill bots`, set
+  by `ctf_bots:internal/killed` for 2 ticks). `award` checks the victim's side with `#vside`
+  (set by `victim` too) and pays a bot owner (`ctf_bots:api/credited`: wallet, sidebar).
+- Placing: `ctf_traps:api/place/<id>` (generated, defense traps): the display of the shop egg at the
+  position + `ctf_traps:internal/place`, as the owner. `ctf_bots:traps` (generated from TRAPS of
+  `registry/bots.bolt` and the shop costs / counts / keys): at freeze, after the flag is hidden
+  (`internal/flag/hide`), for each trap in order: a random defense wallet that can pay buys it (one
+  of each per round for the server: `bought.item`), its bot places all of them on free spots of
+  their kind (T; AN for the anvil): the nearest to the flag 2 times of 3, else random.
+- Breaking: an attack bot (every think, `internal/traps/break_check`) breaks the nearest enemy trap
+  within TRAP_BREAK (4) that it sees (`internal/traps/los`): removed without going off, like a
+  player's hit with the hand. A trap it doesn't see (behind a corner) goes off.
+- Fixes after the first test:
+  - The anvil trap fell onto the top of a ladder and was gone (a falling block can't pass a
+    ladder). Now the anvil is a block display moved every tick (`ctf_traps:internal/anvil/fall`:
+    the old speed, +0.04 a tick, drag 0.98) through `#ctf_guns:passable`, landing on the first other
+    block with the old damage (10 / 20, damage type `falling_anvil`, everyone in its block).
+  - Reactions (DELAY): no hit / shot for 10 ticks after a weapon switch and 6 ticks after the target
+    first comes within 4 blocks (`internal/combat/wait`: the tag `bot_wait`, an attribute modifier
+    `ctf_bots:wait` x0 on `attack_damage`, so a swing misses; the mob swings again 1 s later).
+  - Shooting only while the target is in sight (the line of sight at the think, up to SIGHT_FIGHT
+    64: tag `bot_los`). Missed shots (`miss` of RANGED_USE: a gun shoots with the `wide` spread, an
+    arrow goes `dev` degrees to a side); the rifle shoots 3 times a second (players 6).
+  - Grenades: only at a target in sight with 3 free blocks of the throw ahead (they used to hit the
+    wall in front of the bot: a "teleported" explosion); thrown 30 degrees up with the speed that
+    lands them at the target's feet (bands of 2 blocks, found at build time by simulating the potion:
+    `ctf_bots:combat`); before, a fixed speed always flew ~15 blocks.
+  - Ladders (CLIMB, `ctf_bots:climb`, `internal/climb/*`): a vanilla path never goes up a ladder,
+    so a bot stood under a flag on a platform. A bot stuck for 1 s with its target 2+ blocks above
+    looks for the nearest ladder (2+ blocks high, within 6 blocks, generated offsets nearest first),
+    walks to it (a `bot_ladder` marker, up to 5 s; failed: no search for 10 s), climbs it NoAI by tp
+    (0.12 blocks a tick, facing the wall from the ladder's `facing`), steps off its top towards the
+    wall and plans its path again (the lure nudge of the gap jump).
+  - Gap jump: the far edge may be 1 block higher (it had to be at the same level). Tried and
+    reverted: the hole looked for also along the body yaw (the mob turns a lot: random jumps) and a
+    far edge 1 block lower (jumps where the path just goes down).
+  - Defense bots: at freeze each one goes straight to its defend spot with the chance POST_TP (1/2,
+    `internal/brain/post`: a teleport; it keeps that spot at the round start, tag `bot_posted`). The
+    spots are freed at freeze now (before: at the round start).

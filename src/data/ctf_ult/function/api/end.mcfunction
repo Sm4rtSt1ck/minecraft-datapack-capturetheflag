@@ -20,6 +20,8 @@ weather clear
 # Kill credit for the bomber
 execute if entity @s[tag=bomber] run scoreboard players operation #owner kc.tmp = @s player_id
 execute if entity @s[tag=bomber] positioned as @s as @a[tag=player, distance=..8] run function ctf_fight:api/credit/mark {time: 60, src: 3}
+# The bots too (BOTS.md)
+execute if entity @s[tag=bomber] positioned as @s as @e[type=zombified_piglin, tag=ctf_bot, distance=..8] run function ctf_fight:api/credit/mark {time: 60, src: 3}
 
 execute if entity @s[tag=bomber, tag=player] at @s run function ctf_ult:internal/categories/bomber_explode
 

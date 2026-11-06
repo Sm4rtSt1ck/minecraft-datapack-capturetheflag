@@ -12,8 +12,10 @@ execute as @n[tag=!placed, tag=trap_display] at @s if entity @n[tag=placed, tag=
 for t in TRAPS:
     execute as @n[tag=!placed, tag=trap_display, tag=f"trap.{t['id']}"] run function f"ctf_traps:internal/{t['id']}/place"
 
-# Owner of the new trap (kill credit)
-execute at @s run scoreboard players operation @e[tag=trap_marker, tag=!kc.owned, distance=..8] kc.owner = @s player_id
-execute at @s run tag @e[tag=trap_marker, tag=!kc.owned, distance=..8] add kc.owned
+# Owner and placer of the new trap (kill credit): the one who placed it (a player, or a bot:
+# ctf_traps:api/place/<id>). Only the new marker has no owner yet
+scoreboard players operation @e[type=frog, tag=trap_marker, tag=!kc.owned] kc.owner = @s player_id
+scoreboard players operation @e[type=frog, tag=trap_marker, tag=!kc.owned] kc.placer = @s player_id
+tag @e[type=frog, tag=trap_marker, tag=!kc.owned] add kc.owned
 
 tag @n[tag=!placed, tag=trap_display] add placed

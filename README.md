@@ -200,9 +200,12 @@ reward finds the weapon.
 (creeper explosions, falling anvils, effect clouds), so they are credited by
 [`ctf_fight:internal/credit`](src/data/ctf_fight/function/internal/credit/):
 
-* every trap marker, grenade and trap effect cloud stores its owner (`kc.owner`);
-* when it goes off, every player in its damage radius is marked with the owner
-  for a short time (3 s for explosions and anvils, 10 s for wither / levitation);
+* every trap marker, grenade and trap effect cloud stores its owner (`kc.owner`); a trap also
+  stores who placed it (`kc.placer`); an attacker who sets a trap off becomes its owner;
+* when it goes off, every player (and bot) in its damage radius is marked with the owner
+  for a short time (3 s for explosions and anvils, 10 s for wither / levitation); an attacker hit
+  by a trap is marked with its placer instead: a defender whose trap kills an attacker gets the
+  kill, a defender killed by it is the kill of the attacker who set it off;
 * if a marked player dies within that time and **no player** got the vanilla
   kill credit, the owner gets the kill (+1 kill, money, ultimate points);
 * no reward for killing yourself or a teammate.
@@ -330,6 +333,10 @@ Traps activate when attackers enter a small radius around them.
   1024 HP, so damage never kills them before they go off.
 * A hit with the hand (any melee hit) removes a trap without setting it off
   (`ctf_traps:internal/hit_by_hand`).
+* The anvil of an anvil trap falls through ladders, plants, torches and other thin blocks (a block
+  display moved every tick: `ctf_traps:internal/anvil/fall`) and lands on the first solid block, with
+  the damage of a falling anvil: 10 after a fall of up to 2 blocks, 20 after a longer one (a helmet
+  takes 25% off), to everyone in its block.
 
 ### Ultimates
 

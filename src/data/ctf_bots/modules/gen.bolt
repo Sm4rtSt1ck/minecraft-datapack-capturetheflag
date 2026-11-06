@@ -67,6 +67,7 @@ function ctf_bots:internal/brain/spot:
     execute if score #enemy bots matches 2 run tag @p[tag=defense, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{SIGHT}")] add bot_see
     scoreboard players set #los bots 0
     scoreboard players set #step bots 0
+    scoreboard players set #lmax bots (SIGHT + 4)
     execute if entity @a[tag=bot_see] anchored eyes facing entity @p[tag=bot_see] eyes positioned ^ ^ ^1 run function ctf_bots:internal/brain/los
     execute if score #los bots matches 1 run tag @a[tag=bot_see] add bot_want
     tag @a remove bot_see

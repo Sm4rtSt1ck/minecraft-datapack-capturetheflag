@@ -11,6 +11,9 @@ function ctf_traps:internal/hurt
 execute as @a[tag=player, tag=!dead, tag=!invisible] at @s positioned ~-0.125 ~1 ~-0.125 if entity @e[type=frog, tag=trap.anvil, tag=trap_marker, dx=0.25, dy=256, dz=0.25] run function ctf_traps:internal/touch_anvil
 execute as @e[type=zombified_piglin, tag=ctf_bot, tag=attack] at @s positioned ~-0.125 ~1 ~-0.125 if entity @e[type=frog, tag=trap.anvil, tag=trap_marker, dx=0.25, dy=256, dz=0.25] run function ctf_traps:internal/touch_anvil
 
+# Falling anvils (ctf_traps:internal/anvil/trigger)
+execute as @e[type=block_display, tag=trap_anvil_fall] at @s run function ctf_traps:internal/anvil/fall
+
 execute at @a[tag=player, tag=!dead, tag=!invisible] as @e[type=frog, tag=trap.web, tag=trap_marker, tag=!triggered, distance=..2] run function ctf_traps:internal/web/trigger
 execute at @e[type=zombified_piglin, tag=ctf_bot, tag=attack] as @e[type=frog, tag=trap.web, tag=trap_marker, tag=!triggered, distance=..2] run function ctf_traps:internal/web/trigger
 

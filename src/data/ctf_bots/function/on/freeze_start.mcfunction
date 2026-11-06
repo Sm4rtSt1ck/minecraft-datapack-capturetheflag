@@ -1,5 +1,6 @@
 # #ctf:on/freeze_start (after the map spawns). Like the players: the bots alive go back to their base,
 # healed, with the freeze effects; the dead ones of the last round come back (BOTS.md)
+from registry:bots import POST_TP
 execute if score team bots matches 0 run return run function ctf_bots:on/remove
 function ctf_bots:internal/flag/clear
 
@@ -23,5 +24,13 @@ execute as @e[type=zombified_piglin, tag=ctf_bot] run function ctf_bots:internal
 
 # Defense bots: the flag goes to a random flag spot of the map (bot markers, BOTS.md); a map without
 # flag spots: where a defense bot stands
-execute if entity @e[type=zombified_piglin, tag=ctf_bot, tag=defense] if entity @e[type=marker, tag=bot_flag] at @e[type=marker, tag=bot_flag, sort=random, limit=1] run return run function ctf_flag:api/place_here
-execute at @e[type=zombified_piglin, tag=ctf_bot, tag=defense, sort=random, limit=1] run function ctf_flag:api/place_here
+execute if entity @e[type=zombified_piglin, tag=ctf_bot, tag=defense] run function ctf_bots:internal/flag/hide
+
+# Traps of the defense bots (with the money left), near the flag more often
+execute if entity @e[type=zombified_piglin, tag=ctf_bot, tag=defense] run function ctf_bots:internal/traps/buy
+
+# Defend spots free again; some defense bots go straight to their spots (POST_TP: ctf_bots:internal/brain/post)
+tag @e[type=marker, tag=bot_defend] remove bot_taken
+scoreboard players reset @e[type=marker, tag=bot_defend] bot.own
+tag @e[type=zombified_piglin, tag=ctf_bot] remove bot_posted
+execute as @e[type=zombified_piglin, tag=ctf_bot, tag=defense, sort=random] if predicate {condition: "minecraft:random_chance", chance: (POST_TP)} run function ctf_bots:internal/brain/post

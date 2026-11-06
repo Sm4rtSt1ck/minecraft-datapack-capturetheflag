@@ -33,7 +33,9 @@
         "ctf_maps:gen",
         "ctf_bots:gen",
         "ctf_bots:buy",
-        "ctf_bots:combat"
+        "ctf_bots:combat",
+        "ctf_bots:traps",
+        "ctf_bots:climb"
       ]
     }
   }

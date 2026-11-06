@@ -1,0 +1,40 @@
+# The traps of the bots, generated from registry/bots.bolt TRAPS and the shop (costs, counts, keys).
+# BOTS.md stage 7
+from registry:bots import TRAPS, TRAP_BREAK
+from registry:shop import product
+
+# Freeze start (after the flag is placed): the defense bots buy their traps
+function ctf_bots:internal/traps/buy:
+    tag @e[type=marker, tag=bot_spot] remove bot_used
+    for _t in TRAPS:
+        _p = product(f"{_t['id']}_trap")
+        _key = _p["buy"][1]["key"]
+        _count = _p["buy"][1]["count"]
+        scoreboard players set #paid bots 0
+        execute unless score _key bought.item matches 1.. as @e[type=marker, tag=bot_wallet, tag=defense, scores={money=(f"{_p['cost']}..")}, sort=random, limit=1] run function ctf_bots:internal/traps/pay {cost: (_p["cost"]), key: (_key)}
+        execute if score #paid bots matches 1 run scoreboard players set #left bots (_count)
+        execute if score #paid bots matches 1 run function f"ctf_bots:internal/traps/place_{_t['id']}"
+    tag @e[type=marker, tag=bot_spot] remove bot_used
+
+# As the paying bot (#payer bots = its number): one trap at a free spot, #left times
+for _t in TRAPS:
+    function f"ctf_bots:internal/traps/place_{_t['id']}":
+        execute store result score #p bots run random value 1..3
+        execute if score #p bots matches 1..2 at @n[type=armor_stand, tag=flag] as @e[type=marker, tag=f"{_t['spot']}", tag=!bot_used, sort=nearest, limit=1] run tag @s add bot_pick
+        execute unless entity @e[type=marker, tag=bot_pick] as @e[type=marker, tag=f"{_t['spot']}", tag=!bot_used, sort=random, limit=1] run tag @s add bot_pick
+        execute unless entity @e[type=marker, tag=bot_pick] run return 0
+        execute as @e[type=zombified_piglin, tag=ctf_bot] if score @s bot.n = #payer bots at @n[type=marker, tag=bot_pick] run function f"ctf_traps:api/place/{_t['id']}"
+        tag @e[type=marker, tag=bot_pick] add bot_used
+        tag @e[type=marker, tag=bot_pick] remove bot_pick
+        scoreboard players remove #left bots 1
+        execute if score #left bots matches 1.. run function f"ctf_bots:internal/traps/place_{_t['id']}"
+
+# As an attack bot (every think), at it: an enemy trap within TRAP_BREAK that it sees is broken
+function ctf_bots:internal/traps/break_check:
+    execute as @e[type=frog, tag=trap_marker, tag=!trap.detector, tag=!triggered, distance=(f"..{TRAP_BREAK}"), sort=nearest, limit=1] run tag @s add bot_trap_see
+    execute unless entity @e[type=frog, tag=bot_trap_see] run return 0
+    scoreboard players set #los bots 0
+    scoreboard players set #step bots 0
+    execute anchored eyes facing entity @n[type=frog, tag=bot_trap_see] eyes positioned ^ ^ ^1 run function ctf_bots:internal/traps/los
+    execute if score #los bots matches 1 as @n[type=frog, tag=bot_trap_see] at @s run function ctf_bots:internal/traps/break
+    tag @e[type=frog, tag=bot_trap_see] remove bot_trap_see

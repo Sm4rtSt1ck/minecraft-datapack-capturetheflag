@@ -1,6 +1,8 @@
 # Kill credit: everyone in the blast radius
 function ctf_fight:api/credit/owner
 execute positioned as @s as @a[tag=player, distance=..6] run function ctf_fight:api/credit/mark {time: 60, src: 2}
+# The bots too (BOTS.md)
+execute positioned as @s as @e[type=zombified_piglin, tag=ctf_bot, distance=..6] run function ctf_fight:api/credit/mark {time: 60, src: 2}
 execute positioned as @s run function ctf_fight:api/credit/mark_traps {r: 6}
 
 execute positioned as @s run summon minecraft:creeper ~ ~ ~ {\

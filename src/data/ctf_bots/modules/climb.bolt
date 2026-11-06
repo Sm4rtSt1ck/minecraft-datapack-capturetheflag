@@ -1,0 +1,27 @@
+# Climbing ladders (registry/bots.bolt CLIMB): the ladder search, generated (the offsets around the
+# bot's feet, nearest first: the first ladder found is the nearest). BOTS.md stage 7
+from registry:bots import CLIMB
+
+# As a bot stuck below its target, positioned at the center of its feet block: the nearest ladder 2+
+# blocks high (its lowest block at the bot's level or 1 above) within CLIMB "search" blocks:
+# ctf_bots:internal/climb/found there (returns 1); none: fails
+_r = CLIMB["search"]
+_offs = []
+for _dx in range(-_r, _r + 1):
+    for _dz in range(-_r, _r + 1):
+        if _dx * _dx + _dz * _dz <= _r * _r:
+            for _dy in [0, 1]:
+                _offs.append([_dx * _dx + _dz * _dz + _dy, _dx, _dy, _dz])
+_offs.sort()
+function ctf_bots:internal/climb/search:
+    for _o in _offs:
+        execute positioned (f"~{_o[1]}") (f"~{_o[2]}") (f"~{_o[3]}") if block ~ ~ ~ minecraft:ladder if block ~ ~1 ~ minecraft:ladder run return run function ctf_bots:internal/climb/found
+
+# Every tick, as a climbing bot (NoAI, moved by tp), at its feet: up CLIMB "speed" while a ladder is at
+# its feet or above them (and its head has room); above the ladder: off it (ctf_bots:internal/climb/top)
+function ctf_bots:internal/climb/tick:
+    scoreboard players remove @s bot.clt 1
+    execute if score @s bot.clt matches ..0 run return run function ctf_bots:internal/climb/stop
+    execute unless block ~ ~ ~ minecraft:ladder unless block ~ ~1 ~ minecraft:ladder run return run function ctf_bots:internal/climb/top
+    execute unless block ~ ~2.1 ~ #ctf_bots:gap run return run function ctf_bots:internal/climb/stop
+    tp @s ~ (f"~{CLIMB['speed']}") ~

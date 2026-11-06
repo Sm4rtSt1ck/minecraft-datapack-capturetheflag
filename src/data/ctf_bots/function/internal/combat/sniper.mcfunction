@@ -1,10 +1,11 @@
 # Every tick, as a bot with the sniper rifle: it aims (aim ticks), shoots (spread), then reloads
-# like a player (ctf_sniper:config reload)
+# like a player (ctf_sniper:config reload); a miss (chance miss): the spread wide
 execute if score @s bot.cd matches 1.. run return run scoreboard players remove @s bot.cd 1
 scoreboard players add @s bot.aim 1
 $execute if score @s bot.aim matches ..$(aim) run return 0
 scoreboard players set @s bot.aim 0
 $scoreboard players set #s gun.tmp $(spread)
+$execute if predicate {condition: "minecraft:random_chance", chance: $(miss)} run scoreboard players set #s gun.tmp $(wide)
 function ctf_guns:spread
 function ctf_bots:internal/combat/fire {gun: 1}
 playsound minecraft:entity.generic.explode player @a[tag=!lobby] ~ ~ ~ 2 2

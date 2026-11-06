@@ -14,6 +14,11 @@ execute if entity @e[type=marker, tag=bot_flag_pos] unless entity @e[type=zombif
 # tick and jumps over it
 execute as @e[type=zombified_piglin, tag=bot_leap] at @s run function ctf_bots:internal/brain/leap_tick
 
+# Climbing bots (ctf_bots:internal/climb), waiting bots (another weapon taken, a target come near:
+# ctf_bots:internal/combat/wait)
+execute as @e[type=zombified_piglin, tag=bot_climb] at @s run function ctf_bots:internal/climb/tick
+execute as @e[type=zombified_piglin, tag=bot_wait] run function ctf_bots:internal/combat/wait_tick
+
 # The bots holding a ranged weapon at their target shoot (every tick)
 execute as @e[type=zombified_piglin, tag=bot_shoot] at @s run function ctf_bots:internal/combat/shoot_tick
 
@@ -22,3 +27,9 @@ scoreboard players add #t bots 1
 scoreboard players operation #slot bots = #t bots
 scoreboard players operation #slot bots %= #5 bots
 execute as @e[type=zombified_piglin, tag=ctf_bot] if score @s bot.slot = #slot bots at @s run function ctf_bots:internal/brain/think
+
+# Kill credit of the bots killed by a grenade / trap / ultimate: the marks follow the bots into their
+# wallets; a wallet whose bot is gone gives the kill to the owner of the mark
+execute as @e[type=zombified_piglin, tag=ctf_bot, scores={kc.time=1..}] run function ctf_bots:internal/credit/mirror
+execute as @e[type=marker, tag=bot_wallet, tag=kc.watch] run function ctf_bots:internal/credit/watch
+execute if score #vkill bots matches 1.. run scoreboard players remove #vkill bots 1

@@ -110,7 +110,17 @@ scoreboard objectives add bot.det dummy
 scoreboard objectives add bot.dt dummy
 # bot.lt - ticks the gap jump stays armed (ctf_bots:internal/brain/leap_scan)
 scoreboard objectives add bot.lt dummy
+# bot.rdy - ticks a bot doesn't hit / shoot (another weapon taken, a target come near:
+# ctf_bots:internal/combat/wait)
+scoreboard objectives add bot.rdy dummy
+# Climbing ladders (ctf_bots:internal/climb): bot.clm - thinks left to reach its ladder, bot.clw - thinks
+# without a ladder search, bot.clt - ticks of climbing left, bot.cdir - the side of the ladder's wall
+scoreboard objectives add bot.clm dummy
+scoreboard objectives add bot.clw dummy
+scoreboard objectives add bot.clt dummy
+scoreboard objectives add bot.cdir dummy
 scoreboard players set #one bots 1
+scoreboard players set #vkill bots 0
 scoreboard players set #4 bots 4
 scoreboard players set #5 bots 5
 
@@ -224,6 +234,12 @@ scoreboard objectives add flag_pickedup minecraft.picked_up:minecraft.magenta_ba
 scoreboard objectives add flag_broken minecraft.mined:minecraft.magenta_banner
 scoreboard objectives add wall_flag_broken minecraft.mined:minecraft.magenta_wall_banner
 scoreboard objectives add just_placed_trap minecraft.used:minecraft.frog_spawn_egg
+# The falling anvil of the anvil trap (ctf_traps:internal/anvil/fall): its speed and the distance
+# fallen (thousandths of a block); #98 / #100 - constants of its drag
+scoreboard objectives add trap.v dummy
+scoreboard objectives add trap.d dummy
+scoreboard players set #98 trap.v 98
+scoreboard players set #100 trap.v 100
 scoreboard objectives add just_threw_grenade minecraft.used:minecraft.lingering_potion
 # Smoke grenades (ctf_grenades:internal/smoke): throws and cloud ticks left
 scoreboard objectives add just_threw_smoke minecraft.used:minecraft.splash_potion
@@ -243,6 +259,9 @@ scoreboard objectives add tk.blue teamkill.blue
 #   4 inferno, 5 Creepenator creeper explosion, 6 a killed Creepenator creeper)
 #   kc.died - the player was killed by a player (vanilla kill credit)
 scoreboard objectives add kc.owner dummy
+# kc.placer - on a trap marker: player_id of who placed it (its kills of attackers are his: a trap set
+# off by an attacker has kc.owner = that attacker, for its kills of defenders)
+scoreboard objectives add kc.placer dummy
 scoreboard objectives add kc.by dummy
 scoreboard objectives add kc.time dummy
 scoreboard objectives add kc.src dummy

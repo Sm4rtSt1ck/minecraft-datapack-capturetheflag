@@ -2,6 +2,8 @@
 # Carrying the flag: to the win trigger, nothing else
 execute if entity @s[tag=bot_carrier] if entity @e[type=armor_stand, tag=win_trigger, distance=..2.5] run return run function ctf_bots:internal/flag/deliver
 execute if entity @s[tag=bot_carrier] at @n[type=armor_stand, tag=win_trigger] run return run function ctf_bots:internal/brain/lure_here
+# An enemy trap in sight next to it: broken
+function ctf_bots:internal/traps/break_check
 # The flag on the ground next to it, nobody carries it: picked up
 execute if entity @e[type=item, tag=bot_flag_item, distance=..1.5] unless entity @e[type=zombified_piglin, tag=bot_carrier] run return run function ctf_bots:internal/flag/pickup
 # Fighting a defender: go on; hit by a defender: fight back; a defender in sight near: fight

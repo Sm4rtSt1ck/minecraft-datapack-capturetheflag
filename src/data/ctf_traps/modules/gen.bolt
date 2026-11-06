@@ -8,3 +8,12 @@ for t in TRAPS:
         function f"ctf_traps:internal/touch/{t['id']}":
             execute if entity @s[tag=attack] run scoreboard players operation @e[type=frog, tag=f"trap.{t['id']}", tag=trap_marker, distance=..2] kc.owner = @s player_id
             execute as @e[type=frog, tag=f"trap.{t['id']}", tag=trap_marker, distance=..2] run function f"ctf_traps:internal/{t['id']}/trigger"
+
+# A trap placed by a non-player (ctf_bots: a defense bot in freeze), as its owner, positioned where a
+# player's trap egg would put it: the same display (the shop egg's entity_data, registry/shop.bolt
+# trap_buy) and the same placing (ctf_traps:internal/place)
+for t in TRAPS:
+    if t["team"] == "defense":
+        function f"ctf_traps:api/place/{t['id']}":
+            summon armor_stand ~ ~ ~ {Marker: true, Invisible: true, Tags: ["trap", "trap_display", (f"trap.{t['id']}")], ArmorItems: [{}, {}, {}, {id: (f"minecraft:{t['block']}"), count: 1}]}
+            function ctf_traps:internal/place

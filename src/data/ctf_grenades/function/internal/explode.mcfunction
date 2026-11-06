@@ -1,6 +1,8 @@
 # Runs as the grenade marker. Explosion radius 2 -> damage up to 4 blocks
 function ctf_fight:api/credit/owner
 execute as @a[tag=player, distance=..4] run function ctf_fight:api/credit/mark {time: 60, src: 1}
+# The bots too (BOTS.md)
+execute as @e[type=zombified_piglin, tag=ctf_bot, distance=..4] run function ctf_fight:api/credit/mark {time: 60, src: 1}
 function ctf_fight:api/credit/mark_traps {r: 4}
 
 summon minecraft:creeper ~ ~ ~ {Fuse: 0b, ExplosionRadius: 2, CustomName: '"Grenade"'}

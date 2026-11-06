@@ -57,25 +57,61 @@ ARMOR = {"gold_armor": {"tier": 1}, "iron_armor": {"tier": 2}}
 LIMITED = ["he", "regen", "speed"]
 
 # FIGHTING (stage 6). A bot with a ranged weapon uses it against a target farther than its
-# "min" blocks (closer: the main weapon), up to "max". The guns use the players' damage and their
-# spread (ctf_guns:config) plus "spread" tenths of a degree (the bot's aim); bows / crossbows shoot
-# arrows ("aim" ticks to draw, "elevation" degrees up against the drop).
+# "min" blocks (closer: the main weapon), up to "max", only while it sees the target (a line of sight
+# at its think). The guns use the players' damage and their spread (ctf_guns:config) plus "spread"
+# tenths of a degree (the bot's aim); bows / crossbows shoot arrows ("aim" ticks to draw, "elevation"
+# degrees up against the drop). "miss": the chance of a missed shot (a gun: the spread "wide" tenths
+# of a degree; an arrow: "dev" degrees to a side). The rifle: "rate" shots a second (players: 6)
 RANGED_USE = {
-    "bow": {"min": 6, "max": 40, "aim": 20, "elevation": 3},
-    "fire_bow": {"min": 6, "max": 40, "aim": 20, "elevation": 3},
-    "punch_bow": {"min": 6, "max": 40, "aim": 20, "elevation": 3},
-    "crossbow": {"min": 6, "max": 40, "aim": 25, "elevation": 2},
-    "sniper": {"min": 8, "max": 90, "aim": 30, "spread": 15},
-    "rifle": {"min": 5, "max": 48, "spread": 25},
+    "bow": {"min": 6, "max": 40, "aim": 20, "elevation": 3, "miss": 0.3, "dev": 6},
+    "fire_bow": {"min": 6, "max": 40, "aim": 20, "elevation": 3, "miss": 0.3, "dev": 6},
+    "punch_bow": {"min": 6, "max": 40, "aim": 20, "elevation": 3, "miss": 0.3, "dev": 6},
+    "crossbow": {"min": 6, "max": 40, "aim": 25, "elevation": 2, "miss": 0.3, "dev": 6},
+    "sniper": {"min": 8, "max": 90, "aim": 30, "spread": 15, "miss": 0.3, "wide": 60},
+    "rifle": {"min": 5, "max": 48, "spread": 25, "rate": 3, "miss": 0.35, "wide": 120},
 }
+# The line of sight to the target is checked up to this many blocks (farther: not seen)
+SIGHT_FIGHT = 64
+# Reactions, in ticks: a bot doesn't hit or shoot for "switch" ticks after it takes another weapon,
+# and for "react" ticks after its target first comes within "near" blocks (a swing then misses:
+# no damage; the next swing of the mob comes 1 s later). Its target goes "near" + 3 away: a new react
+DELAY = {"switch": 10, "react": 6, "near": 4}
 # Potions and grenades: a regeneration potion below this health; a speed potion when the target is
-# farther than this; a grenade at a target within [min, max], a chance of 1 in "chance" per think
+# farther than this; a grenade at a target within [min, max], a chance of 1 in "chance" per think,
+# thrown "pitch" degrees up with the speed that lands it at the target's feet (ctf_bots:combat), only
+# at a target in sight with nothing in the way of the throw (3 blocks)
 REGEN_BELOW = 8
 SPEED_FROM = 10
-GRENADE = {"min": 6, "max": 18, "chance": 6}
+GRENADE = {"min": 6, "max": 18, "chance": 6, "pitch": 30}
 # The mace: a wind charge under its feet when the target is within this (a jump, then a smash)
 MACE_JUMP = 4
 
 # Jumping over a gap (a hole 2+ blocks deep right ahead, the ground again 2..4 blocks ahead, towards
 # its target): the leap's horizontal speed and its jump (blocks a tick)
 LEAP = {"forward": 0.5, "up": 0.45}
+
+# Climbing ladders (vanilla paths never go up a ladder). A bot stuck for 1 s ("stuck" thinks) below
+# its target (2+ blocks) looks for a ladder (2+ blocks high) within "search" blocks around its feet
+# (the nearest one), walks to it (up to "go" thinks), then climbs it ("speed" blocks a tick: a
+# player's ~0.12) and steps off its top towards its wall. No ladder / not reached: no search for "wait"
+# thinks. ctf_bots:internal/climb
+CLIMB = {"stuck": 4, "search": 6, "go": 20, "speed": 0.12, "wait": 40}
+
+# At freeze each defense bot goes straight to its defend spot (a teleport) with this chance; the
+# others walk there at the start of the round
+POST_TP = 0.5
+
+# TRAPS (stage 7). At freeze, after the plans, the defense bots buy traps with the money left in their
+# wallets (the shop costs and counts; one of each per round for the server, like the players):
+# a random defense bot that can pay, in this order. Each trap goes to a free spot of its kind (bot
+# markers: T, AN for the anvil): the nearest one to the flag 2 times of 3, else a random one
+TRAPS = [
+    {"id": "tnt", "spot": "bot_trap"},
+    {"id": "anvil", "spot": "bot_anvil"},
+    {"id": "levitation", "spot": "bot_trap"},
+    {"id": "wither", "spot": "bot_trap"},
+    {"id": "web", "spot": "bot_trap"},
+]
+# An attack bot that sees an enemy trap within this breaks it (like a player's hit with the hand);
+# the trap goes off within 2 blocks, the bots think 4 times a second (~1.5 blocks)
+TRAP_BREAK = 4
