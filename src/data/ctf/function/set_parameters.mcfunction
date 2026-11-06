@@ -38,6 +38,10 @@ weather clear
 
 team leave @a
 
+# The lures of the bots (ctf_bots): nobody bumps into them
+team add bot_lures
+team modify bot_lures collisionRule never
+
 team add lobby
 team modify lobby color gold
 team modify lobby collisionRule never
@@ -67,6 +71,19 @@ scoreboard objectives add bots dummy
 scoreboard players set team bots 0
 # "attack bots" = the attack bots alive (ctf_bots:internal/count)
 scoreboard players set attack bots 0
+# Bots (ctf_bots): bot.n - the number of the bot (its name), bot.slot - its brain tick (n % 5),
+# bot.own - on a lure / a defend spot: the number of its bot, bot.r / bot.w - the attack route of the
+# bot and its next point (0: the route is done), bot.idx - on a route point copy: its number
+scoreboard objectives add bot.n dummy
+scoreboard objectives add bot.slot dummy
+scoreboard objectives add bot.own dummy
+scoreboard objectives add bot.r dummy
+scoreboard objectives add bot.w dummy
+# bot.t - thinks without reaching the next route point (stuck: skipped), bot.brk - thinks breaking the flag
+scoreboard objectives add bot.t dummy
+scoreboard objectives add bot.brk dummy
+scoreboard players set #4 bots 4
+scoreboard players set #5 bots 5
 
 # Numbers
 scoreboard objectives add number dummy

@@ -89,11 +89,12 @@ def copy_solid(map):
     execute positioned (_b[0] - 0.5) (_b[1] - 0.5) (_b[2] - 0.5) as @e[type=block_display, tag=ctf_solid, dx=(ARENA["size"][0] - 1), dy=(ARENA["size"][1] - 1), dz=(ARENA["size"][2] - 1)] at @s positioned f"~{_d[0]}" f"~{_d[1]}" f"~{_d[2]}" run function ctf_maps:internal/solid/copy
 
 # The bot markers of the template (admin:build/bots, BOTS.md) are copied into the arena as markers
-# (ctf_maps:internal/bots/copy): the bots' knowledge of the map. Like copy_solid
+# (ctf_maps:internal/bots/copy): the bots' knowledge of the map. Like copy_solid; only in a match
+# with bots (score team bots, set at the match start)
 def copy_bot_markers(map):
     _b = template_block(map)
     _d = arena_shift(map)
-    execute positioned (_b[0] - 0.5) (_b[1] - 0.5) (_b[2] - 0.5) as @e[type=armor_stand, tag=build_bot, dx=(ARENA["size"][0] - 1), dy=(ARENA["size"][1] - 1), dz=(ARENA["size"][2] - 1)] at @s positioned f"~{_d[0]}" f"~{_d[1]}" f"~{_d[2]}" run function ctf_maps:internal/bots/copy
+    execute if score team bots matches 1.. positioned (_b[0] - 0.5) (_b[1] - 0.5) (_b[2] - 0.5) as @e[type=armor_stand, tag=build_bot, dx=(ARENA["size"][0] - 1), dy=(ARENA["size"][1] - 1), dz=(ARENA["size"][2] - 1)] at @s positioned f"~{_d[0]}" f"~{_d[1]}" f"~{_d[2]}" run function ctf_maps:internal/bots/copy
 
 # The flag is delivered here: ctf_maps:map/<id>/clone
 def win_trigger(map):

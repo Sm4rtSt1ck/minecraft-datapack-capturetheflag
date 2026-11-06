@@ -8,6 +8,7 @@
         "ctf_fight:tick/combat_credit",
         "ctf_grenades:tick/fly",
         "ctf_ult:tick/click",
-        "ctf_ult:tick/active"
+        "ctf_ult:tick/active",
+        "ctf_bots:tick/combat"
     ]
 }

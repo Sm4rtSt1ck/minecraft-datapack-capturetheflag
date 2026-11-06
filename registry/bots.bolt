@@ -9,7 +9,8 @@ NAMES = ["Alex", "Steve", "Kate", "Max", "Lily", "Sam", "Nina", "Tom", "Zoe", "B
 # reinforcements (more zombies when hurt) are set to 0 in ctf_bots:gen
 BODY = {
     "attack_damage": 1.0,
-    "follow_range": 64.0,
+    # Far enough to chase the flag carrier across the map (the path search visits up to 16 x this)
+    "follow_range": 96.0,
     # A mob moves by speed^2 per tick of input (a player by 0.98 x speed): 0.35 ~ a sprinting player
     # (0.1 x 1.3 sprint); a husk has 0.23 (~ half the walking speed of a player)
     "movement_speed": 0.35,

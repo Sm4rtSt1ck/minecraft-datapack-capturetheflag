@@ -133,8 +133,8 @@ Each stage is one commit, checked by the user in the game before the next one.
 | 1 | Lobby and teams: button, count sign (1-10), all players in one random side; no bots yet | done |
 | 2 | Bot body, melee: spawn, death (out until the round end), round win counts bots, kill credit, kill money; first TPS measurement | done |
 | 3 | Map annotation: `admin:build` bot markers, `bot.*` in `maps.bolt`; the user annotates the first map | done |
-| 4 | Movement and the flag: routes, attacking the flag, delivery (playable mode); defenders to defend spots (near the flag more often) | |
-| 5 | Economy and shop: buy profiles from the registry; defense on a high base prefers bows / guns | |
+| 4 | Movement and the flag: routes, attacking the flag, delivery (playable mode); defenders to defend spots (near the flag more often); the flag carrier chased from anywhere | done |
+| 5 | Economy and shop: buy profiles from the registry; defense on a high base prefers bows / guns | in progress |
 | 6 | Weapons: guns, bow, grenades, mace, potions, totem, wind charge | |
 | 7 | Traps: bots place them; see / avoid / break the enemy traps; kills of bots by a player's trap credited to him | |
 | 8 | Ultimates: charge, choice, use (adapt / forbid the player-only ones); fear a player in the bomber ultimate | |
@@ -212,3 +212,36 @@ Each stage is one commit, checked by the user in the game before the next one.
   (generated) restores the markers of the registry entry. test_map has one.
 - The flag of defense bots: a random `bot_flag` marker (else where a defense bot stands).
 - New objectives `build.idx`, `bot.idx` (`ctf:set_parameters`).
+
+### Stage 4 - movement and the flag
+
+- Brain: `ctf_bots:tick/combat` (`#ctf:tick/combat`, round and end_round): every bot thinks 4 times
+  a second (`internal/brain/think`, `bot.slot` = `bot.n % 5` = its tick of 5). Objectives `bot.n`,
+  `bot.slot`, `bot.own`, `bot.r`, `bot.w`, `bot.t`, `bot.brk` (`ctf:set_parameters`).
+- Moving: each bot has a lure (`internal/brain/new_lure`: an invisible, silent, NoAI rabbit, scale
+  0.0625, team `bot_lures` without collision, 1024 HP + resistance 4, `bot.own` = the bot), put at
+  where the bot must go; the bot gets a 0.01 `generic` hit "by" the lure and retaliates (vanilla
+  `HurtByTargetGoal`, priority over players). Fighting: the same hit "by" the player.
+- Switching targets (the lesson of the first test): a running retaliation is NOT restarted by a new
+  hit, so the old target must be dropped first, else the bot keeps its target and gets hit every
+  think. Lure -> player: the lure becomes `Invulnerable` (not a valid target: the goal stops in the
+  same tick) and the player's hit starts the new goal. Player -> anything: the bot joins the
+  players' team for one tick (`internal/brain/drop_target`, tag `bot_reset`; a mob stops targeting
+  a teammate), `rejoin` the next tick, the new target at the next think. Hits only on a change.
+- Fighting: a bot keeps fighting the enemy player it targets (vanilla also picks visible players);
+  hit by an enemy (`on attacker`) -> fights back; an enemy within 16 -> fights.
+- Attack bot: carrying the flag (glowing only) -> the win trigger (delivered within 2.5:
+  `ctf_flag:api/deliver`); the flag item within 1.5 -> picked up (`bot_carrier`, a `bot_flag_pos`
+  marker follows it: the flag drops there when it dies); fight; the placed flag within 2.5 ->
+  broken in 3 s (`internal/flag/breaking`: 12 thinks, particles and sound, then its banner is
+  removed: `ctf_flag:tick/combat` breaks the flag); its route (`bot.r` = route (n % 4) + 1 or the
+  next one with points; `bot.w` = the next point; within 3 -> the next; 10 s without reaching it ->
+  skipped; gaps skipped); then escort a carrier (to the win trigger), else the flag item / the flag.
+- Defense bot: a player carrying the flag (tag `bot_flag_player`, any distance: he glows) -> chase;
+  fight; the flag on the ground -> guard it; its defend spot (picked at the round start: the nearest
+  free one to the flag 2 times of 3, else a random free one; none: the flag), standing there asleep
+  (`bot_guard`, NoAI: no swinging at the lure).
+- `follow_range` 96 (the chase across the map).
+- The bot markers are copied into the arena only in a match with bots (`team bots` >= 1).
+- Known: a lure / fight hit is a real hit (0.01): a bot dying soon after (a fall) may credit that
+  player with a kill (vanilla kill credit). The bots know where the flag is (no search yet).
