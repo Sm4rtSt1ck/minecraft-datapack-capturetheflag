@@ -6,5 +6,5 @@ scoreboard players reset @s dc.killer
 tag @s add ctf.victim
 execute on attacker if entity @s[type=player] run scoreboard players operation @a[tag=ctf.victim, limit=1] dc.killer = @s player_id
 # Killed by a bot (BOTS.md)
-execute on attacker if entity @s[type=husk, tag=ctf_bot] run function ctf_bots:api/killed_player
+execute on attacker if entity @s[type=zombified_piglin, tag=ctf_bot] run function ctf_bots:api/killed_player
 tag @s remove ctf.victim

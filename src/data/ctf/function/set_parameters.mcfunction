@@ -91,6 +91,26 @@ scoreboard objectives add bot.he dummy
 scoreboard objectives add bot.regen dummy
 scoreboard objectives add bot.speed dummy
 scoreboard objectives add bot.wind dummy
+# Fighting (ctf_bots:combat): held weapon (0 main, 1 ranged), shot cooldown, utility cooldown
+# (thinks), rifle magazine, aiming ticks
+scoreboard objectives add bot.hold dummy
+scoreboard objectives add bot.cd dummy
+scoreboard objectives add bot.cd2 dummy
+scoreboard objectives add bot.mag dummy
+scoreboard objectives add bot.aim dummy
+# bot.blind - ticks without sight (dropping a target); bot.px / bot.pz / bot.stk - its last position
+# (tenths of a block), thinks without moving
+scoreboard objectives add bot.blind dummy
+scoreboard objectives add bot.px dummy
+scoreboard objectives add bot.pz dummy
+scoreboard objectives add bot.stk dummy
+# bot.det - thinks of a detour left (a bot under a player it can't reach goes to the bot marker nearest
+# to him); bot.dt - on that marker: the number of its bot + 1
+scoreboard objectives add bot.det dummy
+scoreboard objectives add bot.dt dummy
+# bot.lt - ticks the gap jump stays armed (ctf_bots:internal/brain/leap_scan)
+scoreboard objectives add bot.lt dummy
+scoreboard players set #one bots 1
 scoreboard players set #4 bots 4
 scoreboard players set #5 bots 5
 

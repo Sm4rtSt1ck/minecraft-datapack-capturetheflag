@@ -1,6 +1,6 @@
 # Stuns the defenders within 2.5 blocks for 3 seconds: almost no movement, no jumping, no hitting
 execute as @a[tag=defense, tag=player, gamemode=!spectator, distance=..2.5] run function ctf_loot:reward/stun/apply
-execute as @e[type=husk, tag=ctf_bot, tag=defense, distance=..2.5] run function ctf_loot:reward/stun/apply
+execute as @e[type=zombified_piglin, tag=ctf_bot, tag=defense, distance=..2.5] run function ctf_loot:reward/stun/apply
 particle minecraft:electric_spark ~ ~1 ~ 0.8 0.8 0.8 0.3 60 force @a[tag=!lobby]
 particle minecraft:flash ~ ~1 ~ 0 0 0 0 1 force @a[tag=!lobby]
 playsound minecraft:block.anvil.land block @a[tag=!lobby] ~ ~ ~ 1 1.6

@@ -4,19 +4,13 @@
             "trigger": "minecraft:player_killed_entity",
             "conditions": {
                 "entity": {
-                    "type": "minecraft:husk",
+                    "type": "minecraft:zombified_piglin",
                     "nbt": "{Tags:[\"ctf_bot\"]}"
                 },
                 "killing_blow": {
                     "source_entity": {
                         "type": "minecraft:player"
-                    },
-                    "tags": [
-                        {
-                            "id": "ctf_bots:fake_hit",
-                            "expected": false
-                        }
-                    ]
+                    }
                 }
             }
         }

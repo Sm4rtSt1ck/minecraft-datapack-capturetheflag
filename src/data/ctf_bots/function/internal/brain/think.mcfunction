@@ -2,8 +2,16 @@
 # (ctf_bots:internal/brain/target_want, lure_here)
 scoreboard players operation #me bots = @s bot.n
 execute as @e[type=rabbit, tag=bot_lure] if score @s bot.own = #me bots run tag @s add bot_mylure
-execute if entity @s[tag=attack] run function ctf_bots:internal/brain/attack
-execute if entity @s[tag=defense] run function ctf_bots:internal/brain/defense
+# A detour (ctf_bots:internal/brain/detour), else its side's thinking
+execute if score @s bot.det matches 1.. run function ctf_bots:internal/brain/detour
+execute unless score @s bot.det matches 1.. if entity @s[tag=attack] run function ctf_bots:internal/brain/attack
+execute unless score @s bot.det matches 1.. if entity @s[tag=defense] run function ctf_bots:internal/brain/defense
+# A gap ahead: the jump armed
+function ctf_bots:internal/brain/leap_scan
+# Stuck on the way: a small jump; under a player it can't reach: a detour
+function ctf_bots:internal/brain/stuck
+# Its weapons: potions, the held weapon, a grenade, a mace jump (ctf_bots:combat)
+function ctf_bots:internal/combat/think
 tag @e[type=rabbit, tag=bot_mylure] remove bot_mylure
 tag @a remove bot_want
 tag @a remove bot_tgt

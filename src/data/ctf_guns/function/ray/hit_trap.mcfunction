@@ -1,5 +1,6 @@
 # The shooter sets the trap off, so he gets the kill credit (ctf_fight:internal/credit)
 particle minecraft:crit ~ ~ ~ 0.1 0.1 0.1 0.2 10 force @a[tag=!lobby]
-scoreboard players operation @e[type=frog, tag=gun.trap] kc.owner = @a[tag=gun.shooter, limit=1] player_id
+execute unless score #bot gun.tmp matches 1 run scoreboard players operation @e[type=frog, tag=gun.trap] kc.owner = @a[tag=gun.shooter, limit=1] player_id
+execute if score #bot gun.tmp matches 1 run scoreboard players operation @e[type=frog, tag=gun.trap] kc.owner = @e[type=zombified_piglin, tag=gun.shooter, limit=1] player_id
 execute as @e[type=frog, tag=gun.trap] at @s run function ctf_traps:api/trigger
 tag @e[tag=gun.trap] remove gun.trap

@@ -1,9 +1,7 @@
 # A defense bot thinks
 # A player carries the flag: chase him (he glows: seen from anywhere)
 execute if entity @a[tag=bot_flag_player] run tag @p[tag=bot_flag_player] add bot_want
-execute if entity @a[tag=bot_want] run function ctf_bots:internal/brain/far_on
 execute if entity @a[tag=bot_want] run return run function ctf_bots:internal/brain/target_want
-function ctf_bots:internal/brain/far_off
 # Fighting an attacker: go on, unless he leads it too far from its post; hit by an attacker: fight
 # back; an attacker near: fight
 execute as @e[type=marker, tag=bot_defend] if score @s bot.own = #me bots run tag @s add bot_post
@@ -11,7 +9,8 @@ execute on target if entity @s[type=player] run tag @s add bot_tgt
 execute if entity @a[tag=bot_tgt] if function ctf_bots:internal/brain/leash run return 1
 execute on target if entity @s[type=player, tag=attack, tag=!dead] run return 1
 execute on attacker if entity @s[type=player, tag=attack, tag=!dead, gamemode=!spectator] run tag @s add bot_want
-execute unless entity @a[tag=bot_want] run tag @p[tag=attack, tag=player, tag=!dead, gamemode=!spectator, distance=..16] add bot_want
+scoreboard players set #enemy bots 1
+execute unless entity @a[tag=bot_want] run function ctf_bots:internal/brain/spot
 execute if entity @a[tag=bot_want] run return run function ctf_bots:internal/brain/target_want
 # The flag on the ground: guard it
 execute if entity @e[type=item, tag=bot_flag_item] at @n[type=item, tag=bot_flag_item] run return run function ctf_bots:internal/brain/lure_here

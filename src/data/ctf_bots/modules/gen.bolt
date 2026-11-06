@@ -1,5 +1,5 @@
 # Functions generated from the bots registry (registry/bots.bolt) at build time
-from registry:bots import NAMES, BODY, ARMOR_COLOR, CHASE_RANGE, LEASH
+from registry:bots import NAMES, BODY, ARMOR_COLOR, LEASH
 from registry:world import ARENA
 
 # The bots of the match (settings Bots_count: the first N names) that are missing (all at the first
@@ -7,13 +7,13 @@ from registry:world import ARENA
 # the spawn of their side (ctf_bots:on/freeze_start). NoAI until the round starts
 function ctf_bots:internal/spawn/missing:
     for i in range(len(NAMES)):
-               execute if score Bots_count settings matches (f"{i + 1}..") unless entity @e[type=husk, tag=f"ctf_bot_{i}"] run summon husk (ARENA["respawn"][0]) (ARENA["respawn"][1]) (ARENA["respawn"][2]) {Tags: ["ctf_bot", "ctf_bot_new", (f"ctf_bot_{i}")], CustomName: (f'"[Bot] {NAMES[i]}"'), CustomNameVisible: 1b, PersistenceRequired: 1b, NoAI: 1b, CanPickUpLoot: 0b, CanBreakDoors: 0b, IsBaby: 0b, DeathLootTable: "minecraft:empty", HandItems: [{id: "minecraft:golden_sword", count: 1, components: {"minecraft:enchantments": {levels: {"minecraft:knockback": 2, "minecraft:sweeping_edge": 3}}, "minecraft:custom_data": {tags: ["main weapon"], wpn: "golden_sword"}}}, {}], HandDropChances: [0.0f, 0.0f], ArmorDropChances: [0.0f, 0.0f, 0.0f, 0.0f], attributes: [{id: "minecraft:attack_damage", base: (BODY["attack_damage"])}, {id: "minecraft:follow_range", base: (BODY["follow_range"])}, {id: "minecraft:movement_speed", base: (BODY["movement_speed"])}, {id: "minecraft:spawn_reinforcements", base: 0.0}, {id: "minecraft:armor", base: 0.0}]}
+               execute if score Bots_count settings matches (f"{i + 1}..") unless entity @e[type=zombified_piglin, tag=f"ctf_bot_{i}"] run summon zombified_piglin (ARENA["respawn"][0]) (ARENA["respawn"][1]) (ARENA["respawn"][2]) {Tags: ["ctf_bot", "ctf_bot_new", (f"ctf_bot_{i}")], CustomName: (f'"[Bot] {NAMES[i]}"'), CustomNameVisible: 1b, PersistenceRequired: 1b, NoAI: 1b, CanPickUpLoot: 0b, CanBreakDoors: 0b, IsBaby: 0b, DeathLootTable: "minecraft:empty", HandItems: [{id: "minecraft:golden_sword", count: 1, components: {"minecraft:enchantments": {levels: {"minecraft:knockback": 2, "minecraft:sweeping_edge": 3}}, "minecraft:custom_data": {tags: ["main weapon"], wpn: "golden_sword"}}}, {}], HandDropChances: [0.0f, 0.0f], ArmorDropChances: [0.0f, 0.0f, 0.0f, 0.0f], attributes: [{id: "minecraft:attack_damage", base: (BODY["attack_damage"])}, {id: "minecraft:follow_range", base: (BODY["follow_range"])}, {id: "minecraft:movement_speed", base: (BODY["movement_speed"])}, {id: "minecraft:spawn_reinforcements", base: 0.0}, {id: "minecraft:armor", base: 0.0}]}
 
 # The number of every bot (its name) and its brain tick (ctf_bots:tick/combat: n % 5)
 function ctf_bots:internal/spawn/numbers:
     for i in range(len(NAMES)):
-        scoreboard players set @e[type=husk, tag=f"ctf_bot_{i}"] bot.n (i)
-        scoreboard players set @e[type=husk, tag=f"ctf_bot_{i}"] bot.slot (i % 5)
+        scoreboard players set @e[type=zombified_piglin, tag=f"ctf_bot_{i}"] bot.n (i)
+        scoreboard players set @e[type=zombified_piglin, tag=f"ctf_bot_{i}"] bot.slot (i % 5)
 
 # As a bot at the start of freeze: like a player without armor / weapon (ctf_inv:on/freeze_start),
 # the missing pieces of the team leather set and the golden sword
@@ -36,19 +36,44 @@ function ctf_bots:internal/money/wallets:
     execute if score #attack bots matches 0 run tag @e[type=marker, tag=bot_wallet_new] add defense
     tag @e[type=marker, tag=bot_wallet_new] remove bot_wallet_new
 
-# As a defense bot: the long sight while it chases the flag carrier (written only on a change)
-function ctf_bots:internal/brain/far_on:
-    execute if entity @s[tag=bot_far] run return 0
-    attribute @s minecraft:follow_range base set (CHASE_RANGE)
-    tag @s add bot_far
-function ctf_bots:internal/brain/far_off:
-    execute unless entity @s[tag=bot_far] run return 0
-    attribute @s minecraft:follow_range base set (BODY["follow_range"])
-    tag @s remove bot_far
-
 # As a defense bot: its target (tag bot_tgt) farther than LEASH from its post (bot_post: its defend
 # spot, else the flag) is dropped: back to the post
 function ctf_bots:internal/brain/leash:
-    execute at @n[type=marker, tag=bot_post] unless entity @a[tag=bot_tgt, distance=(f"..{LEASH}")] run return run function ctf_bots:internal/brain/drop_target
-    execute unless entity @e[type=marker, tag=bot_post] at @n[type=armor_stand, tag=flag] unless entity @a[tag=bot_tgt, distance=(f"..{LEASH}")] run return run function ctf_bots:internal/brain/drop_target
+    execute at @n[type=marker, tag=bot_post] unless entity @a[tag=bot_tgt, distance=(f"..{LEASH}")] run return run function ctf_bots:internal/brain/leash_back
+    execute unless entity @e[type=marker, tag=bot_post] at @n[type=armor_stand, tag=flag] unless entity @a[tag=bot_tgt, distance=(f"..{LEASH}")] run return run function ctf_bots:internal/brain/leash_back
     return fail
+
+# The bots in the kills sidebar: a score holder bot_<i> per bot, shown as "[Bot] <name>", in the
+# bots' team (its color). The tab list shows only players (no way to add the bots there)
+function ctf_bots:internal/score/init:
+    for i in range(len(NAMES)):
+        execute if score Bots_count settings matches (f"{i + 1}..") run scoreboard players add f"bot_{i}" kills 0
+        execute if score Bots_count settings matches (f"{i + 1}..") run scoreboard players display name f"bot_{i}" kills (f"[Bot] {NAMES[i]}")
+        execute if score Bots_count settings matches (f"{i + 1}..") if score team bots matches 1 run team join team_1 f"bot_{i}"
+        execute if score Bots_count settings matches (f"{i + 1}..") if score team bots matches 2 run team join team_2 f"bot_{i}"
+function ctf_bots:internal/score/kill:
+    for i in range(len(NAMES)):
+        execute if entity @s[tag=f"ctf_bot_{i}"] run scoreboard players add f"bot_{i}" kills 1
+function ctf_bots:internal/score/remove:
+    for i in range(len(NAMES)):
+        scoreboard players reset f"bot_{i}" kills
+        team leave f"bot_{i}"
+
+# As a bot, at it: the nearest enemy player within SIGHT gets the tag bot_want if the bot can see him
+# (ctf_bots:internal/brain/los). The side of the enemies: #enemy bots (1 attack, 2 defense)
+from registry:bots import SIGHT
+function ctf_bots:internal/brain/spot:
+    execute if score #enemy bots matches 1 run tag @p[tag=attack, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{SIGHT}")] add bot_see
+    execute if score #enemy bots matches 2 run tag @p[tag=defense, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{SIGHT}")] add bot_see
+    scoreboard players set #los bots 0
+    scoreboard players set #step bots 0
+    execute if entity @a[tag=bot_see] anchored eyes facing entity @p[tag=bot_see] eyes positioned ^ ^ ^1 run function ctf_bots:internal/brain/los
+    execute if score #los bots matches 1 run tag @a[tag=bot_see] add bot_want
+    tag @a remove bot_see
+
+# As a bot at the start of freeze: the body attributes of the registry (a bot that survives keeps its
+# entity: a change of BODY reaches it here too)
+function ctf_bots:internal/spawn/body:
+    attribute @s minecraft:follow_range base set (BODY["follow_range"])
+    attribute @s minecraft:movement_speed base set (BODY["movement_speed"])
+    attribute @s minecraft:attack_damage base set (BODY["attack_damage"])

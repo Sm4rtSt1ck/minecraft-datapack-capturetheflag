@@ -5,7 +5,7 @@ scoreboard players set #attack bots 0
 execute if score team bots matches 1 if score match rounds < swap rounds run scoreboard players set #attack bots 1
 execute if score team bots matches 2 if score match rounds >= swap rounds run scoreboard players set #attack bots 1
 
-execute if score team bots matches 1 run team join team_1 @e[type=husk, tag=ctf_bot_new]
-execute if score team bots matches 2 run team join team_2 @e[type=husk, tag=ctf_bot_new]
-execute if score #attack bots matches 1 run tag @e[type=husk, tag=ctf_bot_new] add attack
-execute if score #attack bots matches 0 run tag @e[type=husk, tag=ctf_bot_new] add defense
+execute if score team bots matches 1 run team join team_1 @e[type=zombified_piglin, tag=ctf_bot_new]
+execute if score team bots matches 2 run team join team_2 @e[type=zombified_piglin, tag=ctf_bot_new]
+execute if score #attack bots matches 1 run tag @e[type=zombified_piglin, tag=ctf_bot_new] add attack
+execute if score #attack bots matches 0 run tag @e[type=zombified_piglin, tag=ctf_bot_new] add defense

@@ -26,9 +26,9 @@ execute as @a if score @s player_id = #k dc.tmp run tag @s add ctf.killer_of_vic
 execute if entity @a[tag=ctf.killer_of_victim] run title @s subtitle [{"selector": "@a[tag=ctf.killer_of_victim]"}, {"text": " has ", "color": "gold"}, {"score": {"name": "@a[tag=ctf.killer_of_victim, limit=1]", "objective": "health"}, "color": "red"}, {"text": " hp left!", "color": "gold"}]
 tag @a remove ctf.killer_of_victim
 # Killed by a bot (BOTS.md): its health from its NBT (no "health" score)
-execute as @e[type=husk, tag=ctf_bot] if score @s player_id = #k dc.tmp run tag @s add ctf.killer_of_victim
-execute store result score #hp dc.tmp run data get entity @n[type=husk, tag=ctf.killer_of_victim] Health
-execute if entity @e[type=husk, tag=ctf.killer_of_victim] run title @s subtitle [{"selector": "@n[type=husk, tag=ctf.killer_of_victim]"}, {"text": " has ", "color": "gold"}, {"score": {"name": "#hp", "objective": "dc.tmp"}, "color": "red"}, {"text": " hp left!", "color": "gold"}]
-tag @e[type=husk, tag=ctf.killer_of_victim] remove ctf.killer_of_victim
+execute as @e[type=zombified_piglin, tag=ctf_bot] if score @s player_id = #k dc.tmp run tag @s add ctf.killer_of_victim
+execute store result score #hp dc.tmp run data get entity @n[type=zombified_piglin, tag=ctf.killer_of_victim] Health
+execute if entity @e[type=zombified_piglin, tag=ctf.killer_of_victim] run title @s subtitle [{"selector": "@n[type=zombified_piglin, tag=ctf.killer_of_victim]"}, {"text": " has ", "color": "gold"}, {"score": {"name": "#hp", "objective": "dc.tmp"}, "color": "red"}, {"text": " hp left!", "color": "gold"}]
+tag @e[type=zombified_piglin, tag=ctf.killer_of_victim] remove ctf.killer_of_victim
 
 schedule function ctf_fight:internal/tp_death_location 6t

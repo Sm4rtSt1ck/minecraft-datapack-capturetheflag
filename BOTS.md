@@ -31,7 +31,7 @@ No mods: datapack only.
 | Bot respawn | Like players: a dead bot is out until the end of the round; at the next freeze the
   alive ones go back to the base (healed, freeze effects, missing leather armor / sword), the dead
   ones come back |
-| Bot body | The cheapest mob that fits (see "Bot body"); the look is decided later |
+| Bot body | A zombified piglin (see "Bot body"; was a husk until stage 6); the look is decided later |
 | Button | Vote phase, hotbar slot 9 (`hotbar.8`), a villager head; glints when on |
 | Bot count sign | 1 block west of the rounds sign: `LOBBY["sign_bots"]` = [-1, -40, 28] |
 | Map knowledge | The bot markers in the template, copied at every clone (not the registry: it is a backup) |
@@ -45,12 +45,15 @@ No mods: datapack only.
 
 1. **A bot is a mob with vanilla AI**, not an armor stand moved by `tp`: vanilla pathfinding
    (ladders, steps, obstacles) can't be rebuilt with commands.
-   - Mobs don't attack their own scoreboard team; the target with line of sight is chosen by
-     vanilla and read with `execute on target`.
-   - Moving to a point: a "lure" (an invisible invulnerable living entity) stands at the point,
-     the bot gets 0+ damage `by` the lure and chases it (retaliation target).
-   - Vanilla limits: no doors (maps need openings), no gap jumps / parkour, path length limited by
-     `follow_range` (long routes need waypoints), no chorus fruit / map teleports.
+   - Targets without hits: a zombified piglin is a neutral mob, `AngryAt` (a UUID) loaded into its
+     NBT sets its target right away (`internal/brain/aim`, `aim_player`). It never targets a
+     player by itself (only one it is angry at), so the brain decides every target.
+   - Moving to a point: a "lure" (an invisible unhurtable tiny rabbit) stands at the point and is
+     the bot's target.
+   - Spotting enemies: the brain itself (`internal/brain/spot`: the nearest enemy within SIGHT, in
+     the line of sight: `los`, 1-block steps through passable blocks).
+   - Vanilla limits: no doors (maps need openings), no gap jumps (done by the brain), path length
+     limited by `follow_range` (long routes need waypoints), no chorus fruit / map teleports.
 2. **Map knowledge is annotated, not computed.** Markers placed on the template with
    `admin:build/bots/get_tools` (flag, trap, anvil trap, defend spots, 4 attack routes) ARE the
    bots' knowledge: every clone of the map copies them into the arena as `marker` entities (tags
@@ -69,9 +72,11 @@ No mods: datapack only.
 
 ### Bot body
 
-A **husk**: doesn't burn in the sun, holds items in both hands, wears armor, chases its target,
-hits with the held item. A husk in water turns into a zombie (then a drowned): the conversion has
-to be blocked (to check in stage 2: `DrownedConversionTime` / keeping it out of water).
+A **zombified piglin**: holds items in both hands, wears armor, chases its target, hits with the
+held item; a neutral mob, so its target is set by `AngryAt` without a hit (see above); doesn't
+convert in water. Fire immune (vanilla: fire arrows / the Inferno blade / fire aspect don't burn it).
+Until stage 6 it was a husk: its target could only be set by a hit "by" the target (retaliation),
+which made the bots get hurt all the time, flicker, fight vanilla's own target picks.
 
 ### Planned layout
 
@@ -224,10 +229,12 @@ Each stage is one commit, checked by the user in the game before the next one.
   `HurtByTargetGoal`, priority over players). Fighting: the same hit "by" the player.
 - Switching targets (the lesson of the first test): a running retaliation is NOT restarted by a new
   hit, so the old target must be dropped first, else the bot keeps its target and gets hit every
-  think. Lure -> player: the lure becomes `Invulnerable` (not a valid target: the goal stops in the
-  same tick) and the player's hit starts the new goal. Player -> anything: the bot joins the
-  players' team for one tick (`internal/brain/drop_target`, tag `bot_reset`; a mob stops targeting
-  a teammate), `rejoin` the next tick, the new target at the next think. Hits only on a change.
+  think. Lure -> player: the lure becomes `Invulnerable` (not a valid target) and the player's hit
+  starts the new goal. Player -> anything: `internal/brain/blind`: `follow_range` 0 for 2 ticks (a
+  mob drops a target farther than it; the target goals are checked every 2nd AI tick), the new
+  hit in the same tick, `sight` gives the range back (24, or 96 while chasing: `bot_far`). All in
+  one AI tick, so vanilla can't grab another player in between (that loop made the bots get hit
+  again and again). The first version changed the bot's team for a tick: the name flickered.
 - Fighting: a bot keeps fighting the enemy player it targets (vanilla also picks visible players);
   hit by an enemy (`on attacker`) -> fights back; an enemy within 16 -> fights.
 - Attack bot: carrying the flag (glowing only) -> the win trigger (delivered within 2.5:
@@ -283,3 +290,82 @@ Each stage is one commit, checked by the user in the game before the next one.
     every visible player within 96); 96 only while a defense bot chases the flag carrier
     (`far_on` / `far_off`, on a change); a defense bot drops a target farther than LEASH (24) from
     its post (its defend spot, else the flag) and goes back (`internal/brain/leash`).
+
+### Stage 6 - weapons
+
+- `registry/bots.bolt`: RANGED_USE (per ranged weapon: min / max distance, aim ticks, spread,
+  elevation), REGEN_BELOW, SPEED_FROM, GRENADE, MACE_JUMP. `ctf_bots:combat` (entrypoint) generates
+  `internal/combat/hold_melee|hold_ranged` (the item stacks by `bot.mw` / `bot.sec`), `choose`,
+  `shoot`, `think`. Objectives `bot.hold`, `bot.cd`, `bot.cd2`, `bot.mag`, `bot.aim`.
+- Every think (`internal/combat/think`, after the movement): a regeneration potion below 8 health
+  (a husk is undead: instant damage II heals it 8, like regeneration II for 10 s); its target is an
+  enemy player (`execute on target`, tag `bot_tc`): a speed potion if he is farther than 10
+  (speed II: mobs move by speed^2), a grenade at 6..18 blocks (1 chance in 6 per think), a mace jump
+  within 4 (a wind charge under its feet, then the fall makes the mace hit a smash), the ranged
+  weapon within its min..max (`ranged`: held, tag `bot_shoot`) else the main weapon (`melee`).
+- Shooting every tick (`ctf_bots:tick/combat` -> `internal/combat/shoot_tick`):
+  - guns: `internal/combat/fire` calls `ctf_guns:ray/fire` with the bot as the shooter: `#bot
+    gun.tmp 1` makes every ctf_guns damage / trap credit "by" `@e[type=husk, tag=gun.shooter]`
+    (the players' lines are unchanged with `#bot` 0 / unset); the shooter and its teammates
+    (`gun.ally`) aren't hit. From its eyes at the target's eyes (`anchored eyes facing`).
+    Rifle: 6 shots a second, magazine 30, reload 50 ticks, the players' base spread + 2.5 degrees;
+    sniper: 1.5 s aim, 1.5 degrees, reload `ctf_sniper:config reload`.
+  - bows / crossbow: arrows summoned with the motion to the target (`internal/combat/motion`: a
+    marker 1 block ahead, the difference x speed), speed 3, damage 2.5, piercing 4, Owner = the
+    bot, a few degrees up against the drop; fire bow: burning arrows; crossbow: 3 arrows (+-10).
+    Punch is not applied (it is a bow enchantment, not the arrow's).
+  - grenade: the thrown potion + the `he_grenade` marker of ctf_grenades (kill credit owner = the
+    bot), 25 degrees up.
+- The totem in the off hand works by itself (vanilla). The kills by a held ranged weapon pay its
+  kill money (the item has the `wpn` of the shop one).
+- Fixes after the test of stage 6:
+  - The bots never had a ranged weapon: the plans bought the armor first and the weapon was then
+    too expensive. Now the weapon comes first, a cheaper one after it is the fallback (bow), then
+    the protection; a better ranged weapon (later in RANGED) replaces a worse one.
+  - Gaps: `internal/brain/leap_check` (every tick (`ctf_bots:tick/combat`: at 4 thinks a second the
+    bot walked off the edge first), on the ground, towards its target: the lure or
+    the player, not within 3): `leap` (generated): a hole 2 deep right ahead and the ground 2..4
+    ahead with room -> `leap_go`: forward speed for the distance + LEAP up (registry). The target
+    stays, so the path goes on after the landing. Block tag `#ctf_bots:gap` = `#ctf_guns:passable`.
+  - A bot that delivered the flag stops glowing (`internal/flag/deliver`). The flag of a bot that
+    starts an ultimate drops: stage 8.
+- Fixes after the second test of stage 6:
+  - Shared code instead of copies: `ctf_flag:api/pickup` (was internal: glowing of the carrier) and
+    `ctf_flag:api/bring` (was internal: the delivery) are used by the players and the bots; the bot
+    carrier's glowing ends in `ctf_flag:on/end_round_start` with the players'. The bots keep their
+    own code where the player one works on the inventory (the shop's `give` / slots, the armor sets
+    assembled from the chestplate, the hotbar layout): a mob has only hands and armor slots.
+  - Target switching without a team change (see stage 4: `blind`): no name flicker, no hit loop.
+  - Stuck: `internal/brain/stuck` (every think): a bot going to its lure (farther than 3) that
+    hasn't moved half a block in 3 s jumps a little towards it. Objectives `bot.blind`, `bot.px`,
+    `bot.pz`, `bot.stk`.
+  - The kills sidebar: a score holder `bot_<i>` per bot, shown as "[Bot] <name>" (`scoreboard players
+    display name`), in the bots' team (`internal/score/init` at every freeze, `kill` when a bot
+    kills, `remove` at the match end: `ctf_bots:on/match_end`). The tab list shows only players:
+    no way to add the bots without mods.
+- Fixes after the third test of stage 6:
+  - The gap jump is armed at a think (`leap_scan`: a hole 2 deep 1..2 blocks ahead towards the
+    target -> tag `bot_leap`, `bot.lt` 6 ticks); only armed bots check the edge every tick
+    (`leap_tick` -> `leap_check`), so it isn't missed and costs nothing for the others.
+  - Under a player it can't reach (he is above, behind a fence...): a bot chasing a player that
+    hasn't moved for 1.5 s (6 thinks; `internal/brain/stuck`) takes a detour (`detour_pick`): the
+    bot marker (any copied annotation, tag `bot_nav`: all reachable) nearest to the player, not one
+    within 4 of the bot, for up to 10 s (`detour`, `bot.det` thinks left, the marker's `bot.dt` = the
+    bot's number + 1); there (within 3) it thinks as usual again. Objectives `bot.det`, `bot.dt`.
+- Rework after the fourth test of stage 6 (the bots still got hurt, stuck, flickered):
+  - The body is a zombified piglin (`type=zombified_piglin` everywhere the husk was). Targets are
+    set by `AngryAt` (no hits at all: no damage, no fake player hits, no team tricks): `aim` (the
+    lure, tag `bot_aim`), `aim_player` (the player tagged `bot_want`). Removed: the retaliation
+    hits, `blind` / `sight`, the damage type tag `#ctf_bots:fake_hit` and its advancement
+    conditions.
+  - Spotting: the bots don't target players by themselves any more: `spot` (generated: SIGHT 16 in
+    `registry/bots.bolt`) + `los` (the line of sight, 20 steps of 1 block). Kept: keep fighting the
+    player it targets, fight back the one who hit it (`on attacker`), the carrier chase, the leash
+    (`leash_back`: its lure at the post).
+  - After a gap jump the lure moves 1.5 up for a moment (`leap_go`): the mob plans its path again
+    from the landing (its old path went down into the gap: it turned back).
+  - An angry zombified piglin grunts now and then (its ambient sound while angry).
+- The carrier stood still with all defenders dead: the win trigger was farther than `follow_range`
+  (48): no path, and a mob without a path doesn't move at all. `follow_range` 128 (the whole arena)
+  for every bot (the 96 of the carrier chase is gone: `far_on` / `far_off`, CHASE_RANGE removed);
+  `internal/spawn/body` (generated) puts the BODY attributes on every bot at each freeze.

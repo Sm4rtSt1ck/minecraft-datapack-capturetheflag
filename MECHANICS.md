@@ -31,7 +31,7 @@ their detection is still in the code, so they can be turned on there.
 
 | Task | Rarity | Reward | How it is detected |
 | --- | --- | --- | --- |
-| Deliver the flag to the base | Common | Stun trap | the flag delivery (`ctf_flag:internal/bring`) |
+| Deliver the flag to the base | Common | Stun trap | the flag delivery (`ctf_flag:api/bring`) |
 | Break the flag (off) | Rare | test item | the flag breaking (`ctf_flag:internal/break`), the player who broke it |
 | Take more than 20 damage in one round and stay alive ("unkillable") | Rare | 3 walls | stat `damage_taken` of the round (totems and regeneration make it possible); checked for alive players only |
 | Kill an enemy with their own trap | Epic | Creepenator | a defender is killed by a trap set off by the attacker: by walking into it, shooting it (bow, crossbow, sniper rifle, assault rifle, fireworks, wind charges) or setting it off otherwise. Any defender counts, not only the one who placed the trap |

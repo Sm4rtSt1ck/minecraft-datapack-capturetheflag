@@ -44,7 +44,7 @@ for _i in range(len(RANGED)):
     _id = RANGED[_i]
     function f"ctf_bots:internal/buy/item/{_id}":
         execute unless score @s money matches (f"{_cost(_id)}..") run return 0
-        execute if score @s bot.sec matches 1.. run return 0
+        execute if score @s bot.sec matches (f"{_i + 1}..") run return 0
         scoreboard players set @s bot.sec (_i + 1)
         scoreboard players remove @s money (_cost(_id))
 def _armor_check(id):

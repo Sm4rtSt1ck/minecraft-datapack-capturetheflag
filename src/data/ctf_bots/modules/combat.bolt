@@ -1,0 +1,72 @@
+# The weapons of the bots, generated from registry/bots.bolt (RANGED, RANGED_USE, MAIN). BOTS.md
+# stage 6. Item stacks are written as they are (bolt can't build an item argument)
+from registry:bots import RANGED, RANGED_USE, REGEN_BELOW, SPEED_FROM, GRENADE, MACE_JUMP
+
+# As a bot: the main weapon in the hand (bot.mw tier) / the ranged one (bot.sec); bot.hold 0 / 1
+function ctf_bots:internal/combat/hold_melee:
+    scoreboard players set @s bot.hold 0
+    execute unless score @s bot.mw matches 1.. run return run item replace entity @s weapon.mainhand with golden_sword[enchantments={knockback: 2, sweeping_edge: 3}, custom_data={tags: ["main weapon"], wpn: "golden_sword"}]
+    execute if score @s bot.mw matches 1 run item replace entity @s weapon.mainhand with iron_sword[enchantments={fire_aspect: 1}, custom_data={tags: ["main weapon"], wpn: "iron_sword"}]
+    execute if score @s bot.mw matches 2 run item replace entity @s weapon.mainhand with diamond_sword[custom_data={tags: ["main weapon"], wpn: "diamond_sword"}]
+    execute if score @s bot.mw matches 3 run item replace entity @s weapon.mainhand with netherite_sword[custom_data={tags: ["main weapon"], wpn: "netherite_sword"}]
+    execute if score @s bot.mw matches 9 run item replace entity @s weapon.mainhand with mace[enchantments={wind_burst: 1}, custom_data={tags: ["main weapon"], wpn: "mace"}]
+function ctf_bots:internal/combat/hold_ranged:
+    scoreboard players set @s bot.hold 1
+    scoreboard players set @s bot.aim 0
+    execute unless score @s bot.mag matches -2147483648.. run scoreboard players set @s bot.mag 30
+    execute if score @s bot.sec matches 1 run item replace entity @s weapon.mainhand with bow[enchantments={piercing: 4, power: 1}, custom_data={tags: ["secondary weapon"], wpn: "bow"}]
+    execute if score @s bot.sec matches 2 run item replace entity @s weapon.mainhand with bow[enchantments={piercing: 4, power: 1, flame: 1}, custom_data={tags: ["secondary weapon"], wpn: "fire_bow"}]
+    execute if score @s bot.sec matches 3 run item replace entity @s weapon.mainhand with bow[enchantments={piercing: 4, power: 1, punch: 2}, custom_data={tags: ["secondary weapon"], wpn: "punch_bow"}]
+    execute if score @s bot.sec matches 4 run item replace entity @s weapon.mainhand with crossbow[enchantments={multishot: 1}, custom_data={tags: ["secondary weapon"], wpn: "crossbow"}]
+    execute if score @s bot.sec matches 5 run item replace entity @s weapon.mainhand with spyglass[custom_data={tags: ["secondary weapon"], wpn: "sniper"}]
+    execute if score @s bot.sec matches 6 run item replace entity @s weapon.mainhand with iron_horse_armor[custom_data={tags: ["secondary weapon"], wpn: "rifle"}]
+
+# As a bot with a target player tagged bot_tc (ctf_bots:internal/combat/think): the ranged weapon
+# when the target is within [min, max] of it, else the main weapon
+function ctf_bots:internal/combat/choose:
+    for _i in range(len(RANGED)):
+        _u = RANGED_USE[RANGED[_i]]
+        execute if score @s bot.sec matches (_i + 1) if entity @a[tag=bot_tc, distance=(f"{_u['min']}..{_u['max']}")] run return run function ctf_bots:internal/combat/ranged
+    function ctf_bots:internal/combat/melee
+
+# Every tick, as a bot holding its ranged weapon at its target (tag bot_tc): the weapon's turn
+function ctf_bots:internal/combat/shoot:
+    for _i in range(len(RANGED)):
+        _id = RANGED[_i]
+        _u = RANGED_USE[_id]
+        if _id == "rifle":
+            execute if score @s bot.sec matches (_i + 1) run return run function ctf_bots:internal/combat/rifle {spread: (_u["spread"])}
+        elif _id == "sniper":
+            execute if score @s bot.sec matches (_i + 1) run return run function ctf_bots:internal/combat/sniper {spread: (_u["spread"]), aim: (_u["aim"])}
+        elif _id == "crossbow":
+            execute if score @s bot.sec matches (_i + 1) run return run function ctf_bots:internal/combat/crossbow {aim: (_u["aim"]), elevation: (_u["elevation"])}
+        else:
+            _fire = 0
+            if _id == "fire_bow":
+                _fire = 1
+            execute if score @s bot.sec matches (_i + 1) run return run function ctf_bots:internal/combat/bow {aim: (_u["aim"]), elevation: (_u["elevation"]), fire: (_fire)}
+
+# As a bot, every think, after deciding where to go: potions, weapon, grenade, mace jump
+function ctf_bots:internal/combat/think:
+    execute if score @s bot.cd2 matches 1.. run scoreboard players remove @s bot.cd2 1
+    execute if score @s bot.regen matches 1.. store result score #hp bots run data get entity @s Health
+    execute if score @s bot.regen matches 1.. if score #hp bots matches (f"..{REGEN_BELOW - 1}") run function ctf_bots:internal/combat/regen
+    execute on target if entity @s[type=player, tag=player, tag=!dead] run tag @s add bot_tc
+    execute unless entity @a[tag=bot_tc] run return run function ctf_bots:internal/combat/melee
+    execute if score @s bot.speed matches 1.. unless entity @a[tag=bot_tc, distance=(f"..{SPEED_FROM}")] run function ctf_bots:internal/combat/speed
+    execute if score @s bot.he matches 1.. if entity @a[tag=bot_tc, distance=(f"{GRENADE['min']}..{GRENADE['max']}")] if predicate {condition: "minecraft:random_chance", chance: (1.0 / GRENADE["chance"])} run function ctf_bots:internal/combat/grenade
+    execute if score @s bot.mw matches 9 if score @s bot.wind matches 1.. unless score @s bot.cd2 matches 1.. if entity @a[tag=bot_tc, distance=(f"..{MACE_JUMP}")] if predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {flags: {is_on_ground: true}}} run function ctf_bots:internal/combat/mace_jump
+    execute if score @s bot.sec matches 1.. run function ctf_bots:internal/combat/choose
+    tag @a remove bot_tc
+
+# Jumping over a gap (vanilla paths don't jump): as a bot on the ground, positioned at its feet,
+# rotated to its target (horizontally): a hole 2 blocks deep right ahead and the ground again k
+# blocks ahead (2..4, room for the bot above it) -> a leap: LEAP up, forward fast enough for k (a mob
+# in the air keeps 0.91 of its speed a tick: about 7 x the speed in a 0.45 jump). Its target stays,
+# so the path goes on after the landing
+from registry:bots import LEAP
+function ctf_bots:internal/brain/leap:
+    execute unless block ^ ^-1 ^1 #ctf_bots:gap run return 0
+    execute unless block ^ ^-2 ^1 #ctf_bots:gap run return 0
+    for _k in [2, 3, 4]:
+        execute unless block ^ ^-1 f"^{_k}" #ctf_bots:gap if block ^ ^ f"^{_k}" #ctf_bots:gap if block ^ ^1 f"^{_k}" #ctf_bots:gap run return run function ctf_bots:internal/brain/leap_go {speed: (str(round((LEAP["forward"] * _k / 3 + 0.1) / 1000, 7))), up: (str(LEAP["up"]))}
