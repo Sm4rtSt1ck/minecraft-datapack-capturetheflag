@@ -9,12 +9,45 @@ NAMES = ["Alex", "Steve", "Kate", "Max", "Lily", "Sam", "Nina", "Tom", "Zoe", "B
 # reinforcements (more zombies when hurt) are set to 0 in ctf_bots:gen
 BODY = {
     "attack_damage": 1.0,
-    # Far enough to chase the flag carrier across the map (the path search visits up to 16 x this)
-    "follow_range": 96.0,
+    # How far a bot sees enemies (vanilla targets visible players within it) and keeps a target
+    "follow_range": 24.0,
     # A mob moves by speed^2 per tick of input (a player by 0.98 x speed): 0.35 ~ a sprinting player
     # (0.1 x 1.3 sprint); a husk has 0.23 (~ half the walking speed of a player)
     "movement_speed": 0.35,
 }
 
+# While a defense bot chases the flag carrier: far enough to follow him across the map (the path
+# search visits up to 16 x this); back to BODY follow_range after
+CHASE_RANGE = 96.0
+# A defense bot doesn't follow an enemy farther than this from its defend spot (or the flag)
+LEASH = 24
+
 # The team leather armor (the same colors as the players' default set, ctf_inv:armor/freeze_default)
 ARMOR_COLOR = {"attack": 16711799, "defense": 47103}
+
+# BUYING (stage 5). At the start of freeze every bot buys like a player: the same costs (registry/
+# shop.bolt), the same round limits (registry/items.bolt LIMITS), its money kept in its wallet (a
+# marker: a dead bot keeps its money, like a player). A bot keeps what it has while it survives.
+# A plan = the items to buy, in order; an item it can't pay or already has is skipped. Each round
+# every bot picks a plan at random (weight). A defense bot on a high base (its spawn HIGH_BASE blocks
+# or more above the lowest point of the map) picks only among the "ranged" plans.
+# Items: gold_armor, iron_armor, helmet, iron_sword, diamond_sword, netherite_sword, mace, bow,
+# fire_bow, punch_bow, crossbow, sniper, rifle, totem, he, regen, speed (the shop product ids)
+HIGH_BASE = 10
+PLANS = [
+    {"id": "rifler", "weight": 3, "ranged": True, "items": ["iron_armor", "rifle", "helmet", "he", "regen", "iron_sword"]},
+    {"id": "sniper", "weight": 2, "ranged": True, "items": ["gold_armor", "sniper", "helmet", "regen", "he"]},
+    {"id": "archer", "weight": 2, "ranged": True, "items": ["gold_armor", "bow", "helmet", "speed", "iron_sword"]},
+    {"id": "swordsman", "weight": 3, "ranged": False, "items": ["iron_armor", "diamond_sword", "helmet", "regen", "speed", "netherite_sword", "totem"]},
+    {"id": "macer", "weight": 1, "ranged": False, "items": ["gold_armor", "mace", "helmet", "speed", "totem"]},
+    {"id": "crossbow", "weight": 1, "ranged": True, "items": ["iron_armor", "crossbow", "helmet", "he"]},
+]
+
+# How a bot holds a bought item. Main weapons: the main hand, by tier (bot.mw: the golden sword 0);
+# the mace is a main weapon of its own (tier 9: no sword replaces it). Ranged weapons: kept as
+# bot.sec (used in stage 6). Armor: bot.arm tier. Limited items: scores up to the LIMITS max
+# (the item stacks: ctf_bots:buy, like the shop products)
+MAIN = {"iron_sword": {"tier": 1}, "diamond_sword": {"tier": 2}, "netherite_sword": {"tier": 3}, "mace": {"tier": 9}}
+RANGED = ["bow", "fire_bow", "punch_bow", "crossbow", "sniper", "rifle"]
+ARMOR = {"gold_armor": {"tier": 1}, "iron_armor": {"tier": 2}}
+LIMITED = ["he", "regen", "speed"]

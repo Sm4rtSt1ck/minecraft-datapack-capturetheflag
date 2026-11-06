@@ -1,5 +1,5 @@
 # Functions generated from the bots registry (registry/bots.bolt) at build time
-from registry:bots import NAMES, BODY, ARMOR_COLOR
+from registry:bots import NAMES, BODY, ARMOR_COLOR, CHASE_RANGE, LEASH
 from registry:world import ARENA
 
 # The bots of the match (settings Bots_count: the first N names) that are missing (all at the first
@@ -24,3 +24,31 @@ for _side in ["attack", "defense"]:
         execute unless items entity @s armor.legs * run item replace entity @s armor.legs with leather_leggings[dyed_color={rgb: (_c)}]
         execute unless items entity @s armor.feet * run item replace entity @s armor.feet with leather_boots[dyed_color={rgb: (_c)}]
         execute unless items entity @s weapon.mainhand * run item replace entity @s weapon.mainhand with golden_sword[enchantments={knockback: 2, sweeping_edge: 3}, custom_data={tags: ["main weapon"], wpn: "golden_sword"}]
+
+# The wallets of the bots (markers, tag bot_wallet_<i>): the money of a bot stays when it dies, like
+# a player's. New ones (the first freeze of each half) get the starting money and the bots' side
+function ctf_bots:internal/money/wallets:
+    for i in range(len(NAMES)):
+        execute if score Bots_count settings matches (f"{i + 1}..") unless entity @e[type=marker, tag=f"bot_wallet_{i}"] run summon marker (ARENA["respawn"][0]) (ARENA["respawn"][1]) (ARENA["respawn"][2]) {Tags: ["bot_wallet", (f"bot_wallet_{i}"), "bot_wallet_new"]}
+        scoreboard players set @e[type=marker, tag=f"bot_wallet_{i}", tag=bot_wallet_new] bot.n (i)
+    scoreboard players operation @e[type=marker, tag=bot_wallet_new] money = #start econ
+    execute if score #attack bots matches 1 run tag @e[type=marker, tag=bot_wallet_new] add attack
+    execute if score #attack bots matches 0 run tag @e[type=marker, tag=bot_wallet_new] add defense
+    tag @e[type=marker, tag=bot_wallet_new] remove bot_wallet_new
+
+# As a defense bot: the long sight while it chases the flag carrier (written only on a change)
+function ctf_bots:internal/brain/far_on:
+    execute if entity @s[tag=bot_far] run return 0
+    attribute @s minecraft:follow_range base set (CHASE_RANGE)
+    tag @s add bot_far
+function ctf_bots:internal/brain/far_off:
+    execute unless entity @s[tag=bot_far] run return 0
+    attribute @s minecraft:follow_range base set (BODY["follow_range"])
+    tag @s remove bot_far
+
+# As a defense bot: its target (tag bot_tgt) farther than LEASH from its post (bot_post: its defend
+# spot, else the flag) is dropped: back to the post
+function ctf_bots:internal/brain/leash:
+    execute at @n[type=marker, tag=bot_post] unless entity @a[tag=bot_tgt, distance=(f"..{LEASH}")] run return run function ctf_bots:internal/brain/drop_target
+    execute unless entity @e[type=marker, tag=bot_post] at @n[type=armor_stand, tag=flag] unless entity @a[tag=bot_tgt, distance=(f"..{LEASH}")] run return run function ctf_bots:internal/brain/drop_target
+    return fail

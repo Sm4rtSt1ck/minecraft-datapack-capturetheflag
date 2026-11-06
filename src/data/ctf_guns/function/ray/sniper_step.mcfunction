@@ -25,6 +25,9 @@ execute if entity @a[tag=gun.hit, limit=1] run return run function ctf_guns:ray/
 # Creepers (Creepenator: a player is in it) the same way
 execute positioned ~-0.99 ~-0.99 ~-0.99 as @e[type=creeper, dx=0, dy=0, dz=0] positioned ~0.98 ~0.98 ~0.98 if entity @s[dx=0, dy=0, dz=0] run tag @s add gun.hit_c
 execute if entity @e[type=creeper, tag=gun.hit_c, limit=1] run return run function ctf_guns:ray/hit_creeper
+# Bots (BOTS.md): the same hitbox as a player
+execute positioned ~-0.99 ~-0.99 ~-0.99 as @e[type=husk, tag=ctf_bot, dx=0, dy=0, dz=0] positioned ~0.98 ~0.98 ~0.98 if entity @s[dx=0, dy=0, dz=0] run tag @s add gun.hit_b
+execute if entity @e[type=husk, tag=gun.hit_b, limit=1] run return run function ctf_guns:ray/hit_bot
 
 # Max range (range is in blocks, 4 steps per block)
 scoreboard players operation #t gun.tmp = #dist gun.tmp

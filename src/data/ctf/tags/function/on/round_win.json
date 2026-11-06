@@ -1,5 +1,6 @@
 {
     "values": [
+        "ctf_bots:on/round_win",
         "ctf_flag:on/round_win",
         "ctf_econ:on/round_win"
     ]

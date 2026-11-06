@@ -18,7 +18,17 @@
                             }
                         }
                     }
-                ]
+                ],
+                "damage": {
+                    "type": {
+                        "tags": [
+                            {
+                                "id": "ctf_bots:fake_hit",
+                                "expected": false
+                            }
+                        ]
+                    }
+                }
             }
         }
     },

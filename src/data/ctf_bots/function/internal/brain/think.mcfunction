@@ -6,3 +6,5 @@ execute if entity @s[tag=attack] run function ctf_bots:internal/brain/attack
 execute if entity @s[tag=defense] run function ctf_bots:internal/brain/defense
 tag @e[type=rabbit, tag=bot_mylure] remove bot_mylure
 tag @a remove bot_want
+tag @a remove bot_tgt
+tag @e[type=marker, tag=bot_post] remove bot_post

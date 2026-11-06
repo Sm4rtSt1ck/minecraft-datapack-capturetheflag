@@ -82,6 +82,15 @@ scoreboard objectives add bot.w dummy
 # bot.t - thinks without reaching the next route point (stuck: skipped), bot.brk - thinks breaking the flag
 scoreboard objectives add bot.t dummy
 scoreboard objectives add bot.brk dummy
+# What a bot has bought (ctf_bots:buy): armor tier, main weapon tier, ranged weapon (index + 1),
+# limited items, wind charges
+scoreboard objectives add bot.arm dummy
+scoreboard objectives add bot.mw dummy
+scoreboard objectives add bot.sec dummy
+scoreboard objectives add bot.he dummy
+scoreboard objectives add bot.regen dummy
+scoreboard objectives add bot.speed dummy
+scoreboard objectives add bot.wind dummy
 scoreboard players set #4 bots 4
 scoreboard players set #5 bots 5
 

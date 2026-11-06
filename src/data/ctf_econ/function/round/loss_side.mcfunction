@@ -8,3 +8,4 @@ scoreboard players operation #amount econ *= #loss.step econ
 scoreboard players operation #amount econ += #loss.base econ
 
 $execute as @a[tag=player, tag=$(side)] run function ctf_econ:round/loss {side: "$(side)"}
+$execute as @e[type=marker, tag=bot_wallet, tag=$(side)] run function ctf_econ:round/loss {side: "$(side)"}

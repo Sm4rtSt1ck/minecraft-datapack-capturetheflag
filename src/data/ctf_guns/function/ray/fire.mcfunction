@@ -9,3 +9,4 @@ $execute if score #gun gun.tmp matches 1 anchored eyes positioned ^ ^ ^ rotated 
 $execute if score #gun gun.tmp matches 2 anchored eyes positioned ^ ^ ^ rotated ~$(yaw) ~$(pitch) run function ctf_guns:ray/rifle_step
 tag @a remove gun.hit
 tag @e[type=creeper, tag=gun.hit_c] remove gun.hit_c
+tag @e[type=husk, tag=gun.hit_b] remove gun.hit_b

@@ -1,0 +1,127 @@
+# The buying of the bots, generated from registry/bots.bolt (plans, how a bot holds an item) and the
+# shop (costs: registry/shop.bolt, limits: registry/items.bolt). BOTS.md stage 5
+from registry:bots import PLANS, MAIN, RANGED, ARMOR, LIMITED, HIGH_BASE, ARMOR_COLOR
+from registry:shop import product
+from registry:items import limit
+from registry:maps import MAPS
+
+def _cost(id):
+    return product(id)["cost"]
+
+# As a bot with its money (@s money): one item of a plan, if it can pay and doesn't have it. The item
+# stacks are written as they are (bolt can't build an item argument), the rest from the registries
+def _main_check(id):
+    _m = MAIN[id]
+    execute unless score @s money matches (f"{_cost(id)}..") run return 0
+    if _m["tier"] == 9:
+        execute if score @s bot.mw matches 9 run return 0
+        scoreboard players set @s bot.wind (limit("wind")["max"])
+    else:
+        execute if score @s bot.mw matches (f"{_m['tier']}..") run return 0
+
+def _main_paid(id):
+    scoreboard players set @s bot.mw (MAIN[id]["tier"])
+    scoreboard players remove @s money (_cost(id))
+
+function ctf_bots:internal/buy/item/iron_sword:
+    _main_check("iron_sword")
+    item replace entity @s weapon.mainhand with iron_sword[enchantments={fire_aspect: 1}, custom_data={tags: ["main weapon"], wpn: "iron_sword"}]
+    _main_paid("iron_sword")
+function ctf_bots:internal/buy/item/diamond_sword:
+    _main_check("diamond_sword")
+    item replace entity @s weapon.mainhand with diamond_sword[custom_data={tags: ["main weapon"], wpn: "diamond_sword"}]
+    _main_paid("diamond_sword")
+function ctf_bots:internal/buy/item/netherite_sword:
+    _main_check("netherite_sword")
+    item replace entity @s weapon.mainhand with netherite_sword[custom_data={tags: ["main weapon"], wpn: "netherite_sword"}]
+    _main_paid("netherite_sword")
+function ctf_bots:internal/buy/item/mace:
+    _main_check("mace")
+    item replace entity @s weapon.mainhand with mace[enchantments={wind_burst: 1}, custom_data={tags: ["main weapon"], wpn: "mace"}]
+    _main_paid("mace")
+
+for _i in range(len(RANGED)):
+    _id = RANGED[_i]
+    function f"ctf_bots:internal/buy/item/{_id}":
+        execute unless score @s money matches (f"{_cost(_id)}..") run return 0
+        execute if score @s bot.sec matches 1.. run return 0
+        scoreboard players set @s bot.sec (_i + 1)
+        scoreboard players remove @s money (_cost(_id))
+def _armor_check(id):
+    execute unless score @s money matches (f"{_cost(id)}..") run return 0
+    execute if score @s bot.arm matches (f"{ARMOR[id]['tier']}..") run return 0
+
+def _armor_paid(id):
+    scoreboard players set @s bot.arm (ARMOR[id]["tier"])
+    scoreboard players remove @s money (_cost(id))
+
+function ctf_bots:internal/buy/item/gold_armor:
+    _armor_check("gold_armor")
+    item replace entity @s armor.chest with golden_chestplate
+    item replace entity @s armor.legs with golden_leggings
+    item replace entity @s armor.feet with golden_boots[enchantments={feather_falling: 1}]
+    _armor_paid("gold_armor")
+function ctf_bots:internal/buy/item/iron_armor:
+    _armor_check("iron_armor")
+    item replace entity @s armor.chest with iron_chestplate
+    item replace entity @s armor.legs with iron_leggings
+    item replace entity @s armor.feet with iron_boots[enchantments={feather_falling: 1}]
+    _armor_paid("iron_armor")
+function ctf_bots:internal/buy/item/helmet:
+    execute unless score @s money matches (f"{_cost('helmet')}..") run return 0
+    execute if items entity @s armor.head * run return 0
+    item replace entity @s[tag=attack] armor.head with leather_helmet[dyed_color={rgb: (ARMOR_COLOR["attack"])}]
+    item replace entity @s[tag=defense] armor.head with leather_helmet[dyed_color={rgb: (ARMOR_COLOR["defense"])}]
+    scoreboard players remove @s money (_cost("helmet"))
+function ctf_bots:internal/buy/item/totem:
+    execute unless score @s money matches (f"{_cost('totem')}..") run return 0
+    execute if items entity @s weapon.offhand * run return 0
+    item replace entity @s weapon.offhand with totem_of_undying
+    scoreboard players remove @s money (_cost("totem"))
+for _id in LIMITED:
+    function f"ctf_bots:internal/buy/item/{_id}":
+        execute unless score @s money matches (f"{_cost(_id)}..") run return 0
+        execute if score @s f"bot.{_id}" matches (f"{limit(_id)['max']}..") run return 0
+        scoreboard players add @s f"bot.{_id}" 1
+        scoreboard players remove @s money (_cost(_id))
+
+# The plans
+for _p in PLANS:
+    function f"ctf_bots:internal/buy/plan/{_p['id']}":
+        for _it in _p["items"]:
+            function f"ctf_bots:internal/buy/item/{_it}"
+
+# As a bot: a plan at random (weights); #ranged bots = 1: only the ranged plans
+def _pick(plans):
+    _total = 0
+    for _p in plans:
+        _total = _total + _p["weight"]
+    execute store result score #p bots run random value (f"1..{_total}")
+    _from = 1
+    for _p in plans:
+        _to = _from + _p["weight"] - 1
+        execute if score #p bots matches (f"{_from}..{_to}") run return run function f"ctf_bots:internal/buy/plan/{_p['id']}"
+        _from = _to + 1
+
+function ctf_bots:internal/buy/pick:
+    execute if score #ranged bots matches 1 run return run function ctf_bots:internal/buy/pick_ranged
+    _pick(PLANS)
+
+function ctf_bots:internal/buy/pick_ranged:
+    _ranged = []
+    for _p in PLANS:
+        if _p["ranged"]:
+            _ranged.append(_p)
+    _pick(_ranged)
+
+# #high bots = 1 if the defense spawn of the current map is HIGH_BASE blocks or more above the lowest
+# point of its template (both in the template: the shift doesn't change the difference)
+function ctf_bots:internal/buy/high_base:
+    scoreboard players set #high bots 0
+    for _i in range(len(MAPS)):
+        _m = MAPS[_i]
+        _low = int(_m["template"][1])
+        if _m["template"][1] < _low:
+            _low = _low - 1
+        if _m["spawns"]["defense"]["under"] - _low >= HIGH_BASE:
+            execute if score result map_vote matches (_i + 1) run scoreboard players set #high bots 1

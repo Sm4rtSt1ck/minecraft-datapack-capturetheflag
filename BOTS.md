@@ -134,8 +134,8 @@ Each stage is one commit, checked by the user in the game before the next one.
 | 2 | Bot body, melee: spawn, death (out until the round end), round win counts bots, kill credit, kill money; first TPS measurement | done |
 | 3 | Map annotation: `admin:build` bot markers, `bot.*` in `maps.bolt`; the user annotates the first map | done |
 | 4 | Movement and the flag: routes, attacking the flag, delivery (playable mode); defenders to defend spots (near the flag more often); the flag carrier chased from anywhere | done |
-| 5 | Economy and shop: buy profiles from the registry; defense on a high base prefers bows / guns | in progress |
-| 6 | Weapons: guns, bow, grenades, mace, potions, totem, wind charge | |
+| 5 | Economy and shop: buy profiles from the registry; defense on a high base prefers bows / guns | done |
+| 6 | Weapons: guns, bow, grenades, mace, potions, totem, wind charge | in progress |
 | 7 | Traps: bots place them; see / avoid / break the enemy traps; kills of bots by a player's trap credited to him | |
 | 8 | Ultimates: charge, choice, use (adapt / forbid the player-only ones); fear a player in the bomber ultimate | |
 | 9 | Tactics: roles, groups, retreat, events; difficulty | |
@@ -245,3 +245,41 @@ Each stage is one commit, checked by the user in the game before the next one.
 - The bot markers are copied into the arena only in a match with bots (`team bots` >= 1).
 - Known: a lure / fight hit is a real hit (0.01): a bot dying soon after (a fall) may credit that
   player with a kill (vanilla kill credit). The bots know where the flag is (no search yet).
+
+### Stage 5 - economy and shop
+
+- Wallets: a `marker` per bot (`bot_wallet` + `bot_wallet_<i>`, `bot.n`, the side tag) keeps its
+  money, so a dead bot keeps it like a player (`ctf_bots:internal/money/wallets`, generated: new
+  ones get `#start econ`; removed at the swap / the match end, so each half starts again).
+- Round money: `ctf_econ:round_end` / `round/loss_side` also pay the wallets of the side, with the
+  same functions as the players (win reasons, loss bonus, streaks, the CS rule: `ctf_bots:on/
+  round_win`, first in `#ctf:on/round_win`, tags the wallets of the dead bots `dead`; the flag
+  broken bonus).
+- Kill money: `ctf_econ:kill` as the bot (by the weapon in its hand), the delivery (`ctf_flag:api/
+  deliver`), breaking the flag (`#break`, like a player): into the bot's `money`, then
+  `internal/money/flush` moves it into the wallet (capped).
+- Buying (`ctf_bots:buy`, generated from `registry/bots.bolt` PLANS / MAIN / RANGED / ARMOR /
+  LIMITED, the shop costs and the LIMITS max): at freeze start every bot loads its wallet, picks a
+  plan at random (weights), buys its items in order (skipped: can't pay / already has), the rest
+  goes back. What it has: main weapon in the hand (`bot.mw` tier: golden 0, iron 1, diamond 2,
+  netherite 3, mace 9 + `bot.wind` 10), armor set (`bot.arm`: golden 1, iron 2, boots with feather
+  falling), helmet, totem in the off hand, ranged weapon `bot.sec` (index + 1 in RANGED: used in
+  stage 6), `bot.he` / `bot.regen` / `bot.speed` (up to the round limit). Kept while alive; a dead
+  bot comes back with the golden sword and leather (like a player).
+- High base: `internal/buy/high_base` (generated): the defense spawn `under` of the current map is
+  HIGH_BASE (10) or more above the lowest point of its template -> defense bots pick only the
+  "ranged" plans. With 10 it is true for 5 maps of 7 (`under` is the top of the spawn spread, so
+  it overestimates): tune HIGH_BASE.
+- Mob armor never wears out (vanilla), so a bot never buys the same armor twice.
+- Fixes after the test of stage 5:
+  - Guns hit bots (`ctf_guns:ray/*_step`: the bot hitbox like the creeper one, `ray/hit_bot`,
+    `ray/damage_bot`); the stun trap (loot reward) stuns defense bots.
+  - The fake hits "by" a player (`target_want`) set off "the player hurt an entity" advancements:
+    the Inferno blade burned around its owner without a hit. They are `minecraft:generic` damage:
+    the damage type tag `#ctf_bots:fake_hit` (registry tags reload with /reload) is excluded in
+    `ctf_loot:inferno_hit`; `ctf_bots:killed` counts only a killing blow from a player that isn't a
+    fake hit (no kill for a bot that fell after a fake hit).
+  - Guarding: `follow_range` 24 (how far a bot sees enemies and keeps a target; vanilla targeted
+    every visible player within 96); 96 only while a defense bot chases the flag carrier
+    (`far_on` / `far_off`, on a change); a defense bot drops a target farther than LEASH (24) from
+    its post (its defend spot, else the flag) and goes back (`internal/brain/leash`).
