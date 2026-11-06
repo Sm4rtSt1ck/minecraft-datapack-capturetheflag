@@ -5,6 +5,7 @@ from registry:bots import MEMORY
 execute store result score #p bots run random value 1..3
 execute if score @s bot.mw matches 9 run function ctf_bots:internal/brain/pick_high
 execute unless entity @e[type=marker, tag=bot_pick] if predicate {condition: "minecraft:random_chance", chance: (1.0 / MEMORY["hot_spot"])} run function ctf_bots:internal/trick/pick_hot
+execute unless entity @e[type=marker, tag=bot_pick] if score Bots_learn settings matches 1 if predicate {condition: "minecraft:random_chance", chance: 0.5} run function ctf_bots:internal/learn/pick_good
 execute unless entity @e[type=marker, tag=bot_pick] if score #p bots matches 1..2 at @n[type=armor_stand, tag=flag] as @e[type=marker, tag=bot_defend, tag=!bot_taken, sort=nearest, limit=1] run tag @s add bot_pick
 execute unless entity @e[type=marker, tag=bot_pick] as @e[type=marker, tag=bot_defend, tag=!bot_taken, sort=random, limit=1] run tag @s add bot_pick
 scoreboard players operation @e[type=marker, tag=bot_pick] bot.own = @s bot.n

@@ -1,5 +1,6 @@
 {
     "values": [
-        "ctf_maps:on/prepare"
+        "ctf_maps:on/prepare",
+        "ctf_bots:on/prepare"
     ]
 }

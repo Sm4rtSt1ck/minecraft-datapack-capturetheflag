@@ -111,6 +111,7 @@ for _k in range(_K):
     function f"ctf_bots:internal/nav/relax_{_k}":
         tag @s remove nav_q
         scoreboard players operation #df nav = @s (_d)
+        function ctf_bots:internal/learn/danger
         scoreboard players operation #f nav = @s nav.id
         execute as @e[type=marker, tag=nav_link, distance=(f"..{_LR + 0.5}")] if score @s nav.to = #f nav at @s run function f"ctf_bots:internal/nav/relax_link_{_k}"
     # As a link X -> F, at X: X gets nearer through F?
@@ -119,6 +120,7 @@ for _k in range(_K):
         scoreboard players operation #nd nav = #df nav
         scoreboard players operation #nd nav += @s nav.c
         scoreboard players operation #nd nav += #x nav
+        scoreboard players operation #nd nav += #dgf nav
         execute as @e[type=marker, tag=nav_node, distance=..0.1, limit=1] if score #nd nav < @s (_d) run function f"ctf_bots:internal/nav/better_{_k}"
     function f"ctf_bots:internal/nav/better_{_k}":
         scoreboard players operation @s (_d) = #nd nav
@@ -148,6 +150,9 @@ for _k in range(_K):
         function ctf_bots:internal/nav/move
         tag @e[type=marker, tag=nav_next] remove nav_next
     function f"ctf_bots:internal/nav/arrive_{_k}":
+        scoreboard players operation #la nav = @s bot.cn
+        scoreboard players operation #lb nav = #nn nav
+        execute if score #la nav matches 1.. run function ctf_bots:internal/learn/bot_link {f: "s"}
         scoreboard players operation @s bot.cn = #nn nav
         tag @s remove bot_climbed
         scoreboard players set @s bot.ht 0
@@ -156,11 +161,13 @@ for _k in range(_K):
         execute at @n[type=marker, tag=nav_here] run function f"ctf_bots:internal/nav/hop_{_k}"
         execute unless score @s bot.nn matches 1.. run return run function ctf_bots:internal/nav/arrived
         execute if score #best nav > #dcur nav run return run function ctf_bots:internal/nav/arrived
-    # As a bot, at the node it reached: the link with the least (cost + distance of its node)
+    # As a bot, at the node it reached: the link with the least (cost + distance of its node; + TRAP_SEE
+    # "cost" next to a trap its team keeps out of: ctf_bots:internal/nav/trap_cost)
     function f"ctf_bots:internal/nav/hop_{_k}":
         scoreboard players set #best nav 2147483647
         scoreboard players set #bn nav 0
         scoreboard players set #bt nav 1
+        function ctf_bots:internal/traps/hop_mark
         execute as @e[type=marker, tag=nav_link, distance=..0.1] run function f"ctf_bots:internal/nav/hop_link_{_k}"
         execute if score #best nav matches (f"{_INF}..") run scoreboard players set #bn nav 0
         scoreboard players operation @s bot.nn = #bn nav
@@ -172,7 +179,11 @@ for _k in range(_K):
     function f"ctf_bots:internal/nav/hop_link_{_k}":
         scoreboard players operation #to nav = @s nav.to
         scoreboard players set #dt nav (_INF)
+        scoreboard players set #dgf nav 0
+        execute as @e[type=marker, tag=nav_node, distance=(f"..{_LR + 1}")] if score @s nav.id = #to nav run function ctf_bots:internal/learn/danger
         execute as @e[type=marker, tag=nav_node, distance=(f"..{_LR + 1}")] if score @s nav.id = #to nav run scoreboard players operation #dt nav = @s (_d)
+        scoreboard players operation #dt nav += #dgf nav
+        execute as @e[type=marker, tag=nav_node, distance=(f"..{_LR + 1}")] if score @s nav.id = #to nav at @s run function ctf_bots:internal/nav/trap_cost
         scoreboard players operation #dt nav += @s nav.c
         function ctf_bots:internal/nav/link_x
         scoreboard players operation #dt nav += #x nav

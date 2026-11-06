@@ -1,6 +1,9 @@
 from registry:world import ARENA
 function admin:log/function {name: "match/end/end"}
 
+# Modules: the match ends, before the arena is cleaned (what the bots learned is saved)
+function #ctf:on/match_ending
+
 tag team_1 remove attack
 tag team_1 remove defense
 tag team_2 remove attack

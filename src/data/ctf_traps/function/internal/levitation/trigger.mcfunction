@@ -1,3 +1,5 @@
+# The trap goes off: announced (#ctf:on/trap_fired, as its marker: the bots learn which of their traps work)
+function #ctf:on/trap_fired
 execute positioned as @s run kill @n[tag=trap_display, tag=trap.levitation, distance=1.2..1.5]
 
 execute positioned as @s run summon area_effect_cloud ~ ~ ~ {Tags:["kc.cloud", "kc.new"], Radius:2f,potion_contents:{custom_effects:[{id:"minecraft:levitation",amplifier:1,duration:140}]}, Duration:60}

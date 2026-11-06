@@ -6,6 +6,7 @@
         "ctf_inv:on/freeze_start",
         "ctf_maps:on/freeze_start",
         "ctf_bots:on/freeze_start",
+        "ctf_bots:internal/learn/freeze",
         "ctf_shop:on/freeze_start",
         "ctf_loot:freeze_start",
         "ctf_ult:on/render_all",

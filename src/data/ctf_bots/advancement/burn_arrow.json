@@ -1,0 +1,24 @@
+{
+    "criteria": {
+        "hit": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:zombified_piglin",
+                    "nbt": "{Tags:[\"ctf_bot\"]}"
+                },
+                "damage": {
+                    "type": {
+                        "tags": [{"id": "minecraft:is_projectile", "expected": true}],
+                        "direct_entity": {
+                            "flags": {"is_on_fire": true}
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "ctf_bots:internal/body/burn_arrow"
+    }
+}

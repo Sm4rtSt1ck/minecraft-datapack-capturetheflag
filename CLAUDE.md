@@ -114,8 +114,12 @@ The bots feature is developed on the branch `bots`; its plan, decisions and prog
     modules listed in `bolt.entrypoint` (e.g. `ctf_inv:gen`) generate such functions.
   - A `def` with commands inside writes them into the calling function (`ctf_inv:lib` `count`).
   - Expressions go into command arguments: f-strings, `a["max"]`, `(f"..{n}")` for ranges.
-  - **Values put in by bolt are not validated by mecha** (a broken item predicate builds fine).
-    Check the output.
+  - **Values put in by bolt are not validated by mecha** (a broken item predicate builds fine;
+    `scoreboard players remove ... (x)` with a negative `x` builds, but Minecraft silently skips the
+    whole function). Check the output: parse the built pack again with plain mecha, a beet project
+    with no bolt: `{"minecraft": "1.21.4", "data_pack": {"load": ["<built>/CaptureTheFlag"],
+    "pack_format": 61}, "pipeline": ["mecha"], "output": "<tmp>"}` (keep both on the Linux file
+    system: on `/mnt/c` it takes minutes).
   - Macro lines (`$...`) are copied as they are: no bolt expressions inside them.
   - No list comprehensions, no `**kwargs`, no tuples without parentheses (`return (a, b)`), no
     tuple unpacking (`for i in range(len(x))`, `b = f(); a = b[0]`).
@@ -240,8 +244,9 @@ the old order of the calls, so keep it when adding entries.
   of freeze, swap, end), `freeze_start`, `round_start`, `round_win` (storage
   `ctf:round won {winner, loser, reason}`), `end_round_start`, `end_round_end`, `swap`,
   `player_reset` (as a player, before his inventory is cleared: swap, end, lobby join), `prepare`
-  (the map is cloned, then warm-up or freeze starts), `map_cloned` (right after the clone: the bot
-  navigation graph), `match_end`, `reset` (`ctf:set_parameters`),
+  (the map is cloned, then warm-up or freeze starts), `noise` (a shot / an explosion, storage
+  `ctf:noise kind`), `bought` (a shop purchase, storage `ctf:bought id`), `map_cloned` (right after the clone: the bot
+  navigation graph, learning), `match_ending` (before the match end cleanup: learning saved), `match_end`, `reset` (`ctf:set_parameters`),
   `player_join` (as the player).
 - Handlers: `<module>:on/<event>`, `<module>:tick/<phase>`, `<module>:tick` (every tick).
 - The core (`ctf`) never calls a module function, not even in a `clickEvent` string. Modules call
@@ -325,6 +330,14 @@ the old order of the calls, so keep it when adding entries.
 - `kc.hit` - the last player who hurt this player.
 - `credit/mark_traps` lets trap markers in a blast remember the owner of the explosion.
 - A vanilla player kill has priority. `credit/trap_task` still counts the loot task "enemy_trap".
+
+**Players and bots in one selector:** bots carry the tag `player` too (set at every freeze), and the
+entity type tag `#ctf:fighter` = player + the bot body (zombified piglin). Anything the game does to
+the players in a match (traps, grenades, clouds, effects, kill credit, loot) selects
+`@e[type=#ctf:fighter, tag=player, ...]`: one line for both, never a separate bot line. `@a[...]`
+stays for player-only things (UI, chat, inventory, sounds). `gamemode=!spectator` never matches a
+non-player: use `predicate=ctf:not_spectator` instead. Effects the bot body ignores (undead: wither;
+fire-immune: burning; NoAI while asleep: levitation) are played for it by `ctf_bots:internal/body`.
 
 **Entity invariants used for typed selectors:**
 

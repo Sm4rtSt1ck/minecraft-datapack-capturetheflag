@@ -69,6 +69,15 @@ Game phases:
   noise on the other side of the flag while the breaker waits for it and for its cover; sly defenders
   wait in ambush and call their teammates. During a match the bots remember where they met the players
   and where the flag was hidden, and search / watch there first.
+* **The bots learn** (on by default; `/function ctf_test:bots/learn` turns it off): in every match,
+  with or without bots, they remember per map where players walk, stand, die, carry the flag, hide
+  it, place traps and throw grenades, how they get from place to place (jumps, falls, ladders, wind
+  charges: new ways for the bots) and what they buy in which situation. The bots then defend where
+  players defended, put traps where players put them, buy like players in the same situation, take
+  the routes that worked and avoid deadly places. `/function ctf_test:bots/learn_info` shows what they
+  know about the current map, `/function ctf_test:bots/learn_forget` clears it. Old knowledge
+  fades: once a match, when the game starts, the learned counts are multiplied by the setting
+  `Bots_decay` (95% by default, 100 = never; `/function ctf_test:bots/learn_decay {pct: 95}`).
 * The bossbar timer is **white** in freeze, **green** in the round, and in the end of the round it
   has the color of the winners (**red** attack, **blue** defense); pink in the other phases.
 
@@ -583,7 +592,8 @@ Adding content:
   (walking along a straight line, jumping over a gap up to 4 blocks, dropping or jumping down up to
   24 blocks, flying up 2-6 blocks with a wind charge, climbing a ladder within 3 blocks of a node). Put N at both ends of a ladder, at both edges of a gap, on
   platforms, at stairs, turns and crossings. `/function ctf_test:bots/nav` shows the links in a
-  match. A marker in the air drops to the floor below it (within 3 blocks), else it is not a node
+  match, and in the lobby the graph of the template you stand at (with what the bots learned on that
+  map; `/function ctf_test:bots/bake` builds it again after you edit the markers). A marker in the air drops to the floor below it (within 3 blocks), else it is not a node
   (shown red); a way the bots fail to pass gets dearer and they try another one. `/function admin:build/bots/dump`
   prints a backup (click to copy) for the `bot` entry of the map in `registry/maps.bolt`;
   `/function admin:build/bots/show/<map>` restores it;

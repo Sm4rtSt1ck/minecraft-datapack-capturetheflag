@@ -12,4 +12,8 @@ scoreboard players set #fknown bots 0
 execute if score #flag_known bots matches 1 run scoreboard players set #fknown bots 1
 scoreboard players set #hidrec bots 0
 function ctf_bots:internal/team/search_reset
+# The defense knows its traps; no defend spot next to one (ctf_bots:internal/traps/round_start)
+function ctf_bots:internal/traps/round_start
 execute as @e[type=zombified_piglin, tag=ctf_bot] at @s run function ctf_bots:internal/brain/start
+# What the bots learn: the flag the players hid, the attack routes (ctf_bots:internal/learn/round_start)
+function ctf_bots:internal/learn/round_start

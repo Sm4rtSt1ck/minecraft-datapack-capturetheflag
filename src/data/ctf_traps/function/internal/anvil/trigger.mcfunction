@@ -1,8 +1,8 @@
+# The trap goes off: announced (#ctf:on/trap_fired, as its marker: the bots learn which of their traps work)
+function #ctf:on/trap_fired
 # Kill credit: everyone in the column under the anvil
 function ctf_fight:api/credit/owner
-execute positioned as @s positioned ~-1 ~-40 ~-1 as @a[tag=player, dx=1, dy=40, dz=1] run function ctf_fight:api/credit/mark {time: 60, src: 2}
-# The bots too (BOTS.md)
-execute positioned as @s positioned ~-1 ~-40 ~-1 as @e[type=zombified_piglin, tag=ctf_bot, dx=1, dy=40, dz=1] run function ctf_fight:api/credit/mark {time: 60, src: 2}
+execute positioned as @s positioned ~-1 ~-40 ~-1 as @e[type=#ctf:fighter, tag=player, dx=1, dy=40, dz=1] run function ctf_fight:api/credit/mark {time: 60, src: 2}
 
 # The anvil falls (ctf_traps:internal/anvil/fall): a block display moved every tick, not a falling
 # block (a falling block lands on the top of a ladder and is gone). Its first speed: 1.5 blocks a tick

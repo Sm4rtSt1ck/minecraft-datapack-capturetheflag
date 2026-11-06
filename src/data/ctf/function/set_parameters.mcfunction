@@ -194,8 +194,51 @@ scoreboard objectives add bot.wt dummy
 scoreboard objectives add bot.nz dummy
 scoreboard objectives add bot.heat dummy
 scoreboard objectives add bot.hide dummy
+# A bot's burning / withering ticks left (ctf_bots:internal/body: its body ignores fire and wither)
+scoreboard objectives add bot.fire dummy
+scoreboard objectives add bot.wth dummy
 scoreboard objectives add bk.hc dummy
 scoreboard players set #hidrec bots 0
+# Learning (ctf_bots:internal/learn, BOTS.md stage 11): Bots_learn (settings, default on) - learning in
+# every match; lrn - temporary values; on a point: lrn.id and its counts (registry LEARN); on a player:
+# lrn.from / lrn.tt - the point he came from, ticks since, lrn.sc / sf / sj / sw - climbed cm, fallen cm,
+# jumps, wind charges (stats) and lrn.bc / bf / bj / bw - their values at that point, lrn.death -
+# deaths, lrn.ctx - his purchase context; bot.pn - thinks before a bot's next pre-aimed grenade
+from registry:traps import TRAPS
+execute unless score Bots_learn settings matches 0..1 run scoreboard players set Bots_learn settings 1
+# Bots_decay (settings, %): the learned counts x it / 100 once a match (registry LEARN "decay"; 100: never)
+from registry:bots import LEARN
+execute unless score Bots_decay settings matches 0..100 run scoreboard players set Bots_decay settings (LEARN["decay"])
+scoreboard players set #decay lrn 0
+scoreboard objectives add lrn dummy
+scoreboard objectives add lrn.id dummy
+for _s in ["ha", "hd", "hc", "dg", "nd", "hide", "hw", "hl", "ws", "wf", "tw", "dk", "nh", "tv", "dv"]:
+    scoreboard objectives add f"lrn.{_s}" dummy
+for _t in TRAPS:
+    if _t["team"] == "defense":
+        scoreboard objectives add f"lrn.t_{_t['id']}" dummy
+scoreboard objectives add lrn.from dummy
+scoreboard objectives add lrn.tt dummy
+scoreboard objectives add lrn.sc minecraft.custom:minecraft.climb_one_cm
+scoreboard objectives add lrn.sf minecraft.custom:minecraft.fall_one_cm
+scoreboard objectives add lrn.sj minecraft.custom:minecraft.jump
+scoreboard objectives add lrn.sw minecraft.used:minecraft.wind_charge
+scoreboard objectives add lrn.bc dummy
+scoreboard objectives add lrn.bf dummy
+scoreboard objectives add lrn.bj dummy
+scoreboard objectives add lrn.bw dummy
+scoreboard objectives add lrn.death deathCount
+scoreboard objectives add lrn.ctx dummy
+# lrn.bw2 - a player's wind charges counted already; lrn.k0 - on a bot wallet: its kills at freeze
+scoreboard objectives add lrn.bw2 dummy
+scoreboard objectives add lrn.k0 dummy
+scoreboard objectives add bot.pn dummy
+scoreboard players set #3 lrn 3
+scoreboard players set #5 lrn 5
+scoreboard players set #20 lrn 20
+scoreboard players set #10 lrn 10
+scoreboard players set #2 lrn 2
+scoreboard players set #map lrn 0
 scoreboard objectives add bot.say dummy
 scoreboard objectives add bot.shot dummy
 # bot.idle - thinks standing still (ctf_bots:internal/brain/unstick); bot.nopick - thinks it doesn't
@@ -203,6 +246,8 @@ scoreboard objectives add bot.shot dummy
 scoreboard objectives add bot.idle dummy
 scoreboard objectives add bot.nopick dummy
 scoreboard players set #ready nav 0
+# #lshow nav - 1: the lobby view of the graph is built (ctf_bots:internal/nav/lobby_build)
+scoreboard players set #lshow nav 0
 scoreboard players set #one bots 1
 scoreboard players set #vkill bots 0
 scoreboard players set #4 bots 4

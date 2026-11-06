@@ -4,6 +4,7 @@ from registry:bots import DUEL
 scoreboard players set @s bot.ret (DUEL["retreat"])
 scoreboard players set @s bot.retcd (DUEL["retreat_again"])
 function ctf_bots:internal/talk/retreat
+function ctf_bots:internal/learn/wind_escape
 execute if function ctf_bots:internal/duel/retreat_go run return 1
 function ctf_bots:internal/brain/target_want
 return 1

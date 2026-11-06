@@ -4,7 +4,7 @@ execute as @e[type=item] if items entity @s contents magenta_banner run data mer
 function ctf_flag:api/summon_flag {target: '@n[type=armor_stand, tag=flag]'}
 
 
-effect give @a[tag=defense,tag=!spectator,tag=!died] blindness 3 1 false
+effect give @e[type=#ctf:fighter, tag=defense, tag=!spectator, tag=!died] blindness 3 1 false
 execute as @a[tag=!lobby] positioned as @s run playsound minecraft:ambient.cave ambient @s ~ ~ ~ 0.35 1
 execute as @a[tag=!lobby] positioned as @s run playsound minecraft:ambient.cave ambient @s ~ ~ ~ 0.35 1
 execute as @a[tag=!lobby] positioned as @s run playsound minecraft:ambient.cave ambient @s ~ ~ ~ 0.35 1

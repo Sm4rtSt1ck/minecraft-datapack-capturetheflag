@@ -11,6 +11,9 @@ function ctf_bots:internal/sense/look
 execute if score @s bot.alt matches 1.. run scoreboard players remove @s bot.alt 1
 execute unless entity @s[tag=bot_fall] unless predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {flags: {is_on_ground: true}}} if function ctf_bots:internal/nav/falling run tag @s add bot_fall
 execute if score @s bot.nopick matches 1.. run scoreboard players remove @s bot.nopick 1
+execute if score @s bot.pn matches 1.. run scoreboard players remove @s bot.pn 1
+# Its wallet follows it (its death place: ctf_bots:internal/learn/wallet_check)
+execute if score #map lrn matches 1.. as @e[type=marker, tag=bot_wallet] if score @s bot.n = #me bots run function ctf_bots:internal/learn/wallet_here
 execute if score @s bot.nopick matches ..0 run tag @s remove bot_thrower
 execute if score @s bot.ret matches 1.. run scoreboard players remove @s bot.ret 1
 execute if score @s bot.retcd matches 1.. run scoreboard players remove @s bot.retcd 1

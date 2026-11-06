@@ -1,0 +1,314 @@
+# Learning (registry/bots.bolt LEARN, BUY_MONEY, BUY_ITEMS; BOTS.md stage 11), the generated part:
+# the storage of a map (load / save), the point stats, the purchase contexts, the bots' learned buying
+from registry:bots import LEARN, BUY_MONEY, BUY_ITEMS, NAMES
+from registry:traps import TRAPS
+from registry:maps import MAPS
+from registry:world import ARENA
+from ctf_maps:lib import template_block
+
+_C = ARENA["corner"]
+_STATS = ["ha", "hd", "hc", "dg", "nd", "hide", "hw", "hl", "ws", "wf", "tw", "dk", "nh"]
+for _t in TRAPS:
+    if _t["team"] == "defense":
+        _STATS.append(f"t_{_t['id']}")
+
+# The map of the match: its learned data into storage ctf_bots:learn cur (#map lrn = its number;
+# ctf_bots:internal/learn/load_map), then the points spawned (ctf_bots:internal/learn/load_pts)
+function ctf_bots:internal/learn/load:
+    scoreboard players set #map lrn 0
+    for _i in range(len(MAPS)):
+        execute if score result map_vote matches (_i + 1) run scoreboard players set #map lrn (_i + 1)
+        execute if score result map_vote matches (_i + 1) run function ctf_bots:internal/learn/load_map {id: (MAPS[_i]["id"])}
+    execute if score #map lrn matches 0 run return 0
+    execute unless data storage ctf_bots:learn cur.next run data modify storage ctf_bots:learn cur set value {pts: [], links: [], next: 1, routes: [{w: 0, n: 0}, {w: 0, n: 0}, {w: 0, n: 0}, {w: 0, n: 0}]}
+    execute unless data storage ctf_bots:learn cur.pts[0] run data modify storage ctf_bots:learn cur.links set value []
+    execute store result score #next lrn run data get storage ctf_bots:learn cur.next
+    data modify storage ctf_bots:learn work set from storage ctf_bots:learn cur.pts
+    execute positioned (_C[0]) (_C[1]) (_C[2]) run function ctf_bots:internal/learn/load_pts
+    execute as @e[type=marker, tag=bot_nav, tag=!lrn_pt] run function ctf_bots:internal/learn/new_id
+    execute store result score #npts lrn if entity @e[type=marker, tag=lrn_pt]
+    function ctf_bots:internal/learn/after_load
+
+# As a new point (lrn_cur), its stats from storage ctf_bots:learn work[0]
+function ctf_bots:internal/learn/pt_stats:
+    execute store result score @s lrn.id run data get storage ctf_bots:learn work[0].id
+    for _s in _STATS:
+        execute store result score @s f"lrn.{_s}" run data get storage ctf_bots:learn f"work[0].{_s}"
+
+# Once a match, when the game itself starts (the first freeze_start after #ctf:on/match_start:
+# #decay lrn 1; ctf_bots:internal/learn/freeze; with no warm-up too): the counts of the points in the
+# arena x Bots_decay / 100 (100+: nothing), the bots' heat again from them
+function ctf_bots:internal/learn/decay:
+    scoreboard players set #decay lrn 0
+    scoreboard players operation #dk lrn = Bots_decay settings
+    execute if score #dk lrn matches 100.. run return 0
+    execute if score #dk lrn matches ..-1 run scoreboard players set #dk lrn 0
+    scoreboard players set #100 lrn 100
+    execute as @e[type=marker, tag=lrn_pt] run function ctf_bots:internal/learn/decay_pt
+function ctf_bots:internal/learn/decay_pt:
+    for _s in _STATS:
+        scoreboard players operation @s f"lrn.{_s}" *= #dk lrn
+        scoreboard players operation @s f"lrn.{_s}" /= #100 lrn
+    scoreboard players operation @s bot.heat = @s lrn.ha
+
+# As a point: its entry appended to storage ctf_bots:learn cur.pts (arena-relative x / y / z, its stats);
+# not when a point saved already stands here (a node of the map dropped onto a learned point). The corner
+# is subtracted with add / remove by its sign (scoreboard remove takes no negative number: the function
+# would not load)
+function ctf_bots:internal/learn/save_pt:
+    execute at @s if entity @e[type=marker, tag=lrn_saved, distance=..0.6] run return 0
+    tag @s add lrn_saved
+    data modify storage ctf_bots:learn cur.pts append value {}
+    execute store result score #x lrn run data get entity @s Pos[0] 10
+    execute store result score #y lrn run data get entity @s Pos[1] 10
+    execute store result score #z lrn run data get entity @s Pos[2] 10
+    for _a in range(3):
+        _v = int(_C[_a] * 10)
+        _o = ["#x", "#y", "#z"][_a]
+        if _v >= 0:
+            scoreboard players remove (_o) lrn (_v)
+        else:
+            scoreboard players add (_o) lrn (-_v)
+    execute store result storage ctf_bots:learn cur.pts[-1].x double 0.1 run scoreboard players get #x lrn
+    execute store result storage ctf_bots:learn cur.pts[-1].y double 0.1 run scoreboard players get #y lrn
+    execute store result storage ctf_bots:learn cur.pts[-1].z double 0.1 run scoreboard players get #z lrn
+    execute store result storage ctf_bots:learn cur.pts[-1].id int 1 run scoreboard players get @s lrn.id
+    for _s in _STATS:
+        execute store result storage ctf_bots:learn f"cur.pts[-1].{_s}" int 1 run scoreboard players get @s f"lrn.{_s}"
+
+# The learned data of the match back into its map (every LEARN "save" ticks, before a swap clone and
+# before the match end cleanup); never when the arena has no points (cleaned already: nothing to save)
+function ctf_bots:internal/learn/save:
+    execute unless score #map lrn matches 1.. run return 0
+    execute unless entity @e[type=marker, tag=lrn_pt] run return 0
+    tag @e[type=marker, tag=lrn_saved] remove lrn_saved
+    data modify storage ctf_bots:learn cur.pts set value []
+    execute as @e[type=marker, tag=lrn_pt] run function ctf_bots:internal/learn/save_pt
+    tag @e[type=marker, tag=lrn_saved] remove lrn_saved
+    execute store result storage ctf_bots:learn cur.next int 1 run scoreboard players get #next lrn
+    for _i in range(len(MAPS)):
+        execute if score #map lrn matches (_i + 1) run function ctf_bots:internal/learn/save_map {id: (MAPS[_i]["id"])}
+    scoreboard players operation #saved lrn = #lt lrn
+
+# As a player (or a bot: its wallet's money), #side lrn (0 attack, 1 defense): #ctx lrn = the purchase
+# context: side x 12 + money bucket (BUY_MONEY) x 3 + the score (0 behind, 1 even, 2 ahead; #my / #en lrn)
+function ctf_bots:internal/learn/ctx:
+    scoreboard players set #b lrn (len(BUY_MONEY))
+    for _i in range(len(BUY_MONEY)):
+        _m = BUY_MONEY[len(BUY_MONEY) - 1 - _i]
+        execute if score #money lrn matches (f"..{_m - 1}") run scoreboard players set #b lrn (len(BUY_MONEY) - 1 - _i)
+    scoreboard players set #st lrn 1
+    execute if score #my lrn < #en lrn run scoreboard players set #st lrn 0
+    execute if score #my lrn > #en lrn run scoreboard players set #st lrn 2
+    scoreboard players operation #ctx lrn = #side lrn
+    scoreboard players set #k lrn ((len(BUY_MONEY) + 1) * 3)
+    scoreboard players operation #ctx lrn *= #k lrn
+    scoreboard players operation #b lrn *= #3 lrn
+    scoreboard players operation #ctx lrn += #b lrn
+    scoreboard players operation #ctx lrn += #st lrn
+
+# As a bot buying (BOTS.md stage 11): the players' purchases of its context (storage ctf_bots:learn
+# buy.c<ctx>: n rounds, a count per item); known for LEARN "buy_min"+ rounds: each item of BUY_ITEMS in
+# order with the chance count / n, changed by what the item gave the bots in this context (buyb.c<ctx>:
+# ctf_bots:internal/learn/buy_adjust; its own checks: money, limits); 1 when it bought so
+function ctf_bots:internal/learn/buy_ctx:
+    function ctf_bots:internal/learn/buy_get with storage ctf_bots:learn arg
+    execute store result score #n lrn run data get storage ctf_bots:learn bc.n
+    execute unless score #n lrn matches (f"{LEARN['buy_min']}..") run return 0
+    for _it in BUY_ITEMS:
+        execute store result score #c lrn run data get storage ctf_bots:learn f"bc.{_it}"
+        execute store result score #bn lrn run data get storage ctf_bots:learn f"bb.{_it}.n"
+        execute store result score #bv lrn run data get storage ctf_bots:learn f"bb.{_it}.v"
+        execute if score #bn lrn matches (f"{LEARN['buy_bot_min']}..") run function ctf_bots:internal/learn/buy_adjust
+        execute if score #c lrn matches 1.. store result score #r lrn run random value 1..1000
+        execute if score #c lrn matches 1.. run scoreboard players operation #r lrn %= #n lrn
+        execute if score #c lrn matches 1.. if score #r lrn < #c lrn run function f"ctf_bots:internal/buy/get/{_it}"
+    return 1
+
+# After a load: the bots' heat (where attackers came from) = the learned attackers' heat; with bots the
+# LEARN "spots" points with the most defenders' heat (LEARN "spot_min"+ visits) become defend spots
+# (where human defenders stood); new points 0
+function ctf_bots:internal/learn/after_load:
+    execute as @e[type=marker, tag=lrn_pt] run scoreboard players operation @s bot.heat = @s lrn.ha
+    scoreboard players set #lrn_new lrn 0
+    execute unless score team bots matches 1.. run return 0
+    for _n in range(LEARN["spots"]):
+        scoreboard players set #hb lrn (LEARN["spot_min"] * 10 - 1)
+        execute as @e[type=marker, tag=lrn_pt, tag=!bot_defend, tag=lrn_learned] run function ctf_bots:internal/learn/spot_one
+        tag @e[type=marker, tag=lrn_best] add bot_defend
+        tag @e[type=marker, tag=lrn_best] remove lrn_best
+
+# The recorder, every tick of freeze / round / end_round (learning on, a map loaded): actors every 5
+# ticks (trail points, observed links; freeze too), heat every LEARN "heat" ticks (not in freeze: there
+# the defenders hide the flag and place traps, the attackers wait), deaths, traps and the bots'
+# deaths every 20 ticks, a save every LEARN "save" ticks
+function ctf_bots:internal/learn/tick:
+    execute unless score #map lrn matches 1.. run return 0
+    execute unless score Bots_learn settings matches 1 run return 0
+    scoreboard players add #lt lrn 1
+    execute as @a[scores={lrn.death=1..}] at @s run function ctf_bots:internal/learn/death
+    scoreboard players operation #m lrn = #lt lrn
+    scoreboard players operation #m lrn %= #20 lrn
+    execute if score #m lrn matches 0 as @e[type=frog, tag=trap_marker, tag=!lrn_t] run function ctf_bots:internal/learn/trap
+    execute if score #m lrn matches 0 as @e[type=marker, tag=bot_wallet, tag=lrn_moved, tag=!lrn_dead] run function ctf_bots:internal/learn/wallet_check
+    execute unless score game state matches 3..5 run return 0
+    scoreboard players operation #m lrn = #lt lrn
+    scoreboard players operation #m lrn %= #5 lrn
+    execute if score #m lrn matches 0 as @a[tag=player, tag=!dead, gamemode=!spectator] at @s run function ctf_bots:internal/learn/actor
+    execute unless score game state matches 4..5 run return 0
+    scoreboard players operation #m lrn = #lt lrn
+    scoreboard players set #k lrn (LEARN["heat"])
+    scoreboard players operation #m lrn %= #k lrn
+    execute if score #m lrn matches 0 as @a[tag=player, tag=!dead, gamemode=!spectator] at @s run function ctf_bots:internal/learn/heat
+    scoreboard players operation #m lrn = #lt lrn
+    scoreboard players set #k lrn (LEARN["save"])
+    scoreboard players operation #m lrn %= #k lrn
+    execute if score #m lrn matches 0 run function ctf_bots:internal/learn/save
+
+# As a player (every 5 ticks), at him: at a point (within LEARN "touch"): ctf_bots:internal/learn/at_point;
+# on the ground with no point within LEARN "spacing": a new one (up to LEARN "max" a map)
+function ctf_bots:internal/learn/actor:
+    scoreboard players add @s lrn.tt 5
+    execute if score @s lrn.sw > @s lrn.bw2 run function ctf_bots:internal/learn/wind
+    tag @e[type=marker, tag=lrn_pt, distance=(f"..{LEARN['touch']}"), sort=nearest, limit=1] add lrn_here
+    execute if entity @e[type=marker, tag=lrn_here] run function ctf_bots:internal/learn/at_point
+    execute unless entity @e[type=marker, tag=lrn_here] if score #npts lrn matches (f"..{LEARN['max'] - 1}") if predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {flags: {is_on_ground: true}}} unless entity @e[type=marker, tag=lrn_pt, distance=(f"..{LEARN['spacing']}")] run function ctf_bots:internal/learn/new_pt
+    tag @e[type=marker, tag=lrn_here] remove lrn_here
+
+# As a player at a point he left another one from within LEARN "transit" ticks: the observed link
+# (ctf_bots:internal/learn/observe)
+function ctf_bots:internal/learn/at_point:
+    scoreboard players operation #pid lrn = @n[type=marker, tag=lrn_here] lrn.id
+    execute if score @s lrn.from = #pid lrn run return run function ctf_bots:internal/learn/baseline
+    execute if score @s lrn.from matches 1.. if score @s lrn.tt matches (f"..{LEARN['transit']}") run function ctf_bots:internal/learn/observe
+    scoreboard players operation @s lrn.from = #pid lrn
+    function ctf_bots:internal/learn/baseline
+
+# The traps a player placed: as a new trap marker: placed by a player -> the point within 6 counts it
+# (lrn.t_<trap>)
+function ctf_bots:internal/learn/trap:
+    tag @s add lrn_t
+    scoreboard players operation #pl lrn = @s kc.placer
+    scoreboard players set #isp lrn 0
+    execute as @a[tag=player] if score @s player_id = #pl lrn run scoreboard players set #isp lrn 1
+    execute if score #isp lrn matches 0 run return 0
+    for _t in TRAPS:
+        if _t["team"] == "defense":
+            execute if entity @s[tag=f"trap.{_t['id']}"] at @s as @n[type=marker, tag=lrn_pt, distance=..6] run scoreboard players add @s f"lrn.t_{_t['id']}" 10
+
+# As a defense bot placing a trap of a kind: the point where players placed it most and the bots' traps
+# worked (lrn.tv = lrn.t_<kind> + 2 x lrn.tw, 10+), unused, no trap within 3, gets the tag bot_pick (an anvil: a marker under the ceiling above it, within 8);
+# none: nothing (the bot markers T / AN then)
+for _t in TRAPS:
+    if _t["team"] == "defense":
+        function f"ctf_bots:internal/learn/trap_spot_{_t['id']}":
+            scoreboard players set #hb lrn 9
+            execute as @e[type=marker, tag=lrn_pt] run scoreboard players operation @s lrn.tv = @s f"lrn.t_{_t['id']}"
+            execute as @e[type=marker, tag=lrn_pt] run scoreboard players operation @s lrn.tv += @s lrn.tw
+            execute as @e[type=marker, tag=lrn_pt] run scoreboard players operation @s lrn.tv += @s lrn.tw
+            execute as @e[type=marker, tag=lrn_pt, tag=!bot_used] at @s unless entity @e[type=frog, tag=trap_marker, distance=..3] run function ctf_bots:internal/learn/trap_best {stat: "lrn.tv"}
+            if _t["id"] == "anvil":
+                execute at @n[type=marker, tag=lrn_best] run function ctf_bots:internal/learn/ceiling
+                tag @e[type=marker, tag=lrn_best] add bot_used
+            else:
+                tag @e[type=marker, tag=lrn_best] add bot_pick
+            tag @e[type=marker, tag=lrn_best] remove lrn_best
+
+# The attack routes by their results (storage cur.routes: w rounds won, n rounds; a value (w + 1) x 100 /
+# (n + 2) + a random 0..40, -25 for every bot on it already this round): as an attack bot, its route
+# (bot.r; 0: none has points)
+function ctf_bots:internal/learn/pick_route:
+    scoreboard players set #best lrn -1000
+    scoreboard players set @s bot.r 0
+    for _r in range(1, 5):
+        scoreboard players set #has lrn 0
+        execute as @e[type=marker, tag=bot_route] if score @s bot.r matches (_r) run scoreboard players set #has lrn 1
+        execute store result score #w lrn run data get storage ctf_bots:learn f"cur.routes[{_r - 1}].w"
+        execute store result score #n lrn run data get storage ctf_bots:learn f"cur.routes[{_r - 1}].n"
+        scoreboard players add #w lrn 1
+        scoreboard players set #k lrn 100
+        scoreboard players operation #w lrn *= #k lrn
+        scoreboard players add #n lrn 2
+        scoreboard players operation #w lrn /= #n lrn
+        execute store result score #r lrn run random value 0..40
+        scoreboard players operation #w lrn += #r lrn
+        execute store result score #c lrn if entity @e[type=zombified_piglin, tag=ctf_bot, tag=attack, scores={bot.r=(_r)}]
+        scoreboard players set #k lrn 25
+        scoreboard players operation #c lrn *= #k lrn
+        scoreboard players operation #w lrn -= #c lrn
+        execute if score #has lrn matches 1 if score #w lrn > #best lrn run scoreboard players set @s bot.r (_r)
+        execute if score #has lrn matches 1 if score #w lrn > #best lrn run scoreboard players operation #best lrn = #w lrn
+    scoreboard players set @s bot.w 1
+
+# Round win: the routes the attack bots took (#ru<r> lrn) counted, won by the attack?
+function ctf_bots:internal/learn/routes_done:
+    scoreboard players set #won lrn 0
+    execute if data storage ctf:round won{winner: "attack"} run scoreboard players set #won lrn 1
+    for _r in range(1, 5):
+        execute if score f"#ru{_r}" lrn matches 1 store result score #n lrn run data get storage ctf_bots:learn f"cur.routes[{_r - 1}].n"
+        execute if score f"#ru{_r}" lrn matches 1 store result storage ctf_bots:learn f"cur.routes[{_r - 1}].n" int 1 run scoreboard players add #n lrn 1
+        execute if score f"#ru{_r}" lrn matches 1 if score #won lrn matches 1 store result score #n lrn run data get storage ctf_bots:learn f"cur.routes[{_r - 1}].w"
+        execute if score f"#ru{_r}" lrn matches 1 if score #won lrn matches 1 store result storage ctf_bots:learn f"cur.routes[{_r - 1}].w" int 1 run scoreboard players add #n lrn 1
+        scoreboard players set f"#ru{_r}" lrn 0
+function ctf_bots:internal/learn/routes_mark:
+    for _r in range(1, 5):
+        execute if entity @e[type=zombified_piglin, tag=ctf_bot, tag=attack, scores={bot.r=(_r)}] run scoreboard players set f"#ru{_r}" lrn 1
+
+# Lobby view of the graph, as a player: the template he stands in (its box: the arena size from its block):
+# the points the bots learned on that map spawned on the template (ctf_bots:internal/learn/lobby_load)
+function ctf_bots:internal/learn/lobby_points:
+    for _m in MAPS:
+        _b = template_block(_m)
+        execute positioned (_b[0]) (_b[1]) (_b[2]) if entity @s[dx=(ARENA["size"][0] - 1), dy=(ARENA["size"][1] - 1), dz=(ARENA["size"][2] - 1)] run function ctf_bots:internal/learn/lobby_load {id: (_m["id"])}
+
+# The statistics of what the bots learned on the map being played (ctf_bots:api/learn/info): sums over
+# the points in the arena (the counts / 10 = events), over the links, the routes
+function ctf_bots:internal/learn/stats:
+    for _s in _STATS:
+        scoreboard players set f"#S_{_s}" lrn 0
+    scoreboard players set #S_pts lrn 0
+    scoreboard players set #S_new lrn 0
+    execute as @e[type=marker, tag=lrn_pt] run function ctf_bots:internal/learn/stat_pt
+    for _s in _STATS:
+        scoreboard players operation f"#S_{_s}" lrn /= #10 lrn
+    scoreboard players set #S_obs lrn 0
+    scoreboard players set #S_n lrn 0
+    scoreboard players set #S_s lrn 0
+    scoreboard players set #S_f lrn 0
+    scoreboard players set #S_lk lrn 0
+    data modify storage ctf_bots:learn work2 set from storage ctf_bots:learn cur.links
+    function ctf_bots:internal/learn/stat_links
+function ctf_bots:internal/learn/stat_pt:
+    scoreboard players add #S_pts lrn 1
+    execute if entity @s[tag=lrn_learned] run scoreboard players add #S_new lrn 1
+    for _s in _STATS:
+        scoreboard players operation f"#S_{_s}" lrn += @s f"lrn.{_s}"
+
+# A bot's wallet at freeze: its purchase tags of the last round cleared (ctf_bots:internal/learn/bot_buy);
+# its bot's kills now (lrn.k0)
+function ctf_bots:internal/learn/wallet_clear:
+    for _it in BUY_ITEMS:
+        tag @s remove f"lrn_b_{_it}"
+function ctf_bots:internal/learn/wallet_start:
+    for _i in range(len(NAMES)):
+        execute if score @s bot.n matches (_i) run scoreboard players operation @s lrn.k0 = f"bot_{_i}" kills
+
+# Round win, as a bot's wallet (it bought this round): what its purchases gave (#v lrn = kills this round x
+# 10 + the bots' side won x 10 + alive x 5) added to each item it bought (storage buyb.c<ctx>.<item>: n, v)
+function ctf_bots:internal/learn/bot_round:
+    scoreboard players set #k lrn 0
+    for _i in range(len(NAMES)):
+        execute if score @s bot.n matches (_i) run scoreboard players operation #k lrn = f"bot_{_i}" kills
+    scoreboard players operation #k lrn -= @s lrn.k0
+    scoreboard players operation #v lrn = #k lrn
+    scoreboard players operation #v lrn *= #10 lrn
+    execute if entity @s[tag=attack] if data storage ctf:round won{winner: "attack"} run scoreboard players add #v lrn 10
+    execute if entity @s[tag=defense] if data storage ctf:round won{winner: "defense"} run scoreboard players add #v lrn 10
+    execute if entity @s[tag=!dead] run scoreboard players add #v lrn 5
+    data modify storage ctf_bots:learn arg set value {ctx: 0, id: "", v: 0}
+    execute store result storage ctf_bots:learn arg.ctx int 1 run scoreboard players get @s lrn.ctx
+    execute store result storage ctf_bots:learn arg.v int 1 run scoreboard players get #v lrn
+    for _it in BUY_ITEMS:
+        execute if entity @s[tag=f"lrn_b_{_it}"] run data modify storage ctf_bots:learn arg.id set value (_it)
+        execute if entity @s[tag=f"lrn_b_{_it}"] run function ctf_bots:internal/learn/bot_buy_add with storage ctf_bots:learn arg
+        tag @s remove f"lrn_b_{_it}"

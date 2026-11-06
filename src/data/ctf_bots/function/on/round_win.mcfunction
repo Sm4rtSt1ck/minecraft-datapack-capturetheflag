@@ -4,3 +4,5 @@ tag @e[type=marker, tag=bot_wallet] add dead
 execute as @e[type=zombified_piglin, tag=ctf_bot] run function ctf_bots:internal/money/alive
 # The memory of the match: where the players hid the flag (not found by the bots: recorded now)
 execute if entity @e[type=zombified_piglin, tag=ctf_bot, tag=attack] if entity @e[type=armor_stand, tag=flag] run function ctf_bots:internal/trick/hide_rec
+# What the bots learn: their flag spot, the attack routes (ctf_bots:internal/learn/round_win)
+function ctf_bots:internal/learn/round_win

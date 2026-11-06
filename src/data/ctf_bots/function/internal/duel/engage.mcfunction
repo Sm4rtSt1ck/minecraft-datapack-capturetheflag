@@ -27,6 +27,7 @@ function ctf_bots:internal/trick/retreat_hp
 execute if entity @s[tag=defense] if score @s bot.role matches 11 if score @s bot.trait matches 3 run function ctf_bots:internal/trick/ambush_call
 execute if score #push bots matches 0 if score #hp bots <= #rhp bots if function ctf_bots:internal/duel/losing run return run function ctf_bots:internal/duel/retreat
 execute if score @s bot.mw matches 9 if function ctf_bots:internal/duel/dive run return 1
+function ctf_bots:internal/learn/wind_throw
 execute if function ctf_bots:internal/duel/stance run return 1
 execute if score #eranged bots matches 1 if score #dist bots matches (f"{DUEL['dodge']}..") if predicate {condition: "minecraft:random_chance", chance: 0.5} if predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {flags: {is_on_ground: true}}} run function ctf_bots:internal/duel/dodge
 function ctf_bots:internal/duel/chase

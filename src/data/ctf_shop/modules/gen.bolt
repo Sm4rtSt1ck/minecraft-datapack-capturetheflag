@@ -40,7 +40,8 @@ for page in PAGES:
             else:
                 function ctf_shop:ui/product (display(p, p["look"], p["look"]["extra"]))
 
-    # The clicked slot (#slot shop.tmp) buys its product
+    # The clicked slot (#slot shop.tmp) buys its product; a purchase is announced (#ctf:on/bought:
+    # ctf_shop:internal/announce)
     function f"ctf_shop:page/{page['id']}/click":
         for p in page["products"]:
             b = buy_args(p)
@@ -48,14 +49,16 @@ for page in PAGES:
             args = b[1]
             if "team" in p:
                 if args is None:
-                    execute if entity @s[tag=p["team"]] if score #slot shop.tmp matches (p["slot"]) run return run function f"{fn}"
+                    execute if entity @s[tag=p["team"]] if score #slot shop.tmp matches (p["slot"]) run return run function ctf_shop:internal/bought {fn: (fn), id: (p["id"])}
                 else:
-                    execute if entity @s[tag=p["team"]] if score #slot shop.tmp matches (p["slot"]) run return run function f"{fn}" (args)
+                    execute if entity @s[tag=p["team"]] if score #slot shop.tmp matches (p["slot"]) store result score #ok shop.tmp run function f"{fn}" (args)
+                    execute if entity @s[tag=p["team"]] if score #slot shop.tmp matches (p["slot"]) run return run function ctf_shop:internal/announce {ok: "#ok", id: (p["id"])}
             else:
                 if args is None:
-                    execute if score #slot shop.tmp matches (p["slot"]) run return run function f"{fn}"
+                    execute if score #slot shop.tmp matches (p["slot"]) run return run function ctf_shop:internal/bought {fn: (fn), id: (p["id"])}
                 else:
-                    execute if score #slot shop.tmp matches (p["slot"]) run return run function f"{fn}" (args)
+                    execute if score #slot shop.tmp matches (p["slot"]) store result score #ok shop.tmp run function f"{fn}" (args)
+                    execute if score #slot shop.tmp matches (p["slot"]) run return run function ctf_shop:internal/announce {ok: "#ok", id: (p["id"])}
 
 
 # 1 if one more item can be bought: (carried at freeze start + bought) < max and carried now < max

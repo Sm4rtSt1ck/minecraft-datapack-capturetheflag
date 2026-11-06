@@ -9,6 +9,7 @@
         "ctf_grenades:tick/fly",
         "ctf_ult:tick/click",
         "ctf_ult:tick/active",
-        "ctf_bots:tick/combat"
+        "ctf_bots:tick/combat",
+        "ctf_bots:internal/learn/tick"
     ]
 }

@@ -31,6 +31,12 @@ execute as @e[type=zombified_piglin, tag=bot_wait] run function ctf_bots:interna
 # Falling bots: soft landings, the mace smash, wind charge jumps (ctf_bots:internal/nav/fall_tick)
 execute as @e[type=zombified_piglin, tag=bot_fall] at @s run function ctf_bots:internal/nav/fall_tick
 
+# What the bots' body ignores but a player feels: wither, burning, levitation while asleep
+# (ctf_bots:internal/body)
+function ctf_bots:internal/body/tick
+# Known enemy traps broken within reach, the traps the team knows kept out of (ctf_bots:internal/traps/tick)
+function ctf_bots:internal/traps/tick
+
 # The bots holding a ranged weapon at their target shoot (every tick)
 execute as @e[type=zombified_piglin, tag=bot_shoot] at @s run function ctf_bots:internal/combat/shoot_tick
 

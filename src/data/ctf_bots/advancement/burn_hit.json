@@ -1,0 +1,37 @@
+{
+    "criteria": {
+        "hit": {
+            "trigger": "minecraft:player_hurt_entity",
+            "conditions": {
+                "player": [
+                    {
+                        "condition": "minecraft:entity_properties",
+                        "entity": "this",
+                        "predicate": {
+                            "equipment": {
+                                "mainhand": {
+                                    "predicates": {
+                                        "minecraft:enchantments": [{"enchantments": "minecraft:fire_aspect"}]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ],
+                "entity": {
+                    "type": "minecraft:zombified_piglin",
+                    "nbt": "{Tags:[\"ctf_bot\"]}"
+                },
+                "damage": {
+                    "type": {
+                        "is_direct": true,
+                        "tags": [{"id": "minecraft:is_projectile", "expected": false}]
+                    }
+                }
+            }
+        }
+    },
+    "rewards": {
+        "function": "ctf_bots:internal/body/burn_hit"
+    }
+}

@@ -97,6 +97,7 @@ function ctf_bots:internal/combat/think:
     tag @s remove bot_los
     execute unless entity @a[tag=bot_tc] run tag @s remove bot_close
     execute unless entity @a[tag=bot_tc] if score @s bot.he matches 1.. run function ctf_bots:internal/duel/nade_intel
+    execute unless entity @a[tag=bot_tc] if entity @s[tag=attack] if score @s bot.he matches 1.. run function ctf_bots:internal/learn/prenade
     execute unless entity @a[tag=bot_tc] run return run function ctf_bots:internal/combat/melee
     execute if entity @a[tag=bot_tc, tag=bk_seen] run tag @s add bot_los
     execute if entity @s[tag=!bot_close] if entity @a[tag=bot_tc, distance=(f"..{DELAY['near']}")] run function ctf_bots:internal/combat/react

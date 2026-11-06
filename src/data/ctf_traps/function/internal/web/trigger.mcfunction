@@ -1,3 +1,5 @@
+# The trap goes off: announced (#ctf:on/trap_fired, as its marker: the bots learn which of their traps work)
+function #ctf:on/trap_fired
 execute positioned as @s run fill ~-1 ~-1 ~-1 ~1 ~1 ~1 cobweb replace air
 
 execute positioned as @s run playsound minecraft:entity.spider.ambient block @a ~ ~ ~ 1 1

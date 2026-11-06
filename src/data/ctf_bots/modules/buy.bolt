@@ -85,11 +85,30 @@ for _id in LIMITED:
         scoreboard players add @s f"bot.{_id}" 1
         scoreboard players remove @s money (_cost(_id))
 
+# As a bot buying: an item (ctf_bots:internal/buy/item/<id>); bought (its money went down): its wallet
+# remembers it for the round (lrn_b_<id>: the bots learn what their purchases gave)
+_ALL_ITEMS = []
+for _id in MAIN:
+    _ALL_ITEMS.append(_id)
+for _id in RANGED:
+    _ALL_ITEMS.append(_id)
+for _id in ARMOR:
+    _ALL_ITEMS.append(_id)
+for _id in ["helmet", "totem"]:
+    _ALL_ITEMS.append(_id)
+for _id in LIMITED:
+    _ALL_ITEMS.append(_id)
+for _id in _ALL_ITEMS:
+    function f"ctf_bots:internal/buy/get/{_id}":
+        scoreboard players operation #m0 bots = @s money
+        function f"ctf_bots:internal/buy/item/{_id}"
+        execute if score @s money < #m0 bots run tag @e[type=marker, tag=bot_mywallet] add f"lrn_b_{_id}"
+
 # The plans
 for _p in PLANS:
     function f"ctf_bots:internal/buy/plan/{_p['id']}":
         for _it in _p["items"]:
-            function f"ctf_bots:internal/buy/item/{_it}"
+            function f"ctf_bots:internal/buy/get/{_it}"
 
 # As a bot: a plan at random (weights); #ranged bots = 1: only the ranged plans
 def _pick(plans):

@@ -170,18 +170,36 @@ TRAPS = [
     {"id": "wither", "spot": "bot_trap"},
     {"id": "web", "spot": "bot_trap"},
 ]
-# An attack bot that sees an enemy trap within this breaks it (like a player's hit with the hand);
-# the trap goes off within 2 blocks, the bots think 4 times a second (~1.5 blocks)
-TRAP_BREAK = 4
+# Traps, known like a player knows them. The defense knows every trap of its team (placed in freeze:
+# tag bot_known_d at the round start). An attack bot notices an enemy trap within "sight" in its field
+# of view (SENSE "fov") with a free line of sight only by chance ("chance" % a think, 4 thinks a
+# second: a trap passed by is often missed); a noticed trap is known to the attack team (bot_known_a)
+# and broken by an attack bot within "reach" (checked every tick: a player's hit with the hand).
+# Traps go off on bots like on players (within 2 blocks, the anvil: under it). A bot keeps out of the
+# traps its team knows (the defense: all its traps; the attack: the anvils it can't reach): the next
+# node near one costs "cost" more (nav units: 10 a block), and within "avoid" blocks (the anvil: its
+# column +-"avoid_anvil") it is pushed away ("push" blocks a tick), unless what it goes to (its lure)
+# is in there (its spot, the flag, an enemy: then it goes in like a player would). Defend spots
+# within "avoid" of a trap are not taken
+TRAP_SEE = {"sight": 10, "chance": 10, "reach": 3, "avoid": 2.6, "avoid_anvil": 1.5, "cost": 300,
+            "push": 0.25}
+# The effects of the game a player feels but the bot's body ignores, played for it
+# (ctf_bots:internal/body): a zombified piglin is undead (no wither effect: the wither trap cloud gives
+# "wither" ticks, 1 damage every "wither_every") and fire-immune (fire blocks / lava: "in_fire" ticks
+# of burning and 1 damage every "in_fire_every"; a hit with a fire aspect weapon "fire_hit" ticks, a
+# burning arrow "fire_arrow" ticks; burning: 1 damage every "burn_every", water puts it out)
+BODY_FX = {"wither": 140, "wither_every": 20, "in_fire": 160, "in_fire_every": 10, "fire_hit": 80,
+           "fire_arrow": 100, "burn_every": 20}
 
-# PERCEPTION AND TEAM MEMORY (stage 10a, BOTS.md). A bot sees an enemy within "sight" in its
+# PERCEPTION AND TEAM MEMORY (stage 10a, BOTS.md). Blinded (blindness) a bot sees only within "blind",
+# in darkness within "dark", like a player. A bot sees an enemy within "sight" in its
 # horizontal field of view (+-"fov" degrees from where its body looks) or within "near" around it;
 # a sneaking player only within "sneak", an invisible one within "invisible"; and a ray from its eyes
 # to his eyes passes (#ctf_bots:see: what bullets pass, glass, panes, bars, leaves...). It hears a
 # sprinting enemy within "sprint" (not seen). An enemy's hp at or below "low" is news. What the bots know
 # about an enemy is "fresh" for "fresh" ticks, forgotten after "forget" ticks. A bot that sees an
 # enemy within "warn" of a teammate who doesn't face him warns it
-SENSE = {"sight": 64, "fov": 70, "near": 3, "sneak": 10, "invisible": 2, "sprint": 12, "low": 6, "fresh": 60, "forget": 160, "warn": 10}
+SENSE = {"sight": 64, "fov": 70, "near": 3, "blind": 4, "dark": 12, "sneak": 10, "invisible": 2, "sprint": 12, "low": 6, "fresh": 60, "forget": 160, "warn": 10}
 # Shots heard within these blocks (the kinds of #ctf:on/noise and the arrows)
 NOISE = {"rifle": 48, "sniper": 96, "bow": 20}
 # The weapons the bots recognise in an enemy's hand (custom_data wpn), their names in the chat, the
@@ -282,4 +300,42 @@ TRICKS = {"fake_from": 3, "fake_near": 8, "fake_far": 24, "noise": 40, "stage": 
 # defend spot with the most heat around it ("hot_radius"); a bot on guard faces the hottest node
 # within "look"
 MEMORY = {"near": 8, "hot_spot": 3, "hot_radius": 12, "look": 32}
+
+# LEARNING (stage 11, BOTS.md): in every match (with bots or not; off: the setting Bots_learn 0,
+# /function ctf_test:bots/learn) the bots learn from the players (imitation) and from their own results,
+# kept per map in the storage ctf_bots:learn (maps.<map id>; purchases: buy) across matches and
+# restarts. Saved every "save" ticks, before a swap clone and before the match end cleanup. Once a
+# match, when the game itself starts (its first freeze; not the warm-up, not the swap), the point
+# counts are x the setting Bots_decay / 100 (newer play counts more; default "decay", 100: never;
+# /function ctf_test:bots/learn_decay {pct: N}).
+#   points: trail points where players / bots walk (one within "spacing" blocks of none, "max" a map;
+#           the bot markers of the map are points too), with counts: ha / hd - attackers / defenders
+#           seen near it (every "heat" ticks a player), hc - a flag carrier passing, dg - deaths,
+#           nd - player grenades exploding, hide - the flag placed near it, hw / hl - rounds won /
+#           lost by bots that hid the flag there, t_<trap> - player traps placed near it
+#   links: a player going from a point to another (touching it within "touch") within "transit"
+#          ticks: an observed link (its kind from what he did on the way: climbed, fell 4+ blocks,
+#          used a wind charge, jumped); a bot's link passed / failed. Baked into the graph: observed
+#          links the walk test missed (seen "observed"+ times), failures make a link dearer
+#   buy: what players buy in a context (side, money at freeze, the score) -> the bots buy alike
+#        once "buy_min" rounds of that context are known (else their plans)
+#   use: defend spots where human defenders stood (the "spots" points with the most hd become defend
+#        spots), the bots face where attackers came from, traps where players placed them, the flag
+#        hidden where players hid it / where it held, attack routes by their results, grenades at
+#        the places players threw theirs / defenders stood, dearer ways through deadly places
+# Also learned from the bots' own results: their traps that went off on an enemy (t: x 2 in the choice
+# of a trap spot), kills from a place (defend spots by kills - deaths), their grenades that hit, their
+# purchases by what they gave (kills x 10 + the round won x 10 + alive x 5; known "buy_bot_min"+ times:
+# an item that gave less than "buy_low" is bought half as often, more than "buy_high" 1.5 times as
+# often). Players' wind charges: where (ws) and where in a fight (wf, an enemy within 10); a bot falls
+# back with a wind charge jump where players did (ws "wind_min"+), and throws one at an enemy within 3..8
+# where players did in fights
+LEARN = {"save": 600, "decay": 95, "spacing": 4, "max": 220, "heat": 40, "touch": 3, "transit": 300, "observed": 1,
+         "danger": 15, "danger_max": 300, "fail": 150, "buy_min": 2, "spots": 4, "spot_min": 3, "prenade": 8,
+         "buy_bot_min": 3, "buy_low": 8, "buy_high": 20, "wind_min": 20}
+# The money buckets of the purchase contexts (money at freeze below each)
+BUY_MONEY = [800, 2000, 3500]
+# The bot items the players' purchases map to (the shop product ids are the same), in the order the
+# bots buy them (the weapon first)
+BUY_ITEMS = ["rifle", "sniper", "crossbow", "fire_bow", "punch_bow", "bow", "netherite_sword", "diamond_sword", "mace", "iron_sword", "iron_armor", "gold_armor", "helmet", "totem", "he", "regen", "speed"]
 

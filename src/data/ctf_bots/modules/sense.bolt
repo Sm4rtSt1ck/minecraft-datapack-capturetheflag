@@ -8,11 +8,14 @@ _F = 90 - SENSE["fov"]
 # memory: ctf_bots:internal/sense/seen); the enemies it hears running (ctf_bots:internal/sense/steps).
 # Candidates within "sight"; seen: within "near", or in the field of view (two half-spaces: huge
 # spheres +-(90 - "fov") degrees from its body's yaw); a sneaking one only within "sneak", an
-# invisible one within "invisible"; then the ray (ctf_bots:internal/sense/ray). A bot on its post
+# invisible one within "invisible"; blinded only within "blind", in darkness "dark" (the wither trap,
+# the flag broken, near the flag); then the ray (ctf_bots:internal/sense/ray). A bot on its post
 # with nobody in sight turns to the nearest fresh intel
 function ctf_bots:internal/sense/look:
     execute if entity @s[tag=attack] run tag @a[tag=defense, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{SENSE['sight']}")] add bk_c
     execute if entity @s[tag=defense] run tag @a[tag=attack, tag=player, tag=!dead, gamemode=!spectator, distance=(f"..{SENSE['sight']}")] add bk_c
+    execute if predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {effects: {"minecraft:blindness": {}}}} run tag @a[tag=bk_c, distance=(f"{SENSE['blind']}..")] remove bk_c
+    execute if predicate {condition: "minecraft:entity_properties", entity: "this", predicate: {effects: {"minecraft:darkness": {}}}} run tag @a[tag=bk_c, distance=(f"{SENSE['dark']}..")] remove bk_c
     execute if entity @a[tag=bk_c] run function ctf_bots:internal/sense/candidates
     execute if entity @s[tag=attack] unless score #fknown bots matches 1 run function ctf_bots:internal/sense/flag
     execute if entity @s[tag=bot_guard] unless entity @a[tag=bk_seen] if entity @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{SENSE['fresh']}")}, distance=1..32] run tp @s ~ ~ ~ facing entity @e[type=marker, tag=bot_intel, scores={bk.age=(f"..{SENSE['fresh']}")}, distance=1..32, sort=nearest, limit=1] feet
@@ -65,6 +68,7 @@ function ctf_bots:internal/talk/wpn_name:
 # radius of the kind (NOISE) hear it (ctf_bots:internal/sense/heard; #wpn bots = the weapon class)
 _KIND_WPN = {"rifle": "rifle", "sniper": "sniper", "bow": "bow"}
 function ctf_bots:on/noise:
+    execute if data storage ctf:noise {kind: "explosion"} run return run function ctf_bots:internal/learn/nade
     execute unless score team bots matches 1.. run return 0
     execute unless entity @s[type=player, tag=player, tag=!dead] run return 0
     for _k in NOISE:

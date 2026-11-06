@@ -40,7 +40,8 @@
         "ctf_bots:sense",
         "ctf_bots:team",
         "ctf_bots:duel",
-        "ctf_bots:trick"
+        "ctf_bots:trick",
+        "ctf_bots:learn"
       ]
     }
   }

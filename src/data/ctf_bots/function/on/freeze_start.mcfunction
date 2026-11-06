@@ -3,6 +3,9 @@
 from registry:bots import POST_TP
 execute if score team bots matches 0 run return run function ctf_bots:on/remove
 function ctf_bots:internal/flag/clear
+# New trail points learned: the graph baked again (they become nodes)
+execute if score #lrn_new lrn matches 1 run function ctf_bots:internal/nav/bake_start
+scoreboard players set #lrn_new lrn 0
 
 function ctf_bots:internal/spawn/missing
 function ctf_bots:internal/score/init

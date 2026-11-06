@@ -3,6 +3,11 @@
 # armor / sword
 data merge entity @s {NoAI: 1b, Health: 20.0f, Fire: 0s}
 effect clear @s
+# The game treats it as a player (the tag player: the selectors @e[type=#ctf:fighter, tag=player] of the
+# traps, grenades, ultimates, loot...); no burning / withering left (ctf_bots:internal/body)
+tag @s add player
+scoreboard players set @s bot.fire 0
+scoreboard players set @s bot.wth 0
 function ctf_bots:internal/spawn/body
 tag @s remove bot_carrier
 # The main weapon in the hand, nothing being aimed

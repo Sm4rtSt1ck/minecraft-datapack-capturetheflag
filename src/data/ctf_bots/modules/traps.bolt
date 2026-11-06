@@ -1,11 +1,12 @@
 # The traps of the bots, generated from registry/bots.bolt TRAPS and the shop (costs, counts, keys).
 # BOTS.md stage 7
-from registry:bots import TRAPS, TRAP_BREAK
+from registry:bots import TRAPS, TRAP_SEE, SENSE
 from registry:shop import product
 
 # Freeze start (after the flag is placed): the defense bots buy their traps
 function ctf_bots:internal/traps/buy:
     tag @e[type=marker, tag=bot_spot] remove bot_used
+    tag @e[type=marker, tag=lrn_pt] remove bot_used
     for _t in TRAPS:
         _p = product(f"{_t['id']}_trap")
         _key = _p["buy"][1]["key"]
@@ -19,22 +20,92 @@ function ctf_bots:internal/traps/buy:
 # As the paying bot (#payer bots = its number): one trap at a free spot, #left times
 for _t in TRAPS:
     function f"ctf_bots:internal/traps/place_{_t['id']}":
+        execute if score Bots_learn settings matches 1 if score #map lrn matches 1.. run function f"ctf_bots:internal/learn/trap_spot_{_t['id']}"
         execute store result score #p bots run random value 1..3
-        execute if score #p bots matches 1..2 at @n[type=armor_stand, tag=flag] as @e[type=marker, tag=f"{_t['spot']}", tag=!bot_used, sort=nearest, limit=1] run tag @s add bot_pick
+        execute unless entity @e[type=marker, tag=bot_pick] if score #p bots matches 1..2 at @n[type=armor_stand, tag=flag] as @e[type=marker, tag=f"{_t['spot']}", tag=!bot_used, sort=nearest, limit=1] run tag @s add bot_pick
         execute unless entity @e[type=marker, tag=bot_pick] as @e[type=marker, tag=f"{_t['spot']}", tag=!bot_used, sort=random, limit=1] run tag @s add bot_pick
         execute unless entity @e[type=marker, tag=bot_pick] run return 0
         execute as @e[type=zombified_piglin, tag=ctf_bot] if score @s bot.n = #payer bots at @n[type=marker, tag=bot_pick] run function f"ctf_traps:api/place/{_t['id']}"
         tag @e[type=marker, tag=bot_pick] add bot_used
         tag @e[type=marker, tag=bot_pick] remove bot_pick
+        kill @e[type=marker, tag=lrn_tmp]
         scoreboard players remove #left bots 1
         execute if score #left bots matches 1.. run function f"ctf_bots:internal/traps/place_{_t['id']}"
 
-# As an attack bot (every think), at it: an enemy trap within TRAP_BREAK that it sees is broken
+# As an attack bot (every think), at it: enemy traps seen like a player sees them (TRAP_SEE): the nearest
+# unknown one within "sight" in its field of view (SENSE "fov": two half-spaces, as
+# ctf_bots:internal/sense/look), by chance, with a free line of sight (ctf_bots:internal/traps/los):
+# known to the attack team (bot_known_a; broken within reach: ctf_bots:internal/traps/tick)
+_TF = 90 - SENSE["fov"]
 function ctf_bots:internal/traps/break_check:
-    execute as @e[type=frog, tag=trap_marker, tag=!trap.detector, tag=!triggered, distance=(f"..{TRAP_BREAK}"), sort=nearest, limit=1] run tag @s add bot_trap_see
+    execute as @e[type=frog, tag=trap_marker, tag=!trap.detector, tag=!triggered, tag=!bot_known_a, distance=(f"..{TRAP_SEE['sight']}"), sort=nearest, limit=1] run tag @s add bot_trap_see
+    execute unless entity @e[type=frog, tag=bot_trap_see] run return 0
+    execute unless entity @e[type=frog, tag=bot_trap_see, distance=(f"..{SENSE['near']}")] rotated as @s rotated (f"~{_TF}") 0 positioned ^ ^ ^1000 run tag @e[type=frog, tag=bot_trap_see, distance=1000..] remove bot_trap_see
+    execute unless entity @e[type=frog, tag=bot_trap_see, distance=(f"..{SENSE['near']}")] rotated as @s rotated (f"~-{_TF}") 0 positioned ^ ^ ^1000 run tag @e[type=frog, tag=bot_trap_see, distance=1000..] remove bot_trap_see
+    execute store result score #r bots run random value 1..100
+    execute if score #r bots matches (f"{TRAP_SEE['chance'] + 1}..") run tag @e[type=frog, tag=bot_trap_see] remove bot_trap_see
     execute unless entity @e[type=frog, tag=bot_trap_see] run return 0
     scoreboard players set #los bots 0
     scoreboard players set #step bots 0
     execute anchored eyes facing entity @n[type=frog, tag=bot_trap_see] eyes positioned ^ ^ ^1 run function ctf_bots:internal/traps/los
-    execute if score #los bots matches 1 as @n[type=frog, tag=bot_trap_see] at @s run function ctf_bots:internal/traps/break
+    execute if score #los bots matches 1 run tag @e[type=frog, tag=bot_trap_see] add bot_known_a
     tag @e[type=frog, tag=bot_trap_see] remove bot_trap_see
+
+# Round start: the defense knows every trap of its team (placed in freeze); the defend spots next to
+# one are not taken this round (bot_taken by nobody: bot.own -1)
+function ctf_bots:internal/traps/round_start:
+    tag @e[type=frog, tag=trap_marker, tag=!trap.detector] add bot_known_d
+    execute at @e[type=frog, tag=bot_known_d, tag=!trap.anvil] as @e[type=marker, tag=bot_defend, tag=!bot_taken, distance=(f"..{TRAP_SEE['avoid']}")] run scoreboard players set @s bot.own -1
+    execute at @e[type=frog, tag=bot_known_d, tag=!trap.anvil] run tag @e[type=marker, tag=bot_defend, distance=(f"..{TRAP_SEE['avoid']}")] add bot_taken
+    execute at @e[type=frog, tag=bot_known_d, tag=trap.anvil] positioned (f"~-{TRAP_SEE['avoid_anvil']}") ~-40 (f"~-{TRAP_SEE['avoid_anvil']}") as @e[type=marker, tag=bot_defend, tag=!bot_taken, dx=(TRAP_SEE["avoid_anvil"] * 2 - 1), dy=40, dz=(TRAP_SEE["avoid_anvil"] * 2 - 1)] run scoreboard players set @s bot.own -1
+    execute at @e[type=frog, tag=bot_known_d, tag=trap.anvil] positioned (f"~-{TRAP_SEE['avoid_anvil']}") ~-40 (f"~-{TRAP_SEE['avoid_anvil']}") run tag @e[type=marker, tag=bot_defend, dx=(TRAP_SEE["avoid_anvil"] * 2 - 1), dy=40, dz=(TRAP_SEE["avoid_anvil"] * 2 - 1)] add bot_taken
+
+# Every tick (round, end_round): an attack bot breaks a known enemy trap within reach (ctf_traps:api/disarm,
+# a player's hit with the hand); awake bots keep out of the traps their team knows
+# (ctf_bots:internal/traps/avoid_<side>)
+_AV = TRAP_SEE["avoid"]
+_AA = TRAP_SEE["avoid_anvil"]
+function ctf_bots:internal/traps/tick:
+    execute as @e[type=zombified_piglin, tag=ctf_bot, tag=attack] at @s as @e[type=frog, tag=bot_known_a, tag=!triggered, distance=(f"..{TRAP_SEE['reach']}"), sort=nearest, limit=1] at @s run function ctf_bots:internal/traps/break
+    for _side in ["attack", "defense"]:
+        _kt = "bot_known_d"
+        if _side == "attack":
+            _kt = "bot_known_a"
+        execute as @e[type=zombified_piglin, tag=ctf_bot, tag=(_side), tag=!bot_guard, tag=!bot_climb] at @s if entity @e[type=frog, tag=(_kt), tag=!triggered, tag=!trap.anvil, distance=(f"..{_AV}")] run function f"ctf_bots:internal/traps/avoid_{_side}"
+        execute as @e[type=zombified_piglin, tag=ctf_bot, tag=(_side), tag=!bot_guard, tag=!bot_climb] at @s positioned (f"~-{_AA}") ~1 (f"~-{_AA}") if entity @e[type=frog, tag=(_kt), tag=!triggered, tag=trap.anvil, dx=(_AA * 2 - 1), dy=40, dz=(_AA * 2 - 1)] positioned (f"~{_AA}") ~-1 (f"~{_AA}") run function f"ctf_bots:internal/traps/avoid_{_side}"
+
+        # As an awake bot of the side near a trap its team knows, at it: that trap (bot_avoid_t); unless
+        # its lure is in there too, it is pushed away from it (horizontally, TRAP_SEE "push" a tick)
+        function f"ctf_bots:internal/traps/avoid_{_side}":
+            execute as @e[type=frog, tag=(_kt), tag=!triggered, tag=!trap.anvil, distance=(f"..{_AV}"), sort=nearest, limit=1] run tag @s add bot_avoid_t
+            execute unless entity @e[type=frog, tag=bot_avoid_t] positioned (f"~-{_AA}") ~1 (f"~-{_AA}") as @e[type=frog, tag=(_kt), tag=!triggered, tag=trap.anvil, dx=(_AA * 2 - 1), dy=40, dz=(_AA * 2 - 1), limit=1] run tag @s add bot_avoid_t
+            scoreboard players operation #jn bots = @s bot.n
+            execute as @e[type=rabbit, tag=bot_lure] if score @s bot.own = #jn bots at @s if entity @e[type=frog, tag=bot_avoid_t, tag=!trap.anvil, distance=(f"..{_AV}")] run tag @e[type=frog, tag=bot_avoid_t] remove bot_avoid_t
+            execute as @e[type=rabbit, tag=bot_lure] if score @s bot.own = #jn bots at @s positioned (f"~-{_AA}") ~1 (f"~-{_AA}") if entity @e[type=frog, tag=bot_avoid_t, tag=trap.anvil, dx=(_AA * 2 - 1), dy=40, dz=(_AA * 2 - 1)] run tag @e[type=frog, tag=bot_avoid_t] remove bot_avoid_t
+            execute if entity @e[type=frog, tag=bot_avoid_t] run function ctf_bots:internal/traps/push
+            tag @e[type=frog, tag=bot_avoid_t] remove bot_avoid_t
+
+# As a bot, at it, by the trap bot_avoid_t: its horizontal motion = TRAP_SEE "push" away from the trap
+function ctf_bots:internal/traps/push:
+    execute store result score #x1 bots run data get entity @s Pos[0] 1000
+    execute store result score #z1 bots run data get entity @s Pos[2] 1000
+    execute facing entity @n[type=frog, tag=bot_avoid_t] feet rotated ~180 0 run summon marker ^ ^ ^1 {Tags: ["bot_vec"]}
+    execute store result score #x2 bots run data get entity @n[type=marker, tag=bot_vec] Pos[0] 1000
+    execute store result score #z2 bots run data get entity @n[type=marker, tag=bot_vec] Pos[2] 1000
+    kill @e[type=marker, tag=bot_vec]
+    scoreboard players operation #x2 bots -= #x1 bots
+    scoreboard players operation #z2 bots -= #z1 bots
+    execute store result entity @s Motion[0] double (TRAP_SEE["push"] / 1000) run scoreboard players get #x2 bots
+    execute store result entity @s Motion[2] double (TRAP_SEE["push"] / 1000) run scoreboard players get #z2 bots
+
+# As a bot choosing its next link (ctf_bots:internal/nav/hop_<k>): the traps its team keeps out of
+# (bot_trap_avoid: the defense all it knows, the attack the anvils it knows) for
+# ctf_bots:internal/nav/trap_cost
+function ctf_bots:internal/traps/hop_mark:
+    tag @e[type=frog, tag=bot_trap_avoid] remove bot_trap_avoid
+    execute if entity @s[tag=defense] run tag @e[type=frog, tag=bot_known_d, tag=!triggered] add bot_trap_avoid
+    execute if entity @s[tag=attack] run tag @e[type=frog, tag=bot_known_a, tag=trap.anvil, tag=!triggered] add bot_trap_avoid
+# As a node, at it: #dt nav + TRAP_SEE "cost" when a trap the bot keeps out of is near (the anvil: above)
+function ctf_bots:internal/nav/trap_cost:
+    execute if entity @e[type=frog, tag=bot_trap_avoid, tag=!trap.anvil, distance=(f"..{_AV}")] run return run scoreboard players add #dt nav (TRAP_SEE["cost"])
+    execute positioned (f"~-{_AA}") ~ (f"~-{_AA}") if entity @e[type=frog, tag=bot_trap_avoid, tag=trap.anvil, dx=(_AA * 2 - 1), dy=40, dz=(_AA * 2 - 1)] run scoreboard players add #dt nav (TRAP_SEE["cost"])

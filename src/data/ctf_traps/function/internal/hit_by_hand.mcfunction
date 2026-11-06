@@ -3,4 +3,4 @@
 # set it off. Markers have 1024 HP: the hit one is below max health
 advancement revoke @s only ctf_traps:trap_hit
 execute as @e[type=frog, tag=trap_marker, tag=!triggered, distance=..8] store result score @s kc.tmp run data get entity @s Health
-kill @e[type=frog, tag=trap_marker, tag=!triggered, distance=..8, scores={kc.tmp=..1023}]
+execute as @e[type=frog, tag=trap_marker, tag=!triggered, distance=..8, scores={kc.tmp=..1023}] run function ctf_traps:api/disarm

@@ -11,6 +11,7 @@
         "ctf_sniper:tick",
         "ctf_guns:tick",
         "ctf_inv:freeze_shots",
-        "ctf_inv:tick/match"
+        "ctf_inv:tick/match",
+        "ctf_bots:internal/learn/tick"
     ]
 }

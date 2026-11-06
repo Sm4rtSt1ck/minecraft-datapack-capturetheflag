@@ -1,0 +1,4 @@
+# The viewers of the graph: its nodes and links, the colors of the kinds
+execute store result score #c nav if entity @e[type=marker, tag=nav_node]
+execute store result score #c2 nav if entity @e[type=marker, tag=nav_link]
+tellraw @a[tag=nav_viewer] [{"text": "Bot graph: ", "color": "gold"}, {"score": {"name": "#c", "objective": "nav"}, "color": "white"}, {"text": " nodes, ", "color": "gray"}, {"score": {"name": "#c2", "objective": "nav"}, "color": "white"}, {"text": " links. ", "color": "gray"}, {"text": "walk", "color": "white"}, {"text": " narrow", "color": "yellow"}, {"text": " jump", "color": "aqua"}, {"text": " drop", "color": "gold"}, {"text": " ladder up", "color": "green"}, {"text": " ladder down", "color": "dark_green"}, {"text": " fall", "color": "dark_red"}, {"text": " wind charge up", "color": "light_purple"}]

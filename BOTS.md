@@ -144,7 +144,8 @@ Each stage is one commit, checked by the user in the game before the next one.
 | 7 | Traps: bots place them; see / avoid / break the enemy traps; kills of bots by a player's trap credited to him | in progress |
 | 8 | Navigation graph: nav points (N) + all bot markers as nodes, links found after each clone (walk, narrow, jump, drop, ladder up / down), distance fields, bots move node by node | done, not tested (kept on; tactics use its distances) |
 | 9 | Ultimates: charge, choice, use (adapt / forbid the player-only ones); fear a player in the bomber ultimate | later |
-| 10 | Tactics (10a-10e below): perception and team memory, team brain and roles, fighting tactics, tricks and traits, difficulty | in progress |
+| 10 | Tactics (10a-10e below): perception and team memory, team brain and roles, fighting tactics, tricks and traits, difficulty | 10a-10d done (not tested), 10e later |
+| 11 | Learning: from the players (imitation) and from the bots' results, in every match, kept per map | in progress |
 
 ## Progress log
 
@@ -701,3 +702,124 @@ of the bots' reach.
 - The user's call: the attack bots always know where the flag is (FLAG_KNOWN, `#flag_known bots`:
   `#fknown` 1 at the round start); the search stays for FLAG_KNOWN = False.
 
+### Stage 11 - learning (plan, agreed with the user)
+
+Not a neural network (too little data: one tester; training would take thousands of matches, an
+inference library like ajjnn exists but can't train in the game). Instead counting what works:
+imitation of the players (what they do in which situation) + the bots' own results (link failures,
+routes, flag spots), kept per map in the storage `ctf_bots:learn` across matches, decaying slowly.
+Fast: a match gives data at once. In every match (with bots or not), on by default (setting
+Bots_learn). Details: LEARN in `registry/bots.bolt`.
+
+#### Stage 11 - done (not tested)
+
+- `ctf_bots:learn` (generated) + `internal/learn/*`. Storage `ctf_bots:learn`: `maps.<map id>` = {pts,
+  links, next, routes}, the map being played in `cur` (`#map lrn` = its number; `learn/load` at
+  `#ctf:on/map_cloned` in every match with Bots_learn 1, `learn/save` every LEARN "save" ticks, at
+  `#ctf:on/prepare` (the swap clone) and at the new core event `#ctf:on/match_ending` (before the
+  match end cleanup, also when everyone left)); `buy.c<ctx>` the purchases.
+- Points: the stored ones spawned at their place (arena-relative), merged into a bot marker standing
+  there (every bot marker gets a point id: `learn/new_id`); events add 10 (the counts fade: see the
+  decay below). New trail points where players walk (`learn/actor`, `new_pt`; up to LEARN "max";
+  with bots they are graph nodes, baked again at the next freeze: `#lrn_new`).
+- Recorded (`learn/tick` in `#ctf:tick/freeze` and `#ctf:tick/combat`): players' heat by side while
+  the flag stands and the carrier's path (`learn/heat`), deaths of players (`lrn.death`) and bots
+  (their wallets follow them: `learn/wallet_here` / `wallet_check`), players' traps by kind
+  (`learn/trap`), players' grenades (`#ctf:on/noise` kind explosion from ctf_grenades: `learn/nade`),
+  the flag the players hid (`learn/round_start`), the defense bots' flag spot won / lost and the
+  attack routes' results (`learn/round_win`), observed links between points with their kind from the
+  stats (climb / fall cm, jumps, wind charges: `learn/observe`, `link_obs`), the bots' links passed /
+  failed (`learn/bot_link` from `nav/arrive_<k>` / `nav/fail`), purchases (`#ctf:on/bought` from the
+  shop click: `ctf_shop:internal/announce`; contexts counted at freeze: `learn/freeze`).
+- Used: learned links at the end of a bake (`learn/links_start`: dearer by failures, new observed
+  links), danger in the field costs (`learn/danger`), defend spots where human defenders stood
+  (`learn/after_load`), the bots' heat = the attackers' heat (facing, hot spots), traps where players
+  put them (`learn/trap_spot_<kind>`, an anvil under the ceiling above), the flag hidden by value
+  (`learn/hide`), routes by value (`learn/pick_route`), purchases like the players of the bot's
+  situation (`learn/bot_buy`), grenades at likely defender spots (`learn/prenade`).
+- `/function ctf_test:bots/learn` (on / off), `learn_info`, `learn_forget`.
+- The graph shown in the lobby too (`ctf_test:bots/nav`, the same toggle): `nav/lobby_build` builds a
+  view graph at the template the player stands at (a node marker `nav_tmp` at every bot marker within
+  160, the map's learned points: `learn/lobby_points` / `lobby_load` by the template box), baked as in a
+  match (`#lshow nav` 1; the learned links of that map applied; "Bot graph: N nodes, M links" when
+  ready); removed when nobody views it (`nav/lobby_clear`) or at the clone; `ctf_test:bots/bake` in the
+  lobby builds it again after editing the markers. Nothing is saved in the lobby.
+- Fix: a save with no points in the arena (a stale `#map lrn` from a match that ended before
+  `match_ending` existed, saved at the next match start's prepare) wrote an empty point list over the
+  map. `learn/save` now needs points in the arena; a load without points clears the orphan links.
+- Trails and observed links are recorded in freeze too (`learn/tick`: states 3..5); the heat only in
+  the round (in freeze the defenders hide the flag and place traps).
+- `learn_info` in detail (`learn/stats`, `stat_links`, `stat_routes`): places (from trails / the
+  map's markers), heat by side and carriers, deaths, grenades, flags hidden, players' traps by kind,
+  ways (shown by players, passed / failed by bots), the bots' flag spots held / lost, the attack routes
+  won / rounds, purchase situations, the last save; the points near the player shown.
+
+#### Stage 11 - the bots' own results, wind charges (after the user's notes)
+
+- Players' wind charges (`learn/wind`, from `learn/actor` when `lrn.sw` grows past `lrn.bw2`): the
+  point near counts it (`lrn.ws`), in a fight (an enemy within 10) also `lrn.wf`. Bots: a wind charge
+  jump up and away when falling back where players used them or with the enemy within 4
+  (`learn/wind_escape`, from `duel/retreat`); a wind charge thrown at an enemy 3..8 away where players
+  used them in fights (`learn/wind_throw`, from `duel/engage`).
+- Bot traps that went off (new core event `#ctf:on/trap_fired`, as the trap marker, at the top of
+  every trap's trigger): `learn/trap_fired` counts `lrn.tw` near it; the trap spot value `lrn.tv` =
+  players' traps of the kind + 2 x `lrn.tw`.
+- Bot kills from a place (`ctf_bots:api/killed_player`: `lrn.dk`); a defense bot (1 in 2) takes the
+  free defend spot with the best kills x 2 - deaths (`learn/pick_good`, `good_one`).
+- Bot grenades that hit (an enemy within 4 of the explosion: `lrn.nh`, `learn/nade`); the pre-aimed
+  grenade value + 3 x hits.
+- Bot purchases: every bot item bought through `ctf_bots:internal/buy/get/<item>` tags the wallet
+  (`lrn_b_<item>`; the plans use it too); the wallet keeps the context (`lrn.ctx`) and the kills at
+  freeze (`lrn.k0`: `learn/wallet_start`); at the round win `learn/bot_round` adds what each item gave
+  (kills x 10 + won x 10 + alive x 5) to storage `buyb.c<ctx>.<item>` {n, v}; `learn/buy_adjust`
+  halves / raises the players' chance of an item by its average (LEARN "buy_low" / "buy_high", known
+  "buy_bot_min"+ times).
+- `learn_info`: wind charges, the bots' traps that worked, kills from places, grenade hits, the
+  situations with the bots' own purchase results.
+
+- Fix: the learned points were never saved. `learn/save_pt` subtracted the arena corner with
+  `scoreboard players remove #x lrn -2000`; `remove` takes no negative number, so Minecraft did not load
+  the function, and every save wrote an empty point list (the links were kept). At the next load of the
+  map (a swap clone, the next match) the links lost their points and were cleared. The corner is now
+  subtracted with `add` / `remove` by its sign. Values put in by bolt are not checked by mecha: the whole
+  output was parsed again by plain mecha (a beet project loading the built pack, no bolt), no other
+  error.
+- Decay: once a match, when the game itself starts, the point counts in the arena are x the setting
+  `Bots_decay` / 100 (default LEARN "decay" 95, was x 0.9 at every load: the warm-up clone and the swap
+  clone too; 100: never; `/function ctf_test:bots/learn_decay {pct: N}`; shown in `learn_info`).
+  `#ctf:on/match_start` sets `#decay lrn` 1 (`ctf_bots:on/match_start`), the first freeze_start
+  applies it (`learn/freeze` -> `learn/decay`), so it does not depend on the warm-up (to become
+  optional later). Integer math: a count of one event (10) fades by 1 a match at 95%. Links and
+  routes do not fade.
+
+### Fix: traps did not work on bots (bots on the same rights as players)
+
+- The attack bots broke every enemy trap within 4 blocks with a free line of sight, 100%, at once
+  (a trap goes off within 2): no field of view, no chance, no reach. Now (`ctf_bots:internal/traps/
+  break_check`, registry TRAP_SEE) a bot notices a trap within "sight" 10 in its field of view (SENSE
+  "fov") with a free line of sight only by chance ("chance" 10% a think), the trap is then known to its
+  team (`bot_trap_known`), and a bot within "reach" 3 hits it (`ctf_traps:api/disarm`, shared with the
+  player's hit with the hand). A bot running at a trap it didn't notice sets it off.
+- One selector for players and bots: bots carry the tag `player`, `#ctf:fighter` = player + zombified
+  piglin; the duplicated bot lines of the traps (touch, credit marks), the clouds, grenades, the bomber,
+  the stun trap, the death camera and the kill credit are gone. `predicate=ctf:not_spectator` replaces
+  `gamemode=!spectator` (it never matches a bot).
+- Effects that reached only players now reach the bots: the detector's glowing, the blindness of the
+  flag break, the darkness near the flag, the Inferno blade's slam.
+- The bot body ignored: the wither effect (undead), fire (fire-immune), levitation while NoAI (asleep
+  on its post, climbing). `ctf_bots:internal/body` (registry BODY_FX, every tick): the wither trap
+  cloud gives `bot.wth` ticks (1 wither damage a second); fire blocks / lava, fire aspect hits
+  (advancement `ctf_bots:burn_hit`) and burning arrows (`ctf_bots:burn_arrow`) give `bot.fire` ticks
+  (1 damage a second, flames shown, water puts it out); a levitating bot wakes up / stops climbing.
+- Perception: a blinded bot sees only within SENSE "blind" 4, in darkness "dark" 12.
+- Second fix (the user: traps still did not go off on bots, bots did not fear them): the exception
+  `trap_safe` (defense bots never set off their team's traps; a defense player does) is gone: traps go
+  off on every bot like on a player. Instead the bots know traps like players: the defense every trap
+  of its team (`bot_known_d` at the round start: they were placed in freeze), the attack the traps it
+  noticed (`bot_known_a`). `ctf_bots:internal/traps/tick` (every tick): an attack bot breaks a known
+  trap within TRAP_SEE "reach" 3 (before it is within 2); an awake bot within "avoid" 2.6 of a trap its
+  team keeps out of (the defense: all it knows; the attack: known anvils, its column +-"avoid_anvil")
+  is pushed away (`traps/push`, "push" 0.25 a tick), unless its lure is in there (its spot, the flag, an
+  enemy). Choosing the next link (`nav/hop_<k>` -> `traps/hop_mark`, `nav/trap_cost`), a node next to
+  such a trap costs "cost" 300 more. Defend spots next to a trap are not taken that round
+  (`traps/round_start`: `bot_taken`, `bot.own` -1).
