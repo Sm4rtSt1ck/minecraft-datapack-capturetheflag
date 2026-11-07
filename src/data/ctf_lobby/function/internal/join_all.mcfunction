@@ -13,6 +13,7 @@ weather clear
 # SCOREBOARDS
 
 scoreboard objectives setdisplay sidebar settings
+scoreboard objectives setdisplay list
 
 scoreboard players operation game state = lobby state
 

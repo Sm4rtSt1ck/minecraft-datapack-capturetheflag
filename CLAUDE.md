@@ -8,6 +8,8 @@ Repository: https://github.com/Sm4rtSt1ck/minecraft-datapack-capturetheflag (bra
 - Game mechanics for players / admins: [README.md](README.md) (economy, shop, weapons, traps...)
   and [MECHANICS.md](MECHANICS.md) (loot crates, rewards, death camera). Keep them up to date with
   every change of behavior.
+- Building a world and maps: [MAP_GUIDE.md](MAP_GUIDE.md) (registry/world.bolt, registry/maps.bolt,
+  the build tools, the bot markers). Update it when these registries or tools change.
 
 ## Architecture choice: beet + bolt (variant "C") - migration done
 

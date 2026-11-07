@@ -478,6 +478,9 @@ Reusable effects: [`ctf_fx`](src/data/ctf_fx/function/) (`ctf_fx:shake`, `ctf_fx
 
 ## Installation
 
+> Building your own world and maps (lobby, warm-up room, map templates, walls, loot points, bot
+> markup): see the **[Map Guide](MAP_GUIDE.md)**.
+
 The datapack is built with [beet](https://github.com/mcbeet/beet) + bolt from `src/`.
 
 1. Download or clone the repository.
