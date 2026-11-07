@@ -628,13 +628,7 @@ Possible improvements:
 
 Pull requests and suggestions are welcome.
 
-If you want to:
-
-* add a new map
-* improve game balance
-* add new traps or mechanics
-
-feel free to open an issue.
+If you want to improve game balance or add new traps or mechanics feel free to open an issue.
 
 
 ## License
